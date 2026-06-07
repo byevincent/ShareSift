@@ -1,0 +1,55 @@
+{
+  "trained_at": "2026-06-04T18:18:03.214470+00:00",
+  "objective": "literal_vs_referenced_credential_classification",
+  "training_split": "data/external/literal_vs_referenced/splits/train.jsonl",
+  "training_split_sha256": "930d8c02953ba94bdde7298a39e910f10783a2c50a8675d717b9b4f2244d647e",
+  "rendered_training_jsonl": "models/content_classifier_v0p7_literal_vs_referenced/rendered_train.jsonl",
+  "rendered_training_sha256": "b305a26492abcc0fbcf9515a98ef2283aa07bb72004c93979bc3d8fa40f9df0d",
+  "val_split": "data/external/literal_vs_referenced/splits/val.jsonl",
+  "test_split_path_for_guard": "data/external/literal_vs_referenced/splits/test.jsonl",
+  "n_raw_train_records": 30158,
+  "n_balanced_train_records": 47464,
+  "n_val_records": 3719,
+  "label_counts_raw_train": {
+    "referenced": 23732,
+    "literal": 6426
+  },
+  "label_counts_val": {
+    "literal": 763,
+    "referenced": 2956
+  },
+  "negative_subtypes_train": {
+    "variable_reference": 20053,
+    "documentation_example": 1869,
+    "parameter_declaration": 1154,
+    "regex_template": 656
+  },
+  "target_minority_fraction": 0.5,
+  "base_model": "unsloth/Qwen3-1.7B-unsloth-bnb-4bit",
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "optim": {
+    "batch_size": 4,
+    "grad_accum": 4,
+    "effective_batch": 16,
+    "learning_rate": 0.0002,
+    "epochs": 3,
+    "warmup_steps": 100,
+    "lr_scheduler": "cosine",
+    "optimizer": "adamw_8bit"
+  },
+  "max_seq_length": 512,
+  "seed": 2026,
+  "system_prompt": "You are a credential-snippet classifier. Given a short context window from a file flagged by a credential scanner, decide whether it contains a LITERAL credential value (a real password, key, or token written directly in the file) or a REFERENCED credential (a variable reference, function parameter, example block, or template pattern that mentions credentials but does not store one). Answer with exactly one word: literal or referenced."
+}

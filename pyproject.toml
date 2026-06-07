@@ -1,0 +1,116 @@
+[project]
+name = "sharesift"
+version = "0.17.1"
+description = "ML-augmented SMB share hunter (Snaffler successor)"
+requires-python = ">=3.10,<3.13"
+# Core runtime: pydantic for schemas + the Stage-1 path classifier
+# (lightgbm/sklearn/numpy/joblib, ~100MB). ``sharesift score-paths``
+# works with only these — no torch, no transformers required. Stage-2
+# inference adds the ``content-inference`` group on top (~3GB).
+dependencies = [
+    "pydantic>=2.0",
+    "scikit-learn>=1.5",
+    "lightgbm>=4.5",
+    "numpy>=1.26",
+    "joblib>=1.3",
+    "betacal>=1.1.0",
+]
+
+[project.scripts]
+sharesift = "sharesift.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sharesift", "src/truffler"]
+
+[dependency-groups]
+# Stage-2 (content classifier) inference — heavy (~3GB). Opt-in.
+# Required for ``sharesift scan-files`` and ``tools/eval_content_classifier.py``.
+content-inference = [
+    "torch>=2.12.0",
+    "transformers>=4.46",
+    "accelerate>=1.0",
+    "peft>=0.13",
+    "bitsandbytes>=0.43",
+]
+# LoRA training stack + secret-detection rule oracle + GGUF/CPU
+# inference tooling. NOT needed at runtime — pulls ~5GB of training
+# deps. Used by the synthetic-data + Phase-3 training pipeline:
+# ``tools/build_content_dataset.py``, ``tools/train_content_classifier.py``,
+# ``tools/export_content_classifier_gguf.py``, ``tools/benchmark_content_classifier_cpu.py``.
+content-training = [
+    "kingfisher-bin>=1.102.0",
+    "datasketch>=1.6",
+    "datasets>=3.0",
+    "trl>=0.12",
+    "unsloth>=2025.10",
+    "llama-cpp-python>=0.3",
+]
+dev = [
+    "datasets>=4.3.0",
+    "pytest",
+    "python-docx>=1.2.0",
+    "ruff",
+]
+# ONNX export of the path classifier. Used by
+# ``tools/export_path_classifier_onnx.py``; not needed at runtime unless
+# the operator picks the ONNX backend in ``sharesift.path``.
+onnx = [
+    "skl2onnx>=1.17",
+    "onnx>=1.16",
+    "onnxruntime>=1.19",
+    "onnxmltools>=1.12",
+]
+# Streamlit-based labeling app (``src/eval/label_app.py``).
+labeling = [
+    "streamlit>=1.45.0",
+]
+# Anthropic API client for LLM-based labeling (``tools/llm_label.py``).
+# Used to label Linux paths in v0.5 where the rule-based labeler's
+# UNC-shape assumptions block all Linux candidates.
+llm-labeling = [
+    "anthropic>=0.40",
+]
+# pysnaffler integration: wraps PathClassifier as a SnaffleRule so
+# operators can plug Truffler's ML triage into pysnaffler's SMB
+# enumeration loop. See ``src/sharesift/pysnaffler_rule.py``.
+pysnaffler-integration = [
+    "pysnaffler>=0.0.1",
+]
+# Live credential verification (``sharesift verify``). HTTP verifiers
+# only need ``requests`` + ``pyyaml``; ``paramiko`` and ``ldap3``
+# extend coverage to SSH and LDAP. AWS STS verification adds
+# ``boto3`` via ``verify-cloud`` (large; keep optional).
+verify = [
+    "requests>=2.31",
+    "pyyaml>=6.0",
+    "paramiko>=3.3",
+    "ldap3>=2.9",
+]
+verify-cloud = [
+    "boto3>=1.28",
+]
+# Interactive HTML report (``sharesift render-report``).
+report = [
+    "jinja2>=3.1",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# Claude-labeling helper is a labeled-eval-set generator with long
+# justification-text strings (per-rule notes) and sys.path manipulation
+# so it can be invoked from the repo root without editable-install.
+# Relaxations scoped to this single file.
+"tools/claude_label.py" = ["E402", "E501", "N806"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

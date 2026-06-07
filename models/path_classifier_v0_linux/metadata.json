@@ -1,0 +1,41 @@
+{
+  "trained_at_utc": "2026-06-01T00:07:32.747603+00:00",
+  "train_source": "/home/george-5090/projects/truffler/data/eval/train_split_linux.jsonl",
+  "train_record_count": 1348,
+  "train_juicy_count": 965,
+  "train_not_juicy_count": 383,
+  "train_records_sha256": "5e520d70ad682c76edd3acd1a1f9d5a90762ff2def3b2e201ea09e5fe0da6317",
+  "config": {
+    "n_estimators": 300,
+    "learning_rate": 0.05,
+    "num_leaves": 31,
+    "min_child_samples": 20,
+    "reg_alpha": 0.0,
+    "reg_lambda": 0.0,
+    "class_weight": "balanced",
+    "random_state": 0
+  },
+  "features": {
+    "ngram_range": [
+      3,
+      5
+    ],
+    "n_hash_features": 65536,
+    "n_hand_features": 8,
+    "hand_feature_names": [
+      "path_length",
+      "path_depth",
+      "has_extension",
+      "extension_length",
+      "num_dots_in_basename",
+      "num_digits_in_basename",
+      "is_unc_path",
+      "is_linux_path"
+    ]
+  },
+  "versions": {
+    "sklearn": "1.8.0",
+    "lightgbm": "4.6.0",
+    "python": "3.11.13"
+  }
+}

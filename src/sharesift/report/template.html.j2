@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ title }}</title>
+<style>
+:root {
+  --bg: #0f1115;
+  --panel: #161a22;
+  --panel-2: #1c2230;
+  --border: #2a3142;
+  --text: #d8dde7;
+  --muted: #8a94a7;
+  --black: #111;
+  --red: #d93636;
+  --yellow: #e6a800;
+  --green: #2eb872;
+  --gray: #7a8597;
+  --pass: #2eb872;
+  --fail: #d93636;
+  --inc: #e6a800;
+  --skip: #7a8597;
+  --accent: #5b8cff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font: 14px/1.5 -apple-system, "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); }
+header { padding: 18px 28px; background: var(--panel); border-bottom: 1px solid var(--border); }
+h1 { margin: 0; font-size: 18px; font-weight: 600; }
+.meta { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.summary { display: flex; flex-wrap: wrap; gap: 12px; padding: 14px 28px; background: var(--panel-2); border-bottom: 1px solid var(--border); }
+.stat { padding: 8px 14px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; }
+.stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+.stat .value { font-size: 18px; font-weight: 600; margin-top: 2px; }
+.stat .breakdown { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.controls { padding: 12px 28px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; background: var(--panel-2); border-bottom: 1px solid var(--border); }
+.controls input, .controls select { background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 13px; }
+.controls input { min-width: 260px; }
+.controls label { font-size: 12px; color: var(--muted); margin-right: 4px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+th { background: var(--panel); position: sticky; top: 0; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); cursor: pointer; user-select: none; }
+th:hover { color: var(--text); }
+th.sorted-asc::after { content: " ▲"; color: var(--accent); }
+th.sorted-desc::after { content: " ▼"; color: var(--accent); }
+tr.row { cursor: pointer; }
+tr.row:hover { background: var(--panel-2); }
+tr.detail { background: var(--panel-2); display: none; }
+tr.detail.open { display: table-row; }
+.detail-content { padding: 12px 18px 16px 18px; }
+.detail-content h4 { margin: 8px 0 4px; font-size: 12px; color: var(--muted); text-transform: uppercase; }
+.snippet { white-space: pre-wrap; background: #0a0d12; border: 1px solid var(--border); border-radius: 4px; padding: 10px; font: 12px/1.5 "JetBrains Mono", "Menlo", monospace; max-height: 420px; overflow: auto; }
+.tier { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.tier-Black { background: var(--black); color: #fff; border: 1px solid #555; }
+.tier-Red { background: var(--red); color: #fff; }
+.tier-Yellow { background: var(--yellow); color: #111; }
+.tier-Green { background: var(--green); color: #fff; }
+.tier-Gray { background: var(--gray); color: #fff; }
+.verif { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+.verif-passed { background: var(--pass); color: #fff; }
+.verif-failed { background: var(--fail); color: #fff; }
+.verif-inconclusive { background: var(--inc); color: #111; }
+.verif-skipped { background: var(--skip); color: #fff; }
+.path { font-family: "JetBrains Mono", "Menlo", monospace; font-size: 12px; word-break: break-all; }
+.snippet-preview { font-family: "JetBrains Mono", "Menlo", monospace; font-size: 11px; color: var(--muted); }
+.types { font-size: 11px; color: var(--accent); }
+footer { padding: 14px 28px; color: var(--muted); font-size: 11px; text-align: center; border-top: 1px solid var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>{{ title }}</h1>
+  <div class="meta">Generated {{ generated_at }} · {{ summary.total }} records</div>
+</header>
+
+<section class="summary">
+  <div class="stat">
+    <div class="label">Total hits</div>
+    <div class="value">{{ summary.total }}</div>
+    <div class="breakdown">{{ summary.n_with_content }} with content</div>
+  </div>
+  {% if summary.tier_donut %}
+  <div class="stat" style="display: flex; gap: 12px; align-items: center;">
+    <svg width="90" height="90" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#1c2230" stroke-width="14"/>
+      {% for seg in summary.tier_donut %}
+      <circle cx="50" cy="50" r="40" fill="none"
+              stroke="{{ seg.color }}" stroke-width="14"
+              stroke-dasharray="{{ seg.dasharray }}"
+              stroke-dashoffset="{{ seg.dashoffset }}"
+              transform="rotate(-90 50 50)"/>
+      {% endfor %}
+    </svg>
+    <div>
+      <div class="label">By tier</div>
+      <div style="font-size: 12px; margin-top: 4px;">
+        {% for tier, n in summary.by_tier %}
+        <div><span class="tier tier-{{ tier }}">{{ tier }}</span> {{ n }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% if summary.verify_donut %}
+  <div class="stat" style="display: flex; gap: 12px; align-items: center;">
+    <svg width="90" height="90" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" fill="none" stroke="#1c2230" stroke-width="14"/>
+      {% for seg in summary.verify_donut %}
+      <circle cx="50" cy="50" r="40" fill="none"
+              stroke="{{ seg.color }}" stroke-width="14"
+              stroke-dasharray="{{ seg.dasharray }}"
+              stroke-dashoffset="{{ seg.dashoffset }}"
+              transform="rotate(-90 50 50)"/>
+      {% endfor %}
+    </svg>
+    <div>
+      <div class="label">Verification</div>
+      <div style="font-size: 12px; margin-top: 4px;">
+        {% for status, n in summary.by_verify %}
+        <div><span class="verif verif-{{ status }}">{{ status }}</span> {{ n }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="stat">
+    <div class="label">Top shares</div>
+    <div class="value" style="font-size: 13px;">
+      {% for share, n in summary.top_shares[:3] %}
+      <div>{{ share }} <span class="breakdown">×{{ n }}</span></div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="stat">
+    <div class="label">Top extensions</div>
+    <div class="value" style="font-size: 13px;">
+      {% for ext, n in summary.top_extensions[:5] %}
+      <span style="margin-right: 8px;">{{ ext }} <span class="breakdown">×{{ n }}</span></span>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<div class="controls">
+  <input id="search" type="text" placeholder="Search path / snippet / rule..." autofocus>
+  <label>Tier <select id="filter-tier"><option value="">all</option>
+    {% for tier, _ in summary.by_tier %}<option>{{ tier }}</option>{% endfor %}
+  </select></label>
+  {% if summary.has_verification %}
+  <label>Verification <select id="filter-verif"><option value="">all</option>
+    {% for status, _ in summary.by_verify %}<option>{{ status }}</option>{% endfor %}
+  </select></label>
+  {% endif %}
+  <label>Share <select id="filter-share"><option value="">all</option>
+    {% for share, _ in summary.top_shares %}<option>{{ share }}</option>{% endfor %}
+  </select></label>
+  <label>Extension <select id="filter-ext"><option value="">all</option>
+    {% for ext, _ in summary.top_extensions %}<option>{{ ext }}</option>{% endfor %}
+  </select></label>
+  <span id="visible-count" style="margin-left: auto; color: var(--muted); font-size: 12px;"></span>
+  <button id="export-labels" style="background: var(--accent); color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 12px; cursor: pointer;">Export labels (<span id="label-count">0</span>)</button>
+</div>
+
+<table id="tbl">
+<thead>
+<tr>
+  <th data-key="tier">Tier</th>
+  <th data-key="path">Path</th>
+  <th data-key="prob">Path P</th>
+  <th data-key="content_check">Content</th>
+  {% if summary.has_verification %}
+  <th data-key="verification_status">Verified</th>
+  {% endif %}
+  <th data-key="extension">Ext</th>
+  <th data-key="snippet_preview">Snippet preview</th>
+</tr>
+</thead>
+<tbody id="rows"></tbody>
+</table>
+
+<footer>
+  ShareSift {{ title }} · self-contained report · no external network calls
+</footer>
+
+<script>
+const RECORDS = {{ records_json|safe }};
+const HAS_VERIFY = {{ "true" if summary.has_verification else "false" }};
+const rowsEl = document.getElementById("rows");
+const visibleCountEl = document.getElementById("visible-count");
+
+let sortKey = "tier";
+let sortDir = 1;
+const TIER_RANK = { "Black": 0, "Red": 1, "Yellow": 2, "Green": 3, "Gray": 4 };
+
+function sortRecords(records) {
+  return records.slice().sort((a, b) => {
+    let va = a[sortKey] ?? "", vb = b[sortKey] ?? "";
+    if (sortKey === "tier") { va = TIER_RANK[va] ?? 99; vb = TIER_RANK[vb] ?? 99; }
+    else if (sortKey === "prob") { va = parseFloat(va) || 0; vb = parseFloat(vb) || 0; }
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+}
+
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+function renderRow(r, idx) {
+  const verifyCell = HAS_VERIFY
+    ? `<td>${r.verification_status ? `<span class="verif verif-${r.verification_status}">${r.verification_status}</span>` : ""}</td>`
+    : "";
+  return `
+    <tr class="row" data-idx="${idx}">
+      <td><span class="tier tier-${r.tier}">${r.tier}</span></td>
+      <td class="path">${escapeHtml(r.path)}</td>
+      <td>${escapeHtml(r.prob)}</td>
+      <td>${escapeHtml(r.content_check)}</td>
+      ${verifyCell}
+      <td>${escapeHtml(r.extension)}</td>
+      <td class="snippet-preview">${escapeHtml(r.snippet_preview)}</td>
+    </tr>
+    <tr class="detail" data-detail="${idx}">
+      <td colspan="${HAS_VERIFY ? 7 : 6}"></td>
+    </tr>`;
+}
+
+function renderDetailContent(r) {
+  const currentLabel = LABELS[r.fingerprint]?.label || "";
+  const currentNotes = LABELS[r.fingerprint]?.notes || "";
+  let html = '<div class="detail-content">';
+  html += `<h4>Label this hit</h4>
+    <div style="display:flex; gap: 8px; align-items: center; margin-bottom: 8px;">
+      <button class="lbl-btn" data-fp="${r.fingerprint}" data-label="tp" style="background:${currentLabel==='tp'?'var(--pass)':'var(--panel)'}; color:${currentLabel==='tp'?'#fff':'var(--text)'}; border: 1px solid var(--border); padding: 5px 12px; border-radius: 4px; cursor: pointer;">True positive</button>
+      <button class="lbl-btn" data-fp="${r.fingerprint}" data-label="fp" style="background:${currentLabel==='fp'?'var(--fail)':'var(--panel)'}; color:${currentLabel==='fp'?'#fff':'var(--text)'}; border: 1px solid var(--border); padding: 5px 12px; border-radius: 4px; cursor: pointer;">False positive</button>
+      <button class="lbl-btn" data-fp="${r.fingerprint}" data-label="discard" style="background:${currentLabel==='discard'?'var(--skip)':'var(--panel)'}; color:${currentLabel==='discard'?'#fff':'var(--text)'}; border: 1px solid var(--border); padding: 5px 12px; border-radius: 4px; cursor: pointer;">Discard</button>
+      <button class="lbl-btn" data-fp="${r.fingerprint}" data-label="" style="background: var(--panel); color: var(--muted); border: 1px solid var(--border); padding: 5px 10px; border-radius: 4px; cursor: pointer;">Clear</button>
+    </div>
+    <input class="lbl-notes" data-fp="${r.fingerprint}" placeholder="Notes (optional, e.g. 'real GPP cpassword')" value="${escapeHtml(currentNotes)}" style="width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 6px 10px; font-size: 12px;">`;
+  if (r.extracted_credential_types.length) {
+    html += `<h4>Extracted credential types</h4><div class="types">${
+      r.extracted_credential_types.map(escapeHtml).join(", ")
+    }</div>`;
+  }
+  if (r.extracted_fields && r.extracted_fields.length) {
+    html += '<h4>Extracted fields (structured parsers)</h4><table style="background: #0a0d12; border: 1px solid var(--border); border-radius: 4px;">';
+    html += '<thead><tr><th>Field</th><th>Value</th><th>Parser</th><th>Confidence</th></tr></thead><tbody>';
+    for (const f of r.extracted_fields) {
+      html += `<tr><td>${escapeHtml(f.field_name)}</td><td style="font-family: monospace; font-size: 11px;">${escapeHtml((f.value || "").slice(0, 200))}</td><td>${escapeHtml(f.parser)}</td><td>${(f.confidence ?? 0).toFixed(2)}</td></tr>`;
+    }
+    html += '</tbody></table>';
+  }
+  if (r.verification_results.length) {
+    html += '<h4>Verification results</h4><table style="background: #0a0d12; border: 1px solid var(--border); border-radius: 4px;">';
+    html += '<thead><tr><th>Type</th><th>Service</th><th>Status</th><th>Latency</th><th>Detail</th></tr></thead><tbody>';
+    for (const v of r.verification_results) {
+      const detail = v.error || (v.metadata ? JSON.stringify(v.metadata) : "");
+      html += `<tr><td>${escapeHtml(v.credential_type)}</td><td>${escapeHtml(v.service)}</td>` +
+              `<td><span class="verif verif-${v.status}">${v.status}</span></td>` +
+              `<td>${(v.latency_ms ?? 0).toFixed(0)} ms</td>` +
+              `<td style="font-size: 11px; color: var(--muted);">${escapeHtml(detail.slice(0, 240))}</td></tr>`;
+    }
+    html += '</tbody></table>';
+  }
+  html += '<h4>Content excerpt</h4>';
+  html += `<div class="snippet">${escapeHtml(r.snippet_full || "(empty)")}</div>`;
+  html += '</div>';
+  return html;
+}
+
+function applyFilters() {
+  const q = document.getElementById("search").value.toLowerCase();
+  const ftier = document.getElementById("filter-tier").value;
+  const fshare = document.getElementById("filter-share").value;
+  const fext = document.getElementById("filter-ext").value;
+  const fverif = HAS_VERIFY ? document.getElementById("filter-verif").value : "";
+  const filtered = RECORDS.filter(r => {
+    if (ftier && r.tier !== ftier) return false;
+    if (fshare && r.share !== fshare) return false;
+    if (fext && r.extension !== fext) return false;
+    if (fverif && r.verification_status !== fverif) return false;
+    if (q) {
+      const blob = (r.path + " " + r.snippet_preview + " " + r.extracted_credential_types.join(" ")).toLowerCase();
+      if (!blob.includes(q)) return false;
+    }
+    return true;
+  });
+  const sorted = sortRecords(filtered);
+  rowsEl.innerHTML = sorted.map((r, i) => renderRow(r, RECORDS.indexOf(r))).join("");
+  visibleCountEl.textContent = `${sorted.length} of ${RECORDS.length} records`;
+}
+
+document.querySelectorAll("th[data-key]").forEach(th => {
+  th.addEventListener("click", () => {
+    const key = th.dataset.key;
+    if (key === sortKey) { sortDir *= -1; } else { sortKey = key; sortDir = 1; }
+    document.querySelectorAll("th").forEach(x => x.classList.remove("sorted-asc", "sorted-desc"));
+    th.classList.add(sortDir === 1 ? "sorted-asc" : "sorted-desc");
+    applyFilters();
+  });
+});
+
+document.getElementById("search").addEventListener("input", applyFilters);
+document.getElementById("filter-tier").addEventListener("change", applyFilters);
+document.getElementById("filter-share").addEventListener("change", applyFilters);
+document.getElementById("filter-ext").addEventListener("change", applyFilters);
+if (HAS_VERIFY) document.getElementById("filter-verif").addEventListener("change", applyFilters);
+
+// --- Active learning: localStorage-backed labels per fingerprint ---
+const LABELS_KEY = "sharesift_labels_v0p17";
+const LABELS = JSON.parse(localStorage.getItem(LABELS_KEY) || "{}");
+
+function persistLabels() {
+  localStorage.setItem(LABELS_KEY, JSON.stringify(LABELS));
+  document.getElementById("label-count").textContent = Object.keys(LABELS).length;
+}
+persistLabels();
+
+function setLabel(fingerprint, label, notes) {
+  if (!label && !(notes && notes.length)) {
+    delete LABELS[fingerprint];
+  } else {
+    LABELS[fingerprint] = {label, notes: notes || "", timestamp: new Date().toISOString()};
+  }
+  persistLabels();
+}
+
+rowsEl.addEventListener("click", e => {
+  // Label button click — don't toggle the row, just update label state
+  const lbl = e.target.closest("button.lbl-btn");
+  if (lbl) {
+    e.stopPropagation();
+    const fp = lbl.dataset.fp;
+    const newLabel = lbl.dataset.label;
+    const detail = lbl.closest("tr.detail");
+    const notesEl = detail?.querySelector("input.lbl-notes");
+    const notes = notesEl ? notesEl.value : "";
+    setLabel(fp, newLabel, notes);
+    // Re-render the detail block to update button highlight state
+    const idx = detail.dataset.detail;
+    detail.querySelector("td").innerHTML = renderDetailContent(RECORDS[idx]);
+    return;
+  }
+  const row = e.target.closest("tr.row");
+  if (!row) return;
+  const idx = row.dataset.idx;
+  const detail = document.querySelector(`tr.detail[data-detail="${idx}"]`);
+  if (!detail) return;
+  if (!detail.classList.contains("open")) {
+    detail.querySelector("td").innerHTML = renderDetailContent(RECORDS[idx]);
+  }
+  detail.classList.toggle("open");
+});
+
+// Persist notes-textarea edits on blur
+rowsEl.addEventListener("blur", e => {
+  if (e.target.matches("input.lbl-notes")) {
+    const fp = e.target.dataset.fp;
+    const existing = LABELS[fp] || {};
+    setLabel(fp, existing.label || "", e.target.value);
+  }
+}, true);
+
+// Export labels as JSONL
+document.getElementById("export-labels").addEventListener("click", () => {
+  const fpToRecord = {};
+  for (const r of RECORDS) fpToRecord[r.fingerprint] = r;
+  const lines = Object.entries(LABELS).map(([fp, data]) => {
+    const r = fpToRecord[fp] || {};
+    return JSON.stringify({
+      record_fingerprint: fp,
+      path: r.path || "",
+      label: data.label,
+      notes: data.notes || "",
+      timestamp: data.timestamp,
+    });
+  });
+  if (!lines.length) {
+    alert("No labels to export. Click TP / FP / Discard buttons after expanding a row.");
+    return;
+  }
+  const blob = new Blob([lines.join("\n") + "\n"], {type: "application/x-jsonlines"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `sharesift_labels_${new Date().toISOString().slice(0,10)}.jsonl`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+applyFilters();
+</script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+
+# Virtual envs
+.venv/
+venv/
+env/
+ENV/
+
+# uv
+.uv/
+
+# Tooling caches
+.ruff_cache/
+.pytest_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Notebooks
+.ipynb_checkpoints/
+notebooks/
+
+# IDEs / editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials.json
+
+# Project: large / external
+references/
+data/synthetic/
+
+# source_github raw API response cache — regenerable, query-keyed,
+# can grow large with --refresh runs. The labeled CSV outputs in
+# data/eval/sources/ stay tracked (they're the labeling-pipeline
+# input snapshot); only the cache subtree is excluded.
+data/eval/sources/github_cache/
+
+# source_stackexchange raw data dumps — multi-GB Posts.xml files
+# downloaded from archive.org/details/stackexchange. Re-downloadable
+# from the same URLs; the labeled CSV outputs derived from them stay
+# tracked. Same exclusion class as github_cache.
+data/eval/sources/dumps/
+
+# Synthetic generator output — produced by the postprocess pipeline
+# from LLM-generated raw JSONL. Regenerable from the prompts at
+# tools/ and the raw input under data/synthetic/raw/. Filesystem
+# boundary enforced by src/eval/generator/postprocess.py: synthetic
+# never lands under data/eval/, never the other way.
+data/synthetic/
+
+# ML artifacts
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.bin
+*.onnx
+*.gguf
+*.npy
+*.npz
+*.parquet
+*.arrow
+wandb/
+mlruns/
+lightning_logs/
+checkpoints/
+runs/
+
+# Logs
+*.log
+logs/
+data/eval/eval_set.jsonl
+data/eval/queue.jsonl
+data/eval/eval_set_claude.jsonl
+
+# Content classifier corpus — ~1.1GB of raw source files harvested
+# from kingfisher sweeps. Regenerable from the kingfisher run that
+# produced data/content/training_dataset.jsonl. The labeled splits
+# (train_split.jsonl, test_split.jsonl, training_dataset.jsonl) and
+# the stats JSONs stay tracked.
+data/content/corpus/
+
+# External benchmarks — downloaded by their own scripts, multi-GB
+# total. CredData via download_data.py (333 repos, ~1GB obfuscated
+# sources); SecretBench gated behind a data-share agreement (when
+# added). The build_creddata_benchmark.py output (data/eval/
+# creddata_benchmark.jsonl, ~5MB) stays tracked.
+data/external/
+
+# Intermediate training checkpoints — Trainer auto-saves every N
+# steps. Each is a full model snapshot (~100MB). Final-model dirs
+# (e.g. models/content_classifier_v0p3/) stay tracked but their
+# checkpoint-* subdirs are noise.
+models/*/checkpoint-*/
+
+# Ablation + intermediate content-classifier runs — results captured
+# in reports/ablate_content_classifier.json. The artifact directories
+# themselves are large (400MB-3GB each) and not needed once their
+# numbers are recorded. v0p3 is the canonical content classifier;
+# v0p1/v0p2/v0p4 and c4_*/c5_* are intermediate.
+models/content_classifier_v0/
+models/content_classifier_v0p1/
+models/content_classifier_v0p2/
+models/content_classifier_v0p4/
+models/content_classifier_c4_r*/
+models/content_classifier_c5_f*/
+
+# v0p4_creddata is the v0.6 canonical content classifier — keep the
+# small metadata files (adapter_config, chat_template, training
+# metadata) but exclude the large tokenizer.json that's the upstream
+# Qwen3 vocab, identical across all checkpoints.
+models/content_classifier_v0p4_creddata/checkpoint-*/
+models/content_classifier_v0p4_creddata/tokenizer.json
+models/content_classifier_v0p5_handlabel/checkpoint-*/
+models/content_classifier_v0p5_handlabel/tokenizer.json
+models/content_classifier_v0p6_docx_salted/checkpoint-*/
+models/content_classifier_v0p6_docx_salted/tokenizer.json
+
+# Deprecated single-combined path classifier — replaced by per-shape
+# Windows + Linux models in v0.5.
+models/path_classifier_v0_combined_deprecated/
+
+# Unsloth build cache — regenerable, contains compile-time-only
+# trainer subclasses.
+unsloth_compiled_cache/
+
+# Per-session summary scratch files written by the labeling pipeline
+# during interactive runs. Ephemeral.
+data/eval/last_session_summary.txt
+
+# --- v0.17.1: public-repo additions ----------------------------------
+# Below this line: paths that existed locally before the rename to
+# ShareSift but were never explicitly ignored; excluded now because
+# they're either too big for GitHub (>100MB blob cap), contain real
+# engagement data, or are interactive-tool scratch state.
+
+# v0p7 content classifiers — full backbone weights, ~250-470MB each.
+# Follow the v0p4_creddata pattern: keep small metadata, exclude
+# weights/tokenizer/checkpoints.
+models/content_classifier_v0p7_distilled/*.safetensors
+models/content_classifier_v0p7_distilled/*.bin
+models/content_classifier_v0p7_distilled/tokenizer.json
+models/content_classifier_v0p7_distilled/checkpoint-*/
+models/content_classifier_v0p7_distilled/rendered_*.jsonl
+models/content_classifier_v0p7_literal_vs_referenced/*.safetensors
+models/content_classifier_v0p7_literal_vs_referenced/*.bin
+models/content_classifier_v0p7_literal_vs_referenced/tokenizer.json
+models/content_classifier_v0p7_literal_vs_referenced/checkpoint-*/
+models/content_classifier_v0p7_literal_vs_referenced/rendered_*.jsonl
+
+# Scan outputs from internal audits (codex/opus labels, v0p7/v0p14
+# benchmark predictions). May contain real labeled credential strings
+# from the constructed-share corpus.
+reports/
+
+# Labeling pipeline interactive scratch state (queue snapshots,
+# in-progress sessions). Regenerable.
+labeling_kit/
+labeling_kit_v0p9/
+
+# Raw labeled dump from a one-off labeling pass.
+tsvandgroundtruth.txt
+
+# Background-job stderr capture.
+nohup.out
+*.out

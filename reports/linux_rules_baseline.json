@@ -1,0 +1,573 @@
+{
+  "version": "v0.5",
+  "generated": "2026-05-31",
+  "linux_corpus": "data/eval/eval_set_claude_linux_with_seed.jsonl",
+  "n_records": 1685,
+  "n_juicy": 1206,
+  "n_not_juicy": 479,
+  "n_rules": 38,
+  "summary": {
+    "n_matched": 354,
+    "n_matched_juicy": 354,
+    "n_matched_not_juicy": 0,
+    "rule_pack_precision": 1.0,
+    "rule_pack_recall": 0.2935323383084577,
+    "rule_pack_f1": 0.453846153845803,
+    "n_blind_juicy": 852,
+    "n_blind_not_juicy": 479
+  },
+  "per_rule": [
+    {
+      "pattern": "^/etc/(g)?shadow(-|\\.bak|\\.backup)?$",
+      "description": "Linux password hash file",
+      "tier": "Black",
+      "category": "ssh_credentials",
+      "n_matched": 7,
+      "n_juicy_matched": 7,
+      "sample_juicy_paths": [
+        "/etc/shadow",
+        "/etc/shadow-",
+        "/etc/shadow.bak",
+        "/etc/shadow.backup",
+        "/etc/gshadow"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/sudoers(\\.d/.*|\\.bak|\\.dpkg-old)?$",
+      "description": "sudoers privilege config",
+      "tier": "Red",
+      "category": "ssh_credentials",
+      "n_matched": 14,
+      "n_juicy_matched": 14,
+      "sample_juicy_paths": [
+        "/etc/sudoers.d/51-tik",
+        "/etc/sudoers.d/watchtower-deploy",
+        "/etc/sudoers.d/90-",
+        "/etc/sudoers.d/netdata",
+        "/etc/sudoers.d/zzzzzzzz-waydroid"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/(passwd|group)(-|\\.bak)?$",
+      "description": "Unix account enumeration",
+      "tier": "Yellow",
+      "category": "ssh_credentials",
+      "n_matched": 7,
+      "n_juicy_matched": 7,
+      "sample_juicy_paths": [
+        "/etc/passwd",
+        "/etc/passwd-",
+        "/etc/group",
+        "/etc/group-",
+        "/etc/group-"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.ssh/(id_rsa|id_ed25519|id_ecdsa|id_dsa|id_xmss)$",
+      "description": "User SSH private key",
+      "tier": "Black",
+      "category": "ssh_credentials",
+      "n_matched": 39,
+      "n_juicy_matched": 39,
+      "sample_juicy_paths": [
+        "/home/korey/.ssh/id_ed25519",
+        "/var/jenkins_home/.ssh/id_rsa",
+        "~/.ssh/id_ecdsa",
+        "/home/victor/.ssh/id_rsa",
+        "/root/.ssh/id_ed25519"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.ssh/authorized_keys2?$",
+      "description": "Authorized SSH keys",
+      "tier": "Red",
+      "category": "ssh_credentials",
+      "n_matched": 28,
+      "n_juicy_matched": 28,
+      "sample_juicy_paths": [
+        "~root/.ssh/authorized_keys",
+        "/home/accts/sas342/.ssh/authorized_keys",
+        "/var/lib/lxc/deb1/rootfs/root/.ssh/authorized_keys",
+        "/home/deploy/.ssh/authorized_keys",
+        "/home/cuckoo/.ssh/authorized_keys"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.ssh/known_hosts2?$",
+      "description": "Known SSH hosts (internal network intel)",
+      "tier": "Red",
+      "category": "ssh_credentials",
+      "n_matched": 12,
+      "n_juicy_matched": 12,
+      "sample_juicy_paths": [
+        "/root/.ssh/known_hosts",
+        "/home/user/.ssh/known_hosts",
+        "~/.ssh/known_hosts2",
+        "/root/.ssh/known_hosts2",
+        "~/.ssh/known_hosts"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.ssh/config$",
+      "description": "User SSH client config",
+      "tier": "Yellow",
+      "category": "ssh_credentials",
+      "n_matched": 11,
+      "n_juicy_matched": 11,
+      "sample_juicy_paths": [
+        "/home/otto/.ssh/config",
+        "/home/syoung/.ssh/config",
+        "/root/.ssh/config",
+        "/home/alice/.ssh/config",
+        "~/.ssh/config"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/ssh/ssh_host_[a-z0-9_]+_key$",
+      "description": "Host SSH private key",
+      "tier": "Black",
+      "category": "ssh_credentials",
+      "n_matched": 5,
+      "n_juicy_matched": 5,
+      "sample_juicy_paths": [
+        "/etc/ssh/ssh_host_rsa_key",
+        "/etc/ssh/ssh_host_rsa_key",
+        "/etc/ssh/ssh_host_ecdsa_key",
+        "/etc/ssh/ssh_host_ed25519_key",
+        "/etc/ssh/ssh_host_dsa_key"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/ssh/ssh_host_[a-z0-9_]+_key\\.pub$",
+      "description": "Host SSH public key",
+      "tier": "Yellow",
+      "category": "ssh_credentials",
+      "n_matched": 5,
+      "n_juicy_matched": 5,
+      "sample_juicy_paths": [
+        "/etc/ssh/ssh_host_ed25519_key.pub",
+        "/etc/ssh/ssh_host_rsa_key.pub",
+        "/etc/ssh/ssh_host_ecdsa_key.pub",
+        "/etc/ssh/ssh_host_ed25519_key.pub",
+        "/etc/ssh/ssh_host_dsa_key.pub"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/ssh/sshd_config$",
+      "description": "SSH daemon config",
+      "tier": "Yellow",
+      "category": "ssh_credentials",
+      "n_matched": 1,
+      "n_juicy_matched": 1,
+      "sample_juicy_paths": [
+        "/etc/ssh/sshd_config"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.aws/credentials$",
+      "description": "AWS credentials file",
+      "tier": "Black",
+      "category": "cloud_credentials",
+      "n_matched": 11,
+      "n_juicy_matched": 11,
+      "sample_juicy_paths": [
+        "/root/.aws/credentials",
+        "/home/alice/.aws/credentials",
+        "~/.aws/credentials",
+        "/home/user/.aws/credentials",
+        "/opt/sensu/.aws/credentials"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.aws/config$",
+      "description": "AWS config",
+      "tier": "Yellow",
+      "category": "cloud_credentials",
+      "n_matched": 6,
+      "n_juicy_matched": 6,
+      "sample_juicy_paths": [
+        "/root/.aws/config",
+        "/home/ubuntu/.aws/config",
+        "/home/ec2-user/.aws/config",
+        "/home/debian/.aws/config",
+        "/home/vincent/.aws/config"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.kube/config$",
+      "description": "Kubernetes credentials",
+      "tier": "Black",
+      "category": "cloud_credentials",
+      "n_matched": 7,
+      "n_juicy_matched": 7,
+      "sample_juicy_paths": [
+        "~/.kube/config",
+        "/root/.kube/config",
+        "/home/ubuntu/.kube/config",
+        "/home/ec2-user/.kube/config",
+        "/home/debian/.kube/config"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/kubernetes/admin\\.conf$",
+      "description": "Kubernetes admin config",
+      "tier": "Black",
+      "category": "cloud_credentials",
+      "n_matched": 1,
+      "n_juicy_matched": 1,
+      "sample_juicy_paths": [
+        "/etc/kubernetes/admin.conf"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.config/gcloud/.*credentials.*\\.(json|db)$",
+      "description": "GCP credentials",
+      "tier": "Black",
+      "category": "cloud_credentials",
+      "n_matched": 8,
+      "n_juicy_matched": 8,
+      "sample_juicy_paths": [
+        "~/.config/gcloud/application_default_credentials.json",
+        "~/.config/gcloud/credentials.db",
+        "/root/.config/gcloud/application_default_credentials.json",
+        "/home/ubuntu/.config/gcloud/application_default_credentials.json",
+        "/home/ec2-user/.config/gcloud/application_default_credentials.json"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.azure/(credentials|accessTokens\\.json)$",
+      "description": "Azure credentials",
+      "tier": "Black",
+      "category": "cloud_credentials",
+      "n_matched": 2,
+      "n_juicy_matched": 2,
+      "sample_juicy_paths": [
+        "~/.azure/credentials",
+        "~/.azure/accessTokens.json"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.docker/config\\.json$",
+      "description": "Docker registry credentials",
+      "tier": "Red",
+      "category": "scm_cicd_tokens",
+      "n_matched": 10,
+      "n_juicy_matched": 10,
+      "sample_juicy_paths": [
+        "/home/kimia/.docker/config.json",
+        "~/.docker/config.json",
+        "/root/.docker/config.json",
+        "/home/alice/.docker/config.json",
+        "/root/.docker/config.json"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.netrc$",
+      "description": "netrc plaintext FTP/HTTP credentials",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 8,
+      "n_juicy_matched": 8,
+      "sample_juicy_paths": [
+        "/root/.netrc",
+        "/home/ubuntu/.netrc",
+        "/home/ec2-user/.netrc",
+        "/home/debian/.netrc",
+        "/home/vincent/.netrc"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.(bash|zsh|sh|fish|ksh)_history$",
+      "description": "Shell history with potential creds",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 22,
+      "n_juicy_matched": 22,
+      "sample_juicy_paths": [
+        "/home/web/.bash_history",
+        "/root/.sh_history",
+        "~/.zsh_history",
+        "/home/apache2/.sh_history",
+        "/home/test/.bash_history"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/NetworkManager/system-connections/.+\\.nmconnection$",
+      "description": "WiFi/VPN credentials",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 5,
+      "n_juicy_matched": 5,
+      "sample_juicy_paths": [
+        "/etc/NetworkManager/system-connections/LAN2.nmconnection",
+        "/etc/NetworkManager/system-connections/wlan0.nmconnection",
+        "/etc/NetworkManager/system-connections/corp-wifi.nmconnection",
+        "/etc/NetworkManager/system-connections/eth0.nmconnection",
+        "/etc/NetworkManager/system-connections/vpn-corp.nmconnection"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/wireguard/.+\\.conf$",
+      "description": "WireGuard private key config",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 3,
+      "n_juicy_matched": 3,
+      "sample_juicy_paths": [
+        "/etc/wireguard/wg0.conf",
+        "/etc/wireguard/wg0.conf",
+        "/etc/wireguard/wg1.conf"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/openvpn/.+\\.key$",
+      "description": "OpenVPN private key",
+      "tier": "Black",
+      "category": "private_keys_x509",
+      "n_matched": 1,
+      "n_juicy_matched": 1,
+      "sample_juicy_paths": [
+        "/etc/openvpn/ta.key"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/(letsencrypt/live|ssl/private)/.+/privkey\\.pem$",
+      "description": "Let's Encrypt private key",
+      "tier": "Black",
+      "category": "private_keys_x509",
+      "n_matched": 4,
+      "n_juicy_matched": 4,
+      "sample_juicy_paths": [
+        "/etc/letsencrypt/live/npm-56/privkey.pem",
+        "/etc/letsencrypt/live/qhdata.tk/privkey.pem",
+        "/etc/letsencrypt/live/search.worldmodelers.com/privkey.pem",
+        "/etc/letsencrypt/live/example.com/privkey.pem"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/ssl/private/.+\\.key$",
+      "description": "TLS private key in private dir",
+      "tier": "Black",
+      "category": "private_keys_x509",
+      "n_matched": 5,
+      "n_juicy_matched": 5,
+      "sample_juicy_paths": [
+        "/etc/ssl/private/icinga2.example.com_saml_sp.key",
+        "/etc/ssl/private/ssl-cert-snakeoil.key",
+        "/etc/ssl/private/aaho.in.key",
+        "/etc/ssl/private/server.key",
+        "/etc/ssl/private/nginx-selfsigned.key"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/(nginx|apache2|httpd)/.+\\.(key|priv\\.pem)$",
+      "description": "Web server private key",
+      "tier": "Black",
+      "category": "private_keys_x509",
+      "n_matched": 76,
+      "n_juicy_matched": 76,
+      "sample_juicy_paths": [
+        "/etc/apache2/ssl/posbox.key",
+        "/etc/nginx/ssl/wolf.law.uw.edu.key",
+        "/etc/nginx/certs/insecure/insecure.key",
+        "/etc/apache2/edgemap.key",
+        "/etc/nginx/conf/ssl/server.key"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/var/lib/(mysql|postgresql|mongo|redis|cassandra)/",
+      "description": "Database data directory",
+      "tier": "Red",
+      "category": "db_files",
+      "n_matched": 4,
+      "n_juicy_matched": 4,
+      "sample_juicy_paths": [
+        "/var/lib/postgresql/14/data",
+        "/var/lib/postgresql/9.1/main",
+        "/var/lib/mysql/my.cnf",
+        "/var/lib/postgresql/data"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/opt/.+/\\.env(\\..+)?$",
+      "description": "Application env file with secrets",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 15,
+      "n_juicy_matched": 15,
+      "sample_juicy_paths": [
+        "/opt/napp-gemini/.env",
+        "/opt/flowise/.env",
+        "/opt/finlakehouse/.env",
+        "/opt/data/.env",
+        "/opt/copilot-bridge/.env"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/srv/.+/\\.env(\\..+)?$",
+      "description": "Application env file with secrets",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 1,
+      "n_juicy_matched": 1,
+      "sample_juicy_paths": [
+        "/srv/www/.env"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/var/lib/jenkins/secrets(/.+)?$",
+      "description": "Jenkins secrets directory",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 4,
+      "n_juicy_matched": 4,
+      "sample_juicy_paths": [
+        "/var/lib/jenkins/secrets",
+        "/var/lib/jenkins/secrets",
+        "/var/lib/jenkins/secrets/hudson.util.Secret",
+        "/var/lib/jenkins/secrets/master.key"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/var/lib/jenkins/secrets/master\\.key$",
+      "description": "Jenkins master encryption key",
+      "tier": "Black",
+      "category": "embedded_secrets",
+      "n_matched": 0,
+      "n_juicy_matched": 0,
+      "sample_juicy_paths": [],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/etc/postfix/(sasl/)?sasl_passwd$",
+      "description": "Postfix SMTP relay credentials",
+      "tier": "Red",
+      "category": "embedded_secrets",
+      "n_matched": 2,
+      "n_juicy_matched": 2,
+      "sample_juicy_paths": [
+        "/etc/postfix/sasl/sasl_passwd",
+        "/etc/postfix/sasl_passwd"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/var/log/(auth\\.log|secure)(\\.\\d+(\\.gz)?)?$",
+      "description": "Auth log (may contain creds)",
+      "tier": "Yellow",
+      "category": "embedded_secrets",
+      "n_matched": 4,
+      "n_juicy_matched": 4,
+      "sample_juicy_paths": [
+        "/var/log/auth.log.0.gz",
+        "/var/log/auth.log",
+        "/var/log/auth.log",
+        "/var/log/secure"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "^/usr/local/etc/clogin\\.conf$",
+      "description": "RANCID clogin credentials",
+      "tier": "Red",
+      "category": "network_device",
+      "n_matched": 2,
+      "n_juicy_matched": 2,
+      "sample_juicy_paths": [
+        "/usr/local/etc/clogin.conf",
+        "/usr/local/etc/clogin.conf"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "/\\.cloginrc$",
+      "description": "RANCID cloginrc credentials",
+      "tier": "Red",
+      "category": "network_device",
+      "n_matched": 1,
+      "n_juicy_matched": 1,
+      "sample_juicy_paths": [
+        "/etc/rancid/.cloginrc"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "\\.kdbx?$",
+      "description": "KeePass database",
+      "tier": "Black",
+      "category": "credential_containers",
+      "n_matched": 0,
+      "n_juicy_matched": 0,
+      "sample_juicy_paths": [],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "\\.opvault$",
+      "description": "1Password vault",
+      "tier": "Black",
+      "category": "credential_containers",
+      "n_matched": 0,
+      "n_juicy_matched": 0,
+      "sample_juicy_paths": [],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "\\.(key|priv\\.pem)$",
+      "description": "Private key file by extension",
+      "tier": "Black",
+      "category": "private_keys_x509",
+      "n_matched": 21,
+      "n_juicy_matched": 21,
+      "sample_juicy_paths": [
+        "/var/www/html/.docker/config/public.key",
+        "/var/www/jwtRS256.key",
+        "/etc/ssl/certs/default.key",
+        "/opt/micromdm/certs/server.key",
+        "/etc/mysql/certs/server.key"
+      ],
+      "sample_non_juicy_paths": []
+    },
+    {
+      "pattern": "\\.(p12|pfx)$",
+      "description": "PKCS#12 cert+key bundle",
+      "tier": "Black",
+      "category": "private_keys_x509",
+      "n_matched": 2,
+      "n_juicy_matched": 2,
+      "sample_juicy_paths": [
+        "/opt/documenso/cert.p12",
+        "/etc/ishare/certs/client.p12"
+      ],
+      "sample_non_juicy_paths": []
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "version": "v0.5_recalibration",
+  "generated": "2026-05-31",
+  "config": {
+    "train_records": 8540,
+    "test_records": 2150,
+    "benchmark_records": 500,
+    "benchmark_calib_fraction": 0.3,
+    "n_benchmark_calib": 150,
+    "n_benchmark_heldout": 350,
+    "seed": 2026
+  },
+  "baselines": {
+    "current_calibrated_test": {
+      "n": 2150,
+      "n_positive": 66,
+      "ece": 0.007049770387630954,
+      "brier": 0.0025054342687393675,
+      "mean_pred": 0.032481451543000826,
+      "frac_pos": 0.030697674418604652
+    },
+    "current_calibrated_heldout_benchmark": {
+      "n": 350,
+      "n_positive": 174,
+      "ece": 0.29773755575988226,
+      "brier": 0.22520142168661517,
+      "mean_pred": 0.1994053013829748,
+      "frac_pos": 0.49714285714285716
+    },
+    "raw_uncalibrated_test": {
+      "n": 2150,
+      "n_positive": 66,
+      "ece": 0.003071585633743297,
+      "brier": 0.002921585764646551,
+      "mean_pred": 0.03290847385517871,
+      "frac_pos": 0.030697674418604652
+    },
+    "raw_uncalibrated_heldout_benchmark": {
+      "n": 350,
+      "n_positive": 174,
+      "ece": 0.22694245527922366,
+      "brier": 0.1955115244718903,
+      "mean_pred": 0.2702004018636334,
+      "frac_pos": 0.49714285714285716
+    }
+  },
+  "variants": {
+    "isotonic_mixed": {
+      "test": {
+        "n": 2150,
+        "n_positive": 66,
+        "ece": 0.006380767639921759,
+        "brier": 0.0033523755244132905,
+        "mean_pred": 0.03707844205852641,
+        "frac_pos": 0.030697674418604652
+      },
+      "heldout_benchmark": {
+        "n": 350,
+        "n_positive": 174,
+        "ece": 0.1917732549010349,
+        "brier": 0.15050810693301528,
+        "mean_pred": 0.30536960224182225,
+        "frac_pos": 0.49714285714285716
+      }
+    },
+    "platt_mixed": {
+      "test": {
+        "n": 2150,
+        "n_positive": 66,
+        "ece": 0.006459898263586439,
+        "brier": 0.002975811610277226,
+        "mean_pred": 0.037157572682191095,
+        "frac_pos": 0.030697674418604652
+      },
+      "heldout_benchmark": {
+        "n": 350,
+        "n_positive": 174,
+        "ece": 0.23851277779381577,
+        "brier": 0.21327397615010982,
+        "mean_pred": 0.25863007934904136,
+        "frac_pos": 0.49714285714285716
+      }
+    },
+    "temperature_ood_only": {
+      "T": 5.518761141174083,
+      "test": {
+        "n": 2150,
+        "n_positive": 66,
+        "ece": 0.1207018507265453,
+        "brier": 0.01867570299027628,
+        "mean_pred": 0.1410239749778944,
+        "frac_pos": 0.030697674418604652
+      },
+      "heldout_benchmark": {
+        "n": 350,
+        "n_positive": 174,
+        "ece": 0.22502337387161134,
+        "brier": 0.1545316865165269,
+        "mean_pred": 0.3093924768041253,
+        "frac_pos": 0.49714285714285716
+      }
+    },
+    "temperature_mixed": {
+      "T": 1.6639039206819966,
+      "test": {
+        "n": 2150,
+        "n_positive": 66,
+        "ece": 0.005403692356672255,
+        "brier": 0.002632796053933237,
+        "mean_pred": 0.03566287101158435,
+        "frac_pos": 0.030697674418604652
+      },
+      "heldout_benchmark": {
+        "n": 350,
+        "n_positive": 174,
+        "ece": 0.23296629744191633,
+        "brier": 0.18471978059059885,
+        "mean_pred": 0.26417655970094084,
+        "frac_pos": 0.49714285714285716
+      }
+    }
+  }
+}

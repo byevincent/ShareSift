@@ -1,0 +1,312 @@
+{
+  "config": {
+    "train": "data/eval/train_split.jsonl",
+    "test": "data/eval/test_split.jsonl",
+    "bench": "data/eval/snaffler_blind_benchmark.jsonl",
+    "seed": 2026,
+    "bootstrap_iters": 1000,
+    "lgbm_params": {
+      "n_estimators": 300,
+      "learning_rate": 0.05,
+      "num_leaves": 31,
+      "class_weight": "balanced",
+      "verbose": -1
+    }
+  },
+  "variants": [
+    {
+      "name": "P0_headline",
+      "description": "LightGBM, n-grams + hand features, isotonic CV calibration (shipped config)",
+      "config": {
+        "use_ngrams": true,
+        "use_hand": true,
+        "classifier": "lgbm",
+        "calibration": "isotonic"
+      },
+      "train_seconds": 9.900478839874268,
+      "test_metrics": {
+        "n_records": 2138,
+        "n_positive": 60,
+        "pr_auc": 0.8390821624889448,
+        "roc_auc": 0.9907362848893166,
+        "brier_score": 0.00984627938980029,
+        "best_f1": 0.7666666661666667,
+        "best_threshold": 0.34353864734299516,
+        "best_precision": 0.7666666666666667,
+        "best_recall": 0.7666666666666667,
+        "fixed_precision_at_0p5": 0.8260869565217391,
+        "fixed_recall_at_0p5": 0.6333333333333333,
+        "fixed_f1_at_0p5": 0.7169811320754716
+      },
+      "bench_metrics": {
+        "n_records": 500,
+        "n_positive": 250,
+        "pr_auc": 0.9731032382267742,
+        "roc_auc": 0.9697760000000001,
+        "brier_score": 0.2299919392523245,
+        "best_f1": 0.9178356708426872,
+        "best_threshold": 0.01175006331209943,
+        "best_precision": 0.9196787148594378,
+        "best_recall": 0.916,
+        "fixed_precision_at_0p5": 1.0,
+        "fixed_recall_at_0p5": 0.392,
+        "fixed_f1_at_0p5": 0.5632183908045977
+      }
+    },
+    {
+      "name": "P1_ngrams_only",
+      "description": "LightGBM, n-grams ONLY, isotonic \u2014 does the hand-feature block earn weight?",
+      "config": {
+        "use_ngrams": true,
+        "use_hand": false,
+        "classifier": "lgbm",
+        "calibration": "isotonic"
+      },
+      "train_seconds": 10.317867517471313,
+      "test_metrics": {
+        "n_records": 2138,
+        "n_positive": 60,
+        "pr_auc": 0.6852183791412001,
+        "roc_auc": 0.9656520692974013,
+        "brier_score": 0.01417123705887023,
+        "best_f1": 0.6861313863690127,
+        "best_threshold": 0.25381352541016405,
+        "best_precision": 0.6103896103896104,
+        "best_recall": 0.7833333333333333,
+        "fixed_precision_at_0p5": 0.6666666666666666,
+        "fixed_recall_at_0p5": 0.5,
+        "fixed_f1_at_0p5": 0.5714285714285714
+      },
+      "bench_metrics": {
+        "n_records": 500,
+        "n_positive": 250,
+        "pr_auc": 0.9400704964171247,
+        "roc_auc": 0.9349040000000001,
+        "brier_score": 0.28810634934170015,
+        "best_f1": 0.8841201711764815,
+        "best_threshold": 0.03144942494641253,
+        "best_precision": 0.9537037037037037,
+        "best_recall": 0.824,
+        "fixed_precision_at_0p5": 0.9787234042553191,
+        "fixed_recall_at_0p5": 0.184,
+        "fixed_f1_at_0p5": 0.30976430976430974
+      }
+    },
+    {
+      "name": "P2_hand_only",
+      "description": "LightGBM, hand features ONLY (8 dense floats), isotonic \u2014 do n-grams earn weight?",
+      "config": {
+        "use_ngrams": false,
+        "use_hand": true,
+        "classifier": "lgbm",
+        "calibration": "isotonic"
+      },
+      "train_seconds": 1.013476848602295,
+      "test_metrics": {
+        "n_records": 2138,
+        "n_positive": 60,
+        "pr_auc": 0.23674763272945248,
+        "roc_auc": 0.8758822585819698,
+        "brier_score": 0.024403401282630268,
+        "best_f1": 0.31496062942277886,
+        "best_threshold": 0.20385942689333053,
+        "best_precision": 0.29850746268656714,
+        "best_recall": 0.3333333333333333,
+        "fixed_precision_at_0p5": 0.3333333333333333,
+        "fixed_recall_at_0p5": 0.06666666666666667,
+        "fixed_f1_at_0p5": 0.1111111111111111
+      },
+      "bench_metrics": {
+        "n_records": 500,
+        "n_positive": 250,
+        "pr_auc": 0.8021277964449081,
+        "roc_auc": 0.7913600000000001,
+        "brier_score": 0.4081759662858532,
+        "best_f1": 0.753787878289285,
+        "best_threshold": 0.006768462666054864,
+        "best_precision": 0.7158273381294964,
+        "best_recall": 0.796,
+        "fixed_precision_at_0p5": 0.875,
+        "fixed_recall_at_0p5": 0.028,
+        "fixed_f1_at_0p5": 0.05426356589147287
+      }
+    },
+    {
+      "name": "P3_logreg",
+      "description": "Logistic regression on full features, isotonic \u2014 does GBM beat a linear baseline?",
+      "config": {
+        "use_ngrams": true,
+        "use_hand": true,
+        "classifier": "logreg",
+        "calibration": "isotonic"
+      },
+      "train_seconds": 10.758432626724243,
+      "test_metrics": {
+        "n_records": 2138,
+        "n_positive": 60,
+        "pr_auc": 0.6785017232031575,
+        "roc_auc": 0.9803256336220725,
+        "brier_score": 0.014198083895291863,
+        "best_f1": 0.6788990820738995,
+        "best_threshold": 0.4755226488483221,
+        "best_precision": 0.7551020408163265,
+        "best_recall": 0.6166666666666667,
+        "fixed_precision_at_0p5": 0.7142857142857143,
+        "fixed_recall_at_0p5": 0.5,
+        "fixed_f1_at_0p5": 0.5882352941176471
+      },
+      "bench_metrics": {
+        "n_records": 500,
+        "n_positive": 250,
+        "pr_auc": 0.9317665962250249,
+        "roc_auc": 0.9391039999999999,
+        "brier_score": 0.2977022205685288,
+        "best_f1": 0.899009900490148,
+        "best_threshold": 0.006113317888083579,
+        "best_precision": 0.8901960784313725,
+        "best_recall": 0.908,
+        "fixed_precision_at_0p5": 0.9482758620689655,
+        "fixed_recall_at_0p5": 0.22,
+        "fixed_f1_at_0p5": 0.35714285714285715
+      }
+    },
+    {
+      "name": "P4_uncalibrated",
+      "description": "LightGBM on full features, NO calibration \u2014 does isotonic improve reliability?",
+      "config": {
+        "use_ngrams": true,
+        "use_hand": true,
+        "classifier": "lgbm",
+        "calibration": "none"
+      },
+      "train_seconds": 2.270714044570923,
+      "test_metrics": {
+        "n_records": 2138,
+        "n_positive": 60,
+        "pr_auc": 0.868619333472081,
+        "roc_auc": 0.9921719602181585,
+        "brier_score": 0.01126339498319701,
+        "best_f1": 0.7999999995041321,
+        "best_threshold": 0.8815087431955052,
+        "best_precision": 0.88,
+        "best_recall": 0.7333333333333333,
+        "fixed_precision_at_0p5": 0.7666666666666667,
+        "fixed_recall_at_0p5": 0.7666666666666667,
+        "fixed_f1_at_0p5": 0.7666666666666667
+      },
+      "bench_metrics": {
+        "n_records": 500,
+        "n_positive": 250,
+        "pr_auc": 0.9735859805850366,
+        "roc_auc": 0.969328,
+        "brier_score": 0.20115950819973574,
+        "best_f1": 0.9094412326413251,
+        "best_threshold": 0.00018452190204924264,
+        "best_precision": 0.8773234200743495,
+        "best_recall": 0.944,
+        "fixed_precision_at_0p5": 1.0,
+        "fixed_recall_at_0p5": 0.568,
+        "fixed_f1_at_0p5": 0.7244897959183674
+      }
+    },
+    {
+      "name": "P5_platt",
+      "description": "LightGBM on full features, Platt (sigmoid) calibration \u2014 isotonic vs Platt?",
+      "config": {
+        "use_ngrams": true,
+        "use_hand": true,
+        "classifier": "lgbm",
+        "calibration": "platt"
+      },
+      "train_seconds": 9.388954639434814,
+      "test_metrics": {
+        "n_records": 2138,
+        "n_positive": 60,
+        "pr_auc": 0.8443461955149696,
+        "roc_auc": 0.9908565928777672,
+        "brier_score": 0.010541142545831583,
+        "best_f1": 0.7603305780124308,
+        "best_threshold": 0.19457608529808773,
+        "best_precision": 0.7540983606557377,
+        "best_recall": 0.7666666666666667,
+        "fixed_precision_at_0p5": 0.8297872340425532,
+        "fixed_recall_at_0p5": 0.65,
+        "fixed_f1_at_0p5": 0.7289719626168224
+      },
+      "bench_metrics": {
+        "n_records": 500,
+        "n_positive": 250,
+        "pr_auc": 0.9750893341953982,
+        "roc_auc": 0.9707520000000001,
+        "brier_score": 0.26392453415778605,
+        "best_f1": 0.9184890651063796,
+        "best_threshold": 0.006137238352627689,
+        "best_precision": 0.9130434782608695,
+        "best_recall": 0.924,
+        "fixed_precision_at_0p5": 1.0,
+        "fixed_recall_at_0p5": 0.38,
+        "fixed_f1_at_0p5": 0.5507246376811594
+      }
+    }
+  ],
+  "headline_bootstrap_ci": {
+    "test": {
+      "pr_auc": {
+        "metric": "pr_auc",
+        "n_resamples": 1000,
+        "point_estimate": 0.8390821624889448,
+        "mean": 0.8406497863620236,
+        "std": 0.03943732760348842,
+        "ci_low_2p5": 0.7584812954171222,
+        "ci_high_97p5": 0.9088649667243499
+      },
+      "roc_auc": {
+        "metric": "roc_auc",
+        "n_resamples": 1000,
+        "point_estimate": 0.9907362848893166,
+        "mean": 0.9908380252319507,
+        "std": 0.00288456432001796,
+        "ci_low_2p5": 0.9843351498268311,
+        "ci_high_97p5": 0.99560390921986
+      },
+      "f1_at_0p5": {
+        "metric": "f1_at_0p5",
+        "n_resamples": 1000,
+        "point_estimate": 0.7169811320754716,
+        "mean": 0.7167606324692012,
+        "std": 0.04964666484178079,
+        "ci_low_2p5": 0.6153846153846154,
+        "ci_high_97p5": 0.8064826302729527
+      }
+    },
+    "bench": {
+      "pr_auc": {
+        "metric": "pr_auc",
+        "n_resamples": 1000,
+        "point_estimate": 0.9731032382267742,
+        "mean": 0.9728264690769383,
+        "std": 0.005828560718142945,
+        "ci_low_2p5": 0.9600620636547269,
+        "ci_high_97p5": 0.9831044314856883
+      },
+      "roc_auc": {
+        "metric": "roc_auc",
+        "n_resamples": 1000,
+        "point_estimate": 0.9697760000000001,
+        "mean": 0.9693384996119139,
+        "std": 0.006756262010499302,
+        "ci_low_2p5": 0.9555006203894153,
+        "ci_high_97p5": 0.9814192642452079
+      },
+      "f1_at_0p5": {
+        "metric": "f1_at_0p5",
+        "n_resamples": 1000,
+        "point_estimate": 0.5632183908045977,
+        "mean": 0.5619175321368344,
+        "std": 0.03294345914237804,
+        "ci_low_2p5": 0.49696683819325327,
+        "ci_high_97p5": 0.6201217590603065
+      }
+    }
+  }
+}

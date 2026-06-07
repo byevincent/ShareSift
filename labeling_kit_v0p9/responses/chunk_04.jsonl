@@ -1,0 +1,100 @@
+{"idx": 1, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts subdirectory with write access - GPO script abuse vector"}
+{"idx": 2, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PDF file upload that becomes PHP - web shell artifact via file upload bypass"}
+{"idx": 3, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Users directory root"}
+{"idx": 4, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Source root directory in MonitorsThree HTB machine"}
+{"idx": 5, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for webuser"}
+{"idx": 6, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Desktop directory for adam.scott with flag"}
+{"idx": 7, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static product image on furniture web app"}
+{"idx": 8, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PowerShell db_cleanup.ps1 in Administrator Documents - may contain DB credentials"}
+{"idx": 9, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PHP webshell deployed via OpenWebAnalytics exploit - RCE artifact"}
+{"idx": 10, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Transcript file capturing AD replication account data with admin context"}
+{"idx": 11, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Web app racers directory root"}
+{"idx": 12, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file for svc_winrm"}
+{"idx": 13, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static CSS bootstrap file on ten.vl"}
+{"idx": 14, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Race scripts shared directory with group permissions"}
+{"idx": 15, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts subdirectory with write access - GPO script abuse vector"}
+{"idx": 16, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "Powermad.ps1 uploaded - tool for creating fake machine accounts for RBCD attacks"}
+{"idx": 17, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "Office.htb SYSVOL Policies directory - GPO storage with potential cpassword values"}
+{"idx": 18, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Windows svchost.exe process"}
+{"idx": 19, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents for blake with app directory - solarlab web app files"}
+{"idx": 20, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Path traversal via /var/../root - code.htb archive extraction target"}
+{"idx": 21, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows driver device path for Reaper kernel driver"}
+{"idx": 22, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Netdata static web files directory"}
+{"idx": 23, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows spool drivers color directory - AppLocker exception path"}
+{"idx": 24, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "EAP-Hammer certs directory for WiFi attack tool"}
+{"idx": 25, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for taylor.b.adm"}
+{"idx": 26, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "nc64.exe in ProgramData - standard attacker netcat binary"}
+{"idx": 27, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Attacker-created directory in cbrown home during snoopy HTB"}
+{"idx": 28, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Root bin update-stats.sh script - periodic stats update script"}
+{"idx": 29, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Root diagnostic XML output file - clicker.htb SAVE diagnostic data"}
+{"idx": 30, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Faculty.htb admin login page URL"}
+{"idx": 31, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows users directory root - lowercase variant"}
+{"idx": 32, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Backdrop CMS cron.php page URL"}
+{"idx": 33, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Registration CRMLog directory - AppLocker exception path"}
+{"idx": 34, "is_juicy": true, "tier": "Red", "category": "iac", "reason": "Velociraptor API config YAML with ACL database - access control definitions"}
+{"idx": 35, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows ProgramData Microsoft Windows Defender directory"}
+{"idx": 36, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SECURITY hive backup file - contains LSA secrets and cached credentials"}
+{"idx": 37, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows System32 FxsTmp directory - AppLocker exception path"}
+{"idx": 38, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Crypto DSS MachineKeys with path separator - AppLocker path"}
+{"idx": 39, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Web market application root directory"}
+{"idx": 40, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Restic check temporary cache directory"}
+{"idx": 41, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chamilo LMS install/index.php - installer page"}
+{"idx": 42, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Tomcat webapps directory - standard Java web server path"}
+{"idx": 43, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "Deeply nested SYSVOL scripts path with write access - GPO abuse vector"}
+{"idx": 44, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows task calibration loader path in AppLocker exception"}
+{"idx": 45, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Backup copy of dompdf font cache PHP file"}
+{"idx": 46, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Desktop directory for svc_minecraft with flag"}
+{"idx": 47, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "SVG logo asset on git.sorcery.htb"}
+{"idx": 48, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard /etc/nsswitch.conf system file - name service switch config"}
+{"idx": 49, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "iis.ps1 scheduled task PowerShell script in user AppData - persistence mechanism"}
+{"idx": 50, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PetitPotam Python tool for NTLM relay coercion - attacker tooling"}
+{"idx": 51, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chrome browser cache file - missing/nonexistent cache entry"}
+{"idx": 52, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "Python shell history file - may contain credentials, commands with passwords"}
+{"idx": 53, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Django file-based cache directory"}
+{"idx": 54, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "Deeply nested SYSVOL scripts path with write access - GPO abuse vector"}
+{"idx": 55, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Administrator Documents cleanup subdirectory"}
+{"idx": 56, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for gideon.hamill"}
+{"idx": 57, "is_juicy": true, "tier": "Black", "category": "windows_credentials", "reason": "SYSTEM hive backup in Windows temp - contains LSA secrets, service account creds"}
+{"idx": 58, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Flask application Python file - web app source code"}
+{"idx": 59, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Typo in path (def vs dev) for /dev/shm exploit script"}
+{"idx": 60, "is_juicy": true, "tier": "Red", "category": "kerberos_artifacts", "reason": "Kerberos keytab file for admin principal - allows kinit as admin without password"}
+{"idx": 61, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for adam.scott"}
+{"idx": 62, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory - generic user path in nmap docs"}
+{"idx": 63, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Tomcat shutdown script in systemd unit"}
+{"idx": 64, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Blog.bigbang.htb WordPress index page"}
+{"idx": 65, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard groups binary in sandworm AppArmor allowlist"}
+{"idx": 66, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Root start.sh script for WiFi access point setup"}
+{"idx": 67, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "IIS .url shortcut file planted to capture NTLM hashes via axlle technique"}
+{"idx": 68, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "NagiosXI admin banner message AJAX handler - SQL injection target"}
+{"idx": 69, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity build agent jackson-core JAR library"}
+{"idx": 70, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for emily.oscars.CICADA"}
+{"idx": 71, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for svc-deploy service account"}
+{"idx": 72, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "SecLists alphanum fuzzing wordlist - not a target path"}
+{"idx": 73, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static web font file on stocker.htb"}
+{"idx": 74, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for puma user running Maltrail server"}
+{"idx": 75, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Xauthority cookie file copied to /tmp for X11 display access"}
+{"idx": 76, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Snap Docker common var-lib-docker data directory"}
+{"idx": 77, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity build agent xz JAR library"}
+{"idx": 78, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Emergency PHP admin page URL in web app"}
+{"idx": 79, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard /etc/ethers network address file"}
+{"idx": 80, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PermX.htb about.html static page URL"}
+{"idx": 81, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Path traversal attempt to /etc/passwd - standard LFI target"}
+{"idx": 82, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Desktop directory for svc_minecraft"}
+{"idx": 83, "is_juicy": true, "tier": "Yellow", "category": "iac", "reason": "SAML metadata XML file for Guacamole SSO - contains IdP configuration details"}
+{"idx": 84, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "CheckPort.exe build artifact - companion tool to KrbRelay for port checking"}
+{"idx": 85, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "Deeply nested SYSVOL scripts path with write access - GPO abuse vector"}
+{"idx": 86, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "IIS web root directory for eighteen.htb"}
+{"idx": 87, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Eforenzics.htb static service page URL"}
+{"idx": 88, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Soulmate.htb profile page redirecting to login"}
+{"idx": 89, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "DPAPI Protect directory for PPotts - DPAPI master key storage for credential decryption"}
+{"idx": 90, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Impacket SMBConnection Python library file"}
+{"idx": 91, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows share with Bginfo64.exe - background info display tool"}
+{"idx": 92, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Guardian portal admin profile page URL"}
+{"idx": 93, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for Raven"}
+{"idx": 94, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Python monitoring site app.py running as root service"}
+{"idx": 95, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard /etc/systemd directory"}
+{"idx": 96, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Docker overlay2 layer symlink - infrastructure path"}
+{"idx": 97, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for svc_inventory_lnx"}
+{"idx": 98, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "rsync NOPASSWD sudo with fixed source/dest - authorized backup sync script"}
+{"idx": 99, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard ldapsearch binary in IPA environment"}
+{"idx": 100, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Metasploit WinRM Ruby library file - attacker tooling"}

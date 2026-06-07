@@ -1,0 +1,166 @@
+{
+  "C1_zero_shot": {
+    "variant": "C1_zero_shot",
+    "n_demos": 0,
+    "records": 481,
+    "elapsed_seconds": 55.79463791847229,
+    "throughput_records_per_sec": 8.620900106975194,
+    "label_distribution": {
+      "yes": 189,
+      "no": 292
+    },
+    "prediction_distribution": {
+      "no": 235,
+      "yes": 184,
+      "None": 62
+    },
+    "confusion": {
+      "tp": 93,
+      "fp": 91,
+      "fn": 79,
+      "tn": 156,
+      "abstain": 62
+    },
+    "metrics": {
+      "precision": 0.5054347826086957,
+      "recall": 0.5406976744186046,
+      "f1": 0.5224719101123596,
+      "accuracy": 0.594272076372315
+    },
+    "test_set": "data/content/test_split.jsonl",
+    "test_set_sha256": "afe36c0abffa25f51e09b34e4357fc280bca8893e6248469f498c295525bd1f4",
+    "base_model": "unsloth/Qwen3-1.7B-unsloth-bnb-4bit",
+    "seed_for_demo_sampling": 2026
+  },
+  "C2_few_shot_1": {
+    "variant": "C2_few_shot_1",
+    "n_demos": 1,
+    "records": 481,
+    "elapsed_seconds": 64.17108535766602,
+    "throughput_records_per_sec": 7.495587729568278,
+    "label_distribution": {
+      "yes": 189,
+      "no": 292
+    },
+    "prediction_distribution": {
+      "no": 197,
+      "yes": 241,
+      "None": 43
+    },
+    "confusion": {
+      "tp": 119,
+      "fp": 122,
+      "fn": 53,
+      "tn": 144,
+      "abstain": 43
+    },
+    "metrics": {
+      "precision": 0.49377593360995853,
+      "recall": 0.6918604651162791,
+      "f1": 0.576271186440678,
+      "accuracy": 0.6004566210045662
+    },
+    "test_set": "data/content/test_split.jsonl",
+    "test_set_sha256": "afe36c0abffa25f51e09b34e4357fc280bca8893e6248469f498c295525bd1f4",
+    "base_model": "unsloth/Qwen3-1.7B-unsloth-bnb-4bit",
+    "seed_for_demo_sampling": 2026
+  },
+  "C2_few_shot_3": {
+    "variant": "C2_few_shot_3",
+    "n_demos": 3,
+    "records": 481,
+    "elapsed_seconds": 48.31798577308655,
+    "throughput_records_per_sec": 9.954885169652918,
+    "label_distribution": {
+      "yes": 189,
+      "no": 292
+    },
+    "prediction_distribution": {
+      "yes": 282,
+      "no": 196,
+      "None": 3
+    },
+    "confusion": {
+      "tp": 155,
+      "fp": 127,
+      "fn": 34,
+      "tn": 162,
+      "abstain": 3
+    },
+    "metrics": {
+      "precision": 0.549645390070922,
+      "recall": 0.8201058201058201,
+      "f1": 0.6581740976645435,
+      "accuracy": 0.6631799163179917
+    },
+    "test_set": "data/content/test_split.jsonl",
+    "test_set_sha256": "afe36c0abffa25f51e09b34e4357fc280bca8893e6248469f498c295525bd1f4",
+    "base_model": "unsloth/Qwen3-1.7B-unsloth-bnb-4bit",
+    "seed_for_demo_sampling": 2026
+  },
+  "C2_few_shot_5": {
+    "variant": "C2_few_shot_5",
+    "n_demos": 5,
+    "records": 481,
+    "elapsed_seconds": 47.688698530197144,
+    "throughput_records_per_sec": 10.086247157603266,
+    "label_distribution": {
+      "yes": 189,
+      "no": 292
+    },
+    "prediction_distribution": {
+      "yes": 460,
+      "no": 21
+    },
+    "confusion": {
+      "tp": 184,
+      "fp": 276,
+      "fn": 5,
+      "tn": 16,
+      "abstain": 0
+    },
+    "metrics": {
+      "precision": 0.4,
+      "recall": 0.9735449735449735,
+      "f1": 0.5670261941448383,
+      "accuracy": 0.4158004158004158
+    },
+    "test_set": "data/content/test_split.jsonl",
+    "test_set_sha256": "afe36c0abffa25f51e09b34e4357fc280bca8893e6248469f498c295525bd1f4",
+    "base_model": "unsloth/Qwen3-1.7B-unsloth-bnb-4bit",
+    "seed_for_demo_sampling": 2026
+  },
+  "C2_few_shot_10": {
+    "variant": "C2_few_shot_10",
+    "n_demos": 10,
+    "records": 481,
+    "elapsed_seconds": 49.98760533332825,
+    "throughput_records_per_sec": 9.622385325173854,
+    "label_distribution": {
+      "yes": 189,
+      "no": 292
+    },
+    "prediction_distribution": {
+      "yes": 465,
+      "no": 15,
+      "None": 1
+    },
+    "confusion": {
+      "tp": 186,
+      "fp": 279,
+      "fn": 3,
+      "tn": 12,
+      "abstain": 1
+    },
+    "metrics": {
+      "precision": 0.4,
+      "recall": 0.9841269841269841,
+      "f1": 0.5688073394495413,
+      "accuracy": 0.4125
+    },
+    "test_set": "data/content/test_split.jsonl",
+    "test_set_sha256": "afe36c0abffa25f51e09b34e4357fc280bca8893e6248469f498c295525bd1f4",
+    "base_model": "unsloth/Qwen3-1.7B-unsloth-bnb-4bit",
+    "seed_for_demo_sampling": 2026
+  }
+}

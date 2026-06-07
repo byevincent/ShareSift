@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 8/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /opt/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt
+   context: oxdf@hacky$ feroxbuster -u http://cypher.htb/api -w /opt/SecLists/Discovery/Web-Content/directory-list-2.3-medium.txt   ___  ___  __   __     __      __         __   ___ |__  |__  |__) |__) | /  `    
+2. C:\Get-bADpasswords\PSI\Psi_x64.dll
+   context: C:\Get-bADpasswords\PSI\Psi_x64.dll
+3. C:\programdata\c.exe
+   context: /s]                                                              [+] File uploaded successfully as: C:\programdata\c.exe
+4. /usr/share/seclists/Discovery/Web-Content/raft-medium-directories-lowercase.txt
+   context: oxdf@hacky$ feroxbuster -u http://10.129.190.66 -x php -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories-lowercase.txt   ___  ___  __   __     __      __         __   ___ |__  |__  
+5. C:\ProgramData
+   context: PS C:\ProgramData> .\GetCLSID.ps1
+6. C:\Users\sqlmgmt
+   context: evil-winrm-py PS C:\Users\sqlmgmt> tree /f . Folder PATH listing Volume serial number is 736A-0306 C:\USERS\SQLMGMT +---Desktop ¦
+7. /root/TeamCity/buildAgent/lib/coverage-report.jar
+   context: ar:/root/TeamCity/buildAgent/lib/server-logging.jar:/root/TeamCity/buildAgent/lib/common-spring.jar:/root/TeamCity/buildAgent/lib/coverage-report.jar:/root/TeamCity/buildAgent/lib/kotlin-stdlib-common
+8. C:\share\scripts\7-zip64.dll
+   context: C:\share\scripts\7-zip64.dll
+9. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3
+   context: asks RW C:\Windows\System32\spool\drivers\color RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3 RW C:\Windows\SYSVOL\domain\scripts\A32FF
+10. C:\Windows\System32\Tasks_Migrated\
+   context: ader\*" /><FilePathCondition Path="C:\Windows\System32\Tasks_Migrated:*" /><FilePathCondition Path="C:\Windows\System32\Tasks_Migrated\*" /><FilePathCondition Path="C: \Windows\SysWOW64\com\dmp:*" /><
+11. C:\Windows\SysWOW64\Tasks\Microsoft\Windows\PLA\System
+   context: OW64\Tasks:*" /   ><FilePathCondition Path="C:\Windows\SysWOW64\Tasks\*" /><FilePathCondition Path="C:\Windows\SysWOW64\Tasks\Microsoft\Windows\PLA\System:*" /><FilePathCondition Path="C:\Windows\SysW
+12. /itrc.ssg.htb/dashboard.php
+   context: 34w      982c http://itrc.ssg.htb/footer.php 200      GET        3l        5w       46c http://itrc.ssg.htb/dashboard.php 200      GET      155l      300w     2453c http://itrc.ssg.htb/assets/css/main
+13. /var/www/html/gavel/includes
+   context: cess group (1061): Inappropriate ioctl for device bash: no job control in this shell www-data@gavel:/var/www/html/gavel/includes$
+14. /portal.guardian.htb/admin/index.php
+   context: rofile.php => http://portal.guardian.htb/login.php 302      GET        0l        0w        0c http://portal.guardian.htb/admin/index.php => http://portal.guardian.htb/login.php 200      GET        0l 
+15. /var/www/backups
+   context: /var/www/backups
+16. /usr/local/lib/python3.9/site-packages/neo4j/_sync/work/session.py
+   context: le "/app/app.py", line 63, in run_cypher     return [r.data() for r in session.run(cypher)]   File "/usr/local/lib/python3.9/site-packages/neo4j/_sync/work/session.py", line 314, in run     self._auto
+17. C:\Users\steph.cooper\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\steph.cooper\Documents>
+18. /browsedinternals.htb/assets/css/index.css
+   context: 0309/174909.616288:VERBOSE1:network_delegate.cc(37)] NetworkDelegate::NotifyBeforeURLRequest: http://browsedinternals.htb/assets/css/index.css?v=1.24.5 [2415:2420:0309/174909.616742:VERBOSE1:network_d
+19. C:\DumpStack.log.tmp
+   context: 12288 DumpStack.log.tmp  PS C:\> cat .\DumpStack.log.tmp Get-Content: Access to the path 'C:\DumpStack.log.tmp' is denied.
+20. /proc/3083/root/tmp/race_pid.txt
+   context: an@snapped:~$ cat /proc/3083/root/tmp/race_perms.txt  jonathan:jonathan 755 jonathan@snapped:~$ cat /proc/3083/root/tmp/race_pid.txt  3718
+21. /var/log/apache2/access.log.2.gz
+   context: /var/log/auth.log.1 /var/log/kern.log.1 /var/log/dmesg /var/log/apache2 /var/log/apache2/access.log /var/log/apache2/access.log.2.gz /var/log/apache2/error.log.1 /var/log/apache2/error.log /var/log/ap
+22. /root/TeamCity/buildAgent/lib/spring-instrument.jar
+   context: l.jar:/root/TeamCity/buildAgent/lib/build-version.jar:/root/TeamCity/buildAgent/lib/common-impl.jar:/root/TeamCity/buildAgent/lib/spring-instrument.jar:/root/TeamCity/buildAgent/lib/com.github.adedayo
+23. C:\Windows\SystemApps\ShellExperienceHost_cw5n1h2txyewy\ShellExperienceHost.exe
+   context: ternet explorer\iexplore.exe  4552  892   ShellExperienceHost.exe  x64   1        HOSPITAL\drbrown  C:\Windows\SystemApps\ShellExperienceHost_cw5n1h2txyewy\ShellExperienceHost.exe  6492  2444  conhost
+24. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\FD33C0CE11AC
+   context: \scripts\A32FF3AEAA23\D0ECECBC1CCF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\F1D30FCB0100 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\FD33C0CE11AC RW C:\Windows\SYSVOL\domain\scripts\A32FF
+25. C:/Users/Richard/source/cloned_repos
+   context: rd/source/repos/repos.txt"  # Specify the path where you want to clone the repositories clone_path="C:/Users/Richard/source/cloned_repos"  # Check if the file exists if [ ! -f "$repos_file" ]; then   
+26. /dev/shm/test.diff
+   context: cbrown@snoopy:~$ cat /dev/shm/test.diff  diff --git a/authorized_keys b/authorized_keys new file mode 100644 index 0000000..ec273c0 --- /de
+27. /absolute.htb/fonts/icomoon/style.css
+   context: 86926c http://absolute.htb/js/jquery-3.3.1.min.js 200      GET     4919l     8218w    79820c http://absolute.htb/fonts/icomoon/style.css 200      GET        7l     2103w   160392c http://absolute.htb/
+28. /root/TeamCity/buildAgent/lib/nuget-utils.jar
+   context: /TeamCity/buildAgent/lib/jackson-datatype-jsr310.jar:/root/TeamCity/buildAgent/lib/launcher-api.jar:/root/TeamCity/buildAgent/lib/nuget-utils.jar:/root/TeamCity/buildAgent/lib/common.jar:/root/TeamCit
+29. C:\windows\temp\SECURITY.save
+   context: ndows\temp\SAM.save [*] Saved HKLM\SYSTEM to C:\windows\temp\SYSTEM.save [*] Saved HKLM\SECURITY to C:\windows\temp\SECURITY.save
+30. /.mvn/wrapper/MavenWrapperDownloader.java
+   context: woodenk@redpanda:/opt/panda_search$ find . -name '*.java' ./.mvn/wrapper/MavenWrapperDownloader.java ./src/test/java/com/panda_search/htb/panda_search/PandaSearchApplicationTests.java ./src/main/java/
+31. /home/hish/
+   context: t.gpg  gpg: WARNING: unsafe ownership on homedir '/home/hish' gpg: failed to create temporary file '/home/hish/.#lk0x000055979f145170.environment.24002': Permission denied gpg: keyblock resource '/hom
+32. /.cpr/up2k.js
+   context: x.js?_=7WOr"></script>         <script src="/.cpr/browser.js?_=7WOr"></script>         <script src="/.cpr/up2k.js?_=7WOr"></script> </body>  </html>
+33. /ten.vl/dist/img/account-calculate-calculating-220301.jpg
+   context: 155758c http://ten.vl/dist/css/bootstrap.min.css 200      GET      199l     1208w   122095c http://ten.vl/dist/img/account-calculate-calculating-220301.jpg 200      GET      130l      754w    81244c h
+34. /var/lib/haproxy
+   context: bal             log /dev/log    local0             log /dev/log    local1 notice             chroot /var/lib/haproxy             stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd lis
+35. /var/log/journal
+   context: empter/utempter /usr/lib/openssh/ssh-keysign    /usr/libexec/polkit-agent-helper-1 /run/log/journal /var/log/journal                  /var/log/journal/607b86cbcd424ff3ac2e3ca162cb6f32 /var/log/mysql /
+36. /soulmate.htb/index.php
+   context: les => http://soulmate.htb/assets/images/profiles/ 200      GET      306l     1061w    16688c http://soulmate.htb/index.php 302      GET        0l        0w        0c http://soulmate.htb/dashboard.php
+37. /....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//etc/passwd
+   context: ...//....//....//....//etc/passwd [Status: 200, Size: 796, Words: 3, Lines: 2, Duration: 98ms] ....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//etc/passw
+38. /tmp/0xdf-root
+   context: nistd.h>  void _init() {   unsetenv("LD_PRELOAD");   setgid(0);   setuid(0);   system("cp /bin/bash /tmp/0xdf-root");   system("chown root:root /tmp/0xdf-root");   system("chmod 6777 /tmp/0xdf-root");
+39. \\cur.inf\r\nnotepad
+   context: e MSSQLSERVER\r\nStart-Service mssqlserver\r\nwhoami /all\r\nsecedit /export /cfg C:\\windows\\tasks\\cur.inf\r\nnotepad C:\\windows\\tasks\\cur.inf\r\nsecedit /configure /db C:\\Windows\\Security\\lo
+40. C:\Windows\Tasks\Uploads\todo.txt
+   context: }          # Task Done                       UpdateTodo -FilePath $todofile # Updating C:\Windows\Tasks\Uploads\todo.txt         Sleep 15     }  }
+41. C:\Windows\Temp\
+   context: PS C:\> copy "C:\Program Files (x86)\hMailServer\Database\hMailServer.sdf" C:\Windows\Temp\
+42. C:\Users\ryan\Documents
+   context: sequel.htb  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\ryan\Documents>
+43. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\BBD2AC3ADBAF
+   context: B3B0B2D3\33EFC003BFDB RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\BA30A33F3FC2 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\BBD2AC3ADBAF RW C:\Windows\SYSVOL\domain\
+44. C:\Users\administrator\desktop
+   context: *Evil-WinRM* PS C:\Users\administrator\desktop> cat root.txt c3bee243************************
+45. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\3EAF2A3E0CED
+   context: \scripts\A32FF3AEAA23\2F3FCC01E0A3 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\3DACA30B03D1 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\3EAF2A3E0CED RW C:\Windows\SYSVOL\domain\scripts\A32FF
+46. C:\Users\justin.bradley\desktop
+   context: *Evil-WinRM* PS C:\Users\justin.bradley\desktop> type user.txt d6b92d58************************
+47. C:\Users\administrator\Desktop
+   context: C:\Users\administrator\Desktop>dir  Volume in drive C has no label.  Volume Serial Number is 98B0-04D7   Directory of C:\Users\adm
+48. /home/dan_smith/.ssh/authorized_keys
+   context: import os  os.makedirs("/home/dan_smith/.ssh", exist_ok=True) f=open("/home/dan_smith/.ssh/authorized_keys", "a") f.write("ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIK/xSi58QvP1UqH+nBwpD1WQ7IaxiVdTpsg5U19
+49. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_008
+   context: file or directory (2) [2415:2418:0309/174909.482766:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_008": No such file or director
+50. /etc/consul.d
+   context: rver -ui -advertise=127.0.0.1 -bind=127.0.0.1 -data-dir=/var/lib/consul -node=consul-01 -config-dir=/etc/consul.d ...[snip]...
+51. /root/TeamCity/buildAgent/lib/commons-httpclient.jar
+   context: t/TeamCity/buildAgent/lib/idea-settings.jar:/root/TeamCity/buildAgent/lib/jackson-datatype-jdk8.jar:/root/TeamCity/buildAgent/lib/commons-httpclient.jar:/root/TeamCity/buildAgent/lib/stax2-api.jar:/ro
+52. Z:\hackthebox\keeper-10.10.11.227\KeePassDumpFull.dmp
+   context: PS C:\Users\0xdf\keepass-password-dumper > dotnet run Z:\hackthebox\keeper-10.10.11.227\KeePassDumpFull.dmp ...[snip]... Password candidates (character positions): Unknown characters are displayed as 
+53. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\CD102CDEFD0E
+   context: \scripts\A32FF3AEAA23\BFDDF0E1B33E RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\C20F1322FB3C RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\CD102CDEFD0E RW C:\Windows\SYSVOL\domain\scripts\A32FF
+54. /.minikube/logs/lastStart.txt
+   context: andrew@pikatwoo:/home/jennifer$ grep -ir cri-o . 2>/dev/null ./.minikube/logs/lastStart.txt:I0318 10:22:24.318492     443 preload.go:148] Found local preload: /root/.minikube/cache/preloaded-
+55. /media/sf_CTFs/hackthebox/rustykey-10.10.11.75/rev.dll
+   context: l-WinRM* PS C:\programdata> upload rev.dll                                          Info: Uploading /media/sf_CTFs/hackthebox/rustykey-10.10.11.75/rev.dll to C:\programdata\rev.dll                    
+56. C:\Users\f.frizzle\Desktop
+   context: PS C:\Users\f.frizzle\Desktop> type .\user.txt 9a42de6c************************
+57. C:\Users\m.schoolbus
+   context: C:\Users\m.schoolbus
+58. C:\Windows\NTDS.dit
+   context: C:\Windows\NTDS.dit
+59. /opt/scripts/utilities/utils/status.py
+   context: ripts/utilities/utils/db.py      4166      4 -rwxrwx---   1 mark     admins        253 Apr 26  2025 /opt/scripts/utilities/utils/status.py     16832      4 -rw-r-----   1 root     admins        226 Ap
+60. /Eureka-Server/pom.xml
+   context: a-Server/.mvn/wrapper/maven-wrapper.properties ./Eureka-Server/src/main/resources/application.yaml ./Eureka-Server/pom.xml
+61. /home/guests/laurie.casper
+   context: to=tcp,timeo=600,retrans=2,sec=sys,clientaddr=10.9.0.4,local_lock=none,addr=10.9.0.1) corporate.htb:/home/guests/laurie.casper on /home/guests/laurie.casper type nfs4 (rw,relatime,vers=4.2,rsize=52428
+62. /host/root/.ssh
+   context: /host/root/.ssh # echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIK/xSi58QvP1UqH+nBwpD1WQ7IaxiVdTpsg5U19G3d nobody@not
+63. /opt/hash_system/hash_password.py
+   context: /snap/bin, use_pty  User jack_adm may run the following commands on localhost:     (root) NOPASSWD: /opt/hash_system/hash_password.py
+64. /var/log/kdc.log
+   context: [logging]     default = FILE:/var/log/krb5.log     kdc = FILE:/var/log/kdc.log     admin_server = FILE:/var/log/kadmind.log  [libdefaults]     default_realm = GHOST.HTB     dns_l
+65. /var/www/sites/localisation
+   context: est.args.get('lang')     file_ext = request.args.get('ext')     try:             return send_file(f'/var/www/sites/localisation/{lang}.{file_ext}')      except:              return send_file(f'/var/ww
+66. \\dc1\development
+   context: rem @echo off net use * /delete /y net use v: \\dc1\development   if %USERNAME%==A.Briggs net use h: \\fileserver\backups /user:Administrator P4ssw0rd1#123
+67. /crafty.htb/home
+   context: HTTP/1.1 301 Moved Permanently Content-Type: text/html; charset=UTF-8 Location: http://crafty.htb/home Server: Microsoft-IIS/10.0 Date: Mon, 10 Jun 2024 19:36:35 GMT Connection: close Content-Length: 
+68. /root/TeamCity/buildAgent/lib/jackson-dataformat-yaml.jar
+   context: ow.jar:/root/TeamCity/buildAgent/lib/inspections-util.jar:/root/TeamCity/buildAgent/lib/xstream.jar:/root/TeamCity/buildAgent/lib/jackson-dataformat-yaml.jar:/root/TeamCity/buildAgent/lib/build-versio
+69. /dev/shm/apache2/apache2.conf
+   context: /dev/shm/apache2/apache2.conf
+70. /file.era.htb/login.php
+   context: 233w     3205c http://file.era.htb/register.php 200      GET      327l      740w     9214c http://file.era.htb/login.php 301      GET        7l       12w      178c http://file.era.htb/assets => http:/
+71. /usr/share
+   context: gg3@pterodactyl:~> env | grep XDG XDG_VTNR=1 XDG_SESSION_ID=1901 XDG_SESSION_TYPE=tty XDG_DATA_DIRS=/usr/share XDG_SESSION_CLASS=user XDG_SEAT=seat0 XDG_RUNTIME_DIR=/run/user/1002 XDG_CONFIG_DIRS=/etc
+72. /usr/libexec/sssd/sssd_nss
+   context: b --uid 0 --gid 0 --logger=files 165536      4077  0.0  0.5  56680 44928 ?        S    16:05   0:01 /usr/libexec/sssd/sssd_nss --uid 0 --gid 0 --logger=files 165536      4078  0.0  0.1  25360 11648 ? 
+73. /localhost/images/pic03.jpg
+   context: 0309/174909.672753:VERBOSE1:network_delegate.cc(37)] NetworkDelegate::NotifyBeforeURLRequest: http://localhost/images/pic03.jpg [2415:2420:0309/174909.712228:VERBOSE1:network_delegate.cc(37)] NetworkD
+74. C:\Users\emily\Documents
+   context: QFKoHjXmb'  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\emily\Documents>
+75. /dev.pov.htb/portfolio/contact.aspx
+   context: ov.htb/.aspx => http://dev.pov.htb/portfolio/.aspx 200      GET      106l      271w     4691c http://dev.pov.htb/portfolio/contact.aspx 301      GET        2l       10w      159c http://dev.pov.htb/po
+76. /var/www/sites/lantern.htb/static/images
+   context: le);           string FileName = file.Name.Replace("\\", "");           string path = Path.Combine("/var/www/sites/lantern.htb/static/images", FileName);           if (!this.isFileExist(FileName))    
+77. C:\Users\jack.black\Desktop
+   context: PS C:\Users\jack.black\Desktop> cat user.txt 3c65d26d************************
+78. /root/scripts/backup.tar.gz
+   context: ssh/authorized_keys /root/.ssh/id_rsa /root/.vim /root/.vim/.netrwhist /root/root.txt /root/scripts /root/scripts/backup.tar.gz /root/scripts/cleanup.sh /root/scripts/cleanup_conf.sh /root/scripts/cle
+79. /browsedinternals.htb/assets/img/logo.svg
+   context: 0309/174909.621338:VERBOSE1:network_delegate.cc(37)] NetworkDelegate::NotifyBeforeURLRequest: http://browsedinternals.htb/assets/img/logo.svg [2415:2420:0309/174909.625034:VERBOSE1:network_delegate.cc
+80. C:\Windows\Temp\test.b64
+   context: PS C:\> certutil -encode "C:\Program Files (x86)\hMailServer\Database\hMailServer.sdf" C:\Windows\Temp\test.b64 2>&1 DecodeFile returned The process cannot access the file because it is being used by 
+81. /devvortex.htb/contact.html
+   context: 583l     1274w    18048c http://devvortex.htb/ 200      GET      289l      573w     8884c http://devvortex.htb/contact.html 200      GET      231l      545w     7388c http://devvortex.htb/about.html 2
+82. /../wwwroot/download.php
+   context: oxdf@hacky$ curl http://mailing.htb/download.php?file=../../wwwroot/download.php <?php if (isset($_GET['file'])) {     $file = $_GET['file'];      $file_path = 'C:/wwwroot/instruct
+83. /etc/nginx
+   context: root@d91450e894df:/etc/nginx# ls conf.d  fastcgi_params  includes  mime.types  modules  nginx.conf  scgi_params  uwsgi_params
+84. C:\Windows\System32\FxsTmp
+   context: m32\com\dmp:*" /><FilePathCondition Path="C:\Windows\System32\com\dmp\*" /><FilePathCondition Path="C:\Windows\System32\FxsTmp:*" /><FilePathCondition Path="C:\Windows\System32\FxsTmp\*" /><FilePathCo
+85. /blog.bigbang.htb/wp-content/uploads/2025/01/1-7.png
+   context: oxdf@hacky$ curl http://blog.bigbang.htb/wp-content/uploads/2025/01/1-7.png -o- GIF89a127.0.0.1 localhost ::1     localhost ip6-localhost ip6-loopback fe00::0 ip6-localnet ff0
+86. /var/log/snmpttunknown.log
+   context: "/usr/local/nagiosxi/var/components/profile/$folder/logs/snmpttsystem.txt"     /usr/bin/tail -n1000 /var/log/snmpttunknown.log > "/usr/local/nagiosxi/var/components/profile/$folder/logs/snmpttunknown.
+87. C:\Windows\System32\Dism
+   context: 025-05-16 23:05:24, Info                  DISM   DISM Manager: PID=3580 TID=4348 Copying DISM from "C:\Windows\System32\Dism" - CDISMManager::CreateImageSessionFromLocation 2025-05-16 23:05:24, Info  
+88. /var/www/.cache/google-chrome-for-testing/Default/Cache/Cache_Data/the-real-index
+   context: file or directory (2) [2415:2418:0309/174909.476983:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/Cache_Data/the-real-index": No such file or d
+89. /root/TeamCity/buildAgent/lib/xercesImpl.jar
+   context: r.jar:/root/TeamCity/buildAgent/lib/mxparser.jar:/root/TeamCity/buildAgent/lib/commons-compress.jar:/root/TeamCity/buildAgent/lib/xercesImpl.jar:/root/TeamCity/buildAgent/lib/agent-deployment-config.j
+90. /root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-compat-3.8.6.jar
+   context: worlds-2.6.0.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-settings-3.8.6.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-compat-3.8.6.jar:/root/TeamCity/weba
+91. C:\Users\jdoe\Documents
+   context: 4^*y9Zzj'  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\jdoe\Documents>
+92. /etc/hosts.equiv
+   context: /etc/hosts.equiv
+93. /tmp/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+   context: www-data@dump:/var/cache/captures$ sudo tcpdump -c10 -w/var/cache/captures/a/ -V /root/root.txt -w /tmp/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa -F/var/cache/captures/filter.aaaaaaaa-aaaa-aaaa-aaaa-aaaaaa
+94. /usr/local/nagiosxi/scripts/manage_services.sh
+   context: _latest.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/change_timezone.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/manage_services.sh *     (root) NOPASSWD: /usr/local/nagiosxi/scripts/re
+95. /usr/local/ispconfig
+   context: 000:tobias:/home/tobias:/bin/bash ispapps:x:1001:1002::/var/www/apps:/bin/sh ispconfig:x:1002:1003::/usr/local/ispconfig:/bin/sh
+96. /var/adm
+   context: oot:/bin/ash bin:x:1:1:bin:/bin:/sbin/nologin daemon:x:2:2:daemon:/sbin:/sbin/nologin adm:x:3:4:adm:/var/adm:/sbin/nologin lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin sync:x:5:0:sync:/sbin:/bin/sync shut
+97. C:\Users\nathan.aadam\desktop
+   context: evil-winrm-py PS C:\Users\nathan.aadam\desktop> cat user.txt 01d9c5a2************************
+98. C:\Users\svc_minecraft\server
+   context: PS C:\Users\svc_minecraft\server> ls      Directory: C:\Users\svc_minecraft\server  Mode                LastWriteTime         Length
+99. /usr/libexec/sssd/sssd_sudo
+   context: p --uid 0 --gid 0 --logger=files 165536      4080  0.0  0.1  22412  8448 ?        S    16:05   0:00 /usr/libexec/sssd/sssd_sudo --uid 0 --gid 0 --logger=files 165536      4081  0.0  0.1  72648 15488 ?
+100. C:\Users\e.black
+   context: *Evil-WinRM* PS C:\Users\e.black> net group "PKI Admins" Group name     PKI Admins Comment        ADCS Certificate and Template Mana

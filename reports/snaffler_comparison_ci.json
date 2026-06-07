@@ -1,0 +1,40 @@
+{
+  "version": "v0.5",
+  "generated": "2026-05-31",
+  "config": {
+    "model": "models/path_classifier_v0_windows/calibrated.joblib",
+    "benchmark": "data/eval/snaffler_blind_benchmark.jsonl",
+    "n_records": 500,
+    "n_positive": 250,
+    "threshold": 0.5,
+    "bootstrap_iters": 10000,
+    "seed": 2026
+  },
+  "snaffler_baseline": {
+    "recall": 0.415,
+    "source": "tools/train_path_classifier.py:SNAFFLER_RECALL_BASELINE \u2014 228/550 on the 11,190-record queue",
+    "note": "Point estimate, not bootstrapped; computed from rule-pack-vs-labeled-queue."
+  },
+  "truffler_benchmark": {
+    "precision": {
+      "point": 0.9888268156424581,
+      "mean": 0.9887761098732226,
+      "std": 0.00792838686472809,
+      "ci_95_lo": 0.9709302325581395,
+      "ci_95_hi": 1.0
+    },
+    "recall": {
+      "point": 0.708,
+      "mean": 0.7076701943770755,
+      "std": 0.029124803573706125,
+      "ci_95_lo": 0.649995487364621,
+      "ci_95_hi": 0.7630522088353414
+    }
+  },
+  "delta_vs_snaffler": {
+    "point": 0.293,
+    "ci_95_lo": 0.234995487364621,
+    "ci_95_hi": 0.34805220883534144,
+    "note": "Snaffler baseline is a fixed precomputed point estimate (228/550 = 41.5% on the full 11,190-record labeled queue). Delta CI = Truffler CI \u2212 fixed Snaffler value. The bootstrap captures only Truffler's sampling variance on the 500-record benchmark; Snaffler's variance is not modeled."
+  }
+}

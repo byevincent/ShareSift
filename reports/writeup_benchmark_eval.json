@@ -1,0 +1,82 @@
+{
+  "label": "writeup_realistic_share_benchmark",
+  "n_records": 995,
+  "snaffler_verdict_breakdown": {
+    "Silent": 995,
+    "Discard": 134,
+    "Snaffle": 370
+  },
+  "n_windows_records": 43,
+  "n_linux_records": 952,
+  "windows_metrics": {
+    "tp": 2,
+    "fp": 0,
+    "fn": 8,
+    "tn": 33,
+    "precision": 1.0,
+    "recall": 0.2,
+    "f1": 0.33333333333333337,
+    "pr_auc": 0.5243103655603655,
+    "ece": 0.1874695903833406,
+    "n": 43,
+    "n_positive": 10,
+    "per_tier": {
+      "Black": {
+        "n": 2,
+        "n_juicy": 2,
+        "tier_precision": 1.0
+      },
+      "Red": {
+        "n": 0
+      },
+      "Yellow": {
+        "n": 0
+      },
+      "None": {
+        "n": 41,
+        "n_juicy": 8,
+        "tier_precision": 0.1951219512195122
+      }
+    }
+  },
+  "linux_metrics": {
+    "tp": 74,
+    "fp": 281,
+    "fn": 94,
+    "tn": 503,
+    "precision": 0.2084507042253521,
+    "recall": 0.44047619047619047,
+    "f1": 0.28298279158699813,
+    "pr_auc": 0.27263687350730514,
+    "ece": 0.3158931241347171,
+    "n": 952,
+    "n_positive": 168,
+    "per_tier": {
+      "Black": {
+        "n": 44,
+        "n_juicy": 18,
+        "tier_precision": 0.4090909090909091
+      },
+      "Red": {
+        "n": 175,
+        "n_juicy": 40,
+        "tier_precision": 0.22857142857142856
+      },
+      "Yellow": {
+        "n": 176,
+        "n_juicy": 22,
+        "tier_precision": 0.125
+      },
+      "None": {
+        "n": 557,
+        "n_juicy": 88,
+        "tier_precision": 0.15798922800718132
+      }
+    }
+  },
+  "v0p5_snaffler_blind_reference": {
+    "source": "reports/snaffler_comparison_ci.json",
+    "windows_recall_at_0p5": 0.708,
+    "windows_delta_vs_snaffler": 0.293
+  }
+}

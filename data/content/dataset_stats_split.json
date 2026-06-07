@@ -1,0 +1,58 @@
+{
+  "input_dataset": "data/content/training_dataset.jsonl",
+  "input_dataset_sha256": "915c7bc5d0cb9ebf820a070dd09873727ce627ab5197d681293e21bc9f2133a4",
+  "input_records_raw": 2603,
+  "input_records_after_exact_dedup": 2408,
+  "exact_duplicates_dropped": 195,
+  "clusters_total": 2355,
+  "clusters_singleton": 2308,
+  "clusters_multi": 47,
+  "largest_cluster_size": 4,
+  "cluster_size_distribution": {
+    "1": 2308,
+    "2": 42,
+    "3": 4,
+    "4": 1
+  },
+  "stratum_stats": {
+    "yes": {
+      "clusters": 908,
+      "records": 947,
+      "to_train": 758,
+      "to_test": 189,
+      "target_test": 189,
+      "test_fraction_actual": 0.19957761351636746
+    },
+    "no": {
+      "clusters": 1447,
+      "records": 1461,
+      "to_train": 1169,
+      "to_test": 292,
+      "target_test": 292,
+      "test_fraction_actual": 0.1998631074606434
+    }
+  },
+  "train": {
+    "records": 1927,
+    "labels": {
+      "no": 1169,
+      "yes": 758
+    },
+    "sha256": "59212fc544de8638fa9e66665db634bd5b894e102e4cb9575b5755935b4115f4"
+  },
+  "test": {
+    "records": 481,
+    "labels": {
+      "yes": 189,
+      "no": 292
+    },
+    "fraction": 0.19975083056478404,
+    "sha256": "afe36c0abffa25f51e09b34e4357fc280bca8893e6248469f498c295525bd1f4"
+  },
+  "config": {
+    "test_fraction": 0.2,
+    "seed": 2026,
+    "jaccard_threshold": 0.8,
+    "num_perm": 128
+  }
+}

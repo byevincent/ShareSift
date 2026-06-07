@@ -1,0 +1,100 @@
+{"idx": 1, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "SeManageVolumeExploit.exe uploaded - privilege escalation tool targeting volume management"}
+{"idx": 2, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static image asset on ten.vl web app"}
+{"idx": 3, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Root local share directory - standard XDG data path"}
+{"idx": 4, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Apache proxy virtual host document root directory"}
+{"idx": 5, "is_juicy": true, "tier": "Black", "category": "ssh_credentials", "reason": "Root CA private key exposed via FTP - signing key compromise"}
+{"idx": 6, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Spring Boot Eureka server application YAML config file"}
+{"idx": 7, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "KrbRelay.exe build artifact - Kerberos relay attack tool"}
+{"idx": 8, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TypeScript source file for browser extension permissions"}
+{"idx": 9, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Surveillance.htb web app index page URL"}
+{"idx": 10, "is_juicy": true, "tier": "Yellow", "category": "iac", "reason": "IPsec VPN configuration file - may contain PSK or certificate references"}
+{"idx": 11, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows PowerShell command sequence - not a meaningful file path"}
+{"idx": 12, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "Deeply nested SYSVOL scripts path with write access - GPO abuse vector"}
+{"idx": 13, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Soulmate.htb login page URL"}
+{"idx": 14, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "vpopmail home directory for mail server user"}
+{"idx": 15, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file"}
+{"idx": 16, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard jQuery JavaScript library file"}
+{"idx": 17, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for matthew"}
+{"idx": 18, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for svcMosh service account"}
+{"idx": 19, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "WPScan configuration YAML file"}
+{"idx": 20, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Exploit database shellcodes CSV file - tooling data file not a target"}
+{"idx": 21, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file for svc_ldap"}
+{"idx": 22, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for scryh user with incident directory"}
+{"idx": 23, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Web application index.php - standard web file read via LFI"}
+{"idx": 24, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Certificate.htb about page URL"}
+{"idx": 25, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Bitnami Apache configuration directory"}
+{"idx": 26, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Impacket library installation path - attacker tooling location"}
+{"idx": 27, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chrome browser cache file - missing/nonexistent cache entry"}
+{"idx": 28, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for jennifer user"}
+{"idx": 29, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Flask application requirements.txt - dependency list"}
+{"idx": 30, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Impacket AES.py library file path - Python cryptography module"}
+{"idx": 31, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Tipnet SGID binary for developer group - privilege escalation via Rust library injection"}
+{"idx": 32, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "GMSAPasswordReader.exe uploaded - reads GMSA passwords for service account takeover"}
+{"idx": 33, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for support"}
+{"idx": 34, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "snap-confine SUID binary - used in snap privilege escalation exploits"}
+{"idx": 35, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "FTP pub directory root for anonymous access"}
+{"idx": 36, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "XWiki startup script in systemd service"}
+{"idx": 37, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file for mikasaAckerman"}
+{"idx": 38, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "ZAPI log file for API service"}
+{"idx": 39, "is_juicy": true, "tier": "Black", "category": "ssh_credentials", "reason": "Root SSH private key via path traversal in code.htb archive"}
+{"idx": 40, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for fritz user"}
+{"idx": 41, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Get-bADpasswords PowerShell script - AD password auditing tool at C:\\ root"}
+{"idx": 42, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": ".NET Hello World DLL built during Visual HTB exploitation"}
+{"idx": 43, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "git-commit.sh script in web app - may autocommit with credentials or sensitive data"}
+{"idx": 44, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows System32 Tasks directory - AppLocker write exception"}
+{"idx": 45, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "OpenMediaVault user-defined cron job - runs as root every minute, may be modifiable"}
+{"idx": 46, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Tasks uploads path with random variable - web upload handler path"}
+{"idx": 47, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows PowerShell command sequence - not a meaningful file path"}
+{"idx": 48, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Temporary TLE data file in /tmp for Jupiter HTB"}
+{"idx": 49, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Desktop directory for keysvc"}
+{"idx": 50, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for winrm_svc"}
+{"idx": 51, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "UNC path for meterpreter DLL via SQLite load_extension - SQL injection RCE payload"}
+{"idx": 52, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "VBS script running Python via scheduled task - SyncAppvPublicationServer.vbs abuse"}
+{"idx": 53, "is_juicy": true, "tier": "Yellow", "category": "db_files", "reason": "Application zip backup in /var/backups - may contain source code and credentials"}
+{"idx": 54, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PHP index file read via sqlmap --file-read"}
+{"idx": 55, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Desktop directory for 0xdf - attacker's own VM"}
+{"idx": 56, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows command sequence fragment - not a meaningful file path"}
+{"idx": 57, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file for drbrown.HOSPITAL"}
+{"idx": 58, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Shell script for vulnerability analysis - attacker tool or CTF script"}
+{"idx": 59, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Maven pom.xml for user management service"}
+{"idx": 60, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chamilo LMS web root directory"}
+{"idx": 61, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Recycle Bin with dollar sign prefix"}
+{"idx": 62, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "ISPConfig web administration directory"}
+{"idx": 63, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for M.harris"}
+{"idx": 64, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PowerShell cleanup.ps1 in Administrator Documents - may contain credential handling"}
+{"idx": 65, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file for emily"}
+{"idx": 66, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts subdirectory with write access - GPO script abuse vector"}
+{"idx": 67, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Windows taskhostw.exe task host process"}
+{"idx": 68, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for e.black"}
+{"idx": 69, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file for Lion.SK"}
+{"idx": 70, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for Richard"}
+{"idx": 71, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for PPotts"}
+{"idx": 72, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Student notices page URL on guardian portal"}
+{"idx": 73, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Web application directory for dvir user app"}
+{"idx": 74, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Public user directory"}
+{"idx": 75, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard mkdir binary used in model evaluation script"}
+{"idx": 76, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Desktop directory for svc_exampanel"}
+{"idx": 77, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for Sharon.Mullard"}
+{"idx": 78, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "GhostScript batch script in user Documents - runs as SYSTEM via scheduled task in Hospital HTB"}
+{"idx": 79, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PHP monitor script path referenced in crontab documentation"}
+{"idx": 80, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Rust application access log file in /opt/tipnet"}
+{"idx": 81, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Edge browser User Data directory"}
+{"idx": 82, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "DMG file in user scanfiles directory for ClamAV testing"}
+{"idx": 83, "is_juicy": true, "tier": "Yellow", "category": "iac", "reason": "Website monitor PHP configuration file writable by management group - privilege escalation"}
+{"idx": 84, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "MySQL debian.cnf contains root DB credentials for automated maintenance"}
+{"idx": 85, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "SecLists API endpoints wordlist - fuzzing resource not a target"}
+{"idx": 86, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Impacket library installation path - standard Python package location"}
+{"idx": 87, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "NFS-mounted directory for Katie.Ward - empty directory"}
+{"idx": 88, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity build agent mxparser JAR library"}
+{"idx": 89, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Maven compiler plugin input files list - build artifact metadata"}
+{"idx": 90, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PM2 automation web app directory"}
+{"idx": 91, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chrome browser cache file - missing/nonexistent cache entry"}
+{"idx": 92, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Apache2 sites-enabled vhost configuration file"}
+{"idx": 93, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Installer directory - standard MSI storage"}
+{"idx": 94, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "ZMQ Python library config.json - standard package config not a target"}
+{"idx": 95, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PHP webshell deployed to surveillance.htb web directory via Craft CMS exploit"}
+{"idx": 96, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Temporary blockdev file in /tmp - standard system temp artifact"}
+{"idx": 97, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows share directory root"}
+{"idx": 98, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "containerd configuration in snap Docker directory"}
+{"idx": 99, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "MirthConnect keystore JKS file - contains SSL private keys and certificates"}
+{"idx": 100, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "JavaScript main.js loaded by Chrome in browsed HTB machine"}

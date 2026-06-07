@@ -1,0 +1,419 @@
+{
+  "version": "v0.5",
+  "generated": "2026-05-31",
+  "method": "5-fold stratified CV with LightGBM; cleanlab.filter.find_label_issues + cleanlab.count.estimate_latent for per-class noise matrix.",
+  "audits": [
+    {
+      "model": "windows",
+      "labeled_path": "data/eval/eval_set_claude.jsonl",
+      "n_records": 11190,
+      "n_juicy": 550,
+      "n_not_juicy": 10640,
+      "n_folds_cv": 5,
+      "label_issues": {
+        "n_flagged": 86,
+        "fraction_of_corpus": 0.007685433422698838
+      },
+      "noise_matrix_rows": [
+        "[noisy=not_juicy | true=not_juicy, noisy=not_juicy | true=juicy]",
+        "[noisy=juicy     | true=not_juicy, noisy=juicy     | true=juicy]"
+      ],
+      "noise_matrix": [
+        [
+          0.9974547511312217,
+          0.1013745704467354
+        ],
+        [
+          0.0025452488687782806,
+          0.8986254295532646
+        ]
+      ],
+      "estimated_class_prior_py": [
+        0.9479892761394102,
+        0.05201072386058981
+      ],
+      "joint_distribution_rows": [
+        "[joint(noisy=not_juicy, true=not_juicy), joint(noisy=not_juicy, true=juicy)]",
+        "[joint(noisy=juicy,     true=not_juicy), joint(noisy=juicy,     true=juicy)]"
+      ],
+      "joint_distribution": [
+        [
+          0.9455764075067025,
+          0.0052725647899910634
+        ],
+        [
+          0.002412868632707775,
+          0.04673815907059875
+        ]
+      ],
+      "top_suspect_mislabels": [
+        {
+          "rank": 1,
+          "path": "\\\\MACHINE1\\HKLM\\SYSTEM",
+          "current_label": "juicy",
+          "current_tier": "Black",
+          "current_category": "windows_credential_artifacts",
+          "p_juicy_cv": 7.5193785434544714e-06
+        },
+        {
+          "rank": 2,
+          "path": "\\\\fileserver.local.domain\\Path\\TokensByHost",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "credential_containers",
+          "p_juicy_cv": 1.331422576784937e-05
+        },
+        {
+          "rank": 3,
+          "path": "\\\\Myserver\\AzureScripts\\default.publishsettings",
+          "current_label": "juicy",
+          "current_tier": "Red",
+          "current_category": "cloud_credentials",
+          "p_juicy_cv": 2.2853099624746173e-05
+        },
+        {
+          "rank": 4,
+          "path": "\\\\mydfsshare.net\\share\\helpdesk\\guides\\Passwords",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "credential_containers",
+          "p_juicy_cv": 5.5940337029874024e-05
+        },
+        {
+          "rank": 5,
+          "path": "\\\\path_to_store_pass\\passwords.csv",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "credential_containers",
+          "p_juicy_cv": 0.0001234676711109381
+        },
+        {
+          "rank": 6,
+          "path": "\\\\local.domain\\sysvol\\locla.domain\\Policies.",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9997825694825696
+        },
+        {
+          "rank": 7,
+          "path": "\\\\vault2\\vault2",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "credential_containers",
+          "p_juicy_cv": 0.0002220677275664087
+        },
+        {
+          "rank": 8,
+          "path": "\\\\doo\\unattend",
+          "current_label": "juicy",
+          "current_tier": "Red",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.00022650441619248893
+        },
+        {
+          "rank": 9,
+          "path": "\\\\myNetworkShares\\DSC-Configs\\name.mof",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "iac",
+          "p_juicy_cv": 0.0002709902786068835
+        },
+        {
+          "rank": 10,
+          "path": "\\\\myserver\\myshare\\mydb.mdb",
+          "current_label": "juicy",
+          "current_tier": "Red",
+          "current_category": "db_files",
+          "p_juicy_cv": 0.0003628832755748437
+        },
+        {
+          "rank": 11,
+          "path": "\\\\your.ip.address.number\\share\\backup.bak",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9994590908818372
+        },
+        {
+          "rank": 12,
+          "path": "\\\\fileserver\\passworddictionaries\\5.ps1",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9994169083197851
+        },
+        {
+          "rank": 13,
+          "path": "\\\\e-fake\\d-fake\\o-fake\\AdminScripts\\PatrolRemove\\PtrAgentRemove.bat",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9994100299775825
+        },
+        {
+          "rank": 14,
+          "path": "\\\\SERVER1\\gpofiles\\BusinessVisionCSE.rdp",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.0005974271522026978
+        },
+        {
+          "rank": 15,
+          "path": "\\\\COPS_FACTORY\\FACTORY_DISTRIBUTOR\\bin\\jdk1.7.0_67\\jre\\bin\\java.exe",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9993785498363008
+        },
+        {
+          "rank": 16,
+          "path": "\\\\server1\\share1\\app_folder\\wallet)))",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "credential_containers",
+          "p_juicy_cv": 0.0007515288739176973
+        },
+        {
+          "rank": 17,
+          "path": "\\\\fileserver\\TEAM\\UsersVault\uff09\u3002\u6307\u5b9a\u5024:",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "credential_containers",
+          "p_juicy_cv": 0.0009612501181011482
+        },
+        {
+          "rank": 18,
+          "path": "\\\\live.sysinternals.com\\Tools\\handle.exe",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9987057895682633
+        },
+        {
+          "rank": 19,
+          "path": "\\\\fileserver\\sharename\\mytest.bat",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9985426543163987
+        },
+        {
+          "rank": 20,
+          "path": "\\\\Downloads\\-credentials.publishsettings",
+          "current_label": "juicy",
+          "current_tier": "Red",
+          "current_category": "cloud_credentials",
+          "p_juicy_cv": 0.001911988083045545
+        }
+      ]
+    },
+    {
+      "model": "linux",
+      "labeled_path": "data/eval/eval_set_claude_linux_with_seed.jsonl",
+      "n_records": 1685,
+      "n_juicy": 1206,
+      "n_not_juicy": 479,
+      "n_folds_cv": 5,
+      "label_issues": {
+        "n_flagged": 109,
+        "fraction_of_corpus": 0.06468842729970327
+      },
+      "noise_matrix_rows": [
+        "[noisy=not_juicy | true=not_juicy, noisy=not_juicy | true=juicy]",
+        "[noisy=juicy     | true=not_juicy, noisy=juicy     | true=juicy]"
+      ],
+      "noise_matrix": [
+        [
+          0.8627450980392157,
+          0.033191489361702124
+        ],
+        [
+          0.13725490196078433,
+          0.9668085106382979
+        ]
+      ],
+      "estimated_class_prior_py": [
+        0.3026706231454006,
+        0.6973293768545994
+      ],
+      "joint_distribution_rows": [
+        "[joint(noisy=not_juicy, true=not_juicy), joint(noisy=not_juicy, true=juicy)]",
+        "[joint(noisy=juicy,     true=not_juicy), joint(noisy=juicy,     true=juicy)]"
+      ],
+      "joint_distribution": [
+        [
+          0.26112759643916916,
+          0.02314540059347181
+        ],
+        [
+          0.04154302670623145,
+          0.6741839762611276
+        ]
+      ],
+      "top_suspect_mislabels": [
+        {
+          "rank": 1,
+          "path": "~/.ssh/host_key.rsa.pub",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9998358974932201
+        },
+        {
+          "rank": 2,
+          "path": "/etc/apache2/ssl/DigiCertCA.crt",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9998346907732715
+        },
+        {
+          "rank": 3,
+          "path": "~/.ssh/ssh_auth_sock",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9997506644520696
+        },
+        {
+          "rank": 4,
+          "path": "/var/www/html/wp-content/plugins/woocommerce-gateway-stripe",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "modern_saas_tokens",
+          "p_juicy_cv": 0.0006509211482907188
+        },
+        {
+          "rank": 5,
+          "path": "/srv/cvn/git/infrastructure/bin/cvndb-pull",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.0015335593415906033
+        },
+        {
+          "rank": 6,
+          "path": "/opt/docker/conf/logback.k8s.xml",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9984627236133237
+        },
+        {
+          "rank": 7,
+          "path": "~/.ssh/sshkey.pub",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9982021361956661
+        },
+        {
+          "rank": 8,
+          "path": "/opt/tomcat/logs/catalina.out",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.0021938556068112087
+        },
+        {
+          "rank": 9,
+          "path": "/opt/Electronic-medical-record/uploads",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "decoy_docs",
+          "p_juicy_cv": 0.0027336925095319577
+        },
+        {
+          "rank": 10,
+          "path": "/etc/nginx/certs/dhparam.pem",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9972085610857052
+        },
+        {
+          "rank": 11,
+          "path": "/etc/apt/keyrings/docker.asc",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9956023319581511
+        },
+        {
+          "rank": 12,
+          "path": "~/klipper_config/config/crowsnest.conf",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9947933083931628
+        },
+        {
+          "rank": 13,
+          "path": "/etc/nginx/includes/frontend-location.conf",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.005797090188387704
+        },
+        {
+          "rank": 14,
+          "path": "/etc/postgresql/16/months/PVOUT_01.tif",
+          "current_label": "not_juicy",
+          "current_tier": null,
+          "current_category": "benign_noise",
+          "p_juicy_cv": 0.9938585664889327
+        },
+        {
+          "rank": 15,
+          "path": "/etc/logstash/conf.d/testing.conf",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.006362812004449884
+        },
+        {
+          "rank": 16,
+          "path": "/etc/nginx/conf.d/funnvpn.conf",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.0067413874450761874
+        },
+        {
+          "rank": 17,
+          "path": "/etc/ssl/certs/reapbooster-cert.pem",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "private_keys_x509",
+          "p_juicy_cv": 0.010219604903375605
+        },
+        {
+          "rank": 18,
+          "path": "/var/lib/jenkins/workspace/curve/curve_multijob",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.010709548921365313
+        },
+        {
+          "rank": 19,
+          "path": "/var/log/secure",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.011266209966616494
+        },
+        {
+          "rank": 20,
+          "path": "/var/log/maillog",
+          "current_label": "juicy",
+          "current_tier": "Yellow",
+          "current_category": "embedded_secrets",
+          "p_juicy_cv": 0.011376790962835597
+        }
+      ]
+    }
+  ]
+}

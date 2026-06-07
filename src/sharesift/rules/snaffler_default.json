@@ -1,0 +1,1480 @@
+{
+  "format_version": 1,
+  "snaffler_upstream": {
+    "repo": "https://github.com/SnaffCon/Snaffler.git",
+    "ref": "50ed78372b2cdf6df5a61cfdf6fd49c0d575331f",
+    "commit_sha": "50ed78372b2cdf6df5a61cfdf6fd49c0d575331f",
+    "rules_path": "Snaffler/SnaffRules/DefaultRules"
+  },
+  "ported_at": "2026-06-03T20:11:05.361159+00:00",
+  "audit": {
+    "passed": true,
+    "failures": [],
+    "total_rules": 88,
+    "tier_counts": {
+      "Green": 29,
+      "Yellow": 12,
+      "Red": 34,
+      "Black": 13
+    },
+    "action_counts": {
+      "Discard": 7,
+      "Snaffle": 61,
+      "Relay": 19,
+      "CheckForKeys": 1
+    },
+    "location_types": [
+      "FileContentAsString",
+      "FileExtension",
+      "FileName",
+      "FilePath",
+      "ShareName"
+    ],
+    "empty_files": [
+      "FileRules/Keep/Code/ShellScript/KeepShellScriptCredentials.toml"
+    ]
+  },
+  "rules": [
+    {
+      "rule_name": "DiscardByFileExtension",
+      "triage": "Green",
+      "match_action": "Discard",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.bmp",
+        "\\.eps",
+        "\\.gif",
+        "\\.ico",
+        "\\.jfi",
+        "\\.jfif",
+        "\\.jif",
+        "\\.jpe",
+        "\\.jpeg",
+        "\\.jpg",
+        "\\.png",
+        "\\.psd",
+        "\\.svg",
+        "\\.tif",
+        "\\.tiff",
+        "\\.webp",
+        "\\.xcf",
+        "\\.ttf",
+        "\\.otf",
+        "\\.lock",
+        "\\.css",
+        "\\.less",
+        "\\.admx",
+        "\\.adml",
+        "\\.xsd",
+        "\\.nse",
+        "\\.xsl"
+      ],
+      "source_file": "FileRules/Discard/DiscardByFileExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Skip any further scanning for files with these extensions."
+    },
+    {
+      "rule_name": "DiscardByFileName",
+      "triage": "Green",
+      "match_action": "Discard",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "jmxremote\\.password\\.template",
+        "sceregvl\\.inf"
+      ],
+      "source_file": "FileRules/Discard/DiscardByFileName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Skip any further scanning for files with these names."
+    },
+    {
+      "rule_name": "KeepNameContainsGreen",
+      "triage": "Green",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "passw",
+        "secret",
+        "credential",
+        "thycotic",
+        "cyberark"
+      ],
+      "source_file": "FileRules/Keep/BusinessDocs/ByPartialName/KeepFilenameContainsPamOrPwdVault.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "A description of what a rule does."
+    },
+    {
+      "rule_name": "KeepCSharpDbConnStringsYellow",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "Data Source=.+Integrated Security=(SSPI|true)",
+        "Integrated Security=(SSPI|true);.*Data Source=.+"
+      ],
+      "source_file": "FileRules/Keep/Code/CSharpAndASP/KeepCSharpDbConnStrings.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Match SQL connection strings that appear to use integrated security (so no passwords)."
+    },
+    {
+      "rule_name": "KeepCSharpDbConnStringsRed",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "Data Source=.+(;|)Password=.+(;|)",
+        "Password=.+(;|)Data Source=.+(;|)"
+      ],
+      "source_file": "FileRules/Keep/Code/CSharpAndASP/KeepCSharpDbConnStrings.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Match SQL connection strings that appear to have a password."
+    },
+    {
+      "rule_name": "KeepCSharpViewstateKeys",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "validationkey\\s*=\\s*[\\'\\\"][^\\'\\\"]....",
+        "decryptionkey\\s*=\\s*[\\'\\\"][^\\'\\\"]...."
+      ],
+      "source_file": "FileRules/Keep/Code/CSharpAndASP/KeepCSharpViewstateKeys.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayCSharpByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.aspx",
+        "\\.ashx",
+        "\\.asmx",
+        "\\.asp",
+        "\\.cshtml",
+        "\\.cs",
+        "\\.ascx",
+        "\\.config"
+      ],
+      "source_file": "FileRules/Keep/Code/CSharpAndASP/RelayCSharpByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for CSharp and ASP.NET related strings."
+    },
+    {
+      "rule_name": "KeepCmdCredentials",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "passwo?r?d\\s*=\\s*[\\'\\\"][^\\'\\\"]....",
+        "schtasks.{1,300}(/rp\\s|/p\\s)",
+        "net user ",
+        "psexec .{0,100} -p ",
+        "net use .{0,300} /user:",
+        "cmdkey "
+      ],
+      "source_file": "FileRules/Keep/Code/Cmd/KeepCmdCredentials.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayCmdByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.bat",
+        "\\.cmd"
+      ],
+      "source_file": "FileRules/Keep/Code/Cmd/RelayCmdByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for cmd.exe/batch file related strings."
+    },
+    {
+      "rule_name": "KeepConfigByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.htpasswd",
+        "accounts\\.v4"
+      ],
+      "source_file": "FileRules/Keep/Code/GenericConfig/KeepConfigByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "RelayConfigByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.yaml",
+        "\\.yml",
+        "\\.toml",
+        "\\.xml",
+        "\\.json",
+        "\\.config",
+        "\\.ini",
+        "\\.inf",
+        "\\.cnf",
+        "\\.conf",
+        "\\.properties",
+        "\\.env",
+        "\\.dist",
+        "\\.txt",
+        "\\.sql",
+        "\\.log",
+        "\\.sqlite",
+        "\\.sqlite3",
+        "\\.fdb",
+        "\\.tfvars"
+      ],
+      "source_file": "FileRules/Keep/Code/GenericConfig/RelayConfigByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be subjected to a generic search for keys and such."
+    },
+    {
+      "rule_name": "KeepJavaDbConnStrings",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\\.getConnection\\(\\\"jdbc\\:",
+        "passwo?r?d\\s*=\\s*[\\'\\\"][^\\'\\\"]...."
+      ],
+      "source_file": "FileRules/Keep/Code/Java/KeepJavaDbConnStrings.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayJavaByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.jsp",
+        "\\.do",
+        "\\.java",
+        "\\.cfm"
+      ],
+      "source_file": "FileRules/Keep/Code/Java/RelayJavaByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for Java and ColdFusion related strings."
+    },
+    {
+      "rule_name": "RelayJsByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.js",
+        "\\.cjs",
+        "\\.mjs",
+        "\\.cs",
+        "\\.ts",
+        "\\.tsx",
+        "\\.ls",
+        "\\.es6",
+        "\\.es"
+      ],
+      "source_file": "FileRules/Keep/Code/JavaScript/RelayJsByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for JavaScript related strings."
+    },
+    {
+      "rule_name": "KeepAwsKeysInCode",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "aws[_\\-\\.]?key",
+        "(\\s|\\'|\\\"|\\^|=)(A3T[A-Z0-9]|AKIA|AGPA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z2-7]{12,16}(\\s|\\'|\\\"|$)"
+      ],
+      "source_file": "FileRules/Keep/Code/KeepAwsKeysInCode.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepDbConnStringPw",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "connectionstring.{1,200}passw"
+      ],
+      "source_file": "FileRules/Keep/Code/KeepDbConnStringPw.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepInlinePrivateKey",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "-----BEGIN( RSA| OPENSSH| DSA| EC| PGP)? PRIVATE KEY( BLOCK)?-----"
+      ],
+      "source_file": "FileRules/Keep/Code/KeepInlinePrivateKey.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepPassOrKeyInCode",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "passw?o?r?d\\s*=\\s*[\\'\\\"][^\\'\\\"]....",
+        "api[Kk]ey\\s*=\\s*[\\'\\\"][^\\'\\\"]....",
+        "passw?o?r?d?>\\s*[^\\s<]+\\s*<",
+        "passw?o?r?d?>.{3,2000}</pass",
+        "[\\s]+-passw?o?r?d?",
+        "api[kK]ey>\\s*[^\\s<]+\\s*<",
+        "[_\\-\\.]oauth\\s*=\\s*[\\'\\\"][^\\'\\\"]....",
+        "client_secret\\s*=*\\s*",
+        "<ExtendedMatchKey>ClientAuth",
+        "GIUserPassword"
+      ],
+      "source_file": "FileRules/Keep/Code/KeepPassOrKeyInCode.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepS3UriPrefixInCode",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "s3[a]?:\\/\\/[a-zA-Z0-9\\-\\+\\/]{2,16}"
+      ],
+      "source_file": "FileRules/Keep/Code/KeepS3UriPrefixInCode.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with content matching an AWS S3 or Apache Hadoop S3A URI Prefix"
+    },
+    {
+      "rule_name": "KeepSlackTokensInCode",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(xox[pboa]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
+        "https://hooks.slack.com/services/T[a-zA-Z0-9_]{8}/B[a-zA-Z0-9_]{8}/[a-zA-Z0-9_]{24}"
+      ],
+      "source_file": "FileRules/Keep/Code/KeepSlackTokensInCode.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepSqlAccountCreation",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "CREATE (USER|LOGIN) .{0,200} (IDENTIFIED BY|WITH PASSWORD)"
+      ],
+      "source_file": "FileRules/Keep/Code/KeepSqlAccountCreation.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepPhpByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "LocalSettings\\.php"
+      ],
+      "source_file": "FileRules/Keep/Code/PHP/KeepPhpByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepPhpDbConnStrings",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "mysql_connect\\s*\\(.*\\$.*\\)",
+        "mysql_pconnect\\s*\\(.*\\$.*\\)",
+        "mysql_change_user\\s*\\(.*\\$.*\\)",
+        "pg_connect\\s*\\(.*\\$.*\\)",
+        "pg_pconnect\\s*\\(.*\\$.*\\)"
+      ],
+      "source_file": "FileRules/Keep/Code/PHP/KeepPhpDbConnStrings.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayPhpByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.php",
+        "\\.phtml",
+        "\\.inc",
+        "\\.php3",
+        "\\.php5",
+        "\\.php7"
+      ],
+      "source_file": "FileRules/Keep/Code/PHP/RelayPhpByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for php related strings."
+    },
+    {
+      "rule_name": "KeepPerlDbConnStrings",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "DBI\\-\\>connect\\("
+      ],
+      "source_file": "FileRules/Keep/Code/Perl/KeepPerlDbConnStrings.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayPerlByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.pl"
+      ],
+      "source_file": "FileRules/Keep/Code/Perl/RelayPerlByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for Perl related strings."
+    },
+    {
+      "rule_name": "KeepPSHistoryByName",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "ConsoleHost_history\\.txt",
+        "Visual Studio Code Host_history\\.txt"
+      ],
+      "source_file": "FileRules/Keep/Code/PowerShell/KeepPsByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names will be searched for PowerShell related strings."
+    },
+    {
+      "rule_name": "KeepPsCredentials",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "-SecureString",
+        "-AsPlainText",
+        "\\[Net.NetworkCredential\\]::new\\("
+      ],
+      "source_file": "FileRules/Keep/Code/PowerShell/KeepPsCredentials.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayPsByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.psd1",
+        "\\.psm1",
+        "\\.ps1"
+      ],
+      "source_file": "FileRules/Keep/Code/PowerShell/RelayPsByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for PowerShell related strings."
+    },
+    {
+      "rule_name": "KeepPyDbConnStrings",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "mysql\\.connector\\.connect\\(",
+        "psycopg2\\.connect\\("
+      ],
+      "source_file": "FileRules/Keep/Code/Python/KeepPyDbConnStrings.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayPythonByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.py"
+      ],
+      "source_file": "FileRules/Keep/Code/Python/RelayPythonByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for python related strings."
+    },
+    {
+      "rule_name": "KeepRubyByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "database\\.yml",
+        "\\.secret_token\\.rb",
+        "knife\\.rb",
+        "carrierwave\\.rb",
+        "omniauth\\.rb"
+      ],
+      "source_file": "FileRules/Keep/Code/Ruby/KeepRubyByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepRubyDbConnStrings",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "DBI\\.connect\\("
+      ],
+      "source_file": "FileRules/Keep/Code/Ruby/KeepRubyDbConnStrings.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "RelayRubyByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.rb"
+      ],
+      "source_file": "FileRules/Keep/Code/Ruby/RelayRubyByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for Rubby related strings."
+    },
+    {
+      "rule_name": "RelayShellScriptByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.netrc",
+        "\\.exports",
+        "\\.functions",
+        "\\.extra",
+        "\\.npmrc",
+        "\\.env",
+        "\\.bashrc",
+        "\\.profile",
+        "\\.zshrc",
+        "\\.bash_history",
+        "\\.zsh_history",
+        "\\.sh_history",
+        "zhistory",
+        "\\.irb_history"
+      ],
+      "source_file": "FileRules/Keep/Code/ShellScript/RelayShellScriptByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for Bash related strings."
+    },
+    {
+      "rule_name": "RelayVBScriptByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.vbs",
+        "\\.vbe",
+        "\\.wsf",
+        "\\.wsc",
+        "\\.asp",
+        "\\.hta"
+      ],
+      "source_file": "FileRules/Keep/Code/VBScript/RelayVBScriptByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for cmd.exe/batch file related strings."
+    },
+    {
+      "rule_name": "RelayCertByExtension",
+      "triage": "Red",
+      "match_action": "CheckForKeys",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.pem",
+        "\\.der",
+        "\\.pfx",
+        "\\.pk12",
+        "\\.p12",
+        "\\.pkcs12"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/Certificates/RelayCertByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be parsed as x509 certificates to see if they have private keys."
+    },
+    {
+      "rule_name": "KeepJenkinsByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "jenkins\\.plugins\\.publish_over_ssh\\.BapSshPublisherPlugin\\.xml",
+        "credentials\\.xml"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/CiCdStuff/KeepJenkinsByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepDatabaseByExtension",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.mdf",
+        "\\.sdf",
+        "\\.sqldump",
+        "\\.bak"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/Databases/KeepDatabaseByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are a little interesting."
+    },
+    {
+      "rule_name": "KeepDefenderConfigByName",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "SensorConfiguration.json",
+        "mdatp_managed.json"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/DeploymentAutomation/KeepDefenderConfigByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files containing Defender Configs are very interesting."
+    },
+    {
+      "rule_name": "KeepDeployImageByExtension",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.wim",
+        "\\.ova",
+        "\\.ovf"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/DeploymentAutomation/KeepDeployImageByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are a little interesting."
+    },
+    {
+      "rule_name": "KeepDomainJoinCredsByName",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "customsettings.ini"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/DeploymentAutomation/KeepDomainJoinCredsByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files containing Domain Join Credes are quite interesting."
+    },
+    {
+      "rule_name": "KeepDomainJoinCredsByPath",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "control\\\\customsettings.ini"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/DeploymentAutomation/KeepDomainJoinCredsByPath.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with a path containing these strings are very interesting."
+    },
+    {
+      "rule_name": "KeepSCCMBootVarCredsByPath",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "REMINST\\\\SMSTemp\\\\.*\\.var",
+        "SMS\\\\data\\\\Variables.dat",
+        "SMS\\\\data\\\\Policy.xml"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/DeploymentAutomation/KeepSCCMBootVarCredsByPath.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with a path containing these strings are very interesting."
+    },
+    {
+      "rule_name": "RelayUnattendXml",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "unattend\\.xml",
+        "Autounattend\\.xml"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/DeploymentAutomation/KeepUnattendXmlRelay.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Look inside unattend.xml files for actual values."
+    },
+    {
+      "rule_name": "KeepUnattendXmlRegexRed",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(?s)<AdministratorPassword>.{0,30}<Value>.*<\\/Value>",
+        "(?s)<AutoLogon>.{0,30}<Value>.*<\\/Value>"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/DeploymentAutomation/KeepUnattendXmlRelay.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepFtpServerConfigByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "proftpdpasswd",
+        "filezilla\\.xml"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/FTPServers/KeepFtpServerConfigByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepInfraAsCodeByExtension",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.cscfg",
+        "\\.ucs",
+        "\\.tfvars"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/InfraAsCode/KeepInfraAsCodeConfigByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are very very interesting."
+    },
+    {
+      "rule_name": "KeepMemDumpByExtension",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.dmp"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/MemDumps/KeepMemDumpByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are a little interesting."
+    },
+    {
+      "rule_name": "KeepMemDumpByName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "MEMORY\\.DMP",
+        "hiberfil\\.sys",
+        "lsass\\.dmp",
+        "lsass\\.exe\\.dmp"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/MemDumps/KeepMemDumpByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very very interesting."
+    },
+    {
+      "rule_name": "KeepNetConfigCreds",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "NVRAM config last updated",
+        "enable password \\.",
+        "simple-bind authenticated encrypt",
+        "pac key [0-7] ",
+        "snmp-server community\\s.+\\sRW"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/NetworkDevice/KeepNetConfigCreds.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "A description of what a rule does."
+    },
+    {
+      "rule_name": "KeepNetConfigFileByName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "running-config\\.cfg",
+        "startup-config\\.cfg",
+        "running-config",
+        "startup-config"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/NetworkDevice/KeepNetConfigFileByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very very interesting."
+    },
+    {
+      "rule_name": "RelayNetConfigByName",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileName",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "cisco",
+        "router",
+        "firewall",
+        "switch"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/NetworkDevice/RelayNetConfigByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these name patterns will be searched for Cisco bits."
+    },
+    {
+      "rule_name": "KeepKerberosCredentialsByExtension",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.keytab",
+        "\\.CCACHE"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/NixKerberos/KeepKerberosCredentialsByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are interesting."
+    },
+    {
+      "rule_name": "KeepKerberosCredentialsByName",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "krb5cc_.*"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/NixKerberos/KeepKerberosCredentialsByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these names are interesting."
+    },
+    {
+      "rule_name": "KeepNixLocalHashesByName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "shadow",
+        "pwd\\.db",
+        "passwd"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/NixLocalHashes/KeepNixLocalHashesByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very very interesting."
+    },
+    {
+      "rule_name": "KeepCyberArkConfigsByName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "Psmapp\\.cred",
+        "psmgw\\.cred",
+        "backup\\.key",
+        "MasterReplicationUser\\.pass",
+        "RecPrv\\.key",
+        "ReplicationUser\\.pass",
+        "Server\\.key",
+        "VaultEmergency\\.pass",
+        "VaultUser\\.pass",
+        "Vault\\.ini",
+        "PADR\\.ini",
+        "PARAgent\\.ini",
+        "CACPMScanner\\.exe\\.config",
+        "PVConfiguration\\.xml"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/PAMAndPwVault/KeepCyberArkConfigsByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very very interesting."
+    },
+    {
+      "rule_name": "KeepCyberArkByExtension",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.cred",
+        "\\.pass"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/PAMAndPwVault/RelayCyberArkByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are QUITE interesting."
+    },
+    {
+      "rule_name": "KeepPcapByExtension",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.pcap",
+        "\\.cap",
+        "\\.pcapng"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/PacketCapture/KeepPcapByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are a little interesting."
+    },
+    {
+      "rule_name": "RelayInfraConfigByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.xml",
+        "\\.json",
+        "\\.config",
+        "\\.ini",
+        "\\.inf",
+        "\\.cnf",
+        "\\.conf",
+        "\\.txt"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/RelayInfraConfigByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be subjected to a generic search for keys and such."
+    },
+    {
+      "rule_name": "KeepVMDisksByExtension",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.vmdk",
+        "\\.vdi",
+        "\\.vhd",
+        "\\.vhdx"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/VirtualMachines/KeepVMDisksByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Virtual Machine Disks can contain sensitive data or credentials."
+    },
+    {
+      "rule_name": "KeepWinHashesByName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "NTDS.DIT",
+        "SYSTEM",
+        "SAM",
+        "SECURITY"
+      ],
+      "source_file": "FileRules/Keep/Infrastructure/WinHashes/KeepWinHashesByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very very interesting."
+    },
+    {
+      "rule_name": "KeepCloudApiKeysByName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.tugboat"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/APIKeys/KeepCloudApiKeysByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepCloudApiKeysByPath",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "\\\\\\.aws\\\\",
+        "doctl\\\\config.yaml"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/APIKeys/KeepCloudApiKeysByPath.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with a path containing these strings are very very interesting."
+    },
+    {
+      "rule_name": "KeepFfLoginsJsonRelay",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "logins\\.json"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/BrowserCreds/KeepFfLoginsJsonRelay.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions will be searched for Firefox/Thunderbird backups related strings."
+    },
+    {
+      "rule_name": "KeepFFRegexRed",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\"encryptedPassword\":\"[A-Za-z0-9+/=]+\""
+      ],
+      "source_file": "FileRules/Keep/UserFiles/BrowserCreds/KeepFfLoginsJsonRelay.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexes are very interesting."
+    },
+    {
+      "rule_name": "KeepDbMgtConfigByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "SqlStudio\\.bin",
+        "\\.mysql_history",
+        "\\.psql_history",
+        "\\.pgpass",
+        "\\.dbeaver-data-sources\\.xml",
+        "credentials-config\\.json",
+        "dbvis\\.xml",
+        "robomongo\\.json"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/DBMgmt/KeepDbMgtConfigByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepGitCredsByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.git-credentials"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/DotFiles/KeepGitCredsByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepShellHistoryByName",
+      "triage": "Green",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.bash_history",
+        "\\.zsh_history",
+        "\\.sh_history",
+        "zhistory",
+        "\\.irb_history",
+        "ConsoleHost_History\\.txt"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/DotFiles/KeepShellHistoryByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepShellRcFilesByName",
+      "triage": "Green",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.netrc",
+        "_netrc",
+        "\\.exports",
+        "\\.functions",
+        "\\.extra",
+        "\\.npmrc",
+        "\\.env",
+        "\\.bashrc",
+        "\\.profile",
+        "\\.zshrc"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/DotFiles/KeepShellRcFilesByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepPassMgrsByExtension",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.kdbx",
+        "\\.kdb",
+        "\\.psafe3",
+        "\\.kwallet",
+        "\\.keychain",
+        "\\.agilekeychain",
+        "\\.cred"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/PassMgrs/KeepPassMgrsByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are very very interesting."
+    },
+    {
+      "rule_name": "KeepPasswordFilesByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "passwords\\.txt",
+        "pass\\.txt",
+        "accounts\\.txt",
+        "passwords\\.doc",
+        "pass\\.doc",
+        "accounts\\.doc",
+        "passwords\\.xls",
+        "pass\\.xls",
+        "accounts\\.xls",
+        "passwords\\.docx",
+        "pass\\.docx",
+        "accounts\\.docx",
+        "passwords\\.xlsx",
+        "pass\\.xlsx",
+        "accounts\\.xlsx",
+        "secrets\\.txt",
+        "secrets\\.doc",
+        "secrets\\.xls",
+        "secrets\\.docx",
+        "BitlockerLAPSPasswords\\.csv",
+        "secrets\\.xlsx"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/PassMgrs/KeepPasswordFilesByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepFtpClientConfigConfigByName",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "recentservers\\.xml",
+        "sftp-config\\.json"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/RemoteAccess/KeepFtpClientByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very interesting."
+    },
+    {
+      "rule_name": "KeepRdpPasswords",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "password 51\\:b"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/RemoteAccess/KeepRdpPasswords.toml",
+      "enumeration_scope": "ContentsEnumeration",
+      "description": "Files with contents matching these regexen are very interesting."
+    },
+    {
+      "rule_name": "KeepRemoteAccessConfByExtension",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.rdg",
+        "\\.rtsz",
+        "\\.rtsx",
+        "\\.ovpn",
+        "\\.tvopt",
+        "\\.sdtid"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/RemoteAccess/KeepRemoteAccessConfByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these extensions are a little interesting."
+    },
+    {
+      "rule_name": "KeepRemoteAccessConfByName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "mobaxterm\\.ini",
+        "mobaxterm backup\\.zip",
+        "confCons.xml"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/RemoteAccess/KeepRemoteAccessConfByName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with these exact names are very very interesting."
+    },
+    {
+      "rule_name": "RelayRdpByExtension",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.rdp"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/RemoteAccess/RelayRdpByExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Look inside .rdp files for actual values."
+    },
+    {
+      "rule_name": "KeepSSHKeysByFileName",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "id_rsa",
+        "id_dsa",
+        "id_ecdsa",
+        "id_ed25519"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/SSH/KeepSSHFilesByFileName.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "SSHKeys"
+    },
+    {
+      "rule_name": "KeepSSHFilesByPath",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "\\\\\\.ssh\\\\"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/SSH/KeepSSHFilesByPath.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files with a path containing these strings are very very interesting."
+    },
+    {
+      "rule_name": "KeepSSHKeysByFileExtension",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.ppk"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/SSH/KeepSSHKeysByFileExtension.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "SSHKeys"
+    },
+    {
+      "rule_name": "CertContentByEnding",
+      "triage": "Green",
+      "match_action": "Relay",
+      "match_location": "FileName",
+      "wordlist_type": "EndsWith",
+      "wordlist": [
+        "_rsa",
+        "_dsa",
+        "_ed25519",
+        "_ecdsa"
+      ],
+      "source_file": "FileRules/Keep/UserFiles/SSH/RelayPrivKeyByEnding.toml",
+      "enumeration_scope": "FileEnumeration",
+      "description": "Files ending like this will be grepped for private keys."
+    },
+    {
+      "rule_name": "DiscardLargeFalsePosDirs",
+      "triage": "Green",
+      "match_action": "Discard",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "\\\\puppet\\\\share\\\\doc",
+        "\\\\lib\\\\ruby",
+        "\\\\lib\\\\site-packages",
+        "\\\\usr\\\\share\\\\doc",
+        "node_modules",
+        "vendor\\\\bundle",
+        "vendor\\\\cache",
+        "\\\\doc\\\\openssl",
+        "Anaconda3\\\\Lib\\\\test",
+        "WindowsPowerShell\\\\Modules",
+        "Python\\d*\\\\Lib",
+        "Reference Assemblies\\\\Microsoft\\\\Framework\\\\.NETFramework",
+        "dotnet\\\\sdk",
+        "dotnet\\\\shared",
+        "Modules\\\\Microsoft\\.PowerShell\\.Security",
+        "Windows\\\\assembly"
+      ],
+      "source_file": "PathRules/Discard/DiscardLargeFalsePosDirs.toml",
+      "enumeration_scope": "DirectoryEnumeration",
+      "description": "File paths that will be skipped entirely."
+    },
+    {
+      "rule_name": "DiscardWinSystemDirs",
+      "triage": "Green",
+      "match_action": "Discard",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "\\\\winsxs",
+        "\\\\syswow64",
+        "\\\\system32",
+        "\\\\systemapps",
+        "\\\\windows\\\\servicing",
+        "\\\\servicing",
+        "\\\\Microsoft\\.NET\\\\Framework",
+        "\\\\windows\\\\immersivecontrolpanel",
+        "\\\\windows\\\\diagnostics",
+        "\\\\windows\\\\debug",
+        "\\\\locale",
+        "\\\\chocolatey\\\\helpers",
+        "\\\\sources\\\\sxs",
+        "\\\\localization",
+        "\\\\AppData\\\\Local\\\\Microsoft",
+        "\\\\AppData\\\\Roaming\\\\Microsoft\\\\Windows",
+        "\\\\AppData\\\\Roaming\\\\Microsoft\\\\Teams",
+        "\\\\wsuscontent",
+        "\\\\Application Data\\\\Microsoft\\\\CLR Security Config",
+        "\\\\servicing\\\\LCU"
+      ],
+      "source_file": "PathRules/Discard/DiscardWinSystemDirs.toml",
+      "enumeration_scope": "DirectoryEnumeration",
+      "description": "File paths that will be skipped entirely."
+    },
+    {
+      "rule_name": "DiscardPostMatchByName",
+      "triage": "Green",
+      "match_action": "Discard",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "credentialprovider\\.idl",
+        "pspasswd64\\.exe",
+        "pspasswd\\.exe",
+        "psexec\\.exe",
+        "psexec64\\.exe"
+      ],
+      "source_file": "PostMatchRules/DiscardPostMatchByName.toml",
+      "enumeration_scope": "PostMatch",
+      "description": "Post-match check for specific filenames"
+    },
+    {
+      "rule_name": "DiscardPostMatchByPath",
+      "triage": "Green",
+      "match_action": "Discard",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "Windows Kits\\\\10",
+        "Git\\\\mingw64",
+        "Git\\\\usr\\\\lib",
+        "ProgramData\\\\Microsoft\\\\NetFramework\\\\BreadcrumbStore",
+        "\\.MSSQLSERVER\\\\MSSQL\\\\Binn\\\\Templates"
+      ],
+      "source_file": "PostMatchRules/DiscardPostMatchByPath.toml",
+      "enumeration_scope": "PostMatch",
+      "description": "Post-match check for specific path elements"
+    },
+    {
+      "rule_name": "DiscardNonFileShares",
+      "triage": "Green",
+      "match_action": "Discard",
+      "match_location": "ShareName",
+      "wordlist_type": "EndsWith",
+      "wordlist": [
+        "\\\\print\\$",
+        "\\\\ipc\\$"
+      ],
+      "source_file": "ShareRules/Discard/DiscardNonFileShares.toml",
+      "enumeration_scope": "ShareEnumeration",
+      "description": "Skips scanning inside shares ending with these words."
+    },
+    {
+      "rule_name": "KeepDollarShares",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "ShareName",
+      "wordlist_type": "EndsWith",
+      "wordlist": [
+        "\\\\C\\$",
+        "\\\\ADMIN\\$"
+      ],
+      "source_file": "ShareRules/Keep/KeepDollarShares.toml",
+      "enumeration_scope": "ShareEnumeration",
+      "description": "Notifies the user that they can read C$ or ADMIN$ or something fun/noisy, but doesn't actually scan inside it."
+    },
+    {
+      "rule_name": "KeepSCCMShares",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "ShareName",
+      "wordlist_type": "EndsWith",
+      "wordlist": [
+        "\\\\SCCMContentLib\\$"
+      ],
+      "source_file": "ShareRules/Keep/KeepSCCMShares.toml",
+      "enumeration_scope": "ShareEnumeration",
+      "description": "Notifies the user that they can read SCCMContentLib$ so they can take CMLoot for a spin."
+    }
+  ]
+}

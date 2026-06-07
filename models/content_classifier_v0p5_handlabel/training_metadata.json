@@ -1,0 +1,36 @@
+{
+  "trained_at": "2026-06-01T16:10:04.190262+00:00",
+  "training_dataset": "data/content_v0p5/train_split.jsonl",
+  "effective_training_dataset": "data/content_v0p5/train_split.jsonl",
+  "data_fraction": 1.0,
+  "training_dataset_sha256": "6a5c3bec04f64e0e3f03c4c328148cd8fac015f00e6b226a8a614ae51ab2c8d7",
+  "training_records": 2400,
+  "test_split_path_for_guard": "data/content_v0p5/test_split.jsonl",
+  "base_model": "unsloth/Qwen3-1.7B-unsloth-bnb-4bit",
+  "instruct": true,
+  "lora": {
+    "rank": 16,
+    "alpha": 32,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "optim": {
+    "batch_size": 1,
+    "grad_accum": 16,
+    "effective_batch": 16,
+    "learning_rate": 0.0002,
+    "epochs": 7,
+    "warmup_steps": 200,
+    "lr_scheduler": "cosine",
+    "optimizer": "adamw_8bit"
+  },
+  "max_seq_length": 2048,
+  "seed": 2026
+}

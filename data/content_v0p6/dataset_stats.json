@@ -1,0 +1,12 @@
+{
+  "seed": 2027,
+  "n_target": 5000,
+  "n_excluded_v08_ids": 1772,
+  "n_usable": 4354,
+  "positive_rate": 0.33,
+  "n_total": 4354,
+  "n_positives": 1436,
+  "n_negatives": 2918,
+  "n_train": 3484,
+  "n_test": 870
+}

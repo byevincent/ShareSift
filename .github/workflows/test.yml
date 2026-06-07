@@ -1,0 +1,48 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python 3.11
+        run: uv python install 3.11
+
+      # content-inference pulls torch (~2.5 GB). Skip on PRs to keep CI
+      # cheap; only run the full set on push to main. PRs run with the
+      # lean (path-triage + verify + report) stack, which still covers
+      # ~90% of tests; content-classifier tests skip when their model
+      # artifacts aren't present anyway.
+      - name: Install dependencies (lean)
+        if: github.event_name == 'pull_request'
+        run: uv sync --group verify --group verify-cloud --group report --group dev
+
+      - name: Install dependencies (full)
+        if: github.event_name == 'push'
+        run: uv sync --group content-inference --group verify --group verify-cloud --group report --group dev
+
+      - name: Run pytest
+        run: uv run pytest -q
+
+      - name: Smoke-test CLI
+        run: |
+          uv run sharesift --version
+          uv run sharesift --help

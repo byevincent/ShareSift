@@ -1,0 +1,16 @@
+{
+  "seed": 2026,
+  "n_train_repos": 283,
+  "max_positives": 1000,
+  "neg_per_pos": 2.0,
+  "n_total": 3000,
+  "n_positives": 1000,
+  "n_negatives": 2000,
+  "n_train": 2400,
+  "n_test": 600,
+  "misses": {
+    "not_found": 0,
+    "bad_lines": 0,
+    "empty_snippet": 0
+  }
+}

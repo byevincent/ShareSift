@@ -1,0 +1,100 @@
+{"idx": 1, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "NOPASSWD sudo to custom binary in user home dir - forge blockchain tool with elevated privs"}
+{"idx": 2, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static SVG icon asset in web app vendor directory"}
+{"idx": 3, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Script file related to password auditing tool in C:\\Get-bADpasswords"}
+{"idx": 4, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard cron daemon binary"}
+{"idx": 5, "is_juicy": true, "tier": "Yellow", "category": "iac", "reason": "Attacker-controlled nginx config in /tmp used for privilege escalation via nginx -c"}
+{"idx": 6, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "System package manager binary removed in Docker image hardening"}
+{"idx": 7, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows DISM scratch directory - standard system temp path"}
+{"idx": 8, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts directory with write access - potential GPO script abuse path"}
+{"idx": 9, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Bitnami common binary path in PATH env var"}
+{"idx": 10, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Perl interpreter binary"}
+{"idx": 11, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Tomcat startup script referenced in systemd unit"}
+{"idx": 12, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity build agent JAR library file"}
+{"idx": 13, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Docker overlay2 layer symlink - infrastructure path"}
+{"idx": 14, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "PostgreSQL user .profile - attacker appended code; persistence mechanism via profile injection"}
+{"idx": 15, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "NOPASSWD sudo to custom genlabel binary - privesc vector"}
+{"idx": 16, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Zabbix web login page URL"}
+{"idx": 17, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "ML classifier model file in security pipeline - could reveal decision logic or be replaced"}
+{"idx": 18, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Windows Users directory root"}
+{"idx": 19, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "Transcript capturing Get-ADReplAccount output with admin credentials"}
+{"idx": 20, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Attacker-crafted tar payload for Ansible role installation exploit"}
+{"idx": 21, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard init.d directory"}
+{"idx": 22, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "Deeply nested SYSVOL scripts path with write access - GPO abuse vector"}
+{"idx": 23, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory with permission denied - confirms user exists but no access"}
+{"idx": 24, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chrome browser cache file - missing/nonexistent cache entry"}
+{"idx": 25, "is_juicy": true, "tier": "Yellow", "category": "iac", "reason": "Missing config.json for satellite tracking app - strace shows app reads this path at startup"}
+{"idx": 26, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static image asset on web app"}
+{"idx": 27, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Windows system process sihost.exe"}
+{"idx": 28, "is_juicy": true, "tier": "Red", "category": "iac", "reason": "Ghost CMS production config - contains DB credentials and other sensitive settings"}
+{"idx": 29, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "DPAPI master key directory for specific user SID - credential decryption target"}
+{"idx": 30, "is_juicy": true, "tier": "Red", "category": "db_files", "reason": "Upgraded hMailServer SDF database file containing email data/credentials"}
+{"idx": 31, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chrome browser cache file - missing/nonexistent cache entry"}
+{"idx": 32, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Cortana SearchUI.exe system process"}
+{"idx": 33, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows System32 COM DMP directory - AppLocker exception path"}
+{"idx": 34, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "SNMP community string wordlist from SecLists - wordlist file, not juicy target"}
+{"idx": 35, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PHP plugin CSV export page in admin panel"}
+{"idx": 36, "is_juicy": true, "tier": "Red", "category": "windows_credentials", "reason": "CA certificate PFX file - contains private key for certificate authority"}
+{"idx": 37, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "404 response for Grav theme zipball download attempt"}
+{"idx": 38, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard udisks2 daemon binary"}
+{"idx": 39, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory listing showing user enzo exists"}
+{"idx": 40, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Suricata IDS binary running as root"}
+{"idx": 41, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "HAProxy default environment file path in systemd unit"}
+{"idx": 42, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard date binary used in backup script"}
+{"idx": 43, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static image asset on microblog web app"}
+{"idx": 44, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "DPAPI master key directory for steph.cooper - credential decryption target"}
+{"idx": 45, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard Windows hosts file"}
+{"idx": 46, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "SharpHound uploaded as s.exe - AD enumeration tool for BloodHound data collection"}
+{"idx": 47, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Web app document root directory"}
+{"idx": 48, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows shell command sequence - not a meaningful file path"}
+{"idx": 49, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory listing confirming user existence"}
+{"idx": 50, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Generic scripts directory"}
+{"idx": 51, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows AppLocker writable path - spool drivers color dir"}
+{"idx": 52, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "User desktop with flag file - confirmed user access point"}
+{"idx": 53, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TypeScript source file entry point in browser extension"}
+{"idx": 54, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Temporary test file created during ebook conversion"}
+{"idx": 55, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "NagiosXI script in NOPASSWD sudo list - standard nagios admin script"}
+{"idx": 56, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Restricted web directory HTML page"}
+{"idx": 57, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "OTP generator cron script path"}
+{"idx": 58, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for mtz user"}
+{"idx": 59, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Reverse shell executable uploaded to Windows Temp"}
+{"idx": 60, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user home directory for f.frizzle"}
+{"idx": 61, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Web forum document root directory in Apache config"}
+{"idx": 62, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "WordPress plugin callback.php - brandfolder plugin with known vulnerabilities"}
+{"idx": 63, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "HAProxy error page file - standard configuration"}
+{"idx": 64, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Local named pipe for token impersonation - attacker-created pipe"}
+{"idx": 65, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Path traversal via sudo node to execute arbitrary JS from /dev/shm - privesc"}
+{"idx": 66, "is_juicy": true, "tier": "Yellow", "category": "ssh_credentials", "reason": "GPG keyring pubring.kbx - contains public keys, may reveal key infrastructure"}
+{"idx": 67, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Path traversal for JSP shell upload attempt"}
+{"idx": 68, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Local attacker working directory on Windows for HTB machine"}
+{"idx": 69, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Meterpreter executable uploaded via xp_cmdshell"}
+{"idx": 70, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Support user desktop with flag file"}
+{"idx": 71, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Consul data directory - standard service configuration path"}
+{"idx": 72, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Laravel web application public root directory"}
+{"idx": 73, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PSReadLine command history for dallon.matrix - may contain credentials typed in shell"}
+{"idx": 74, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "DaloRADIUS login page URL"}
+{"idx": 75, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "3D printer G-code file generated in /dev/shm"}
+{"idx": 76, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Apache VirtualHost document root directory"}
+{"idx": 77, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows recycle bin directory"}
+{"idx": 78, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Installation script for Jenkins - standard package manager-adjacent script"}
+{"idx": 79, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Race scripts backup directory with group-writable permissions - race condition target"}
+{"idx": 80, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "Google Authenticator TOTP secret file in backup - 2FA bypass material"}
+{"idx": 81, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Certificate.htb web header PHP file"}
+{"idx": 82, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for sflowers"}
+{"idx": 83, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file"}
+{"idx": 84, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows administrator desktop with flag/root.txt"}
+{"idx": 85, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "pipx venv directory for pyaescrypt tool"}
+{"idx": 86, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag file"}
+{"idx": 87, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "creds.txt in deploy user home - plaintext credentials file"}
+{"idx": 88, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for mark.adams"}
+{"idx": 89, "is_juicy": true, "tier": "Red", "category": "db_files", "reason": "ZoneMinder database dump file - contains full DB backup with credentials"}
+{"idx": 90, "is_juicy": true, "tier": "Yellow", "category": "iac", "reason": "App config test JSON - sudoedit target for privilege escalation via CVE"}
+{"idx": 91, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "Node home .bash_history symlinked to /dev/null in Docker - secrets scrubbed, confirms sensitivity"}
+{"idx": 92, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "Root bash history via path traversal - may contain commands with credentials"}
+{"idx": 93, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Log file for lverifier service"}
+{"idx": 94, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PowerShell script in Administrator Documents - copy.ps1 likely credential-handling script"}
+{"idx": 95, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Clicker.htb web app index page"}
+{"idx": 96, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Compiled Java class file for User model"}
+{"idx": 97, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "7z archive in recycle bin - wapt-backup-sunday.7z may contain sensitive backup data"}
+{"idx": 98, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "Webshell deployed to themes directory - RCE artifact"}
+{"idx": 99, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for Helen.Frost"}
+{"idx": 100, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Next.js webpack chunk JS file - static asset"}

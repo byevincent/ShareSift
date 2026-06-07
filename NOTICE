@@ -1,0 +1,45 @@
+ShareSift
+Copyright 2026 Vincent Dinh
+
+This product includes software developed by Vincent Dinh.
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+================================================================================
+Third-party attributions
+================================================================================
+
+1. Snaffler classification ruleset (pattern strings only)
+   ----------------------------------------------------------------
+   Files:    src/sharesift/rules/snaffler_default.json
+             src/sharesift/rules/extra_rules.py
+   Source:   https://github.com/SnaffCon/Snaffler
+   License:  GPLv3 applies to upstream Snaffler's C# runtime.
+             Pattern strings (regex / exact-match) carry no copyright
+             in the jurisdictions of distribution; see
+             src/sharesift/rules/SOURCES.md for the project's
+             reasoning and the pinned upstream commit ref.
+   Notes:    No Snaffler source code is included or derived. Only
+             the published rule-pattern strings are referenced. If
+             you redistribute this work and your jurisdiction
+             interprets pattern strings as copyrightable subject
+             matter, treat src/sharesift/rules/ as GPLv3.
+
+2. Gitleaks secret-detector patterns (ported)
+   ----------------------------------------------------------------
+   Files:    portions of src/sharesift/rules/extra_rules.py and
+             src/sharesift/preprocess/base64_decode.py
+   Source:   https://github.com/gitleaks/gitleaks
+   License:  MIT
+   Notes:    Detector regex patterns ported into ShareSift's rule
+             engine. Upstream MIT license preserved.
+
+3. pysnaffler (reference, not bundled)
+   ----------------------------------------------------------------
+   Path:     references/pysnaffler/ (not included in this archive;
+             clone from upstream for development integration tests)
+   License:  See upstream LICENSE at the pysnaffler repository.
+
+================================================================================
+End of NOTICE
+================================================================================

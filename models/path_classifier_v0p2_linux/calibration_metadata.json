@@ -1,0 +1,11 @@
+{
+  "calibrated_at_utc": "2026-06-02T02:10:01.524265+00:00",
+  "method": "isotonic",
+  "cv": 5,
+  "tier_thresholds": {
+    "black": 0.95,
+    "red": 0.8,
+    "yellow": 0.5
+  },
+  "train_record_count": 2087
+}

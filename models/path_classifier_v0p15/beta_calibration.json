@@ -1,0 +1,46 @@
+{
+  "calibrator": "beta_abm",
+  "calibrator_path": "models/path_classifier_v0p15/beta_calibrator.joblib",
+  "fit_on": "data/eval/test_split.jsonl",
+  "fit_n_positives": 250,
+  "fit_n_negatives": 250,
+  "benchmark_path": "data/eval/snaffler_blind_benchmark.jsonl",
+  "thresholds_calibrated": {
+    "black": 0.7078927395503383,
+    "red": 0.0749155814611805,
+    "yellow": 9.719766966418994e-05
+  },
+  "metrics": {
+    "black": {
+      "precision": 0.9525862068965517,
+      "recall": 0.884,
+      "f1": 0.91701244813278,
+      "tp": 221,
+      "fp": 11
+    },
+    "red": {
+      "precision": 0.8,
+      "recall": 0.992,
+      "f1": 0.8857142857142858,
+      "tp": 248,
+      "fp": 62
+    },
+    "yellow": {
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "tp": 250,
+      "fp": 250
+    }
+  },
+  "raw_prob_stats": {
+    "min": 2.9937659132877576e-05,
+    "max": 0.9694439946510284,
+    "mean": 0.17809236037604645
+  },
+  "calibrated_prob_stats": {
+    "min": 9.719766966418994e-05,
+    "max": 0.9964792956750793,
+    "mean": 0.4999996154506449
+  }
+}

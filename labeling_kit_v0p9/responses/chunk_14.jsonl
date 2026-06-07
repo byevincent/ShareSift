@@ -1,0 +1,99 @@
+{"idx": 1, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "File.era.htb upload PHP page URL"}
+{"idx": 2, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static app.js JavaScript file in extension.htb web application"}
+{"idx": 3, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for hish user on environment.htb"}
+{"idx": 4, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "PHP webshell deployed via Imagick write exploit to intentions.htb storage"}
+{"idx": 5, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user drbrown Downloads with %filename% variable - script iteration variable"}
+{"idx": 6, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PHP webshell uploaded to /tmp via pearcmd config-create on pterodactyl"}
+{"idx": 7, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Root local pyinstaller binary for socket.htb build script"}
+{"idx": 8, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chrome browser cache file - missing/nonexistent cache entry"}
+{"idx": 9, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PostgreSQL backup current pg_logical directory"}
+{"idx": 10, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity build agent jdk-searcher JAR library"}
+{"idx": 11, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Python GitPython cmd.py - git command wrapper library path for editorial.htb"}
+{"idx": 12, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows SysWOW64 Tasks directory - AppLocker exception path"}
+{"idx": 13, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Desktop directory for winrm_user with flag on absolute"}
+{"idx": 14, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "internal.pdf in bb.morgan Desktop - rustykey internal document with potential sensitive data"}
+{"idx": 15, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "ping_test.bat on attacker system before upload to infiltrator.htb"}
+{"idx": 16, "is_juicy": true, "tier": "Yellow", "category": "high_value_software", "reason": "helpdesk.exe with hardcoded credentials in service ImagePath registry value"}
+{"idx": 17, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Apache2 config copied to /dev/shm/fileread - zero.htb apache read test"}
+{"idx": 18, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static entertainment image on titanic.htb application"}
+{"idx": 19, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user desktop with flag for dallon.matrix on axlle"}
+{"idx": 20, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Source home directory for marcus on monitorsthree.htb"}
+{"idx": 21, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows PowerShell command sequence - not a meaningful file path"}
+{"idx": 22, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard tr binary used in hash-checker script on checker.htb"}
+{"idx": 23, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "NXC BloodHound zip output for INVENTORY on sweep.htb - attacker enumeration output"}
+{"idx": 24, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chamilo LMS changelog HTML page URL"}
+{"idx": 25, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Guardian portal static Tailwind CSS vendor file"}
+{"idx": 26, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows _admin profiles.xml file - kiosk configuration XML"}
+{"idx": 27, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Pilgrimage.htb assets/images news6.php path - 404 file upload test"}
+{"idx": 28, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Temporary print generation directory in bookworm.htb calibre conversion"}
+{"idx": 29, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for Rose.L on university"}
+{"idx": 30, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Web application portal root directory on carpediem.htb"}
+{"idx": 31, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows sqlite.db file path reference in Roundcube docs for outbound.htb"}
+{"idx": 32, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Z: drive Visual HTB working directory for Hello0xdf .exe execution"}
+{"idx": 33, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows temp DLL created by Perfusion.exe performance DLL injection exploit"}
+{"idx": 34, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Impacket smb3structs.py Python library - standard attacker tooling path"}
+{"idx": 35, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Python GitPython repo cloning script in editorial.htb - SSRF via git clone"}
+{"idx": 36, "is_juicy": true, "tier": "Black", "category": "ssh_credentials", "reason": "dan_smith .ssh directory target for authorized_keys injection"}
+{"idx": 37, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "SecLists raft-medium-words wordlist - not a target path"}
+{"idx": 38, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Guardian portal models User PHP file URL"}
+{"idx": 39, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts 21FDFAAFC1D0 subdirectory with write access - GPO abuse vector"}
+{"idx": 40, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "SSH host DSA certificate in /etc/ssh - standard host key infrastructure"}
+{"idx": 41, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Systemd npcd.service unit file in /etc/systemd/system for NagiosXI"}
+{"idx": 42, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Laravel routes/web.php file - routing configuration for extension.htb"}
+{"idx": 43, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Chrome Crashpad crash reporter temp directory in /tmp"}
+{"idx": 45, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Host_root Administrator Desktop with root.txt from Docker container escape"}
+{"idx": 46, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows System32 Tasks SyncCenter directory with trailing slash - AppLocker exception"}
+{"idx": 47, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "DPAPI Protect directory for Administrator with full SID - master key for decryption"}
+{"idx": 48, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static avatar image on eforenzics.htb"}
+{"idx": 49, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Path traversal to /etc/passwd via JSON ReadOrder on bagel.htb"}
+{"idx": 50, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Ansible inventory.ini for intuition.htb runner configuration"}
+{"idx": 51, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Bagel.htb developer app.py read via proc/self/cmdline SSRF"}
+{"idx": 52, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PyInstaller dist directory on socket.htb for build output"}
+{"idx": 53, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Administrator Desktop with flag on overwatch.htb"}
+{"idx": 54, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard /var/spool/news directory for news system account"}
+{"idx": 55, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity webapps Maven plugin maven-resolver-api JAR"}
+{"idx": 56, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts 3DACA30B03D1 subdirectory with write access - GPO abuse vector"}
+{"idx": 57, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts 3A3ED3232FEB subdirectory with write access - GPO abuse vector"}
+{"idx": 58, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for svc_sspr on phantom"}
+{"idx": 59, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "NFS Administrator Documents directory - access denied on vulncicada"}
+{"idx": 60, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Furni.htb Spring Boot actuator env/home endpoint URL"}
+{"idx": 61, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Nocturnal.htb dashboard PHP redirect to login page"}
+{"idx": 62, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "Varnish secret file for admin socket authentication - Varnish admin credentials"}
+{"idx": 63, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows snort etc configuration directory"}
+{"idx": 64, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows System32 directory - standard system path"}
+{"idx": 65, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "Windows SYSVOL sysvol baby2.vl scripts directory - logon script storage"}
+{"idx": 66, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard /etc/needrestart/conf.d directory for package restart config snippets"}
+{"idx": 67, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "sqlmap output directory for shared.htb checkout database"}
+{"idx": 68, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Write test file in /dev/shm for pilgrimage.htb"}
+{"idx": 69, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Temporary output.txt file from calibre ebook-convert on bookworm"}
+{"idx": 70, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for WAO on university - uppercase variant"}
+{"idx": 71, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "bean_backup.tar.gz temporary backup in backup_tmp on awkward.htb"}
+{"idx": 72, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for sam.emerson on aero.htb"}
+{"idx": 73, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Responder.py on attacker system - NTLM capture tool source not a target"}
+{"idx": 74, "is_juicy": true, "tier": "Yellow", "category": "embedded_secrets", "reason": "rev.bat uploaded to programdata for infiltrator.htb - reverse shell batch script"}
+{"idx": 75, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "scikit-learn validation.py Python library - standard ML framework file"}
+{"idx": 76, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows PowerShell command sequence output - not a meaningful file path"}
+{"idx": 77, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Cloud-init output log in /var/log on cat.htb"}
+{"idx": 78, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard md5sum binary for race.htb script signature verification"}
+{"idx": 79, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "PHP 8.2 extensions library directory in /usr/lib/php"}
+{"idx": 80, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity build agent buildAgent-updates-applying JAR library"}
+{"idx": 81, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static CSS for absolute.htb owl.carousel plugin"}
+{"idx": 82, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "OpenSUSE Leap /etc/os-release on pterodactyl.htb"}
+{"idx": 83, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Home directory for brody.wiza guest on corporate.htb via NFS"}
+{"idx": 84, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows mssqlsvc Desktop user.txt read via xp_cmdshell on signed.htb"}
+{"idx": 85, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "TeamCity webapps Maven plugin maven-plugin-api JAR"}
+{"idx": 86, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Preprod-marketing.trick.htb PHP index with LFI page parameter"}
+{"idx": 87, "is_juicy": true, "tier": "Black", "category": "ssh_credentials", "reason": "Phil's SSH RSA private key file in /home/phil/.ssh - private key material"}
+{"idx": 88, "is_juicy": true, "tier": "Yellow", "category": "windows_credentials", "reason": "SYSVOL scripts 23010E0A1A33 subdirectory with write access - GPO abuse vector"}
+{"idx": 89, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static Bootstrap JS bundle on stocker.htb"}
+{"idx": 90, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows user Documents directory for sql_svc on escape.htb"}
+{"idx": 91, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard base64 binary in sandworm AppArmor allowlist"}
+{"idx": 92, "is_juicy": true, "tier": "Red", "category": "embedded_secrets", "reason": "/etc/ld.so.preload - if writable, allows global LD_PRELOAD code injection for privesc"}
+{"idx": 93, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Eureka Furni Maven surefire test reports TXT file"}
+{"idx": 94, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "HardHat C2 TeamServer binary running as sergej on backfire.htb"}
+{"idx": 95, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows ImmersiveControlPanel directory - standard Windows shell component"}
+{"idx": 96, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Static Bootstrap JS file on absolute.htb"}
+{"idx": 97, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows AppData temp directory for sdiag on outdated.htb"}
+{"idx": 98, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Standard filename binary in sandworm AppArmor allowlist"}
+{"idx": 99, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Temp hygiene.ps1 script from overwatch.htb automation"}
+{"idx": 100, "is_juicy": false, "tier": null, "category": "benign_noise", "reason": "Windows Administrator HTB-Stability.exe scheduled task process - CTF stabilization tool"}

