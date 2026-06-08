@@ -7,6 +7,30 @@ reranker that puts the right files at the top, plus 41 additional
 rules from `extra_rules.py` (v0.12 blind-spot + Gitleaks-derived
 modern SaaS).
 
+---
+
+## ⚠ Read this first — v0.21.1 honesty patch
+
+The "+46 pp top-10 precision" headline below is **in-distribution
+only**. Real-world validation on Metasploitable 3 (see
+[`v0p21_real_world_validation.md`](v0p21_real_world_validation.md))
+showed the reranker is ~5× worse on data it wasn't trained against:
+
+| Where | Top-10 precision |
+|---|---|
+| In-distribution (synthetic themed shares, used in training) | 0.76 mean |
+| Out-of-distribution (MSF3, never seen in training) | **0.20** |
+
+The reranker is marked EXPERIMENTAL and is NOT wired into the default
+`sharesift scan` / `scan-files` flow. The cascade (parsers + rules
++ extractor) from v0.20 is the production stack.
+
+The numbers in the rest of this document are accurate descriptions
+of what the reranker does in-distribution — they should NOT be
+treated as expected performance on real engagement data.
+
+---
+
 ## Headline numbers
 
 ### Top-10 precision (the main v0.21 goal)

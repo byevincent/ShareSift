@@ -1,5 +1,24 @@
 """v0.21: cascade-aware reranker.
 
+EXPERIMENTAL — DO NOT USE AS DEFAULT IN PRODUCTION SCANS.
+
+Real-world validation on Metasploitable 3 (see
+``docs/v0p21_real_world_validation.md``) showed this reranker is
+trained on a distribution that does NOT transfer:
+
+    v0.21 release headline (in-distribution): top-10 = 0.76
+    MSF3 real-world (out-of-distribution):    top-10 = 0.20
+
+This module ships as-is for reference and re-training, but the
+default ``Scanner.scan_batch`` flow does NOT use it. The cascade
+(parsers + rules + extractor) from v0.20 is the production stack.
+
+If you want to experiment with reranking, you must retrain on data
+that includes your target distribution AND evaluate on a frozen
+held-out set you never iterate against.
+
+---
+
 v0.20 lifted recall +23 pp but legal top-10 precision regressed to
 0.00 — the rule engine produces matches without distinguishing
 which top-K files matter most. The reranker uses cascade source +

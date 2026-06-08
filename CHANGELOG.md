@@ -82,11 +82,48 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.22 — Stage 1 retrain + lightweight content classifier + PDF
-verification on real PDFs. Plus expanding the v0.21 reranker
-training set to ~1000+ labeled pairs to validate cross-theme
-generalization (CV held-out scores were 0.10-0.30 vs.
-in-distribution 0.60-0.90).
+v0.22 — **versatility-first**. After v0.21's MSF3 validation showed
+the reranker doesn't transfer to real data, the v0.22 plan
+(`docs/v0p22_versatility_plan.md`) shifts focus from learned features
+(which overfit) to architecturally-versatile components: tighter
+rules, more parsers, more credential-format extractors, plus a
+frozen-held-out eval harness that makes future overfit claims
+visible. The reranker stays experimental; the production stack is
+the v0.20 cascade.
+
+## [0.21.1] — 2026-06-08
+
+**Honesty patch.** v0.21's "+46 pp top-10 precision" headline was an
+in-distribution result (reranker trained and evaluated on the same
+5 themed shares). Real-world validation on Metasploitable 3 showed
+the reranker is ~5× worse on data it wasn't trained against
+(top-10 = 0.20 vs the 0.76 mean reported in v0.21).
+
+This release adds honesty to the existing artifacts; no code in the
+production scan flow changes.
+
+### Changed
+
+- `src/sharesift/reranker_v0p21.py` — module docstring leads with
+  an EXPERIMENTAL warning + the MSF3 numbers. The reranker is NOT
+  wired into `Scanner.scan_batch` and was never in the production
+  default flow.
+- `docs/v0p21_results.md` — added a cross-distribution caveat at
+  the top of the document with the in-distribution vs MSF3 numbers
+  side by side.
+- `docs/v0p22_versatility_plan.md` — new. Replaces the previous
+  Unreleased section's "retrain reranker on MSF3+GOAD" idea with a
+  versatility-first plan: evaluation discipline (frozen held-out
+  sets, eval harness with MIN-across-sets headline metric), rule
+  engine over-fire fix, architecturally-versatile component
+  investments.
+
+### Notes
+
+- The v0.20 cascade (parsers + rules + extractor) is unaffected and
+  remains the production stack — its +23 pp recall win is real on
+  both synthetic and MSF3 data.
+- Test count unchanged: 759 passing.
 
 ## [0.21.0] — 2026-06-08
 
