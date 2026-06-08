@@ -1,0 +1,70 @@
+{
+  "theme": "legal",
+  "n_files": 80,
+  "n_salted": 20,
+  "n_flagged_any_tier": 29,
+  "recall_on_salted_overall": 0.2,
+  "recall_per_tier_label": {
+    "Black": 0.25,
+    "Red": 0.1,
+    "Yellow": 0.3333
+  },
+  "recall_per_credential_type": {
+    "cloud_credential": 0.25,
+    "db_password": 0.0,
+    "oauth_token": 0.5,
+    "api_key": 0.0,
+    "contract_password": 0.5,
+    "saml_assertion": 0.0
+  },
+  "top_k_precision": {
+    "top_10": 0.0,
+    "top_20": 0.05,
+    "top_50": 0.26
+  },
+  "tier_distribution": {
+    "None": 51,
+    "Black": 4,
+    "Red": 7,
+    "Yellow": 18,
+    "Green": 0,
+    "Gray": 0
+  },
+  "bottom_misses": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Forms/Templates/MSA_template_0033.txt",
+      "probability": 0.1462,
+      "tier": null,
+      "salted_credential_type": "cloud_credential",
+      "filename_token": "MSA_template"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Forms/Templates/data_processing_addendum_0005.pdf",
+      "probability": 0.1508,
+      "tier": null,
+      "salted_credential_type": "cloud_credential",
+      "filename_token": "data_processing_addendum"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Contracts/Vendor/data_processing_addendum_0077.doc",
+      "probability": 0.2193,
+      "tier": null,
+      "salted_credential_type": "db_password",
+      "filename_token": "data_processing_addendum"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Matters/Active/subpoena_response_0042.yaml",
+      "probability": 0.2334,
+      "tier": null,
+      "salted_credential_type": "contract_password",
+      "filename_token": "subpoena_response"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Contracts/Vendor/NDA_draft_0006.pdf",
+      "probability": 0.2348,
+      "tier": null,
+      "salted_credential_type": "db_password",
+      "filename_token": "NDA_draft"
+    }
+  ]
+}

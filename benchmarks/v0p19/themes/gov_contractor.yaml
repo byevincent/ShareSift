@@ -1,0 +1,63 @@
+# v0.19 government / contractor theme
+#
+# Hypothesised failure mode (pre-registered): extraction-missing /
+# naming-ood. Older naming conventions (FOUO, UNCLASSIFIED markings),
+# more PDFs (which we don't extract text from in v0.18), classified-
+# document conventions further from training distribution. PDF
+# extraction is genuine v0.20 scope — the slip risk the plan flagged.
+
+theme: gov_contractor
+description: Government / contractor — clearances, contracts, FOUO-marked docs
+n_files: 80
+salt_density: 0.25
+seed: 2029
+
+file_naming:
+  juicy_tokens:
+    - clearance_db_password
+    - contract_signing_key
+    - SCIF_access_creds
+    - SF86_processor_key
+    - JPAS_login
+    - DISS_creds
+    - eqip_session_token
+    - facility_clearance_db
+    - SIPR_routing_creds
+    - SAP_program_keys
+    - CAC_signing_cert
+    - PKI_admin_password
+  benign_tokens:
+    - FY24_budget
+    - SOW_draft
+    - CDRL_template
+    - DD254_specification
+    - SF1449_form
+    - status_report_weekly
+    - DCAA_audit_response
+    - quarterly_invoice
+    - DPAS_inventory
+    - SF50_action
+    - PWS_revision
+    - travel_voucher
+
+extensions:
+  documents: [.pdf, .docx, .xlsx, .doc]
+  configs: [.cfg, .ini, .conf, .yaml]
+
+directories:
+  - Programs/Classified
+  - Programs/Unclassified
+  - Contracts/Active
+  - Contracts/Closeout
+  - Security/Clearances
+  - Security/Facility
+  - Finance/Billing
+  - Compliance/Audit
+
+credential_types:
+  api_key: 0.20
+  db_password: 0.25
+  cloud_credential: 0.15
+  ssh_private_key: 0.15
+  saml_assertion: 0.15
+  contract_password: 0.10

@@ -1,0 +1,70 @@
+{
+  "theme": "healthcare",
+  "n_files": 80,
+  "n_salted": 27,
+  "n_flagged_any_tier": 28,
+  "recall_on_salted_overall": 0.3704,
+  "recall_per_tier_label": {
+    "Yellow": 0.6,
+    "Red": 0.2667,
+    "Black": 0.4286
+  },
+  "recall_per_credential_type": {
+    "saml_assertion": 1.0,
+    "api_key": 0.375,
+    "db_password": 0.1429,
+    "cloud_credential": 0.75,
+    "ssh_private_key": 0.0,
+    "ehr_account": 0.0
+  },
+  "top_k_precision": {
+    "top_10": 0.4,
+    "top_20": 0.35,
+    "top_50": 0.36
+  },
+  "tier_distribution": {
+    "None": 52,
+    "Black": 6,
+    "Red": 5,
+    "Yellow": 17,
+    "Green": 0,
+    "Gray": 0
+  },
+  "bottom_misses": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Clinical/Radiology/intake_form_0058.csv",
+      "probability": 0.1611,
+      "tier": null,
+      "salted_credential_type": "db_password",
+      "filename_token": "intake_form"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Compliance/HIPAA/discharge_summary_0075.yaml",
+      "probability": 0.1892,
+      "tier": null,
+      "salted_credential_type": "api_key",
+      "filename_token": "discharge_summary"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Compliance/HIPAA/prior_auth_request_0021.docx",
+      "probability": 0.214,
+      "tier": null,
+      "salted_credential_type": "api_key",
+      "filename_token": "prior_auth_request"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Clinical/Lab/billing_summary_0022.docx",
+      "probability": 0.2205,
+      "tier": null,
+      "salted_credential_type": "db_password",
+      "filename_token": "billing_summary"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Clinical/Lab/billing_summary_0029.docx",
+      "probability": 0.2205,
+      "tier": null,
+      "salted_credential_type": "db_password",
+      "filename_token": "billing_summary"
+    }
+  ]
+}

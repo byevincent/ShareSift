@@ -1,0 +1,63 @@
+# v0.19 finance theme
+#
+# Hypothesised failure mode (pre-registered): naming-ood. The path
+# classifier's training corpus skews dev/ops; finance-specific
+# filename tokens (payroll, treasury, wire_instructions, K1_, 10K_)
+# fall outside its naming distribution. Expect under-recall on the
+# juicy-by-name files even with credentials embedded.
+
+theme: finance
+description: Finance industry — payroll, treasury, wire transfers, audit, tax
+n_files: 80
+salt_density: 0.30
+seed: 2026
+
+file_naming:
+  juicy_tokens:
+    - payroll_keys
+    - wire_instructions
+    - treasury_creds
+    - swift_codes
+    - banking_passwords
+    - K1_signing_keys
+    - 1099_credentials
+    - payroll_api_secret
+    - bank_connection
+    - treasury_auth
+    - ach_routing_creds
+    - wire_password
+    - bank_token
+  benign_tokens:
+    - Q4_close
+    - 10K_filing
+    - audit_report
+    - revenue_forecast
+    - expense_summary
+    - cash_flow_statement
+    - depreciation_schedule
+    - reconciliation_workbook
+    - balance_sheet
+    - tax_filing_draft
+    - earnings_release
+    - SOX_compliance_review
+
+extensions:
+  documents: [.xlsx, .docx, .pdf, .csv]
+  configs: [.yaml, .json, .env, .conf]
+
+directories:
+  - Finance/Payroll
+  - Finance/Treasury
+  - Finance/Audit
+  - Finance/Tax
+  - Finance/Accounts_Payable
+  - Finance/Accounts_Receivable
+  - Finance/Reporting
+  - Finance/Reconciliation
+
+credential_types:
+  api_key: 0.20
+  db_password: 0.20
+  swift_iban: 0.30
+  cloud_credential: 0.15
+  oauth_token: 0.15

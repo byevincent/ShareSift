@@ -190,3 +190,11 @@ tsvandgroundtruth.txt
 # Background-job stderr capture.
 nohup.out
 *.out
+
+# --- v0.19 themed benchmark artifacts ---
+# Themes' config YAMLs + frozen manifests + metrics + triage are
+# tracked (source of truth + reproducible findings); generated shares,
+# paths.txt, scores.jsonl are regenerable from theme + seed.
+benchmarks/v0p19/*/share/
+benchmarks/v0p19/*/paths.txt
+benchmarks/v0p19/*/scores.jsonl

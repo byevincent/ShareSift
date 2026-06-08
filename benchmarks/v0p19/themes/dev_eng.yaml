@@ -1,0 +1,68 @@
+# v0.19 dev/engineering theme
+#
+# Hypothesised failure mode (pre-registered): calibration-drift /
+# parser-gap. Dev shares have HIGH cred density (~30% of files have
+# something interesting) plus exotic formats: vault tokens, OIDC
+# JWTs, signed URLs, K8s service account tokens. The path tier band
+# precision contract assumes ~5% positive rate; under shift to 30%
+# Black/Red precision may drop without Yellow climbing. Also tests
+# parser gaps for newer vault/cloud formats.
+
+theme: dev_eng
+description: Dev / engineering — vault, K8s, OIDC, cloud credentials, CI configs
+n_files: 80
+salt_density: 0.40
+seed: 2028
+
+file_naming:
+  juicy_tokens:
+    - vault_root_token
+    - k8s_sa_token
+    - ci_deploy_key
+    - github_app_pem
+    - terraform_credentials
+    - aws_session_token
+    - gcp_service_account
+    - circle_ci_env
+    - jenkins_master_key
+    - argocd_admin_secret
+    - oidc_signing_key
+    - jwt_secret
+    - npm_token
+    - pypi_credentials
+  benign_tokens:
+    - dependency_audit
+    - changelog_v2
+    - release_notes
+    - architecture_diagram
+    - runbook_template
+    - postmortem_template
+    - incident_log
+    - sprint_planning
+    - tech_radar
+    - oncall_handoff
+    - migration_guide
+    - api_documentation
+
+extensions:
+  documents: [.md, .txt, .yaml, .json]
+  configs: [.yaml, .json, .env, .tfstate, .pem, .conf]
+
+directories:
+  - infra/k8s
+  - infra/terraform
+  - infra/vault
+  - ci/circle
+  - ci/jenkins
+  - ci/github_actions
+  - services/auth
+  - services/payments
+  - secrets/.shared
+
+credential_types:
+  api_key: 0.15
+  vault_token: 0.20
+  cloud_credential: 0.20
+  ssh_private_key: 0.15
+  oauth_token: 0.15
+  db_password: 0.15

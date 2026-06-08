@@ -1,0 +1,64 @@
+# v0.19 legal theme
+#
+# Hypothesised failure mode (pre-registered): template-mismatch /
+# content-ood. Contracts and NDAs are boilerplate-heavy and use the
+# words "credential", "password", "authorization", "secret" in
+# semantic-not-literal contexts. The v0.13 literal-vs-referenced
+# separation is what's under pressure. Path classifier should mostly
+# stay calibrated; Stage 2 false-positive rate is the risk.
+
+theme: legal
+description: Legal — contracts, NDAs, agreements, e-discovery
+n_files: 80
+salt_density: 0.20
+seed: 2030
+
+file_naming:
+  juicy_tokens:
+    - msa_signing_key
+    - escrow_password
+    - docusign_admin_creds
+    - relativity_db_password
+    - opentext_api_key
+    - mcloud_relativity_token
+    - litigation_hold_creds
+    - LMS_admin_password
+    - matter_management_db
+    - billing_engine_creds
+    - ediscovery_signing_cert
+    - clauseguide_api_secret
+  benign_tokens:
+    - MSA_template
+    - NDA_draft
+    - mutual_NDA_2024
+    - SOW_amendment
+    - data_processing_addendum
+    - software_license_agreement
+    - employment_offer_letter
+    - termination_notice
+    - subpoena_response
+    - privilege_log_template
+    - litigation_hold_notice
+    - matter_open_form
+
+extensions:
+  documents: [.docx, .pdf, .doc, .txt]
+  configs: [.yaml, .json, .env]
+
+directories:
+  - Matters/Active
+  - Matters/Closed
+  - Contracts/MSA
+  - Contracts/NDA
+  - Contracts/Vendor
+  - eDiscovery/Holds
+  - Compliance/Privacy
+  - Forms/Templates
+
+credential_types:
+  api_key: 0.20
+  db_password: 0.25
+  cloud_credential: 0.15
+  contract_password: 0.20
+  saml_assertion: 0.10
+  oauth_token: 0.10

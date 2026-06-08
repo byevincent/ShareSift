@@ -1,0 +1,65 @@
+# v0.19 healthcare theme
+#
+# Hypothesised failure mode (pre-registered): content-ood / template-
+# mismatch. EHR exports and HIPAA-redacted docs contain credential-
+# shape strings (MRN, account numbers, claim IDs) that LOOK like
+# credentials but aren't. Stage 2 content classifier is likely to
+# flag these as positives. Stage 1 path classifier should mostly
+# behave but ehr_account/saml_assertion cred types are rare in
+# training.
+
+theme: healthcare
+description: Healthcare — EHR exports, HIPAA forms, claims, identifiers
+n_files: 80
+salt_density: 0.30
+seed: 2027
+
+file_naming:
+  juicy_tokens:
+    - ehr_export_creds
+    - epic_admin_password
+    - cerner_db_password
+    - hipaa_signing_key
+    - phi_decrypt_key
+    - radiology_pacs_creds
+    - lab_system_token
+    - claims_portal_secret
+    - rxnorm_db_password
+    - hl7_message_signing
+    - icd10_api_key
+    - billing_clearinghouse_creds
+  benign_tokens:
+    - discharge_summary
+    - intake_form
+    - patient_education
+    - radiology_report
+    - lab_results_template
+    - consent_form
+    - billing_summary
+    - claim_denial_letter
+    - prior_auth_request
+    - immunization_record
+    - care_plan_draft
+    - diabetes_protocol
+
+extensions:
+  documents: [.pdf, .docx, .xml, .hl7, .csv]
+  configs: [.yaml, .json, .env, .conf]
+
+directories:
+  - Clinical/EHR
+  - Clinical/Radiology
+  - Clinical/Lab
+  - Billing/Claims
+  - Billing/Coding
+  - Compliance/HIPAA
+  - Admin/Auth
+  - Research/Phi
+
+credential_types:
+  api_key: 0.20
+  db_password: 0.25
+  ehr_account: 0.20
+  saml_assertion: 0.15
+  cloud_credential: 0.10
+  ssh_private_key: 0.10

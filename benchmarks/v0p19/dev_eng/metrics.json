@@ -1,0 +1,69 @@
+{
+  "theme": "dev_eng",
+  "n_files": 80,
+  "n_salted": 26,
+  "n_flagged_any_tier": 40,
+  "recall_on_salted_overall": 0.5,
+  "recall_per_tier_label": {
+    "Red": 0.6154,
+    "Black": 0.3846
+  },
+  "recall_per_credential_type": {
+    "db_password": 0.6667,
+    "oauth_token": 0.6667,
+    "api_key": 0.0,
+    "vault_token": 0.5,
+    "cloud_credential": 0.3333,
+    "ssh_private_key": 0.3333
+  },
+  "top_k_precision": {
+    "top_10": 0.3,
+    "top_20": 0.35,
+    "top_50": 0.3
+  },
+  "tier_distribution": {
+    "None": 40,
+    "Black": 5,
+    "Red": 10,
+    "Yellow": 25,
+    "Green": 0,
+    "Gray": 0
+  },
+  "bottom_misses": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/infra/k8s/release_notes_0041.md",
+      "probability": 0.1626,
+      "tier": null,
+      "salted_credential_type": "cloud_credential",
+      "filename_token": "release_notes"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/infra/vault/runbook_template_0058.txt",
+      "probability": 0.1888,
+      "tier": null,
+      "salted_credential_type": "vault_token",
+      "filename_token": "runbook_template"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/infra/terraform/migration_guide_0048.yaml",
+      "probability": 0.1915,
+      "tier": null,
+      "salted_credential_type": "vault_token",
+      "filename_token": "migration_guide"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/infra/terraform/oncall_handoff_0053.txt",
+      "probability": 0.1917,
+      "tier": null,
+      "salted_credential_type": "ssh_private_key",
+      "filename_token": "oncall_handoff"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/infra/vault/migration_guide_0065.md",
+      "probability": 0.1978,
+      "tier": null,
+      "salted_credential_type": "ssh_private_key",
+      "filename_token": "migration_guide"
+    }
+  ]
+}

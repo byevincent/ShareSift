@@ -1,0 +1,67 @@
+{
+  "theme": "finance",
+  "n_files": 80,
+  "n_salted": 22,
+  "n_flagged_any_tier": 26,
+  "recall_on_salted_overall": 0.3182,
+  "recall_per_tier_label": {
+    "Black": 0.3125,
+    "Red": 0.3333
+  },
+  "recall_per_credential_type": {
+    "swift_iban": 0.25,
+    "cloud_credential": 0.5,
+    "oauth_token": 0.0,
+    "db_password": 0.5
+  },
+  "top_k_precision": {
+    "top_10": 0.3,
+    "top_20": 0.3,
+    "top_50": 0.24
+  },
+  "tier_distribution": {
+    "None": 54,
+    "Black": 2,
+    "Red": 6,
+    "Yellow": 18,
+    "Green": 0,
+    "Gray": 0
+  },
+  "bottom_misses": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Reconciliation/wire_instructions_0026.docx",
+      "probability": 0.1462,
+      "tier": null,
+      "salted_credential_type": "swift_iban",
+      "filename_token": "wire_instructions"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Reconciliation/cash_flow_statement_0076.docx",
+      "probability": 0.1585,
+      "tier": null,
+      "salted_credential_type": "swift_iban",
+      "filename_token": "cash_flow_statement"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Reporting/swift_codes_0018.yaml",
+      "probability": 0.2026,
+      "tier": null,
+      "salted_credential_type": "swift_iban",
+      "filename_token": "swift_codes"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Accounts_Payable/swift_codes_0036.docx",
+      "probability": 0.2026,
+      "tier": null,
+      "salted_credential_type": "db_password",
+      "filename_token": "swift_codes"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Reporting/cash_flow_statement_0077.csv",
+      "probability": 0.2319,
+      "tier": null,
+      "salted_credential_type": "swift_iban",
+      "filename_token": "cash_flow_statement"
+    }
+  ]
+}
