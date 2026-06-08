@@ -45,6 +45,7 @@ from pathlib import Path
 from typing import Literal
 
 _RULES_JSON = Path(__file__).resolve().parent / "rules" / "snaffler_default.json"
+_EXTRA_RULES_JSON = Path(__file__).resolve().parent / "rules" / "extra_rules.json"
 
 Tier = Literal["Black", "Red", "Yellow", "Green"]
 MatchLocation = Literal["FileExtension", "FileName", "FilePath", "FileContentAsString"]
@@ -112,37 +113,41 @@ class ContentRuleEngine:
     content)`` per file. The engine is stateless after init.
     """
 
-    def __init__(self, rules_json_path: Path | None = None) -> None:
-        path = rules_json_path or _RULES_JSON
-        data = json.loads(path.read_text(encoding="utf-8"))
+    def __init__(self, rules_json_paths: list[Path] | None = None) -> None:
+        # v0.21: load BOTH snaffler_default.json (88 base) and
+        # extra_rules.json (v0.12 blind-spot + Gitleaks modern SaaS).
+        # Callers can pin to a single file for tests by passing a 1-element list.
+        if rules_json_paths is None:
+            rules_json_paths = [_RULES_JSON]
+            if _EXTRA_RULES_JSON.exists():
+                rules_json_paths.append(_EXTRA_RULES_JSON)
         self._compiled: list[_CompiledRule] = []
-        for rec in data.get("rules", []):
-            location = rec.get("match_location")
-            action = rec.get("match_action")
-            tier = rec.get("triage")
-            wl_type = rec.get("wordlist_type", "Exact")
-            wordlist = rec.get("wordlist") or []
-            # We skip Discard (handled separately — those are for the
-            # enumeration loop, not credential detection) and ShareName
-            # (no share-level concept in file-based scanning).
-            if action == "Discard" or location == "ShareName":
-                continue
-            if tier not in _TIER_RANK or not wordlist:
-                continue
-            try:
-                compiled = [_compile_one(p, wl_type) for p in wordlist]
-            except re.error:
-                # Skip rules with malformed patterns (the port has been
-                # audited but be defensive).
-                continue
-            self._compiled.append(_CompiledRule(
-                rule_name=rec["rule_name"],
-                tier=tier,
-                action=action,
-                location=location,
-                patterns=compiled,
-                raw_wordlist=wordlist,
-            ))
+        for path in rules_json_paths:
+            data = json.loads(path.read_text(encoding="utf-8"))
+            for rec in data.get("rules", []):
+                location = rec.get("match_location")
+                action = rec.get("match_action")
+                tier = rec.get("triage")
+                wl_type = rec.get("wordlist_type", "Exact")
+                wordlist = rec.get("wordlist") or []
+                # Skip Discard (those are for enumeration, not credential
+                # detection) and ShareName (no share-level concept here).
+                if action == "Discard" or location == "ShareName":
+                    continue
+                if tier not in _TIER_RANK or not wordlist:
+                    continue
+                try:
+                    compiled = [_compile_one(p, wl_type) for p in wordlist]
+                except re.error:
+                    continue
+                self._compiled.append(_CompiledRule(
+                    rule_name=rec["rule_name"],
+                    tier=tier,
+                    action=action,
+                    location=location,
+                    patterns=compiled,
+                    raw_wordlist=wordlist,
+                ))
 
     def __len__(self) -> int:
         return len(self._compiled)

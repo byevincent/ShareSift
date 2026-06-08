@@ -1,0 +1,19 @@
+{
+  "theme": "dev_eng",
+  "pipeline": "v0.21 cascade + reranker",
+  "n_files": 80,
+  "n_salted": 26,
+  "n_flagged_any_tier": 68,
+  "recall_on_salted": 0.8462,
+  "top_k_precision_baseline": {
+    "top_10": 0.3,
+    "top_20": 0.4,
+    "top_50": 0.34
+  },
+  "top_k_precision_reranked": {
+    "top_10": 0.7,
+    "top_20": 0.55,
+    "top_50": 0.42
+  },
+  "top_10_delta_pp": 40.0
+}

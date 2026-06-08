@@ -1,0 +1,19 @@
+{
+  "theme": "gov_contractor",
+  "pipeline": "v0.21 cascade + reranker",
+  "n_files": 80,
+  "n_salted": 20,
+  "n_flagged_any_tier": 54,
+  "recall_on_salted": 0.7,
+  "top_k_precision_baseline": {
+    "top_10": 0.4,
+    "top_20": 0.4,
+    "top_50": 0.28
+  },
+  "top_k_precision_reranked": {
+    "top_10": 0.6,
+    "top_20": 0.7,
+    "top_50": 0.38
+  },
+  "top_10_delta_pp": 20.0
+}

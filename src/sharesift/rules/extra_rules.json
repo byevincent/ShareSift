@@ -1,0 +1,488 @@
+{
+  "format_version": 1,
+  "sources": [
+    "sharesift v0.12 blind-spot rules",
+    "gitleaks-derived modern SaaS detectors"
+  ],
+  "ported_at": "2026-06-08",
+  "rules": [
+    {
+      "rule_name": "KeepS3UriPrefixInCode",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "s3[a]?:\\/\\/[a-zA-Z0-9\\-\\+\\/]{2,16}"
+      ],
+      "description": "Files with content matching an AWS S3 or Apache Hadoop S3A URI Prefix"
+    },
+    {
+      "rule_name": "KeepDomainJoinCredsByName",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^customsettings.ini$"
+      ],
+      "description": "Files containing Domain Join Credes are quite interesting."
+    },
+    {
+      "rule_name": "KeepKerberosCredentialsByExtension",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^\\.keytab$",
+        "^\\.CCACHE$"
+      ],
+      "description": "Files with these extensions are interesting."
+    },
+    {
+      "rule_name": "KeepKerberosCredentialsByName",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "krb5cc_.*"
+      ],
+      "description": "Files with these names are interesting."
+    },
+    {
+      "rule_name": "KeepVMDisksByExtension",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^\\.vmdk$",
+        "^\\.vdi$",
+        "^\\.vhd$",
+        "^\\.vhdx$"
+      ],
+      "description": "Virtual Machine Disks can contain sensitive data or credentials."
+    },
+    {
+      "rule_name": "ShareSiftKeepWordPressConfig",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^wp-config.php$"
+      ],
+      "description": "WordPress config \u2014 DB credentials + auth keys + salts at top level."
+    },
+    {
+      "rule_name": "ShareSiftKeepPhpMyAdminConfig",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^config.inc.php$"
+      ],
+      "description": "phpMyAdmin config \u2014 MySQL connection credentials."
+    },
+    {
+      "rule_name": "ShareSiftKeepUnattendXmlUpgrade",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^unattend.xml$",
+        "^Unattend.xml$",
+        "^AutoUnattend.xml$",
+        "^autounattend.xml$"
+      ],
+      "description": "Unattended Windows install \u2014 AdministratorPassword + autologon. Upgrades Snaffler's KeepUnattendXmlRelay (Green) to Red/Snaffle."
+    },
+    {
+      "rule_name": "ShareSiftKeepLaravelEnv",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^.env$"
+      ],
+      "description": "dotenv \u2014 DB credentials, API keys, secrets. Common in Laravel, Node, Django."
+    },
+    {
+      "rule_name": "ShareSiftKeepDockerCompose",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^docker-compose.yml$",
+        "^docker-compose.yaml$",
+        "^docker-compose.override.yml$",
+        "^docker-compose.prod.yml$"
+      ],
+      "description": "Docker compose \u2014 environment vars often hold credentials inline."
+    },
+    {
+      "rule_name": "ShareSiftKeepRailsSecrets",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^secrets.yml$",
+        "^credentials.yml.enc$",
+        "^master.key$"
+      ],
+      "description": "Rails secrets / encrypted credentials / master key."
+    },
+    {
+      "rule_name": "ShareSiftKeepResetPasswordXml",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^resetPWD.xml$"
+      ],
+      "description": "ManageEngine Desktop Central admin password reset XML."
+    },
+    {
+      "rule_name": "ShareSiftKeepGppPreferences",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^Groups.xml$",
+        "^Services.xml$",
+        "^ScheduledTasks.xml$",
+        "^Printers.xml$",
+        "^Drives.xml$",
+        "^DataSources.xml$"
+      ],
+      "description": "GPP Preferences XML in SYSVOL \u2014 canonical AD cpassword target. Historical MS14-025 attack: cpassword attribute is AES-256 encrypted with a publicly published key. Added 2026-06-04 after GOAD benchmark showed both pysnaffler's bundle and v0.14 extras lacked GPP coverage."
+    },
+    {
+      "rule_name": "ShareSiftKeepGppCpasswordContent",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "cpassword\\s*=\\s*[\"\\'][A-Za-z0-9+/=]{8,}[\"\\']"
+      ],
+      "description": "GPP cpassword AES-encrypted blob \u2014 promotes to Black when the actual cpassword XML attribute is present (companion to the filename rule above)."
+    },
+    {
+      "rule_name": "ShareSiftKeepDotEnvVariants",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^\\.env(\\.[\\w]+)?$"
+      ],
+      "description": "dotenv variants \u2014 .env, .env.production, .env.local, .env.staging (common Laravel / Node / Django / Next.js credential storage)."
+    },
+    {
+      "rule_name": "ShareSiftKeepKubeConfig",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.kube[/\\\\]config$",
+        "[/\\\\]kubeconfig$"
+      ],
+      "description": "Kubernetes config \u2014 cluster credentials + service account tokens."
+    },
+    {
+      "rule_name": "ShareSiftKeepSSHHostKeys",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^ssh_host_(rsa|dsa|ecdsa|ed25519)_key$"
+      ],
+      "description": "SSH server host private keys (impersonate the host)."
+    },
+    {
+      "rule_name": "ShareSiftKeepSSHAuthorizedKeys",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "^authorized_keys$",
+        "^authorized_keys2$",
+        "^known_hosts$"
+      ],
+      "description": "SSH user keys + known_hosts (intel value per labeling calibration)."
+    },
+    {
+      "rule_name": "ShareSiftKeepSSHUserKeys",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^id_(rsa|dsa|ecdsa|ed25519|xmss)(\\.pub)?$"
+      ],
+      "description": "SSH user private keys."
+    },
+    {
+      "rule_name": "ShareSiftKeepSudoersFiles",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^/etc/sudoers(\\.d)?(/.*)?$"
+      ],
+      "description": "sudoers + sudoers.d/* \u2014 NOPASSWD entries are top-3 Linux privesc primitive."
+    },
+    {
+      "rule_name": "ShareSiftKeepCronJobs",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^/(var/spool/cron|etc/cron\\.d|etc/cron\\.daily|etc/cron\\.hourly|etc/cron\\.weekly|etc/cron\\.monthly)/",
+        "^/etc/crontab$"
+      ],
+      "description": "Cron jobs \u2014 often contain literal mysql -p / curl -u creds in command strings."
+    },
+    {
+      "rule_name": "ShareSiftKeepCloudCliCreds",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.aws[/\\\\](credentials|config)$",
+        "[/\\\\]\\.azure[/\\\\](msal_token_cache|accessTokens)",
+        "[/\\\\]\\.config[/\\\\]gcloud[/\\\\]",
+        "[/\\\\]\\.docker[/\\\\]config\\.json$"
+      ],
+      "description": "Cloud CLI credential caches \u2014 AWS / Azure / GCP / Docker registry tokens."
+    },
+    {
+      "rule_name": "ShareSiftKeepGnuPGFiles",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.gnupg[/\\\\](private-keys-v1\\.d|pubring\\.kbx|trustdb\\.gpg)"
+      ],
+      "description": "GnuPG keyring (private keys + trust DB)."
+    },
+    {
+      "rule_name": "ShareSiftKeepKerberosKeytab",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\\.keytab$",
+        "^krb5\\.conf$"
+      ],
+      "description": "Kerberos keytab + config."
+    },
+    {
+      "rule_name": "ShareSiftKeepNetworkManagerSecrets",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^/etc/NetworkManager/system-connections/",
+        "\\.nmconnection$",
+        "^/etc/wpa_supplicant/"
+      ],
+      "description": "WiFi / VPN credentials in NetworkManager + wpa_supplicant configs."
+    },
+    {
+      "rule_name": "ShareSiftKeepAnthropicApiKey",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "sk-ant-api03-[a-zA-Z0-9_\\-]{93}AA"
+      ],
+      "description": "Anthropic API key (Claude) (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepAnthropicAdminKey",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "sk-ant-admin01-[a-zA-Z0-9_\\-]{93}AA"
+      ],
+      "description": "Anthropic admin API key \u2014 full org access (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepHuggingFaceToken",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "hf_[A-Za-z]{34}"
+      ],
+      "description": "Hugging Face access token (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepHuggingFaceOrgToken",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "api_org_[A-Za-z]{34}"
+      ],
+      "description": "Hugging Face organization API token (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepBedrockLongLivedKey",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "ABSK[A-Za-z0-9+/]{109,269}={0,2}"
+      ],
+      "description": "AWS Bedrock long-lived API key (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepBedrockShortLivedKey",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "bedrock-api-key-YmVkcm9jay5hbWF6b25hd3MuY29t"
+      ],
+      "description": "AWS Bedrock short-lived API key (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepClickhouseCloudKey",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "4b1d[A-Za-z0-9]{38}"
+      ],
+      "description": "ClickHouse Cloud API secret key (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepDatabricksApiToken",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "dapi[a-f0-9]{32}(?:-\\d)?"
+      ],
+      "description": "Databricks API token (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepGitlabPatRoutable",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "glpat-[0-9a-zA-Z_-]{27,300}\\.[0-9a-z]{2}[0-9a-z]{7}"
+      ],
+      "description": "GitLab routable personal access token (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepOpenAiApiKey",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "sk-(?:proj|svcacct|admin)-(?:[A-Za-z0-9_-]{74}|[A-Za-z0-9_-]{58})T3BlbkFJ"
+      ],
+      "description": "OpenAI API key (proj / svcacct / admin) (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepPerplexityApiKey",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "pplx-[a-zA-Z0-9]{48}"
+      ],
+      "description": "Perplexity API key (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepRenderApiToken",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "rnd_[a-zA-Z0-9]{14}"
+      ],
+      "description": "Render.com API token (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepDatadogToken",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(?i)datadog[\\w. \\-]{0,20}[=:][\\s\\\"'`]{0,5}[a-f0-9]{40}"
+      ],
+      "description": "Datadog access token (context-match) (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepDropboxToken",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(?i)dropbox[\\w. \\-]{0,20}[=:][\\s\\\"'`]{0,5}[a-z0-9]{15}"
+      ],
+      "description": "Dropbox API token (context-match) (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepFastlyToken",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(?i)fastly[\\w. \\-]{0,20}[=:][\\s\\\"'`]{0,5}[a-z0-9=_\\-]{32}"
+      ],
+      "description": "Fastly API token (context-match) (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepNetlifyToken",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(?i)netlify[\\w. \\-]{0,20}[=:][\\s\\\"'`]{0,5}[a-z0-9=_\\-]{40}"
+      ],
+      "description": "Netlify access token (context-match) (ported from Gitleaks 2026-06-04, MIT)."
+    }
+  ]
+}

@@ -82,11 +82,61 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.21 — model retrains + reranker driven by v0.20 findings in
-`docs/v0p20_results.md`. Top candidates by impact: a reranker that
-uses cascade source + tier as features (fixes the top-10 precision
-gap legal regressed to), Stage 1 retrain with v0.19 themed tokens,
-lightweight content classifier for the cascade's smart middle tier.
+v0.22 — Stage 1 retrain + lightweight content classifier + PDF
+verification on real PDFs. Plus expanding the v0.21 reranker
+training set to ~1000+ labeled pairs to validate cross-theme
+generalization (CV held-out scores were 0.10-0.30 vs.
+in-distribution 0.60-0.90).
+
+## [0.21.0] — 2026-06-08
+
+Cascade reranker + extra rules. Executes the plan in
+`docs/v0p21_plan.md`. v0.20's content cascade fixed recall (+23 pp)
+but broke top-K ranking on legal; v0.21 fixes top-K ranking across
+all 5 themes.
+
+### Added
+
+- `src/sharesift/rules/extra_rules.json` — 41 ported rules from
+  the v0.12 blind-spot collection + Gitleaks-derived modern SaaS
+  detectors. Loaded automatically by `ContentRuleEngine` alongside
+  the existing 78 base rules. Total engine rule count: **120**.
+- `src/sharesift/reranker_v0p21.py` — `RerankFeatures` (30-dim
+  vector) + `CascadeReranker` (LightGBM inference wrapper).
+- `tools/train_reranker_v0p21.py` — trains a LightGBM binary
+  classifier on the v0.19 themed manifests + v0.20 cascade output.
+  Supports leave-one-theme-out CV.
+- `tools/score_themed_run_v0p21.py` — re-runs the benchmark with
+  cascade + reranker; emits per-theme baseline-vs-reranked top-K
+  comparison.
+- `models/reranker_v0p21.joblib` — trained model (~50KB).
+- `benchmarks/v0p21/<theme>/metrics.json` — per-theme metrics cards
+  for all 5 themes.
+
+### Findings
+
+| Theme | v0.20 top-10 | v0.21 top-10 | Δ |
+|---|---|---|---|
+| Finance | 0.30 | **0.90** | +60 pp |
+| Healthcare | 0.50 | **0.90** | +40 pp |
+| Dev / engineering | 0.30 | **0.70** | +40 pp |
+| Gov / contractor | 0.40 | **0.60** | +20 pp |
+| Legal | **0.00** | **0.70** | **+70 pp** |
+| **Mean** | **0.30** | **0.76** | **+46 pp** |
+
+Recall identical to v0.20 (cascade unchanged; reranker reorders only).
+
+### Honest caveats
+
+- **In-distribution result.** The reranker was trained on the same
+  5 themes it scored. Leave-one-theme-out CV scores were 0.10-0.30
+  on held-out themes vs. 0.60-0.90 in production. Cross-theme
+  generalization needs ~1000+ labeled pairs to validate; v0.22.
+- Real-PDF regen (Sprint 2 in the v0.21 plan) deferred to v0.22.
+
+### Notes
+
+- Tests added: 5. Full suite: 759 passing, 8 skipped.
 
 ## [0.20.0] — 2026-06-08
 
