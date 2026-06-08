@@ -1,0 +1,225 @@
+# v0.19 — themed-benchmark iteration loop
+
+Drafted 2026-06-07 while v0.18 (CLI ergonomics) is still in flight.
+Captures the iteration loop and the failure-mode hypotheses before
+context drains so the build doesn't lose the thread.
+
+## Context
+
+The point of benchmarks is not credibility. It is to find what the
+*next* version fixes.
+
+After v0.17.1 we have three share-level numbers:
+
+| Share | Coverage |
+|---|---|
+| Constructed share (in-distribution) | end-to-end F1 0.387 |
+| Metasploitable 3 (Windows lab) | recall 100%, top-10 precision 1.000 |
+| GOAD (Linux lab) | recall 100%, precision 85.7% |
+
+These are CTF/lab shares. They share the structural quirks of any
+practitioner-built share (clean directory structure, consistent
+naming, salt density chosen by the author). They expose nothing
+about how the tool behaves on a share built for a *different
+industry's conventions*.
+
+Real engagement data is gated (NDA, consent, jurisdictional
+limits) and won't unblock soon. Public-corpus tuning has plateaued
+— the constructed-share ceiling was hit at v0.11.
+
+v0.19 closes the gap with themed synthetic shares: a small number
+(5-10) of intentionally-different shares whose differences are
+chosen to expose failure modes you can actually act on.
+
+**v0.19 ships after v0.18.** The `--json` summary + one-shot
+`sharesift scan` from v0.18 are what makes the benchmark loop
+cheap enough to run per-theme without ceremony — building v0.19
+on raw v0.17.1 ergonomics would be hours of bash glue per run.
+
+## The iteration loop
+
+The point is repeatable per-theme, not a one-shot benchmark grind.
+
+```
+for theme in [finance, healthcare, dev_eng, gov_contractor, legal]:
+    1. Build:   tools/build_themed_share.py --theme $theme --output shares/$theme/
+    2. Run:     sharesift scan --share shares/$theme/ --output-dir runs/$theme/
+                snaffler ... → runs/$theme/snaffler.jsonl  (head-to-head)
+    3. Score:   tools/score_themed_run.py runs/$theme/ → per-theme metrics card
+    4. Triage:  inspect bottom-5 misses in the report HTML active-learning panel,
+                label what KIND of failure each one is (naming / content
+                template / extraction / calibration)
+    5. Decide:  one of —
+                  (a) retrain Stage 1 with augmented naming patterns
+                  (b) expand Stage 2 training data for the failing genre
+                  (c) extend a structured parser
+                  (d) recalibrate tier band thresholds
+    6. Re-run: compare delta vs. baseline → land if no regression elsewhere
+```
+
+What makes this v0.19-shaped (not v0.20+) is that each loop iteration
+should produce one concrete code change, not a research detour.
+
+## Themes and failure-mode hypotheses
+
+Each theme is a synthetic share with **distinct file-naming conventions,
+distinct document templates, distinct credential type mix, distinct
+salt density**. Per-theme size target: ~200-400 files (large enough to
+matter, small enough to triage by eye).
+
+| Theme | Hypothesised failure mode | What it tests |
+|---|---|---|
+| **Finance** | Industry-specific names (`payroll`, `treasury`, `wire_instructions`, `1099_`, `K1_`) bypass the path classifier; common file types are XLSX/PDF, not the .py/.config-heavy training corpus | Path Stage 1 OOD on naming family |
+| **Healthcare** | EHR exports and HIPAA-redacted docs contain credential-shape strings (`MRN`, account numbers, claim IDs) that look like credentials but aren't | Content Stage 2 false-positive rate under PII-shaped non-credentials |
+| **Dev / engineering** | High cred density, exotic formats (vault tokens, OIDC JWTs, signed URLs, K8s service account tokens) | Tier band calibration under shift — does the Yellow→Red→Black contract still hold when 30% of files are juicy? |
+| **Gov / contractor** | Older naming conventions, more PDFs, classified-document headers ("UNCLASSIFIED//FOUO"), share lives further from training distribution | Stage 2 extraction — PDF text isn't wired into the content pipeline today |
+| **Legal** | Contracts and NDAs use the words `credential`, `password`, `authorization` in boilerplate; the model has to distinguish *mention* from *literal credential* | The v0.13 literal-vs-referenced separation under semantic pressure |
+
+5 themes is the v0.19 commit. The 6th-10th are stretch (if the first
+5 expose generalisable failure patterns, more themes have diminishing
+returns; if they each surface unique failures, fund more).
+
+## Tooling
+
+### `tools/build_themed_share.py` (new)
+
+Extends `tools/build_constructed_share.py` rather than replacing it.
+Shared core: directory-tree templating, salt-injection, manifest
+emission. Per-theme inputs:
+
+| Input | Per theme |
+|---|---|
+| Filename-token pool | YAML list of theme-appropriate stems (`payroll`, `Q3_close`, etc.) |
+| Document template pack | Theme-appropriate corpus (finance: 10-Ks, audit reports; healthcare: discharge summaries, etc.) — generated by reusing the existing docx-corpus pipeline with theme-scoped LLM prompts |
+| Credential type mix | Per-theme weights over the 19 credential-extractor types (finance has more SWIFT/IBAN+API; dev has more cloud+OAuth) |
+| Salt density | Theme-realistic (finance ~5%; dev ~30%; healthcare ~10%) |
+
+Outputs match the existing `constructed_share_manifest.jsonl` schema
+(`is_juicy_label`, `tier_label`, `salted`, `source_box`) so all
+existing benchmark + audit tooling works unchanged.
+
+### `tools/score_themed_run.py` (new)
+
+Reads `runs/<theme>/hits.jsonl` + `manifest.jsonl`. Emits a 1-page
+metrics card per theme:
+
+- Recall (overall, per-tier, per-credential-type)
+- Precision at K = 10, 20, 50
+- ECE per tier band (does the in-distribution calibration hold?)
+- Snaffler head-to-head delta
+- Bottom-5 misses with full path + content excerpt for triage
+
+### Failure-mode taxonomy
+
+The "what kind of failure" labels in step 4 of the loop need to be a
+fixed vocabulary or the iteration loop accumulates noise. Initial
+taxonomy:
+
+| Label | Meaning | Fix-side |
+|---|---|---|
+| `naming-ood` | Path classifier didn't flag a file whose name should have been obvious in the theme | Stage 1 retrain |
+| `content-ood` | Stage 2 said "no" on content the model should have caught | Stage 2 training data |
+| `template-mismatch` | Content classifier said "yes" on a template-shaped FP (legal boilerplate, EHR fields) | Stage 2 training data + adversarial neg examples |
+| `extraction-missing` | The juicy file exists but the pipeline can't read it (PDF, encrypted, binary) | Extractor extension |
+| `calibration-drift` | Tier band assignment was honestly wrong (Black-claimed, actually Yellow-quality) | Recalibrate |
+| `parser-gap` | Structured parser doesn't recognise the format | New parser |
+
+## Methodology rigour
+
+What separates v0.19 themed benchmarks from "30 shares I built last
+week":
+
+1. **Leak-free vs. training data**: each theme's filename pool and
+   document corpus is generated independently of any v0.10+ training
+   data. Audit script asserts zero overlap of file paths + first 200
+   chars of content vs. `data/content/train_split.jsonl`.
+2. **Independent label audit**: per-theme manifest goes through the
+   audit script that flagged the 19/153 silent-failure entries in the
+   2026-05-30 audit, BEFORE running benchmarks. No "score a share
+   whose labels are wrong" rounds.
+3. **Head-to-head fairness**: Snaffler runs on the same share with the
+   same input-file list. Same flag set both ways. Per-theme score
+   card includes both numbers, not just ShareSift's.
+4. **Pre-registration**: write the per-theme failure-mode hypothesis
+   (column 2 in the themes table above) BEFORE running the benchmark.
+   If the failure mode predicted ≠ the failure mode observed, that
+   itself is signal worth recording.
+
+## Honest caveats
+
+- 5 themes by the same builder still share builder quirks. Cross-share
+  variance ≠ cross-engagement variance. The Limitations section in the
+  README stays as-is.
+- The loop assumes the failure modes are *fixable* in v0.19. If a
+  themed run surfaces a failure that requires a major architecture
+  change (e.g. multi-modal model, document layout understanding),
+  that's a v1.0+ research question and gets shelved, not chased
+  mid-v0.19.
+- Build cost per theme is real. ~2 days each with the templated
+  builder is the estimate — slips to ~3-4 days each if the document
+  template generation gets stuck on LLM prompt iteration.
+
+## Phasing
+
+| Sprint | Scope | Duration |
+|---|---|---|
+| 0 | Wait for v0.18 ergonomics to ship (`--json`, `sharesift scan`) | — |
+| 1 | `tools/build_themed_share.py` + `tools/score_themed_run.py` + failure-mode taxonomy code path | ~3 days |
+| 2 | Theme 1 (finance) — build, audit, run, triage, fix | ~3 days |
+| 3 | Theme 2 (healthcare) — same loop | ~2 days |
+| 4 | Theme 3 (dev/engineering) — same loop | ~2 days |
+| 5 | Theme 4 (gov/contractor) — same loop | ~2-3 days (PDF extraction may slip) |
+| 6 | Theme 5 (legal) — same loop | ~2 days |
+| 7 | `docs/v0p19_results.md` + bundle | ~1 day |
+
+Total: ~3 weeks if nothing blocks; ~4-5 weeks realistic.
+
+Most likely slip risk: theme 4 (gov/contractor) blocking on PDF text
+extraction, which is genuine v0.20 scope. Mitigation: keep the gov
+theme synthetic-PDF-light for v0.19 ; PDF extraction is its own
+project.
+
+## Out of scope for v0.19
+
+- 30 generic shares — the "more is better" version of this idea. Same
+  builder, same quirks, no theme-axis information. Statistical theater.
+- Real engagement data — gated, separate project.
+- Multi-modal (image / scanned PDF) content classifier — v1.0+.
+- LLM-generated themed corpora at the file-content level for shares
+  larger than ~400 files — generation cost dominates measurement cost.
+
+## Verification (end-to-end, post-Sprint 1)
+
+```bash
+# Build a finance theme
+uv run python tools/build_themed_share.py \
+    --theme finance \
+    --output benchmarks/v0p19/finance/ \
+    --target-files 300 \
+    --salt-density 0.05
+
+# Audit labels (no silent failures)
+uv run python tools/audit_constructed_share.py benchmarks/v0p19/finance/
+
+# Run end-to-end with v0.18's one-shot
+uv run sharesift scan \
+    --share benchmarks/v0p19/finance/ \
+    --output-dir runs/v0p19/finance/ \
+    --json
+
+# Score
+uv run python tools/score_themed_run.py runs/v0p19/finance/
+
+# Expect: per-theme metrics card on stdout, bottom-5 misses listed
+```
+
+## Critical files (read-before-edit, when v0.19 starts)
+
+- `tools/build_constructed_share.py` — the predecessor; extension points
+  for the themed builder
+- `data/content/training_dataset.jsonl` — leak-check substrate for the
+  audit
+- `src/sharesift/rules/SOURCES.md` — Snaffler ruleset pin (Snaffler
+  head-to-head needs the same pinned version each theme)
+- `docs/audit_2026-05-30.md` — the audit script + silent-failure
+  categories that need to clear for any new themed manifest
