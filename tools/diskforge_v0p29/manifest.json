@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0",
+  "disks": [
+    {
+      "name": "sharesift_v0p29_win10",
+      "label": "SS_V0P29_W10",
+      "type": "GPT",
+      "size": "512M",
+      "bootable": true,
+      "partitions": [
+        {
+          "number": 1,
+          "type": "primary",
+          "filesystem": "ntfs",
+          "label": "SYSTEM",
+          "size": "500M",
+          "populate": {
+            "template": "windows10",
+            "add_files": [
+              { "source": "/files/plant/unattend.xml",          "target": "/Windows/Panther/Unattend.xml" },
+              { "source": "/files/plant/web.config",             "target": "/inetpub/wwwroot/web.config" },
+              { "source": "/files/plant/Groups.xml",             "target": "/ProgramData/Microsoft/Group Policy/History/Preferences/Groups/Groups.xml" },
+              { "source": "/files/plant/passwords.kdbx",         "target": "/Users/Administrator/Documents/passwords.kdbx" },
+              { "source": "/files/plant/credentials",            "target": "/Users/Administrator/.aws/credentials" },
+              { "source": "/files/plant/id_rsa",                 "target": "/Users/Administrator/.ssh/id_rsa" },
+              { "source": "/files/plant/pypirc",                 "target": "/Users/Administrator/.pypirc" },
+              { "source": "/files/plant/ConsoleHost_history.txt","target": "/Users/Administrator/AppData/Roaming/Microsoft/Windows/PowerShell/PSReadLine/ConsoleHost_history.txt" },
+              { "source": "/files/plant/wp-config.php",          "target": "/inetpub/wordpress/wp-config.php" },
+              { "source": "/files/plant/wp-config.php.bak",      "target": "/inetpub/wordpress/wp-config.php.bak" },
+              { "source": "/files/plant/server.ppk",             "target": "/Users/Administrator/Documents/server.ppk" },
+              { "source": "/files/plant/hosts.yml",              "target": "/Users/Administrator/.config/gh/hosts.yml" }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

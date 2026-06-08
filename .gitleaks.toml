@@ -18,6 +18,10 @@ paths = [
     '''tests/test_verify_runner\.py''',
     '''tests/test_verify_ssh_extractor\.py''',
     '''tests/test_extractor_v0p23\.py''',  # v0.23: 9 new credential-shape fixtures
+    # v0.29: DiskForge planted-credential payload files. Synthetic
+    # content matching documented credential file shapes — used by the
+    # build pipeline that generates the 4th held-out benchmark.
+    '''tools/diskforge_v0p29/files/plant/.*''',
     # Compiled bytecode mirrors the same fixtures; covered for local
     # `gitleaks detect --no-git` runs (CI scans the git tree only).
     '''.*\.pyc$''',

@@ -1,0 +1,2 @@
+Get-ChildItem -Recurse
+$Cred = New-Object PSCredential 'CORP\admin','H4rdc0ded123' | ConvertTo-SecureString

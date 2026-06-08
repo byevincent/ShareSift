@@ -351,6 +351,71 @@ def _eval_msf2() -> dict:
     }
 
 
+def _eval_diskforge_win10() -> dict:
+    """DiskForge synthetic Windows 10 share — supplementary set.
+
+    Generated via Stauffer's DiskForge tool (Docker-based forensic
+    disk-image builder) with credentials planted at documented
+    Windows locations sourced from Snaffler default rules + MITRE
+    ATT&CK T1552. The manifest IS the ground truth by construction.
+
+    **Supplementary, not primary**: 12 positives in 43 files
+    (28% positive rate) is far higher than realistic shares
+    (MSF3 = 3.8%, MSF2 = 2.3%). The set tests "does the cascade
+    recognise the well-known credential file shapes we documented?"
+    rather than "is the operator triage workload precision-good?"
+    Putting it in MIN would inflate the headline; supplementary
+    means it shows up in the per-set table but doesn't contribute
+    to MIN.
+    """
+    from sharesift.content_rules import get_default_engine
+    from sharesift.path import PathClassifier
+
+    base = REPO_ROOT / "data" / "external" / "diskforge_win10"
+    if not (base / "ground_truth.jsonl").exists():
+        return {"set": "diskforge_win10", "skipped": True}
+
+    ground = {r["path"]: r for r in _load_jsonl(base / "ground_truth.jsonl")}
+    paths = [
+        line.strip()
+        for line in (base / "file_list.txt").read_text(encoding="utf-8").splitlines()
+        if line.strip() and line.strip() in ground
+    ]
+
+    path_clf = PathClassifier()
+    rules = get_default_engine()
+    path_results = path_clf.score_batch(paths)
+
+    records: list[dict] = []
+    for p, p_result in zip(paths, path_results):
+        v = rules.evaluate(p, content=None)
+        records.append({
+            "path": p,
+            "positive": bool(ground[p].get("has_credential")),
+            "path_tier": p_result.tier,
+            "cascade_tier": v.tier,
+            "path_probability": p_result.probability,
+        })
+
+    scores = _score_with_dedup_penalty(records)
+
+    n_positive = sum(1 for r in records if r["positive"])
+    flagged = sum(
+        1 for r in records
+        if r["positive"] and (r["path_tier"] is not None or r["cascade_tier"] is not None)
+    )
+
+    return {
+        "set": "diskforge_win10",
+        "supplementary": True,
+        "n_records": len(records),
+        "n_positive": n_positive,
+        "recall_any_tier": round(flagged / max(1, n_positive), 4),
+        "top_10_precision": _top_k_precision(records, scores, 10),
+        "top_20_precision": _top_k_precision(records, scores, 20),
+    }
+
+
 def _eval_engagement_corpus() -> dict:
     """Engagement corpus: path-only + tier label (supplementary; possibly
     training-contaminated)."""
@@ -421,6 +486,7 @@ def main(argv: list[str] | None = None) -> int:
         _eval_creddata(),
         _eval_msf2(),
         _eval_engagement_corpus(),
+        _eval_diskforge_win10(),
     ]
     elapsed = round(time.monotonic() - t0, 2)
 

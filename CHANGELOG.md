@@ -82,10 +82,60 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.29 — acquire another Windows-shaped held-out share (turn the MSF3
-"share-specific" claim into evidence vs. counterexample); Azure storage
-account verifier; GCP service-account verifier; registry-hive parser
-when samples accessible.
+v0.30 — **close the parser-without-rule gap** (the .pypirc miss on
+the DiskForge benchmark — parsers v0.24/v0.25 added without paired
+filename rules in the engine); Azure + GCP verifiers (carryover);
+generate a larger DiskForge image to consider promoting it to
+primary; registry-hive parser when samples accessible.
+
+## [0.29.0] — 2026-06-08
+
+**4th held-out set acquired via DiskForge** — Jacob Stauffer's
+Docker-based forensic disk-image generator (`jknyght9/diskforge`).
+Plants 12 credentials at paths documented in Snaffler default rules +
+MITRE ATT&CK T1552 on a Windows 10 template. Added as
+**supplementary**, not primary, because 28% positive density is
+unrealistic for a real share.
+
+### Added
+
+- `tools/diskforge_v0p29/manifest.json` + `files/plant/*` — full
+  reproducible build inputs (12 credential payload files at
+  documented Windows credential locations)
+- `tools/diskforge_v0p29/README.md` — step-by-step reproduction
+- `tools/build_diskforge_benchmark.py` — reads the manifest and
+  the file list from the generated disk, emits labeled ground
+  truth (positives = manifest's `add_files` targets)
+- `tools/eval_harness.py` gains `_eval_diskforge_win10()`;
+  supplementary set, does NOT contribute to MIN
+- `data/external/diskforge_win10/` — 43 records / 12 positives
+- `.gitleaks.toml` allowlist entry for the planted payload files
+  (they contain documented credential shapes that look like
+  secrets to scanners but are synthetic fixtures)
+
+### Findings
+
+| Set | Recall | Top-10 | Positive density |
+|---|---|---|---|
+| DiskForge Win10 (supp) | **0.917** (11/12) | 0.50 | 28% (planted) |
+
+The one missed plant is `.pypirc` — we added a v0.25 parser for it
+but **no corresponding filename rule**. Parsers extract content-side
+structure but don't contribute to the cascade's path-side tier
+signal. **This is a real architectural gap**: parsers added without
+paired rules leave a recall hole on path-only enumeration. v0.30
+fix: add filename rules to `extra_rules.json` for the v0.24/v0.25
+parser families.
+
+### Notes
+
+- The DiskForge supplementary set joins engagement_corpus in
+  surfacing-without-counting-toward-MIN.
+- Vincent's former professor (UTSA) Jacob Stauffer authored
+  DiskForge; the tool turned out to be exactly the right primitive
+  for cheap, reproducible labeled disk images. Credit + provenance
+  documented in the results doc.
+- Test suite unchanged: 821 passing. v0.29 work was data + tooling.
 
 ## [0.28.0] — 2026-06-08
 

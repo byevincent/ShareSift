@@ -1,5 +1,5 @@
 {
-  "elapsed_s": 3.58,
+  "elapsed_s": 4.02,
   "per_set": [
     {
       "set": "msf3",
@@ -42,6 +42,15 @@
       "top_10_precision": 0.6,
       "top_20_precision": 0.65,
       "top_50_precision": 0.74
+    },
+    {
+      "set": "diskforge_win10",
+      "supplementary": true,
+      "n_records": 43,
+      "n_positive": 12,
+      "recall_any_tier": 0.9167,
+      "top_10_precision": 0.5,
+      "top_20_precision": 0.5
     }
   ],
   "headline": {
