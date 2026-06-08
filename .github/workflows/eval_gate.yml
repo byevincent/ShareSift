@@ -69,39 +69,24 @@ jobs:
           path: benchmarks/v0p22_eval/harness_results.json
           retention-days: 90
 
-      - name: Compare against previous release baseline
+      - name: Fetch previous baseline
         if: steps.data-check.outputs.available == 'true'
+        id: prev-baseline
         run: |
           set -euo pipefail
           PREV_TAG="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo '')"
           if [ -z "$PREV_TAG" ]; then
-            echo "no previous tag; skipping comparison"
-            exit 0
+            echo "no previous tag; writing empty baseline"
+            echo '{}' > /tmp/prev_baseline.json
+          else
+            git show "${PREV_TAG}:benchmarks/v0p22_eval/harness_results.json" > /tmp/prev_baseline.json 2>/dev/null \
+              || echo '{}' > /tmp/prev_baseline.json
+            echo "compared against ${PREV_TAG}"
           fi
-          BASE_JSON="$(git show "$PREV_TAG:benchmarks/v0p22_eval/harness_results.json" 2>/dev/null || echo '{}')"
-          if [ "$BASE_JSON" = '{}' ]; then
-            echo "previous tag $PREV_TAG had no baseline; skipping comparison"
-            exit 0
-          fi
-          NEW_JSON="$(cat benchmarks/v0p22_eval/harness_results.json)"
-          PREV_TOP10="$(echo "$BASE_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_top_10_precision_across_primary","0") or 0)')"
-          PREV_REC="$(echo "$BASE_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_recall_across_primary","0") or 0)')"
-          NEW_TOP10="$(echo "$NEW_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_top_10_precision_across_primary","0") or 0)')"
-          NEW_REC="$(echo "$NEW_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_recall_across_primary","0") or 0)')"
-          echo "Previous ($PREV_TAG):  MIN top-10 = $PREV_TOP10  MIN recall = $PREV_REC"
-          echo "This commit:           MIN top-10 = $NEW_TOP10  MIN recall = $NEW_REC"
-          python -c "
-import sys
-prev_t = float('$PREV_TOP10')
-prev_r = float('$PREV_REC')
-new_t  = float('$NEW_TOP10')
-new_r  = float('$NEW_REC')
-fail = False
-if new_t + 1e-6 < prev_t:
-    print(f'::error::MIN top-10 precision regressed: {prev_t} → {new_t}')
-    fail = True
-if new_r + 1e-6 < prev_r:
-    print(f'::error::MIN recall regressed: {prev_r} → {new_r}')
-    fail = True
-sys.exit(1 if fail else 0)
-"
+
+      - name: Compare against previous release baseline
+        if: steps.data-check.outputs.available == 'true'
+        run: |
+          uv run python tools/eval_gate_compare.py \
+            --previous /tmp/prev_baseline.json \
+            --current benchmarks/v0p22_eval/harness_results.json

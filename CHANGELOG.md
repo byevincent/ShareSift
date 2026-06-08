@@ -82,11 +82,68 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.25 — registry-hive + PuTTY `.ppk` parsers (need real samples);
-Stage 2 LoRA cross-distribution eval (need tracked weights); more
-structured parsers (`.pypirc`, gcloud credentials, gh CLI auth,
-KeyringFile); `tools/plot_harness_history.py` for visualising the
-MIN trajectory.
+v0.26 — registry-hive + PuTTY `.ppk` parsers (need samples); Stage 2
+LoRA cross-distribution eval (need tracked weights); a 4th
+independent held-out benchmark (GOAD, HTB box dump, or PoshC2
+logs); read-only verifiers for the v0.23 new credential types
+(Stripe, SendGrid, etc.).
+
+## [0.25.0] — 2026-06-08
+
+4 more structured parsers + harness trajectory chart + CI gate YAML
+fix. Same eval discipline as v0.22-v0.24. MIN top-10 = 0.20, MIN
+recall = 0.90 — flat trajectory across 4 releases.
+
+### Fixed
+
+- `.github/workflows/eval_gate.yml` — embedded multi-line Python at
+  column 0 inside a `run: |` block scalar broke YAML parsing. Logic
+  extracted to `tools/eval_gate_compare.py`; workflow invokes it
+  as a separate command. Helper independently tested.
+
+### Added
+
+- `src/sharesift/parsers/pypirc.py` — PyPI / TestPyPI upload tokens
+- `src/sharesift/parsers/gcloud_credentials.py` — GCP user-credential
+  refresh tokens; skips service-account JSONs (caught by v0.23
+  extractor)
+- `src/sharesift/parsers/gh_cli_config.py` — GitHub CLI OAuth
+  tokens from `hosts.yml`
+- `src/sharesift/parsers/keyring_credentials.py` — Python keyring
+  file backends: cleartext `keyring_pass.cfg`, encrypted-blob
+  presence in `keyring_cryptfile_pass.cfg`, risky-backend
+  detection in `keyringrc.cfg`
+- `tools/eval_gate_compare.py` — separate-script comparison helper
+  used by the eval-gate workflow
+- `tools/plot_harness_history.py` — text-mode chart of harness MIN
+  trajectory across releases (stdlib only, no matplotlib)
+
+Parser count: 22 → **26**.
+
+### Findings
+
+| Metric | v0.24 | v0.25 |
+|---|---|---|
+| MIN top-10 precision | 0.20 | 0.20 |
+| MIN recall any-tier | 0.90 | 0.90 |
+
+Trajectory chart (4 releases):
+
+```
+v0.22.0     ▇▇░░░░░░░░ 0.20     ▇▇▇▇▇▇▇▇▇░ 0.90
+v0.23.0     ▇▇░░░░░░░░ 0.20     ▇▇▇▇▇▇▇▇▇░ 0.90
+v0.24.0     ▇▇░░░░░░░░ 0.20     ▇▇▇▇▇▇▇▇▇░ 0.90
+v0.25.0     ▇▇░░░░░░░░ 0.20     ▇▇▇▇▇▇▇▇▇░ 0.90
+```
+
+Flat is the discipline working. Capacity grew (parser count
+18 → 22 → 26; extractor count 21 → 30); the gate against
+regression hasn't fired.
+
+### Notes
+
+- Tests added: 21 (10 parsers + 5 eval-gate + 6 plot helper).
+  Full suite: **811 passing, 8 skipped, 0 regressions**.
 
 ## [0.24.0] — 2026-06-08
 

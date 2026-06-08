@@ -90,6 +90,11 @@ from sharesift.parsers import (  # noqa: E402
     aws_cli_credentials,
     netrc,
     maven_settings_xml,
+    # v0.25 additions
+    pypirc,
+    gcloud_credentials,
+    gh_cli_config,
+    keyring_credentials,
 )
 
 
@@ -101,5 +106,7 @@ for mod in (
     cisco_running_config, veeam_config_xml, ansible_vault,
     # v0.24
     wp_config_php, aws_cli_credentials, netrc, maven_settings_xml,
+    # v0.25
+    pypirc, gcloud_credentials, gh_cli_config, keyring_credentials,
 ):
     mod.register(_register)
