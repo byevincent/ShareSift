@@ -1,0 +1,1978 @@
+{
+  "schema_version": "1.0",
+  "disks": [
+    {
+      "name": "sharesift_v0p31_win10",
+      "label": "SS_V0P31_W10",
+      "type": "GPT",
+      "size": "2G",
+      "bootable": true,
+      "partitions": [
+        {
+          "number": 1,
+          "type": "primary",
+          "filesystem": "ntfs",
+          "label": "SYSTEM",
+          "size": "1900M",
+          "populate": {
+            "template": "windows10",
+            "add_files": [
+              {
+                "source": "/files/plant/unattend.xml",
+                "target": "/Windows/Panther"
+              },
+              {
+                "source": "/files/plant/web.config",
+                "target": "/inetpub/wwwroot"
+              },
+              {
+                "source": "/files/plant/Groups.xml",
+                "target": "/ProgramData/Microsoft/Group Policy/History/Preferences/Groups"
+              },
+              {
+                "source": "/files/plant/passwords.kdbx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/plant/credentials",
+                "target": "/Users/Administrator/.aws"
+              },
+              {
+                "source": "/files/plant/id_rsa",
+                "target": "/Users/Administrator/.ssh"
+              },
+              {
+                "source": "/files/plant/pypirc",
+                "target": "/Users/Administrator/.pypirc"
+              },
+              {
+                "source": "/files/plant/ConsoleHost_history.txt",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Windows/PowerShell/PSReadLine"
+              },
+              {
+                "source": "/files/plant/wp-config.php",
+                "target": "/inetpub/wordpress"
+              },
+              {
+                "source": "/files/plant/wp-config.php.bak",
+                "target": "/inetpub/wordpress"
+              },
+              {
+                "source": "/files/plant/server.ppk",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/plant/hosts.yml",
+                "target": "/Users/Administrator/.config/gh"
+              },
+              {
+                "source": "/files/decoys/decoy_00001.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00002.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00003.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00004.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00005.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00006.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00007.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00008.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00009.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00010.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00011.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00012.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00013.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00014.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00015.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00016.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00017.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00018.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00019.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00020.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00021.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00022.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00023.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00024.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00025.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00026.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00027.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00028.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00029.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00030.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00031.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00032.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00033.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00034.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00035.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00036.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00037.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00038.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00039.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00040.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00041.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00042.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00043.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00044.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00045.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00046.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00047.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00048.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00049.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00050.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00051.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00052.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00053.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00054.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00055.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00056.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00057.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00058.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00059.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00060.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00061.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00062.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00063.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00064.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00065.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00066.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00067.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00068.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00069.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00070.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00071.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00072.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00073.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00074.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00075.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00076.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00077.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00078.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00079.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00080.dll",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00081.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00082.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00083.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00084.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00085.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00086.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00087.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00088.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00089.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00090.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00091.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00092.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00093.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00094.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00095.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00096.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00097.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00098.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00099.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00100.exe",
+                "target": "/Windows/System32"
+              },
+              {
+                "source": "/files/decoys/decoy_00101.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00102.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00103.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00104.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00105.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00106.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00107.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00108.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00109.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00110.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00111.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00112.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00113.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00114.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00115.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00116.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00117.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00118.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00119.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00120.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00121.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00122.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00123.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00124.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00125.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00126.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00127.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00128.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00129.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00130.sys",
+                "target": "/Windows/System32/drivers"
+              },
+              {
+                "source": "/files/decoys/decoy_00131.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00132.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00133.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00134.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00135.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00136.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00137.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00138.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00139.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00140.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00141.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00142.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00143.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00144.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00145.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00146.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00147.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00148.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00149.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00150.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00151.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00152.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00153.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00154.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00155.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00156.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00157.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00158.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00159.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00160.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00161.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00162.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00163.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00164.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00165.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00166.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00167.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00168.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00169.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00170.dll",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00171.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00172.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00173.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00174.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00175.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00176.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00177.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00178.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00179.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00180.exe",
+                "target": "/Windows/SysWOW64"
+              },
+              {
+                "source": "/files/decoys/decoy_00181.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00182.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00183.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00184.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00185.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00186.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00187.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00188.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00189.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00190.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00191.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00192.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00193.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00194.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00195.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00196.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00197.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00198.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00199.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00200.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00201.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00202.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00203.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00204.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00205.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00206.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00207.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00208.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00209.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00210.evtx",
+                "target": "/Windows/System32/winevt/Logs"
+              },
+              {
+                "source": "/files/decoys/decoy_00211.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00212.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00213.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00214.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00215.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00216.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00217.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00218.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00219.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00220.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00221.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00222.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00223.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00224.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00225.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00226.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00227.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00228.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00229.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00230.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00231.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00232.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00233.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00234.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00235.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00236.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00237.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00238.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00239.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00240.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00241.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00242.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00243.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00244.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00245.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00246.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00247.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00248.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00249.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00250.pf",
+                "target": "/Windows/Prefetch"
+              },
+              {
+                "source": "/files/decoys/decoy_00251.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00252.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00253.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00254.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00255.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00256.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00257.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00258.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00259.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00260.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00261.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00262.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00263.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00264.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00265.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00266.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00267.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00268.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00269.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00270.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00271.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00272.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00273.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00274.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00275.dll",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00276.exe",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00277.exe",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00278.exe",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00279.exe",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00280.exe",
+                "target": "/Program Files/Microsoft Office"
+              },
+              {
+                "source": "/files/decoys/decoy_00281.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00282.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00283.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00284.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00285.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00286.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00287.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00288.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00289.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00290.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00291.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00292.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00293.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00294.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00295.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00296.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00297.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00298.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00299.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00300.dll",
+                "target": "/Program Files (x86)/Common Files"
+              },
+              {
+                "source": "/files/decoys/decoy_00301.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00302.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00303.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00304.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00305.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00306.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00307.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00308.dll",
+                "target": "/Program Files/Internet Explorer"
+              },
+              {
+                "source": "/files/decoys/decoy_00309.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00310.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00311.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00312.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00313.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00314.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00315.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00316.lnk",
+                "target": "/Users/Administrator/Desktop"
+              },
+              {
+                "source": "/files/decoys/decoy_00317.docx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00318.docx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00319.docx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00320.docx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00321.docx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00322.docx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00323.xlsx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00324.xlsx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00325.xlsx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00326.xlsx",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00327.pdf",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00328.pdf",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00329.pdf",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00330.pdf",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00331.pdf",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00332.zip",
+                "target": "/Users/Administrator/Downloads"
+              },
+              {
+                "source": "/files/decoys/decoy_00333.zip",
+                "target": "/Users/Administrator/Downloads"
+              },
+              {
+                "source": "/files/decoys/decoy_00334.zip",
+                "target": "/Users/Administrator/Downloads"
+              },
+              {
+                "source": "/files/decoys/decoy_00335.zip",
+                "target": "/Users/Administrator/Downloads"
+              },
+              {
+                "source": "/files/decoys/decoy_00336.zip",
+                "target": "/Users/Administrator/Downloads"
+              },
+              {
+                "source": "/files/decoys/decoy_00337.zip",
+                "target": "/Users/Administrator/Downloads"
+              },
+              {
+                "source": "/files/decoys/decoy_00338.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00339.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00340.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00341.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00342.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00343.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00344.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00345.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00346.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00347.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00348.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00349.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00350.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00351.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00352.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00353.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00354.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00355.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00356.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00357.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00358.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00359.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00360.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00361.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00362.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00363.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00364.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00365.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00366.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00367.tmp",
+                "target": "/Users/Administrator/AppData/Local/Temp"
+              },
+              {
+                "source": "/files/decoys/decoy_00368.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00369.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00370.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00371.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00372.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00373.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00374.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00375.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00376.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00377.db",
+                "target": "/Users/Administrator/AppData/Local/Microsoft/Windows/Caches"
+              },
+              {
+                "source": "/files/decoys/decoy_00378.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00379.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00380.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00381.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00382.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00383.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00384.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00385.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00386.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00387.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00388.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00389.LNK",
+                "target": "/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent"
+              },
+              {
+                "source": "/files/decoys/decoy_00390.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00391.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00392.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00393.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00394.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00395.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00396.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00397.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00398.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00399.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00400.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00401.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00402.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00403.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00404.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00405.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00406.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00407.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00408.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00409.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00410.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00411.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00412.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00413.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00414.log",
+                "target": "/inetpub/logs/LogFiles/W3SVC1"
+              },
+              {
+                "source": "/files/decoys/decoy_00415.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00416.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00417.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00418.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00419.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00420.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00421.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00422.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00423.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00424.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00425.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00426.ini",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00427.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00428.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00429.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00430.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00431.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00432.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00433.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00434.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00435.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00436.xml",
+                "target": "/Program Files/CommonApp/cfg"
+              },
+              {
+                "source": "/files/decoys/decoy_00437.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00438.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00439.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00440.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00441.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00442.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00443.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00444.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00445.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00446.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00447.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00448.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00449.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00450.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00451.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00452.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00453.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00454.xml",
+                "target": "/Windows/System32/Tasks/Microsoft"
+              },
+              {
+                "source": "/files/decoys/decoy_00455.efi",
+                "target": "/Boot"
+              },
+              {
+                "source": "/files/decoys/decoy_00456.efi",
+                "target": "/Boot"
+              },
+              {
+                "source": "/files/decoys/decoy_00457.efi",
+                "target": "/Boot"
+              },
+              {
+                "source": "/files/decoys/decoy_00458.efi",
+                "target": "/Boot"
+              },
+              {
+                "source": "/files/decoys/decoy_00459.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00460.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00461.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00462.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00463.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00464.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00465.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00466.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00467.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00468.txt",
+                "target": "/Users/Public/Documents"
+              },
+              {
+                "source": "/files/decoys/decoy_00469.jpg",
+                "target": "/Users/Public/Pictures"
+              },
+              {
+                "source": "/files/decoys/decoy_00470.jpg",
+                "target": "/Users/Public/Pictures"
+              },
+              {
+                "source": "/files/decoys/decoy_00471.jpg",
+                "target": "/Users/Public/Pictures"
+              },
+              {
+                "source": "/files/decoys/decoy_00472.jpg",
+                "target": "/Users/Public/Pictures"
+              },
+              {
+                "source": "/files/decoys/decoy_00473.jpg",
+                "target": "/Users/Public/Pictures"
+              },
+              {
+                "source": "/files/decoys/decoy_00474.jpg",
+                "target": "/Users/Public/Pictures"
+              },
+              {
+                "source": "/files/decoys/decoy_00475.jpg",
+                "target": "/Users/Public/Pictures"
+              },
+              {
+                "source": "/files/decoys/decoy_00476.jpg",
+                "target": "/Users/Public/Pictures"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

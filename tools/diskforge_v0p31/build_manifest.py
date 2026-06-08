@@ -1,0 +1,186 @@
+r"""v0.31: programmatically build a DiskForge manifest + payloads for
+a realistic-density Windows 10 share benchmark.
+
+The v0.29 DiskForge image had 12 positives in 43 files (28% positive
+density) — useful for parser coverage tests but unrealistic for top-K
+precision measurement. v0.31 fills the same 12 positives but adds
+~500 negative-class decoy files at realistic Windows paths, dropping
+the positive density to ~2.4% (comparable to MSF3's 3.8% and MSF2's
+2.3%).
+
+The negatives are synthetic clutter — .dll/.exe stubs, .log files,
+.lnk shortcuts, .txt notes, etc. — at standard Windows directories
+(System32, Program Files, AppData, etc.). They aren't real Windows
+binaries; the path classifier and rule engine should see them as
+"plausible Windows path that isn't a credential file."
+
+Run from the repo root::
+
+    uv run python tools/diskforge_v0p31/build_manifest.py
+    docker run --rm --privileged \
+        -v $PWD/tools/diskforge_v0p31/manifest.json:/manifest.json \
+        -v $PWD/tools/diskforge_v0p31/files:/files \
+        -v /tmp/msf_diskforge_v31/output:/output \
+        diskforge /manifest.json
+"""
+
+from __future__ import annotations
+
+import json
+import random
+from pathlib import Path
+
+TOOLS_DIR = Path(__file__).resolve().parent
+PLANT_DIR = TOOLS_DIR / "files" / "plant"
+DECOY_DIR = TOOLS_DIR / "files" / "decoys"
+
+
+# 12 positives — same as v0.29. Sourced from Snaffler default rules + MITRE T1552.
+_POSITIVES: list[tuple[str, str]] = [
+    ("unattend.xml",          "/Windows/Panther"),
+    ("web.config",            "/inetpub/wwwroot"),
+    ("Groups.xml",            "/ProgramData/Microsoft/Group Policy/History/Preferences/Groups"),
+    ("passwords.kdbx",        "/Users/Administrator/Documents"),
+    ("credentials",           "/Users/Administrator/.aws"),
+    ("id_rsa",                "/Users/Administrator/.ssh"),
+    ("pypirc",                "/Users/Administrator/.pypirc"),
+    ("ConsoleHost_history.txt","/Users/Administrator/AppData/Roaming/Microsoft/Windows/PowerShell/PSReadLine"),
+    ("wp-config.php",         "/inetpub/wordpress"),
+    ("wp-config.php.bak",     "/inetpub/wordpress"),
+    ("server.ppk",            "/Users/Administrator/Documents"),
+    ("hosts.yml",             "/Users/Administrator/.config/gh"),
+]
+
+# Decoy directory templates with file extensions. Each (path, extension,
+# count) generates N synthetic files at the path.
+_DECOY_BUCKETS: list[tuple[str, str, int]] = [
+    # System binaries — heaviest noise on Windows shares
+    ("/Windows/System32",                 ".dll", 80),
+    ("/Windows/System32",                 ".exe", 20),
+    ("/Windows/System32/drivers",         ".sys", 30),
+    ("/Windows/SysWOW64",                 ".dll", 40),
+    ("/Windows/SysWOW64",                 ".exe", 10),
+    # Event logs
+    ("/Windows/System32/winevt/Logs",     ".evtx", 30),
+    # Prefetch cache
+    ("/Windows/Prefetch",                 ".pf", 40),
+    # Program Files clutter
+    ("/Program Files/Microsoft Office",   ".dll", 25),
+    ("/Program Files/Microsoft Office",   ".exe", 5),
+    ("/Program Files (x86)/Common Files", ".dll", 20),
+    ("/Program Files/Internet Explorer",  ".dll", 8),
+    # User profile clutter
+    ("/Users/Administrator/Desktop",                          ".lnk", 8),
+    ("/Users/Administrator/Documents",                        ".docx", 6),
+    ("/Users/Administrator/Documents",                        ".xlsx", 4),
+    ("/Users/Administrator/Documents",                        ".pdf", 5),
+    ("/Users/Administrator/Downloads",                        ".zip", 6),
+    ("/Users/Administrator/AppData/Local/Temp",               ".tmp", 30),
+    ("/Users/Administrator/AppData/Local/Microsoft/Windows/Caches",            ".db", 10),
+    ("/Users/Administrator/AppData/Roaming/Microsoft/Office/Recent",           ".LNK", 12),
+    # IIS log files
+    ("/inetpub/logs/LogFiles/W3SVC1",     ".log", 25),
+    # Application config clutter (NOT credentials — boring app settings)
+    ("/Program Files/CommonApp/cfg",      ".ini", 12),
+    ("/Program Files/CommonApp/cfg",      ".xml", 10),
+    # WSUS / scheduled tasks stubs
+    ("/Windows/System32/Tasks/Microsoft", ".xml", 18),
+    # Boot
+    ("/Boot",                             ".efi", 4),
+    # Misc benign user docs
+    ("/Users/Public/Documents",           ".txt", 10),
+    ("/Users/Public/Pictures",            ".jpg", 8),
+]
+
+
+def _generate_decoys(rng: random.Random) -> list[tuple[str, str]]:
+    """Generate the list of (source_file_local, target_dir_on_disk)
+    decoy entries. Writes each source file under PLANT_DIR's sibling
+    decoys/ directory."""
+    DECOY_DIR.mkdir(parents=True, exist_ok=True)
+
+    fillers = [
+        "synthetic binary stub — not a real Windows file\n",
+        "log line 1\nlog line 2\nlog line 3\n",
+        "<config><setting key='theme' value='dark'/></config>\n",
+        "{\n  \"theme\": \"dark\",\n  \"telemetry\": true\n}\n",
+        "[General]\nVersion=1.0.0\nEnabled=true\n",
+        "AB CDEF 0123 4567 89AB CDEF 0123 4567 89AB\n" * 5,
+    ]
+
+    out: list[tuple[str, str]] = []
+    counter = 0
+    for target_dir, ext, count in _DECOY_BUCKETS:
+        for i in range(count):
+            counter += 1
+            name = f"decoy_{counter:05d}{ext}"
+            (DECOY_DIR / name).write_text(rng.choice(fillers), encoding="utf-8")
+            out.append((name, target_dir))
+    return out
+
+
+def main() -> int:
+    if not PLANT_DIR.exists() or not any(PLANT_DIR.iterdir()):
+        # Reuse the v0.29 plant payloads.
+        v29_plant = TOOLS_DIR.parent / "diskforge_v0p29" / "files" / "plant"
+        if not v29_plant.exists():
+            print(f"ERROR: no plant payloads at {v29_plant}")
+            return 1
+        PLANT_DIR.mkdir(parents=True, exist_ok=True)
+        for src in v29_plant.iterdir():
+            (PLANT_DIR / src.name).write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+
+    rng = random.Random(2031)
+    decoys = _generate_decoys(rng)
+    print(f"generated {len(decoys)} decoy files in {DECOY_DIR}")
+
+    # Build the manifest entries.
+    add_files: list[dict] = []
+    for fname, target in _POSITIVES:
+        add_files.append({
+            "source": f"/files/plant/{fname}",
+            "target": target,
+        })
+    for fname, target in decoys:
+        add_files.append({
+            "source": f"/files/decoys/{fname}",
+            "target": target,
+        })
+
+    # DiskForge needs a bigger disk to hold the extra files.
+    manifest = {
+        "schema_version": "1.0",
+        "disks": [
+            {
+                "name": "sharesift_v0p31_win10",
+                "label": "SS_V0P31_W10",
+                "type": "GPT",
+                "size": "2G",
+                "bootable": True,
+                "partitions": [
+                    {
+                        "number": 1,
+                        "type": "primary",
+                        "filesystem": "ntfs",
+                        "label": "SYSTEM",
+                        "size": "1900M",
+                        "populate": {
+                            "template": "windows10",
+                            "add_files": add_files,
+                        },
+                    }
+                ],
+            }
+        ],
+    }
+    (TOOLS_DIR / "manifest.json").write_text(
+        json.dumps(manifest, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    print(f"wrote manifest with {len(add_files)} add_files entries "
+          f"({len(_POSITIVES)} positives + {len(decoys)} decoys)")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

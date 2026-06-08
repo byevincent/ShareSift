@@ -1,6 +1,6 @@
 [project]
 name = "sharesift"
-version = "0.30.0"
+version = "0.31.0"
 description = "ML-augmented SMB share hunter (Snaffler successor)"
 requires-python = ">=3.10,<3.13"
 # Core runtime: pydantic for schemas + the Stage-1 path classifier

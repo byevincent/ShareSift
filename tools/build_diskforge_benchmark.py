@@ -18,19 +18,35 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
-# Credential-type label per planted path. The DiskForge populate
-# step interprets ``target`` as a *directory* and copies the source
-# file INTO it, so each planted file lands at
-# ``<target>/<source_basename>``. The labels below reflect the
-# actual post-build paths.
+# Credential-type label per planted path. DiskForge's populate
+# behavior is inconsistent: when a target directory is shared with
+# other add_files entries (v0.31's bigger image), the source file
+# lands at ``<target>/<source_basename>``; when the target is unique
+# to one entry (v0.29), the target itself becomes a directory and
+# the file is nested inside. We label BOTH path shapes so the
+# benchmark builder works regardless of how DiskForge resolved each
+# entry.
 _PLANT_LABELS: dict[str, str] = {
+    # v0.31 bare paths
+    "/Windows/Panther/unattend.xml": "windows_install_password",
+    "/inetpub/wwwroot/web.config": "iis_connection_string",
+    "/ProgramData/Microsoft/Group Policy/History/Preferences/Groups/Groups.xml": "gpp_cpassword",
+    "/Users/Administrator/Documents/passwords.kdbx": "keepass_database",
+    "/Users/Administrator/.aws/credentials": "aws_cli_credentials",
+    "/Users/Administrator/.ssh/id_rsa": "ssh_private_key",
+    "/Users/Administrator/.pypirc/pypirc": "pypi_upload_token",
+    "/Users/Administrator/AppData/Roaming/Microsoft/Windows/PowerShell/PSReadLine/ConsoleHost_history.txt": "powershell_history",
+    "/inetpub/wordpress/wp-config.php": "wp_config_db_password",
+    "/inetpub/wordpress/wp-config.php.bak": "wp_config_db_password",
+    "/Users/Administrator/Documents/server.ppk": "putty_ppk_unencrypted",
+    "/Users/Administrator/.config/gh/hosts.yml": "gh_cli_oauth_token",
+    # v0.29 nested-fallback variants (kept so the v0.29 build still labels)
     "/Windows/Panther/Unattend.xml/unattend.xml": "windows_install_password",
     "/inetpub/wwwroot/web.config/web.config": "iis_connection_string",
     "/ProgramData/Microsoft/Group Policy/History/Preferences/Groups/Groups.xml/Groups.xml": "gpp_cpassword",
     "/Users/Administrator/Documents/passwords.kdbx/passwords.kdbx": "keepass_database",
     "/Users/Administrator/.aws/credentials/credentials": "aws_cli_credentials",
     "/Users/Administrator/.ssh/id_rsa/id_rsa": "ssh_private_key",
-    "/Users/Administrator/.pypirc/pypirc": "pypi_upload_token",
     "/Users/Administrator/AppData/Roaming/Microsoft/Windows/PowerShell/PSReadLine/ConsoleHost_history.txt/ConsoleHost_history.txt": "powershell_history",
     "/inetpub/wordpress/wp-config.php/wp-config.php": "wp_config_db_password",
     "/inetpub/wordpress/wp-config.php.bak/wp-config.php.bak": "wp_config_db_password",
@@ -86,7 +102,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     args = p.parse_args(argv)
 
-    planted = {_normalize_path(t) for t in _read_manifest_targets(args.manifest)}
+    # ``_PLANT_LABELS`` is the SOURCE OF TRUTH for positives. The manifest
+    # may also contain decoy entries (added to dilute positive density to
+    # realistic levels); those are NEGATIVE by construction even though
+    # they appear in ``add_files``. Only paths that show up in
+    # ``_PLANT_LABELS`` get the has_credential=True label.
+    positive_paths = set(_PLANT_LABELS.keys())
 
     all_paths = [
         _normalize_path(line)
@@ -99,14 +120,15 @@ def main(argv: list[str] | None = None) -> int:
     args.output_dir.mkdir(parents=True, exist_ok=True)
     records: list[dict] = []
     for path in all_paths:
-        is_positive = path in planted
+        is_positive = path in positive_paths
         cred_type = _PLANT_LABELS.get(path)
         records.append({
             "path": path,
             "has_credential": is_positive,
             "credential_type": cred_type if is_positive else None,
             "verified": True,
-            "source": "diskforge_manifest" if is_positive else "diskforge_template_stub",
+            "source": "diskforge_manifest_positive" if is_positive
+                      else "diskforge_template_or_decoy",
         })
 
     (args.output_dir / "file_list.txt").write_text(
@@ -119,10 +141,10 @@ def main(argv: list[str] | None = None) -> int:
     n_pos = sum(1 for r in records if r["has_credential"])
     print(
         f"wrote {len(records)} records to {args.output_dir}; "
-        f"positives = {n_pos}, manifest targets = {len(planted)}"
+        f"positives = {n_pos}, _PLANT_LABELS expected = {len(positive_paths) // 2}"
     )
-    if n_pos != len(planted):
-        missing = sorted(planted - {_normalize_path(p) for p in all_paths})
+    if n_pos != len(positive_paths):
+        missing = sorted(positive_paths - {_normalize_path(p) for p in all_paths})
         print(f"  WARN: {len(missing)} planted target(s) not found in file list:")
         for m in missing[:5]:
             print(f"    {m}")

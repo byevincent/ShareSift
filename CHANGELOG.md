@@ -82,9 +82,62 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.31 — generate a larger DiskForge image (more negatives → realistic
-density, candidate for primary promotion); Azure + GCP verifiers
-(carryover); registry-hive parser when samples accessible.
+v0.32 — **resolve the GCP gap** (expand the extractor to surface the
+full service-account JSON, OR thread file content through the verify
+dispatcher); registry-hive parser when samples accessible.
+
+## [0.31.0] — 2026-06-08
+
+Azure storage verifier shipped; GCP service-account verifier deferred
+on a real architectural finding; DiskForge image grown to realistic
+positive density. Mid-iteration release shape: ship what's done,
+document what blocked.
+
+### Added
+
+- `src/sharesift/verify/azure_storage.py` — Shared Key (HMAC-SHA256)
+  signing for `GET /?comp=list` on `<account>.blob.core.windows.net`.
+  Read-only; never enumerates containers or mutates state. Completes
+  the v0.23 extractor→verifier loop for
+  `azure_storage_connection_string`.
+- `tools/diskforge_v0p31/build_manifest.py` — programmatically
+  generates 476 synthetic Windows-clutter decoys at realistic paths
+  (System32 binaries, event logs, prefetch, user profile clutter,
+  IIS logs). DiskForge: 519 records, 2.3% positive density —
+  comparable to MSF3 (3.8%) and MSF2 (2.3%).
+- `tools/build_diskforge_benchmark.py` uses `_PLANT_LABELS` as the
+  source of truth for positives, so decoy entries are labeled
+  negative even though they appear in the manifest.
+
+### Deferred (honest finding, not vague TODO)
+
+- **GCP service-account verifier.** The v0.23 extractor catches the
+  `client_email` field but not the `private_key`. A real verifier
+  needs the private key to sign an RS256 JWT for OAuth token
+  exchange. Closing this requires either expanding the extractor's
+  data model (capture the full SA JSON) OR threading file content
+  through the verify dispatcher. Both are larger than v0.31 scope.
+
+### Findings
+
+| Metric | v0.30 | v0.31 |
+|---|---|---|
+| Verifier coverage | 18 | **19** |
+| DiskForge records | 43 | **519** |
+| DiskForge density | 28% | **2.3%** |
+| DiskForge recall (supp) | 1.000 | 1.000 |
+| DiskForge top-10 (supp) | 0.60 | 0.60 |
+| MIN top-10 / MIN recall (primary) | 0.20 / 0.90 | 0.20 / 0.90 |
+
+DiskForge holds recall + top-10 across the density change — the
+cascade wasn't relying on the artificially-high positive density to
+look good. Stays supplementary because the negatives are synthetic
+stubs, not real Windows binaries.
+
+### Notes
+
+- Test count: **839 passing**, 8 skipped (was 833 — +6 Azure tests).
+- All HTTP mocked at `requests.request`; no live outbound calls.
 
 ## [0.30.0] — 2026-06-08
 

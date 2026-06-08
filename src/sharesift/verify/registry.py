@@ -87,6 +87,11 @@ def _load_twilio() -> type[BaseVerifier]:
     return TwilioVerifier
 
 
+def _load_azure_storage() -> type[BaseVerifier]:
+    from sharesift.verify.azure_storage import AzureStorageVerifier
+    return AzureStorageVerifier
+
+
 # Each loader returns the verifier class on first access; cached by
 # Python's import system thereafter.
 _REGISTRY: dict[str, Callable[[], type[BaseVerifier]]] = {
@@ -128,6 +133,8 @@ _REGISTRY: dict[str, Callable[[], type[BaseVerifier]]] = {
     "mailgun_api_key": _load_mailgun,
     "twilio_account_sid": _load_twilio,
     "twilio_api_key_sid": _load_twilio,
+    # v0.31 — Azure storage connection-string verifier (Shared Key auth).
+    "azure_storage_connection_string": _load_azure_storage,
 }
 
 
