@@ -3114,6 +3114,7 @@ content-training = [
 ]
 dev = [
     { name = "datasets" },
+    { name = "datasketch" },
     { name = "pytest" },
     { name = "python-docx" },
     { name = "ruff" },
@@ -3175,6 +3176,7 @@ content-training = [
 ]
 dev = [
     { name = "datasets", specifier = ">=4.3.0" },
+    { name = "datasketch", specifier = ">=1.6" },
     { name = "pytest" },
     { name = "python-docx", specifier = ">=1.2.0" },
     { name = "ruff" },

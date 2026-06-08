@@ -51,6 +51,7 @@ content-training = [
 ]
 dev = [
     "datasets>=4.3.0",
+    "datasketch>=1.6",
     "pytest",
     "python-docx>=1.2.0",
     "ruff",

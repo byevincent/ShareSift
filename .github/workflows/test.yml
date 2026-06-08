@@ -33,11 +33,11 @@ jobs:
       # artifacts aren't present anyway.
       - name: Install dependencies (lean)
         if: github.event_name == 'pull_request'
-        run: uv sync --group verify --group verify-cloud --group report --group dev
+        run: uv sync --group verify --group verify-cloud --group report --group pysnaffler-integration --group dev
 
       - name: Install dependencies (full)
         if: github.event_name == 'push'
-        run: uv sync --group content-inference --group verify --group verify-cloud --group report --group dev
+        run: uv sync --group content-inference --group verify --group verify-cloud --group report --group pysnaffler-integration --group dev
 
       - name: Run pytest
         run: uv run pytest -q
