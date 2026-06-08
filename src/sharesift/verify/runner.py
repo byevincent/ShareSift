@@ -34,9 +34,12 @@ def verify_records(
     rl = rate_limiter or RateLimiter(default_rate_per_sec=cfg.rate_limit_per_sec)
     supported = set(supported_credential_types())
 
+    # Materialize once so tqdm can show a total. The CLI always passes a
+    # list; tests pass small lists; the memory hit is bounded by the
+    # accumulated results list anyway.
+    records = list(records)
     results: list[dict] = []
-    total_verified = 0
-    for record in records:
+    for record in out.progress(records, desc="Verify", total=len(records)):
         excerpt = record.get("content_excerpt")
         extracted_fields = record.get("extracted_fields") or []
         cred_pairs = extract_user_password_pairs(extracted_fields)
@@ -71,9 +74,6 @@ def verify_records(
         new_record["verification_results"] = [v.to_dict() for v in verifications]
         new_record["verification_status"] = _aggregate_status(verifications)
         results.append(new_record)
-        total_verified += 1
-        if total_verified % 25 == 0:
-            out.info(f"  verified {total_verified} records")
     return results
 
 

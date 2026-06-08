@@ -76,3 +76,42 @@ def test_module_singleton_is_importable():
 
     assert isinstance(singleton, Output)
     assert singleton.verbosity == Verbosity.NORMAL
+
+
+# --- progress() ---
+
+
+def test_progress_disabled_returns_iterable_unchanged_under_quiet():
+    """QUIET avoids the tqdm import entirely. Returned object is the
+    raw iterable (no tqdm wrapper), no overhead."""
+    out = Output()
+    out.configure(verbosity=Verbosity.QUIET)
+    src = range(5)
+    wrapped = out.progress(src, desc="x")
+    assert wrapped is src
+
+
+def test_progress_passes_items_through_at_every_level():
+    """Iteration must yield the same items in the same order regardless
+    of verbosity. The bar is decoration; the iterable is the contract."""
+    for level in (Verbosity.QUIET, Verbosity.NORMAL, Verbosity.VERBOSE):
+        stream = io.StringIO()
+        out = Output(stream=stream)
+        out.configure(verbosity=level)
+        items = list(out.progress(range(5), desc=f"at-{level.name}", total=5))
+        assert items == [0, 1, 2, 3, 4], f"items mismatch at {level.name}"
+
+
+def test_progress_verbose_emits_bar_even_to_non_tty():
+    """At VERBOSE, the bar should appear in captured output even when
+    the stream isn't a TTY (StringIO emulates a piped stderr)."""
+    stream = io.StringIO()
+    out = Output(stream=stream)
+    out.configure(verbosity=Verbosity.VERBOSE)
+    # Consume the wrapped iterable to trigger tqdm rendering.
+    for _ in out.progress(range(3), desc="verbose-bar", total=3):
+        pass
+    captured = stream.getvalue()
+    assert "verbose-bar" in captured, (
+        f"expected tqdm to emit bar header at VERBOSE; captured: {captured!r}"
+    )

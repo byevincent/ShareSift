@@ -8,6 +8,7 @@ requires-python = ">=3.10,<3.13"
 # works with only these — no torch, no transformers required. Stage-2
 # inference adds the ``content-inference`` group on top (~3GB).
 dependencies = [
+    "tqdm>=4.66",
     "pydantic>=2.0",
     "scikit-learn>=1.5",
     "lightgbm>=4.5",

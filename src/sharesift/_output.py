@@ -30,13 +30,16 @@ from __future__ import annotations
 
 import sys
 from enum import IntEnum
-from typing import TextIO
+from typing import Iterable, TextIO, TypeVar
 
 
 class Verbosity(IntEnum):
     QUIET = 0
     NORMAL = 1
     VERBOSE = 2
+
+
+_T = TypeVar("_T")
 
 
 class Output:
@@ -70,6 +73,36 @@ class Output:
 
     def error(self, msg: str) -> None:
         self._emit(msg)
+
+    def progress(
+        self,
+        iterable: Iterable[_T],
+        desc: str,
+        total: int | None = None,
+    ) -> Iterable[_T]:
+        """Wrap iterable with a tqdm progress bar gated by verbosity.
+
+        QUIET   → returns the iterable as-is (no tqdm import, no overhead).
+        NORMAL  → tqdm with ``disable=None`` so it auto-suppresses on
+                  non-TTY stderr (CI logs, file redirects).
+        VERBOSE → tqdm with ``disable=False`` — always shown, even
+                  non-TTY, so debugging operators see the bar in captured
+                  logs.
+        """
+        if self._verbosity == Verbosity.QUIET:
+            return iterable
+        try:
+            from tqdm import tqdm
+        except ImportError:
+            # tqdm should be installed (it's a direct dep) but be defensive.
+            return iterable
+        return tqdm(
+            iterable,
+            desc=desc,
+            total=total,
+            disable=None if self._verbosity == Verbosity.NORMAL else False,
+            file=self._stream,
+        )
 
     def _emit(self, msg: str) -> None:
         print(msg, file=self._stream, flush=True)

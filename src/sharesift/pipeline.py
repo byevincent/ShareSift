@@ -19,6 +19,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Literal
 
+from sharesift._output import out
 from sharesift.content import ContentClassifier
 from sharesift.path import PathClassifier
 
@@ -127,14 +128,19 @@ class Scanner:
         paths = [p for p, _ in items]
         path_results = self.path_classifier.score_batch(paths)
 
-        out: list[ScanResult] = []
-        for (path, content), p_result in zip(items, path_results):
+        results: list[ScanResult] = []
+        iterator = out.progress(
+            zip(items, path_results),
+            desc="Content scan",
+            total=len(items),
+        )
+        for (path, content), p_result in iterator:
             extracted = _run_parsers(path, content)
             should_check = content is not None and (
                 p_result.tier is not None or force_content
             )
             if not should_check:
-                out.append(
+                results.append(
                     ScanResult(
                         path=path,
                         path_probability=p_result.probability,
@@ -148,7 +154,7 @@ class Scanner:
                 continue
             assert content is not None  # narrowed by should_check
             c_result = self.content_classifier.score(content)
-            out.append(
+            results.append(
                 ScanResult(
                     path=path,
                     path_probability=p_result.probability,
@@ -159,7 +165,7 @@ class Scanner:
                     extracted_fields=extracted,
                 )
             )
-        return out
+        return results
 
 
 def _run_parsers(path: str, content: str | None) -> list[dict]:

@@ -3094,6 +3094,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "scikit-learn", version = "1.7.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "scikit-learn", version = "1.8.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "tqdm" },
 ]
 
 [package.dev-dependencies]
@@ -3156,6 +3157,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26" },
     { name = "pydantic", specifier = ">=2.0" },
     { name = "scikit-learn", specifier = ">=1.5" },
+    { name = "tqdm", specifier = ">=4.66" },
 ]
 
 [package.metadata.requires-dev]
