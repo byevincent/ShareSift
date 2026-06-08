@@ -92,6 +92,11 @@ def _load_azure_storage() -> type[BaseVerifier]:
     return AzureStorageVerifier
 
 
+def _load_gcp_service_account() -> type[BaseVerifier]:
+    from sharesift.verify.gcp_service_account import GcpServiceAccountVerifier
+    return GcpServiceAccountVerifier
+
+
 # Each loader returns the verifier class on first access; cached by
 # Python's import system thereafter.
 _REGISTRY: dict[str, Callable[[], type[BaseVerifier]]] = {
@@ -135,6 +140,9 @@ _REGISTRY: dict[str, Callable[[], type[BaseVerifier]]] = {
     "twilio_api_key_sid": _load_twilio,
     # v0.31 — Azure storage connection-string verifier (Shared Key auth).
     "azure_storage_connection_string": _load_azure_storage,
+    # v0.32 — GCP service-account JSON verifier (structural; live OAuth
+    # exchange is v0.33+).
+    "gcp_service_account_json": _load_gcp_service_account,
 }
 
 

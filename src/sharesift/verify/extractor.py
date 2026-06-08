@@ -121,6 +121,39 @@ _SSH_KEY_PATTERN = re.compile(
 )
 
 
+# v0.32: GCP service-account JSON — multi-field detection.
+#
+# A real SA file is a flat JSON object with no nested values; we look for
+# objects containing all three of `"type": "service_account"`,
+# `"private_key": "..."`, and `"client_email": "...iam.gserviceaccount.com"`.
+# The regex captures the whole `{...}` block so the verifier gets
+# everything (including the private_key for OAuth JWT signing,
+# v0.33+ if/when live verification lands).
+_GCP_SA_JSON_PATTERN = re.compile(
+    r'\{[^{}]*?'
+    r'"type"\s*:\s*"service_account"'
+    r'[^{}]*?'
+    r'"private_key"\s*:\s*"-----BEGIN PRIVATE KEY-----'
+    r'[^{}]*?'
+    r'"client_email"\s*:\s*"[a-z0-9\-]+@[a-z0-9\-]+\.iam\.gserviceaccount\.com"'
+    r'[^{}]*?'
+    r'\}',
+    re.DOTALL,
+)
+_GCP_SA_JSON_ALT_PATTERN = re.compile(
+    # Same fields in a different order; SA JSON field order varies.
+    r'\{[^{}]*?'
+    r'"client_email"\s*:\s*"[a-z0-9\-]+@[a-z0-9\-]+\.iam\.gserviceaccount\.com"'
+    r'[^{}]*?'
+    r'"private_key"\s*:\s*"-----BEGIN PRIVATE KEY-----'
+    r'[^{}]*?'
+    r'"type"\s*:\s*"service_account"'
+    r'[^{}]*?'
+    r'\}',
+    re.DOTALL,
+)
+
+
 def extract_credentials(excerpt: str) -> list[ExtractedCredential]:
     """Find all known credential formats in ``excerpt``.
 
@@ -162,4 +195,20 @@ def extract_credentials(excerpt: str) -> list[ExtractedCredential]:
                 span=(m.start(), m.end()),
             )
         )
+
+    # v0.32: GCP service-account JSON — full object capture for the verifier.
+    for pattern in (_GCP_SA_JSON_PATTERN, _GCP_SA_JSON_ALT_PATTERN):
+        for m in pattern.finditer(excerpt):
+            value = m.group(0)
+            cred_key = ("gcp_service_account_json", value)
+            if cred_key in seen:
+                continue
+            seen.add(cred_key)
+            out.append(
+                ExtractedCredential(
+                    credential_type="gcp_service_account_json",
+                    value=value,
+                    span=(m.start(), m.end()),
+                )
+            )
     return out

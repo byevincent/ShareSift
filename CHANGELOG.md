@@ -82,9 +82,56 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.32 — **resolve the GCP gap** (expand the extractor to surface the
-full service-account JSON, OR thread file content through the verify
-dispatcher); registry-hive parser when samples accessible.
+v0.33 — **live OAuth GCP verification** (JWT signing + token exchange);
+registry-hive parser when samples accessible; optional DiskForge GCP SA
+JSON plant for end-to-end coverage.
+
+## [0.32.0] — 2026-06-08
+
+**Half the GCP gap closed (extractor side).** v0.31 surfaced that the
+v0.23 GCP extractor caught only the `client_email` field; a real
+verifier needs the full SA JSON. v0.32 adds a multi-field extractor
+that captures the entire `{...}` block + a structural verifier that
+validates required fields, PEM-shaped private key, well-formed email.
+Live OAuth verification (RS256 JWT signing + token exchange) stays
+queued for v0.33+ — would add `pyjwt` as opt-in dep.
+
+### Added
+
+- `gcp_service_account_json` credential type — extractor multi-field
+  regex captures the whole `{...}` JSON block (both field orders:
+  `type → private_key → client_email` and the reverse).
+- `src/sharesift/verify/gcp_service_account.py` — `GcpServiceAccountVerifier`
+  does structural validation. Verdict matrix:
+  - `passed` (validation_mode: structural) when required fields are
+    present, `type == service_account`, `private_key` is
+    PEM-shaped, and `client_email` matches the IAM regex
+  - `failed` with a specific error key (`missing_fields:...`,
+    `wrong_type:...`, `malformed_client_email`,
+    `private_key_not_pem_shaped`, `not_valid_json: <reason>`)
+  - No external HTTP calls.
+
+### Findings
+
+| Metric | v0.31 | v0.32 |
+|---|---|---|
+| Verifier coverage | 19 | **20** |
+| Extractor patterns | 30 (1 GCP-email) | 31 (1 GCP-email + 1 GCP-JSON) |
+| MIN top-10 / MIN recall (primary) | 0.20 / 0.90 | **0.20 / 0.90** |
+
+Harness numbers unchanged — none of the primary held-out sets
+contain GCP SA JSON files. Verifier behavior covered exhaustively
+in `tests/test_gcp_v0p32.py`.
+
+### Notes
+
+- v0.23 `gcp_service_account_email` extractor stays — older scan
+  outputs and the v0.30 rule engine keep working.
+- Operator note (in verifier docstring): structural `passed` means
+  the credential is well-formed and ready for live verification with
+  `gcloud auth activate-service-account`. It does NOT confirm the
+  key hasn't been revoked. Live OAuth verification is v0.33+.
+- Test count: **849 passing**, 8 skipped (was 839 — +10 GCP).
 
 ## [0.31.0] — 2026-06-08
 
