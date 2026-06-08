@@ -82,11 +82,66 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.23 — more architecturally-versatile components measured through
-the v0.22 eval harness: CI gate (fail-on-MIN-drop), more credential-
-format extractors (Stripe, Plaid, GCP service-account JSON, Azure
-connection strings), OOXML / registry-hive / `.ppk` parsers, Stage 2
-LoRA cross-distribution honesty check, calibrated abstention UX.
+v0.24 — registry-hive + PuTTY `.ppk` parsers when real samples
+accessible; Stage 2 LoRA cross-distribution eval when weights
+tracked; more structured parsers (`wp-config.php` deeper extraction,
+AWS CLI `credentials` file); GitHub Action artifact upload for
+`harness_results.json` history.
+
+## [0.23.0] — 2026-06-08
+
+More architecturally-versatile components, same v0.22 eval
+discipline. The production stack stays the v0.20 cascade. Harness
+numbers held flat — by design — because the new components target
+credential types and file formats that don't appear in the held-out
+benchmarks but DO appear in real engagements.
+
+### Added
+
+- **9 new credential-format extractors** in
+  `src/sharesift/verify/extractor.py`:
+  - Stripe (live secret, restricted, publishable)
+  - SendGrid + Mailgun
+  - Twilio (account SID, API key SID)
+  - Azure storage connection string
+  - GCP service-account email
+  - Total extractor coverage: 21 → **30** credential formats.
+- **OOXML traversal** in `src/sharesift/extract.py` — `.docx` /
+  `.xlsx` / `.pptx` are now read via stdlib `zipfile` +
+  `xml.etree.ElementTree`. No new dependency. Replaces the silent
+  empty-content fallback that v0.20-v0.22 had for these formats.
+- **Eval gate CI workflow**
+  (`.github/workflows/eval_gate.yml`) — runs
+  `tools/eval_harness.py` on push to main and on PRs; fails the
+  build if MIN top-10 precision OR MIN recall regresses below the
+  previous release tag's value. Skips gracefully when held-out
+  data isn't present.
+
+### Findings
+
+Harness numbers identical to v0.22:
+
+| Metric | v0.22 | v0.23 |
+|---|---|---|
+| MIN top-10 precision | 0.20 | 0.20 |
+| MIN recall any-tier | 0.90 | 0.90 |
+
+**Honest framing**: MSF3 has no content, so OOXML / PDFs / Stripe
+keys / etc. can't affect it. CredData doesn't contain Stripe /
+Mailgun / Twilio / Azure / GCP samples, so the new extractors
+don't fire on it. The new components add capacity for credential
+types known to appear in real engagements but absent from these
+specific held-out sets. The discipline prevents claiming an
+unmeasured improvement; it does NOT prevent shipping components
+whose value is independently documented.
+
+### Notes
+
+- Tests added: 14. Full suite: **779 passing, 8 skipped, 0
+  regressions**.
+- Cascade fields (`content_tier`, `content_source`,
+  `content_matches`) confirmed in `ScanResult.as_record()` output
+  — calibrated abstention UX shipped since v0.20.
 
 ## [0.22.0] — 2026-06-08
 

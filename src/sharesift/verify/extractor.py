@@ -77,6 +77,39 @@ _PATTERNS: list[tuple[str, re.Pattern]] = [
     ("slack_bot_token", re.compile(r"xoxb-[0-9]+-[0-9]+-[A-Za-z0-9]+")),
     ("slack_user_token", re.compile(r"xoxp-[0-9]+-[0-9]+-[0-9]+-[a-f0-9]+")),
     ("slack_workspace_token", re.compile(r"xoxa-[0-9]+-[0-9]+-[0-9]+-[a-f0-9]+")),
+    # ---- Payments (v0.23) ---------------------------------------------
+    ("stripe_live_secret", re.compile(r"sk_live_[A-Za-z0-9]{24,}")),
+    ("stripe_live_restricted", re.compile(r"rk_live_[A-Za-z0-9]{24,}")),
+    ("stripe_live_publishable", re.compile(r"pk_live_[A-Za-z0-9]{24,}")),
+    # ---- Email infra (v0.23) ------------------------------------------
+    (
+        "sendgrid_api_key",
+        re.compile(r"SG\.[A-Za-z0-9_\-]{22}\.[A-Za-z0-9_\-]{43}"),
+    ),
+    ("mailgun_api_key", re.compile(r"key-[a-f0-9]{32}")),
+    # ---- Voice / SMS infra (v0.23) ------------------------------------
+    ("twilio_account_sid", re.compile(r"AC[a-f0-9]{32}")),
+    ("twilio_api_key_sid", re.compile(r"SK[a-f0-9]{32}")),
+    # ---- Cloud storage / IAM (v0.23) ----------------------------------
+    (
+        "azure_storage_connection_string",
+        re.compile(
+            r"DefaultEndpointsProtocol=https?;"
+            r"AccountName=[A-Za-z0-9]+;"
+            r"AccountKey=[A-Za-z0-9+/=]{40,}"
+        ),
+    ),
+    # GCP service-account JSON has a distinctive client_email shape
+    # (always ends in @<project>.iam.gserviceaccount.com). Catches the
+    # presence of a service account key file in content — the actual
+    # private-key block in the JSON is caught by the SSH-key matcher
+    # separately if escaping leaves a PEM-shaped line accessible.
+    (
+        "gcp_service_account_email",
+        re.compile(
+            r'"client_email"\s*:\s*"[a-z0-9\-]+@[a-z0-9\-]+\.iam\.gserviceaccount\.com"'
+        ),
+    ),
 ]
 
 

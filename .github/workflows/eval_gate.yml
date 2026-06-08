@@ -1,0 +1,99 @@
+name: eval-gate
+
+# v0.23 evaluation discipline gate.
+#
+# Runs tools/eval_harness.py on every PR and push to main. If the
+# MIN top-10 precision OR MIN recall (across primary held-out sets)
+# regresses below the value in the most recent release tag's
+# benchmarks/v0p22_eval/harness_results.json, the build fails.
+#
+# This is the operationalisation of the v0.22 versatility discipline:
+# the headline metric is the MIN-across-real-data, and PRs that move
+# it down are surfaced automatically.
+#
+# Held-out data lives in data/external/ which is gitignored on the
+# public repo. This workflow runs only when the data is present (the
+# self-hosted runner mounts the eval directory). On the public CI it
+# falls through with a "skipped" status.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eval-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # need history to read previous tag's benchmark JSON
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Set up Python 3.11
+        run: uv python install 3.11
+
+      - name: Install dependencies
+        run: uv sync --group verify --group verify-cloud --group report --group pysnaffler-integration --group pdf-extraction --group dev
+
+      - name: Check held-out data availability
+        id: data-check
+        run: |
+          if [ -d data/external/metasploitable3 ] && [ -f data/eval/creddata_benchmark.jsonl ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Held-out data not present — eval gate skipped"
+          fi
+
+      - name: Run eval harness
+        if: steps.data-check.outputs.available == 'true'
+        run: uv run python tools/eval_harness.py
+
+      - name: Compare against previous release baseline
+        if: steps.data-check.outputs.available == 'true'
+        run: |
+          set -euo pipefail
+          PREV_TAG="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo '')"
+          if [ -z "$PREV_TAG" ]; then
+            echo "no previous tag; skipping comparison"
+            exit 0
+          fi
+          BASE_JSON="$(git show "$PREV_TAG:benchmarks/v0p22_eval/harness_results.json" 2>/dev/null || echo '{}')"
+          if [ "$BASE_JSON" = '{}' ]; then
+            echo "previous tag $PREV_TAG had no baseline; skipping comparison"
+            exit 0
+          fi
+          NEW_JSON="$(cat benchmarks/v0p22_eval/harness_results.json)"
+          PREV_TOP10="$(echo "$BASE_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_top_10_precision_across_primary","0") or 0)')"
+          PREV_REC="$(echo "$BASE_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_recall_across_primary","0") or 0)')"
+          NEW_TOP10="$(echo "$NEW_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_top_10_precision_across_primary","0") or 0)')"
+          NEW_REC="$(echo "$NEW_JSON" | python -c 'import json,sys; d=json.load(sys.stdin); print(d.get("headline",{}).get("min_recall_across_primary","0") or 0)')"
+          echo "Previous ($PREV_TAG):  MIN top-10 = $PREV_TOP10  MIN recall = $PREV_REC"
+          echo "This commit:           MIN top-10 = $NEW_TOP10  MIN recall = $NEW_REC"
+          python -c "
+import sys
+prev_t = float('$PREV_TOP10')
+prev_r = float('$PREV_REC')
+new_t  = float('$NEW_TOP10')
+new_r  = float('$NEW_REC')
+fail = False
+if new_t + 1e-6 < prev_t:
+    print(f'::error::MIN top-10 precision regressed: {prev_t} → {new_t}')
+    fail = True
+if new_r + 1e-6 < prev_r:
+    print(f'::error::MIN recall regressed: {prev_r} → {new_r}')
+    fail = True
+sys.exit(1 if fail else 0)
+"

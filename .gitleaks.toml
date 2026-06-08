@@ -17,6 +17,7 @@ paths = [
     '''tests/test_verify_extractor\.py''',
     '''tests/test_verify_runner\.py''',
     '''tests/test_verify_ssh_extractor\.py''',
+    '''tests/test_extractor_v0p23\.py''',  # v0.23: 9 new credential-shape fixtures
     # Compiled bytecode mirrors the same fixtures; covered for local
     # `gitleaks detect --no-git` runs (CI scans the git tree only).
     '''.*\.pyc$''',

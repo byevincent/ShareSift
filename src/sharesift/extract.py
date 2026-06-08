@@ -51,6 +51,77 @@ def _extract_pdf(path: Path) -> str | None:
     return "\n".join(chunks)
 
 
+# v0.23: OOXML (docx/xlsx/pptx) traversal. These files are ZIP archives
+# of XML. The stdlib has everything we need — zipfile + ElementTree —
+# so no new dependency.
+_OOXML_TEXT_MEMBERS = {
+    ".docx": ("word/document.xml",),
+    ".xlsx": (
+        "xl/sharedStrings.xml",
+        # Sheet data lives in xl/worksheets/sheet*.xml; enumerated at extract time.
+    ),
+    ".pptx": (),  # enumerated dynamically
+}
+
+
+def _extract_ooxml(path: Path, ext: str) -> str | None:
+    """Best-effort text extraction from a .docx/.xlsx/.pptx file.
+
+    The file is a ZIP of XML. We open the relevant entries, strip the
+    XML tags, and concatenate the text content. Anything that doesn't
+    parse cleanly returns None — caller falls back to None content.
+    """
+    import xml.etree.ElementTree as ET
+    import zipfile
+
+    try:
+        zf = zipfile.ZipFile(str(path))
+    except (zipfile.BadZipFile, OSError):
+        return None
+
+    chunks: list[str] = []
+    try:
+        names = set(zf.namelist())
+        targets: list[str] = []
+        # Static entries per extension.
+        for member in _OOXML_TEXT_MEMBERS.get(ext, ()):
+            if member in names:
+                targets.append(member)
+        # Dynamic worksheet / slide enumeration.
+        if ext == ".xlsx":
+            targets.extend(
+                n for n in sorted(names)
+                if n.startswith("xl/worksheets/sheet") and n.endswith(".xml")
+            )
+        elif ext == ".pptx":
+            targets.extend(
+                n for n in sorted(names)
+                if n.startswith("ppt/slides/slide") and n.endswith(".xml")
+            )
+
+        for member in targets:
+            try:
+                xml_bytes = zf.read(member)
+            except KeyError:
+                continue
+            try:
+                root = ET.fromstring(xml_bytes)
+            except ET.ParseError:
+                continue
+            # Concatenate every text node — the XML schema differs across
+            # OOXML doc types but every text-carrying element is a tag
+            # containing #text.
+            for el in root.iter():
+                if el.text:
+                    chunks.append(el.text)
+    finally:
+        zf.close()
+
+    if not chunks:
+        return None
+    return "\n".join(chunks)
+
+
 def _read_text(path: Path) -> str | None:
     try:
         return path.read_text(encoding="utf-8", errors="replace")
@@ -81,6 +152,8 @@ def load_content(
 
     if ext == ".pdf":
         text = _extract_pdf(path)
+    elif ext in (".docx", ".xlsx", ".pptx"):
+        text = _extract_ooxml(path, ext)
     else:
         text = _read_text(path)
 
