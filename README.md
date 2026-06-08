@@ -16,6 +16,8 @@ ShareSift adds an ML layer on top. The path classifier beats Snaffler on recall 
 
 ## Performance
 
+Classifier-level on held-out splits:
+
 | Metric | ShareSift | Baseline |
 |---|---|---|
 | Windows path classifier PR AUC, Snaffler blind benchmark | 0.985 | Snaffler has no ML |
@@ -25,7 +27,16 @@ ShareSift adds an ML layer on top. The path classifier beats Snaffler on recall 
 | Content classifier precision on docx benchmark | 0.974 | 2.6% false positive rate |
 | End to end F1 on constructed share benchmark | 0.387 | v0p5 0.166 |
 
-See [docs/audit_2026-05-31.md](docs/audit_2026-05-31.md) for calibration details and the full audit story.
+Head-to-head against Snaffler on benchmark shares:
+
+| Share | Metric | ShareSift | Snaffler |
+|---|---|---|---|
+| Metasploitable 3 (Windows, 40 credentials) | Recall | 100% (40/40) | 97.5% (39/40) |
+| Metasploitable 3 | Top-10 precision | 1.000 | 0.000 |
+| GOAD (Linux, 18 credentials) | Recall | 100% (18/18) | 55.6% (10/18) |
+| GOAD | Precision (full flag set) | 85.7% (18/21) | 76.9% (10/13) |
+
+See [docs/audit_2026-05-31.md](docs/audit_2026-05-31.md) for calibration details, [docs/v0p14_results.md](docs/v0p14_results.md) for the Metasploitable 3 head-to-head, and [docs/v0p15_results.md](docs/v0p15_results.md) for GOAD.
 
 ## Install
 
