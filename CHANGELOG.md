@@ -82,10 +82,55 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.28 — investigate the MSF3-specific precision floor (path classifier
-saturation pattern documented in v0.21 validation); Azure storage +
-GCP service-account verifiers; another held-out set (DC-1, Kioptrix,
-Mr-Robot); registry-hive parser when samples accessible.
+v0.29 — acquire another Windows-shaped held-out share (turn the MSF3
+"share-specific" claim into evidence vs. counterexample); Azure storage
+account verifier; GCP service-account verifier; registry-hive parser
+when samples accessible.
+
+## [0.28.0] — 2026-06-08
+
+**Falsified-hypothesis release.** Tested a declarative extension-
+frequency penalty by analogy to v0.22's filename penalty. The
+harness rejected it: MSF3 top-10 0.20 → 0.10, MSF2 top-10
+0.80 → 0.40, MIN 0.20 → 0.10. Backed out instead of iterating
+against the data (which would be the exact overfitting v0.22
+disciplined against).
+
+### Why it failed
+
+The hypothesis ("credentials cluster in minority-extension files")
+was Windows + dev-share shaped. Linux server credential files live
+in **common-extension types** — `.conf` (proftpd / asterisk /
+samba / openldap), `.cnf` (mysql), `.php` (DVWA / TikiWiki /
+phpMyAdmin). Penalising those by extension frequency tanked their
+ranking on MSF2, which is exactly where they live.
+
+### Changed
+
+- `tools/eval_harness.py` — the failed v0.28 code was implemented,
+  measured against the harness, then reverted to v0.22's filename-
+  frequency-only scoring. Comment on `_score_with_dedup_penalty`
+  now documents the failed hypothesis so a future contributor sees
+  it before re-running the experiment.
+
+### Findings
+
+| Metric | v0.27 | v0.28 |
+|---|---|---|
+| MIN top-10 (primary) | 0.20 | 0.20 |
+| MIN recall (primary) | 0.90 | 0.90 |
+
+7-release flat trajectory now includes one explicit "tested-and-
+rejected" entry. That's the eval gate functioning as designed.
+
+### Notes
+
+- No production code changes shipped. The Scanner cascade,
+  rules engine, parsers, extractors all unchanged from v0.27.
+- Test suite unchanged: 821 passing.
+- Azure storage verifier (carryover from v0.26) deferred to v0.29
+  to keep the v0.28 message focused on the falsified-hypothesis
+  finding.
 
 ## [0.27.0] — 2026-06-08
 

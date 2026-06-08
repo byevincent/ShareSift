@@ -92,11 +92,21 @@ def _score_with_dedup_penalty(records: list[dict]) -> list[float]:
 
     1. ``max(path_probability, cascade_pseudo_p)`` — the best
        per-file evidence we have from Stage 1 + the v0.20 cascade.
-    2. **Filename-frequency penalty** — files whose basename appears
-       N times in the same share are likely package-manager
+    2. **Filename-frequency penalty** (v0.22) — files whose basename
+       appears N times in the same share are likely package-manager
        installations, build artifacts, or boilerplate. The v0.14
        LightGBM ranker learned this; we replicate it declaratively
        as ``score / sqrt(filename_frequency)``.
+
+    **NOT IN USE: Extension-frequency penalty.** v0.28 tried adding
+    an ``score / sqrt(extension_frequency)`` divisor on the theory
+    that minority-extension files carry more credential signal. The
+    harness rejected it: MSF3 top-10 dropped 0.20 → 0.10 AND MSF2
+    dropped 0.80 → 0.40. Real Linux credential files live in
+    common-extension types (.conf, .cnf, .php) which the penalty
+    tanked. The hypothesis was wrong-shaped; the discipline said
+    back out rather than iterate against the harness. See
+    ``docs/v0p28_results.md`` for the falsified-hypothesis writeup.
 
     No per-benchmark tuning. ``filename_frequency`` is computed at
     scoring time from the records list alone — same logic on every
