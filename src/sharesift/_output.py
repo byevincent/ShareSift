@@ -28,9 +28,10 @@ Usage::
 
 from __future__ import annotations
 
+import json as _json
 import sys
 from enum import IntEnum
-from typing import Iterable, TextIO, TypeVar
+from typing import Any, Iterable, TextIO, TypeVar
 
 
 class Verbosity(IntEnum):
@@ -52,13 +53,19 @@ class Output:
     def __init__(self, stream: TextIO | None = None) -> None:
         self._verbosity = Verbosity.NORMAL
         self._stream = stream if stream is not None else sys.stderr
+        self._json_enabled = False
 
-    def configure(self, *, verbosity: Verbosity) -> None:
+    def configure(self, *, verbosity: Verbosity, json: bool = False) -> None:
         self._verbosity = verbosity
+        self._json_enabled = json
 
     @property
     def verbosity(self) -> Verbosity:
         return self._verbosity
+
+    @property
+    def json_enabled(self) -> bool:
+        return self._json_enabled
 
     def info(self, msg: str) -> None:
         if self._verbosity >= Verbosity.NORMAL:
@@ -103,6 +110,24 @@ class Output:
             disable=None if self._verbosity == Verbosity.NORMAL else False,
             file=self._stream,
         )
+
+    def summary(self, payload: dict[str, Any]) -> None:
+        """Emit a structured end-of-run JSON summary if --json is on.
+
+        No-op otherwise; subcommands always call this at end-of-run with
+        their per-command schema. When --json is off, the human-readable
+        ``out.info(...)`` lines emitted during the run are the user's
+        summary; this method just stays silent.
+
+        Independent of verbosity: ``--quiet --json`` still emits the
+        summary block (it's how callers extract structured data); only
+        the human info/progress lines get silenced. ``--verbose --json``
+        emits both the debug detail and the trailing summary block.
+        """
+        if not self._json_enabled:
+            return
+        self._stream.write(_json.dumps(payload) + "\n")
+        self._stream.flush()
 
     def _emit(self, msg: str) -> None:
         print(msg, file=self._stream, flush=True)

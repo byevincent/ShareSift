@@ -29,6 +29,7 @@ import argparse
 import json
 import os
 import sys
+import time
 import warnings
 from pathlib import Path
 
@@ -128,6 +129,7 @@ def _parse_target_file(target_file: Path | None) -> dict:
 
 
 def cmd_score_paths(args: argparse.Namespace) -> int:
+    start = time.monotonic()
     paths = _read_paths(args.input, args.stdin)
     out.info(f"Loaded {len(paths)} paths")
     clf = _build_path_classifier(args)
@@ -147,6 +149,16 @@ def cmd_score_paths(args: argparse.Namespace) -> int:
     _emit_jsonl(records, args.output)
     n_tiered = sum(1 for r in results if r.tier is not None)
     out.info(f"Wrote {len(records)} records ({n_tiered} tier-flagged)")
+    out.summary({
+        "command": "score-paths",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "input_count": len(paths),
+        "output_count": len(records),
+        "tier_flagged": n_tiered,
+        "output_path": str(args.output) if args.output else None,
+        "exit_code": 0,
+    })
     return 0
 
 
@@ -155,6 +167,7 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
     # users don't pay for it.
     from sharesift.content import ContentClassifier
 
+    start = time.monotonic()
     paths = _read_paths(args.input, args.stdin)
     out.info(f"Loaded {len(paths)} paths")
     out.debug(
@@ -200,6 +213,24 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
         f"Wrote {len(records)} records "
         f"(content: {n_yes} yes / {n_no} no / {n_skipped} skipped)"
     )
+    out.summary({
+        "command": "scan-files",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "input_count": len(paths),
+        "output_count": len(records),
+        "content_yes": n_yes,
+        "content_no": n_no,
+        "content_skipped": n_skipped,
+        "model": {
+            "content_model_dir": (
+                str(args.content_model_dir) if args.content_model_dir else None
+            ),
+            "device": args.device,
+        },
+        "output_path": str(args.output) if args.output else None,
+        "exit_code": 0,
+    })
     return 0
 
 
@@ -227,16 +258,29 @@ def cmd_retrain_ranker(args: argparse.Namespace) -> int:
 def cmd_render_report(args: argparse.Namespace) -> int:
     from sharesift.report import render_html
 
+    start = time.monotonic()
     records = _read_jsonl(args.input, args.stdin)
     out.info(f"Loaded {len(records)} records")
     report_path = render_html(records, args.output, title=args.title)
-    out.info(f"Wrote {report_path} ({report_path.stat().st_size // 1024} KB)")
+    size_kb = report_path.stat().st_size // 1024
+    out.info(f"Wrote {report_path} ({size_kb} KB)")
+    out.summary({
+        "command": "render-report",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "input_count": len(records),
+        "output_path": str(report_path),
+        "output_size_kb": size_kb,
+        "title": args.title,
+        "exit_code": 0,
+    })
     return 0
 
 
 def cmd_verify(args: argparse.Namespace) -> int:
     from sharesift.verify import VerifyConfig, verify_records
 
+    start = time.monotonic()
     records = _read_jsonl(args.input, args.stdin)
     out.info(f"Loaded {len(records)} hit records")
     out.debug(
@@ -278,6 +322,17 @@ def cmd_verify(args: argparse.Namespace) -> int:
         by_status[s] = by_status.get(s, 0) + 1
     summary = ", ".join(f"{k}={v}" for k, v in sorted(by_status.items()))
     out.info(f"Verification summary: {summary}")
+    out.summary({
+        "command": "verify",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "input_count": len(records),
+        "output_count": len(verified),
+        "by_status": by_status,
+        "dry_run": args.dry_run,
+        "output_path": str(args.output) if args.output else None,
+        "exit_code": 0,
+    })
     return 0
 
 
@@ -343,6 +398,14 @@ def main(argv: list[str] | None = None) -> int:
         help=(
             "Emit debug detail (model dirs, batch sizes, timings) and "
             "re-enable 3rd-party deprecation warnings."
+        ),
+    )
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help=(
+            "Emit a structured end-of-run JSON summary on stderr. "
+            "Independent of -q/-v; stdout stays pure JSONL."
         ),
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -502,7 +565,7 @@ def main(argv: list[str] | None = None) -> int:
         verbosity = Verbosity.VERBOSE
     else:
         verbosity = Verbosity.NORMAL
-    out.configure(verbosity=verbosity)
+    out.configure(verbosity=verbosity, json=args.json)
     _install_warning_filters(verbosity)
     return args.func(args)
 
