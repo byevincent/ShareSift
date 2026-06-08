@@ -1,0 +1,53 @@
+{
+  "theme": "healthcare",
+  "pipeline": "v0.20 cascade (parsers + rules + extractor)",
+  "n_files": 80,
+  "n_salted": 27,
+  "recall_on_salted": 0.5926,
+  "v0p19_recall_on_salted": 0.3704,
+  "recall_delta_pp": 22.2,
+  "top_k_precision": {
+    "top_10": 0.5,
+    "top_20": 0.45,
+    "top_50": 0.4
+  },
+  "cascade_source_distribution_all": {
+    "cascade+path": 19,
+    "path": 9,
+    "rules": 17,
+    "none": 35
+  },
+  "cascade_source_distribution_caught_salted": {
+    "cascade+path": 6,
+    "path": 4,
+    "rules": 6
+  },
+  "n_unmatched_salted": 11,
+  "bottom_misses_examples": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Clinical/Lab/billing_summary_0022.docx",
+      "filename_token": "billing_summary",
+      "salted_credential_type": "db_password"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Clinical/Lab/billing_summary_0029.docx",
+      "filename_token": "billing_summary",
+      "salted_credential_type": "db_password"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Clinical/Lab/billing_summary_0076.pdf",
+      "filename_token": "billing_summary",
+      "salted_credential_type": "ehr_account"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Compliance/HIPAA/consent_form_0069.hl7",
+      "filename_token": "consent_form",
+      "salted_credential_type": "db_password"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/healthcare/share/Billing/Coding/immunization_record_0027.pdf",
+      "filename_token": "immunization_record",
+      "salted_credential_type": "db_password"
+    }
+  ]
+}

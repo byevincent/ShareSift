@@ -1,6 +1,6 @@
 [project]
 name = "sharesift"
-version = "0.19.0"
+version = "0.20.0"
 description = "ML-augmented SMB share hunter (Snaffler successor)"
 requires-python = ">=3.10,<3.13"
 # Core runtime: pydantic for schemas + the Stage-1 path classifier
@@ -81,6 +81,11 @@ llm-labeling = [
 # enumeration loop. See ``src/sharesift/pysnaffler_rule.py``.
 pysnaffler-integration = [
     "pysnaffler>=0.0.1",
+]
+# v0.20: PDF text extraction. Lightweight pure-Python; doesn't read
+# scanned image PDFs (no OCR). Opt-in to keep the core install lean.
+pdf-extraction = [
+    "pypdf>=4.0",
 ]
 # Live credential verification (``sharesift verify``). HTTP verifiers
 # only need ``requests`` + ``pyyaml``; ``paramiko`` and ``ldap3``

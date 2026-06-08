@@ -1,0 +1,48 @@
+{
+  "theme": "dev_eng",
+  "pipeline": "v0.20 cascade (parsers + rules + extractor)",
+  "n_files": 80,
+  "n_salted": 26,
+  "recall_on_salted": 0.8462,
+  "v0p19_recall_on_salted": 0.5,
+  "recall_delta_pp": 34.6,
+  "top_k_precision": {
+    "top_10": 0.3,
+    "top_20": 0.4,
+    "top_50": 0.34
+  },
+  "cascade_source_distribution_all": {
+    "cascade+path": 32,
+    "rules": 28,
+    "none": 12,
+    "path": 8
+  },
+  "cascade_source_distribution_caught_salted": {
+    "cascade+path": 12,
+    "rules": 9,
+    "path": 1
+  },
+  "n_unmatched_salted": 4,
+  "bottom_misses_examples": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/services/payments/incident_log_0045.md",
+      "filename_token": "incident_log",
+      "salted_credential_type": "cloud_credential"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/ci/circle/postmortem_template_0076.md",
+      "filename_token": "postmortem_template",
+      "salted_credential_type": "oauth_token"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/infra/k8s/release_notes_0041.md",
+      "filename_token": "release_notes",
+      "salted_credential_type": "cloud_credential"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/dev_eng/share/ci/github_actions/tech_radar_0078.md",
+      "filename_token": "tech_radar",
+      "salted_credential_type": "cloud_credential"
+    }
+  ]
+}

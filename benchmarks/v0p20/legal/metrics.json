@@ -1,0 +1,52 @@
+{
+  "theme": "legal",
+  "pipeline": "v0.20 cascade (parsers + rules + extractor)",
+  "n_files": 80,
+  "n_salted": 20,
+  "recall_on_salted": 0.6,
+  "v0p19_recall_on_salted": 0.2,
+  "recall_delta_pp": 40.0,
+  "top_k_precision": {
+    "top_10": 0.0,
+    "top_20": 0.05,
+    "top_50": 0.22
+  },
+  "cascade_source_distribution_all": {
+    "rules": 25,
+    "cascade+path": 17,
+    "none": 26,
+    "path": 12
+  },
+  "cascade_source_distribution_caught_salted": {
+    "cascade+path": 4,
+    "rules": 8
+  },
+  "n_unmatched_salted": 8,
+  "bottom_misses_examples": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Contracts/NDA/NDA_draft_0049.pdf",
+      "filename_token": "NDA_draft",
+      "salted_credential_type": "api_key"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Contracts/Vendor/NDA_draft_0006.pdf",
+      "filename_token": "NDA_draft",
+      "salted_credential_type": "db_password"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Contracts/NDA/data_processing_addendum_0079.doc",
+      "filename_token": "data_processing_addendum",
+      "salted_credential_type": "api_key"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Forms/Templates/data_processing_addendum_0005.pdf",
+      "filename_token": "data_processing_addendum",
+      "salted_credential_type": "cloud_credential"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/legal/share/Contracts/Vendor/data_processing_addendum_0077.doc",
+      "filename_token": "data_processing_addendum",
+      "salted_credential_type": "db_password"
+    }
+  ]
+}

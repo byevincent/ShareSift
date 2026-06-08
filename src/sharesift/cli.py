@@ -177,19 +177,15 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
         f"force_content={args.force_content}"
     )
 
+    # v0.20: route through load_content so PDFs (via pypdf) and the
+    # base64 preprocessor become available. PDFs that previously
+    # returned UnicodeDecodeError (then empty) now extract text.
+    from sharesift.extract import load_content
+
     items: list[tuple[str, str | None]] = []
     for p_str in paths:
         p = Path(p_str)
-        if not p.exists() or not p.is_file():
-            items.append((p_str, None))
-            continue
-        try:
-            content = p.read_text(encoding="utf-8", errors="replace")
-        except OSError:
-            items.append((p_str, None))
-            continue
-        if args.max_snippet_bytes and len(content) > args.max_snippet_bytes:
-            content = content[: args.max_snippet_bytes]
+        content = load_content(p, max_bytes=args.max_snippet_bytes or 1_048_576)
         items.append((p_str, content))
 
     n_with_content = sum(1 for _, c in items if c is not None)

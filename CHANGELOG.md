@@ -82,12 +82,78 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.20 — model retrains and PDF text extraction driven by the v0.19
-findings in `docs/v0p19_results.md`. Top-3 candidates by impact:
-PDF extraction in Scanner (unblocks gov_contractor + legal),
-finance/healthcare filename retrain (~50-100 industry tokens), and a
-legal-aware Stage 2 evaluation using the v0.13 literal-vs-referenced
-classifier.
+v0.21 — model retrains + reranker driven by v0.20 findings in
+`docs/v0p20_results.md`. Top candidates by impact: a reranker that
+uses cascade source + tier as features (fixes the top-10 precision
+gap legal regressed to), Stage 1 retrain with v0.19 themed tokens,
+lightweight content classifier for the cascade's smart middle tier.
+
+## [0.20.0] — 2026-06-08
+
+Content determiner + dormant-infrastructure wiring. Executes the plan
+in `docs/v0p20_content_determiner_plan.md` end-to-end. The headline
+result: re-running the v0.19 themed benchmark on the new pipeline
+moves mean recall on salted files from **0.408 → 0.640 (+23.2 pp)**
+without any model retrain.
+
+### Added
+
+- `src/sharesift/content_rules.py` — `ContentRuleEngine` compiles and
+  executes 78 vendored Snaffler content/path rules against
+  `(filename, content)` inside `Scanner.scan_batch`. Pre-v0.20 these
+  rules existed in `snaffler_default.json` but never ran in the main
+  Scanner — only inside the optional pysnaffler enumeration loop.
+- `src/sharesift/extract.py` — unified `load_content(path, *,
+  max_bytes, decode_base64)` replaces the bare `path.read_text()`
+  call. PDFs route through `pypdf.PdfReader`; base64 nested
+  credentials surface via the existing `recursive_base64_decode`
+  preprocessor.
+- `pdf-extraction` optional dependency group (`pypdf>=4.0`).
+- `src/sharesift/content_determiner.py` — `ContentDeterminer`
+  cascades parsers → rules → extractor → (optional) LoRA. Each tier
+  short-circuits on first hit. Callers without the 3 GB Qwen
+  download set `use_classifier=False` and still get useful results.
+- `tools/score_themed_run_v0p20.py` — benchmark script that re-runs
+  the v0.19 themed shares through the new pipeline and emits a
+  per-theme delta against v0.19's metrics.
+- `benchmarks/v0p20/<theme>/metrics.json` — per-theme combined
+  (path + cascade) results for all 5 themes.
+
+### Changed
+
+- `Scanner.scan_batch` now runs the cascade per file. The LoRA
+  classifier becomes a fallback for hard cases instead of the only
+  content-side detector.
+- `ScanResult` grows `content_tier`, `content_source`,
+  `content_matches` fields. The binary `content_check` stays for
+  back-compat.
+
+### Findings
+
+| Theme | v0.19 recall | v0.20 recall | Δ |
+|---|---|---|---|
+| Finance | 0.318 | 0.455 | +13.6 pp |
+| Healthcare | 0.370 | 0.593 | +22.2 pp |
+| Dev / engineering | 0.500 | 0.846 | +34.6 pp |
+| Gov / contractor | 0.650 | 0.700 | +5.0 pp |
+| Legal | 0.200 | 0.600 | +40.0 pp |
+| **Mean** | **0.408** | **0.640** | **+23.2 pp** |
+
+Honest precision gap: legal top-10 precision regressed to 0.00 —
+the rule engine adds matches but ranking by combined tier
+isn't sophisticated enough. v0.21 reranker.
+
+### Notes
+
+- `extra_rules.py` (22 v0.12 blind-spot + Gitleaks-derived modern
+  SaaS rules) not yet loaded — they construct SnaffleRule instances
+  tied to the optional pysnaffler dep. Port to JSON is v0.20.1.
+- PDF extraction is wired but unverified on real PDFs — v0.19's
+  synthetic shares use .pdf-extensioned text files which pypdf
+  rejects.
+- LoRA content classifier still requires manual model dir setup;
+  cascade benchmarks ran with `use_classifier=False`.
+- Tests added: 20. Full suite: 754 passing.
 
 ## [0.19.0] — 2026-06-07
 

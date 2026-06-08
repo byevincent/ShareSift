@@ -1,0 +1,53 @@
+{
+  "theme": "gov_contractor",
+  "pipeline": "v0.20 cascade (parsers + rules + extractor)",
+  "n_files": 80,
+  "n_salted": 20,
+  "recall_on_salted": 0.7,
+  "v0p19_recall_on_salted": 0.65,
+  "recall_delta_pp": 5.0,
+  "top_k_precision": {
+    "top_10": 0.4,
+    "top_20": 0.4,
+    "top_50": 0.28
+  },
+  "cascade_source_distribution_all": {
+    "path": 27,
+    "none": 26,
+    "cascade+path": 16,
+    "rules": 11
+  },
+  "cascade_source_distribution_caught_salted": {
+    "cascade+path": 8,
+    "rules": 1,
+    "path": 5
+  },
+  "n_unmatched_salted": 6,
+  "bottom_misses_examples": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/gov_contractor/share/Security/Facility/CAC_signing_cert_0021.doc",
+      "filename_token": "CAC_signing_cert",
+      "salted_credential_type": "cloud_credential"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/gov_contractor/share/Security/Facility/DCAA_audit_response_0006.docx",
+      "filename_token": "DCAA_audit_response",
+      "salted_credential_type": "api_key"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/gov_contractor/share/Security/Clearances/SOW_draft_0037.docx",
+      "filename_token": "SOW_draft",
+      "salted_credential_type": "api_key"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/gov_contractor/share/Security/Clearances/SOW_draft_0061.doc",
+      "filename_token": "SOW_draft",
+      "salted_credential_type": "contract_password"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/gov_contractor/share/Security/Clearances/status_report_weekly_0055.pdf",
+      "filename_token": "status_report_weekly",
+      "salted_credential_type": "contract_password"
+    }
+  ]
+}

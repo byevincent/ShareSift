@@ -1,0 +1,53 @@
+{
+  "theme": "finance",
+  "pipeline": "v0.20 cascade (parsers + rules + extractor)",
+  "n_files": 80,
+  "n_salted": 22,
+  "recall_on_salted": 0.4545,
+  "v0p19_recall_on_salted": 0.3182,
+  "recall_delta_pp": 13.6,
+  "top_k_precision": {
+    "top_10": 0.3,
+    "top_20": 0.3,
+    "top_50": 0.22
+  },
+  "cascade_source_distribution_all": {
+    "none": 44,
+    "cascade+path": 15,
+    "rules": 10,
+    "path": 11
+  },
+  "cascade_source_distribution_caught_salted": {
+    "cascade+path": 2,
+    "rules": 3,
+    "path": 5
+  },
+  "n_unmatched_salted": 12,
+  "bottom_misses_examples": [
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Accounts_Payable/balance_sheet_0044.pdf",
+      "filename_token": "balance_sheet",
+      "salted_credential_type": "cloud_credential"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Accounts_Payable/balance_sheet_0054.pdf",
+      "filename_token": "balance_sheet",
+      "salted_credential_type": "cloud_credential"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Accounts_Payable/balance_sheet_0064.docx",
+      "filename_token": "balance_sheet",
+      "salted_credential_type": "db_password"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Accounts_Payable/bank_connection_0033.docx",
+      "filename_token": "bank_connection",
+      "salted_credential_type": "oauth_token"
+    },
+    {
+      "path": "/home/george-5090/projects/truffler/benchmarks/v0p19/finance/share/Finance/Audit/cash_flow_statement_0067.xlsx",
+      "filename_token": "cash_flow_statement",
+      "salted_credential_type": "swift_iban"
+    }
+  ]
+}

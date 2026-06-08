@@ -52,6 +52,14 @@ class ScanResult:
     content_excerpt: str | None
     raw_content_response: str | None
     extracted_fields: list[dict] = field(default_factory=list)
+    # v0.20: ContentDeterminer cascade output. ``content_tier`` is the
+    # rule-engine / extractor / classifier tier; ``content_source``
+    # names the cascade tier that fired (parsers/rules/extractor/
+    # classifier/none); ``content_matches`` carries the structured
+    # match details for report rendering and downstream triage.
+    content_tier: str | None = None
+    content_source: str | None = None
+    content_matches: list[dict] = field(default_factory=list)
 
     def as_record(self, include_debug: bool = False) -> dict:
         """JSON-serializable dict for JSONL output.
@@ -87,9 +95,17 @@ class Scanner:
         self,
         path_classifier: PathClassifier | None = None,
         content_classifier: ContentClassifier | None = None,
+        *,
+        use_classifier: bool = True,
     ) -> None:
         self._path = path_classifier
         self._content = content_classifier
+        # v0.20: when False, the cascade stops at the regex tiers
+        # (parsers/rules/extractor) and never invokes the LoRA. The CLI
+        # forces False if --content-model-dir isn't usable, but tests
+        # and bulk runs can opt in/out independently.
+        self._use_classifier = use_classifier
+        self._determiner = None  # lazy
 
     @property
     def path_classifier(self) -> PathClassifier:
@@ -128,6 +144,13 @@ class Scanner:
         paths = [p for p, _ in items]
         path_results = self.path_classifier.score_batch(paths)
 
+        # v0.20: ContentDeterminer cascade — parsers → rules → extractor →
+        # (optional) LoRA. Lazy because constructing it imports the rule
+        # JSON; tests that bypass scan_batch shouldn't pay.
+        if self._determiner is None:
+            from sharesift.content_determiner import ContentDeterminer
+            self._determiner = ContentDeterminer()
+
         results: list[ScanResult] = []
         iterator = out.progress(
             zip(items, path_results),
@@ -135,34 +158,53 @@ class Scanner:
             total=len(items),
         )
         for (path, content), p_result in iterator:
+            # Run parsers once and pass to the cascade — keeps existing
+            # ScanResult.extracted_fields populated for downstream
+            # consumers (ranker + verify dispatch).
             extracted = _run_parsers(path, content)
-            should_check = content is not None and (
-                p_result.tier is not None or force_content
+
+            verdict = self._determiner.evaluate(
+                path,
+                content,
+                use_classifier=False,  # default: cascade stops at extractor
             )
-            if not should_check:
-                results.append(
-                    ScanResult(
-                        path=path,
-                        path_probability=p_result.probability,
-                        path_tier=p_result.tier,
-                        content_check=None,
-                        content_excerpt=None,
-                        raw_content_response=None,
-                        extracted_fields=extracted,
-                    )
-                )
-                continue
-            assert content is not None  # narrowed by should_check
-            c_result = self.content_classifier.score(content)
+
+            should_check_classifier = (
+                self._use_classifier
+                and content is not None
+                and verdict.tier is None
+                and (p_result.tier is not None or force_content)
+            )
+
+            content_check: str | None = None
+            raw_response: str | None = None
+            if verdict.source != "none":
+                content_check = "yes"
+            if should_check_classifier:
+                c_result = self.content_classifier.score(content)
+                if c_result.contains_secret:
+                    content_check = "yes"
+                    verdict.tier = "Yellow"
+                    verdict.source = "classifier"
+                    verdict.matches = [{"verdict": "yes"}]
+                else:
+                    content_check = "no"
+                raw_response = c_result.raw_response
+
+            content_excerpt = content if content_check is not None else None
+
             results.append(
                 ScanResult(
                     path=path,
                     path_probability=p_result.probability,
                     path_tier=p_result.tier,
-                    content_check=("yes" if c_result.contains_secret else "no"),
-                    content_excerpt=content,
-                    raw_content_response=c_result.raw_response,
+                    content_check=content_check,
+                    content_excerpt=content_excerpt,
+                    raw_content_response=raw_response,
                     extracted_fields=extracted,
+                    content_tier=verdict.tier,
+                    content_source=verdict.source if verdict.source != "none" else None,
+                    content_matches=verdict.matches,
                 )
             )
         return results
