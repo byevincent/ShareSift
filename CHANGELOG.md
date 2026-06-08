@@ -82,14 +82,63 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.22 — **versatility-first**. After v0.21's MSF3 validation showed
-the reranker doesn't transfer to real data, the v0.22 plan
-(`docs/v0p22_versatility_plan.md`) shifts focus from learned features
-(which overfit) to architecturally-versatile components: tighter
-rules, more parsers, more credential-format extractors, plus a
-frozen-held-out eval harness that makes future overfit claims
-visible. The reranker stays experimental; the production stack is
-the v0.20 cascade.
+v0.23 — more architecturally-versatile components measured through
+the v0.22 eval harness: CI gate (fail-on-MIN-drop), more credential-
+format extractors (Stripe, Plaid, GCP service-account JSON, Azure
+connection strings), OOXML / registry-hive / `.ppk` parsers, Stage 2
+LoRA cross-distribution honesty check, calibrated abstention UX.
+
+## [0.22.0] — 2026-06-08
+
+Versatility-first: Phases A-C of `docs/v0p22_versatility_plan.md`.
+The production stack is the v0.20 cascade; v0.22 adds eval
+discipline and two declarative ranking fixes — no learned features,
+no per-benchmark tuning.
+
+### Added
+
+- `tools/eval_harness.py` — runs the production cascade against 3
+  independently-collected held-out sets (MSF3, CredData,
+  engagement_corpus). Reports MIN-across-primary as the headline,
+  not mean. Writes `benchmarks/v0p22_eval/harness_results.json`.
+- `RuleVerdict.credential_tier` — distinguishes Snaffle/CheckForKeys
+  matches (credential signal) from Relay matches (enumeration
+  helper). The default `tier` field unchanged for back-compat.
+- `_score_with_dedup_penalty()` — declarative ranking that divides
+  per-file evidence by `sqrt(filename_frequency)`. Replicates the
+  v0.14 LightGBM ranker's "many copies = noise" intuition
+  declaratively. No training, no fitting.
+
+### Changed
+
+- Cascade tier scoring: **Green tier scores 0** in the eval
+  harness ranking. Green is informational ("fetch for context") —
+  the v0.21 MSF3 validation traced top-K collapse to
+  `RelayPsByExtension` (Green-tier) firing on 84% of MSF3 files.
+  Yellow / Red / Black unchanged.
+
+### Findings
+
+| Metric | v0.21 | v0.22 |
+|---|---|---|
+| MSF3 top-10 precision | 0.00 | **0.20** |
+| MSF3 recall | 0.900 | 0.900 |
+| CredData top-10 | 0.70 | 0.70 |
+| CredData recall | 1.000 | 1.000 |
+| **MIN top-10 across primary** | **0.00** | **0.20** |
+
+The 0.20 floor is the honest "what an operator should expect on the
+next share" number. The v0.14 README claim of 1.000 on MSF3 was an
+in-distribution measurement; v0.22 reports cross-distribution.
+
+### Notes
+
+- The v0.21 reranker stays experimental and is NOT in the production
+  scan flow.
+- No MSF3-specific rules added — the dedup penalty addresses
+  Boxstarter / Chocolatey noise universally.
+- No model retraining. Both v0.22 fixes are declarative.
+- Tests added: 6. Full suite: 765 passing, 0 regressions.
 
 ## [0.21.1] — 2026-06-08
 

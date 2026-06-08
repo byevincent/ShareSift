@@ -66,19 +66,59 @@ class RuleMatch:
 
 @dataclass(frozen=True)
 class RuleVerdict:
-    """Aggregate result of running every applicable rule against one file."""
+    """Aggregate result of running every applicable rule against one file.
+
+    v0.22 distinction: ``tier`` returns the declared tier of the
+    highest-confidence credential-bearing match (Snaffle /
+    CheckForKeys). If only Relay matches fire, ``tier`` returns
+    "Green" — that's the "fetch for context" tier, and the eval
+    harness scoring should not promote Green above no-tier (Green
+    is informational, not a credential signal).
+
+    The Snaffler rule taxonomy has four actions:
+
+    - ``Snaffle``       — positive credential signal (file is interesting)
+    - ``CheckForKeys``  — treat as keystore / cert file, extract material
+    - ``Relay``         — enumeration helper, "fetch this for context"
+    - ``Discard``       — noise, ignore (filtered at load time)
+
+    The v0.21 MSF3 validation traced the top-K precision collapse to
+    Green-tier Relay matches (RelayPsByExtension fired on 84% of MSF3
+    files) being given the same ranking weight as Yellow/Red/Black.
+    The fix lives in the ranker / harness side: score Green as 0.
+    """
 
     matches: list[RuleMatch] = field(default_factory=list)
 
     @property
     def tier(self) -> Tier | None:
-        """Highest tier among the firing rules, or None if nothing fired."""
+        """Highest tier among firing rules. Returns None only if no
+        rule fired at all."""
         if not self.matches:
             return None
         return max(self.matches, key=lambda m: _TIER_RANK[m.tier]).tier
 
+    @property
+    def credential_tier(self) -> Tier | None:
+        """Highest tier among Snaffle / CheckForKeys matches only.
+
+        Returns None if only Relay-tier rules fired. Used by ranking
+        code that wants to distinguish "found a credential signal"
+        from "found a file worth looking at"."""
+        credential_matches = [
+            m for m in self.matches if m.action in ("Snaffle", "CheckForKeys")
+        ]
+        if not credential_matches:
+            return None
+        return max(credential_matches, key=lambda m: _TIER_RANK[m.tier]).tier
+
     def has_any(self) -> bool:
+        """True iff at least one rule fired."""
         return bool(self.matches)
+
+    def has_credential_match(self) -> bool:
+        """True iff at least one Snaffle / CheckForKeys rule fired."""
+        return any(m.action in ("Snaffle", "CheckForKeys") for m in self.matches)
 
 
 @dataclass

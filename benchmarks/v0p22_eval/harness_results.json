@@ -1,0 +1,44 @@
+{
+  "elapsed_s": 2.91,
+  "per_set": [
+    {
+      "set": "msf3",
+      "n_records": 1054,
+      "n_positive": 40,
+      "recall_any_tier": 0.9,
+      "top_10_precision": 0.2,
+      "top_20_precision": 0.15,
+      "top_50_precision": 0.22,
+      "k_for_full_recall": 1049,
+      "precision_at_full_recall": 0.0381
+    },
+    {
+      "set": "creddata",
+      "n_records": 1500,
+      "n_positive": 500,
+      "recall_any_tier": 1.0,
+      "precision_any_tier": 0.3333,
+      "top_10_precision": 0.7,
+      "top_20_precision": 0.6,
+      "top_50_precision": 0.68
+    },
+    {
+      "set": "engagement_corpus",
+      "supplementary": true,
+      "n_records": 401,
+      "n_positive": 92,
+      "recall_any_tier": 0.9022,
+      "top_10_precision": 0.6,
+      "top_20_precision": 0.65,
+      "top_50_precision": 0.74
+    }
+  ],
+  "headline": {
+    "min_top_10_precision_across_primary": 0.2,
+    "min_recall_across_primary": 0.9,
+    "primary_sets": [
+      "msf3",
+      "creddata"
+    ]
+  }
+}
