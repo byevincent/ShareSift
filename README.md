@@ -55,6 +55,37 @@ Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
 
 ## Quick start
 
+### One shot — `sharesift scan`
+
+The recommended entry point. Enumerates the share, runs both classifier stages, verifies extracted credentials, and renders an HTML report — all in one call.
+
+```bash
+uv run sharesift scan \
+    --share /mnt/downloaded_share \
+    --output-dir ./scan-out
+
+# Or to skip live verification + the report and just get triaged hits:
+uv run sharesift scan \
+    --share /mnt/downloaded_share \
+    --output-dir ./scan-out \
+    --skip-verify --skip-report
+```
+
+Intermediates land in `--output-dir`:
+
+```
+scan-out/
+├── files.txt       # enumerated paths
+├── paths.jsonl     # stage 1 scores
+├── hits.jsonl      # stage 1+2 results
+├── verified.jsonl  # live credential checks
+└── report.html     # interactive HTML report
+```
+
+Add `--json` for a structured end-of-run summary on stderr (useful for CI). Add `-q` / `--quiet` to silence progress or `-v` / `--verbose` for debug detail.
+
+The individual subcommands below let you run each stage on its own when you need finer control.
+
 ### Score paths from share enumeration
 
 Pipe output from your enumeration tool directly into ShareSift.
