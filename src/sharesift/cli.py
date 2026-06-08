@@ -234,6 +234,139 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
     return 0
 
 
+def _ns(**kwargs: object) -> argparse.Namespace:
+    """Build an argparse.Namespace from kwargs — used by cmd_scan to call
+    existing subcommand handlers without having argparse parse a synthetic
+    argv. Tighter than the alternatives (subprocess, full _run_* refactor)
+    for the v0.18 scope."""
+    return argparse.Namespace(**kwargs)
+
+
+def cmd_scan(args: argparse.Namespace) -> int:
+    """One-shot pipeline: enumerate → score-paths → scan-files → verify → report.
+
+    Each stage prints a ``[N/5] ...`` banner. ``--skip-verify`` and
+    ``--skip-report`` drop the late stages. The sub-handlers each emit
+    their own JSON summary at end-of-run — we silence that during sub-calls
+    and emit one combined summary here, so ``sharesift scan --json``
+    produces one block, not five.
+    """
+    start = time.monotonic()
+    output_dir: Path = args.output_dir
+    share: Path = args.share
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    # Stage 0: enumerate.
+    files_path = output_dir / "files.txt"
+    if share.is_dir():
+        out.info(f"[1/5] enumerating files under {share}")
+        files = sorted(p for p in share.rglob("*") if p.is_file())
+        files_path.write_text(
+            "\n".join(str(p) for p in files) + "\n", encoding="utf-8"
+        )
+        n_enumerated = len(files)
+    elif share.is_file():
+        # Treat as a pre-existing file list.
+        out.info(f"[1/5] using file list {share}")
+        files_path.write_text(share.read_text(encoding="utf-8"), encoding="utf-8")
+        n_enumerated = sum(
+            1 for line in files_path.read_text(encoding="utf-8").splitlines() if line.strip()
+        )
+    else:
+        raise SystemExit(f"--share: {share} does not exist")
+    out.debug(f"enumerated {n_enumerated} files → {files_path}")
+
+    # Silence sub-handler summaries — we emit one combined summary at the end.
+    was_json = out.json_enabled
+    if was_json:
+        out.configure(verbosity=out.verbosity, json=False)
+
+    paths_path = output_dir / "paths.jsonl"
+    hits_path = output_dir / "hits.jsonl"
+    report_input = hits_path
+    verified_path: Path | None = None
+    report_path: Path | None = None
+    stages_run = ["enumerate", "score-paths", "scan-files"]
+
+    try:
+        # Stage 1: score-paths
+        out.info(f"[2/5] path triage → {paths_path}")
+        cmd_score_paths(_ns(
+            input=files_path,
+            stdin=False,
+            output=paths_path,
+            windows_model_dir=args.windows_model_dir,
+            linux_model_dir=args.linux_model_dir,
+        ))
+
+        # Stage 2: scan-files
+        out.info(f"[3/5] content scan → {hits_path}")
+        cmd_scan_files(_ns(
+            input=files_path,
+            stdin=False,
+            output=hits_path,
+            windows_model_dir=args.windows_model_dir,
+            linux_model_dir=args.linux_model_dir,
+            content_model_dir=args.content_model_dir,
+            device=args.device,
+            max_snippet_bytes=args.max_snippet_bytes,
+            force_content=args.force_content,
+            debug=False,
+        ))
+
+        # Stage 3: verify (optional)
+        if not args.skip_verify:
+            verified_path = output_dir / "verified.jsonl"
+            out.info(f"[4/5] verify → {verified_path}")
+            cmd_verify(_ns(
+                input=hits_path,
+                stdin=False,
+                output=verified_path,
+                target_file=args.target_file,
+                rate_limit=args.rate_limit,
+                timeout=args.timeout,
+                dry_run=args.dry_run,
+                only=None,
+                no_banner=True,  # one-shot is non-interactive; banner skipped
+            ))
+            report_input = verified_path
+            stages_run.append("verify")
+
+        # Stage 4: render-report (optional)
+        if not args.skip_report:
+            report_path = output_dir / "report.html"
+            out.info(f"[5/5] report → {report_path}")
+            cmd_render_report(_ns(
+                input=report_input,
+                stdin=False,
+                output=report_path,
+                title=args.title,
+            ))
+            stages_run.append("render-report")
+    finally:
+        if was_json:
+            out.configure(verbosity=out.verbosity, json=True)
+
+    out.summary({
+        "command": "scan",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "share": str(share),
+        "output_dir": str(output_dir),
+        "input_count": n_enumerated,
+        "stages_run": stages_run,
+        "intermediates": {
+            "files": str(files_path),
+            "paths": str(paths_path),
+            "hits": str(hits_path),
+            "verified": str(verified_path) if verified_path else None,
+            "report": str(report_path) if report_path else None,
+        },
+        "exit_code": 0,
+    })
+    return 0
+
+
 def cmd_retrain_ranker(args: argparse.Namespace) -> int:
     """Thin wrapper around ``tools/retrain_ranker.py`` for v0.17 active learning."""
     import sys as _sys
@@ -409,6 +542,58 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
+
+    # scan (one-shot pipeline)
+    sc = sub.add_parser(
+        "scan",
+        help=(
+            "One-shot pipeline: enumerate → score-paths → scan-files → "
+            "verify → render-report. The recommended entry point."
+        ),
+    )
+    sc.add_argument(
+        "--share",
+        type=Path,
+        required=True,
+        help="Directory to scan, or a file listing paths (one per line).",
+    )
+    sc.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="Directory where intermediates (files.txt, paths.jsonl, hits.jsonl, ...) land.",
+    )
+    sc.add_argument(
+        "--skip-verify",
+        action="store_true",
+        help="Skip the live-credential verification stage.",
+    )
+    sc.add_argument(
+        "--skip-report",
+        action="store_true",
+        help="Skip the HTML report rendering stage.",
+    )
+    _add_path_model_args(sc)
+    sc.add_argument("--content-model-dir", type=Path, default=None)
+    sc.add_argument("--device", choices=["cuda", "cpu"], default=None)
+    sc.add_argument("--max-snippet-bytes", type=int, default=4096)
+    sc.add_argument("--force-content", action="store_true")
+    sc.add_argument(
+        "--target-file",
+        type=Path,
+        default=None,
+        help="YAML file with verifier targets (required unless --skip-verify).",
+    )
+    sc.add_argument("--rate-limit", type=float, default=1.0)
+    sc.add_argument("--timeout", type=float, default=10.0)
+    sc.add_argument("--dry-run", action="store_true")
+    sc.add_argument(
+        "--title",
+        type=str,
+        default=None,
+        help="Title for the HTML report.",
+    )
+    sc.set_defaults(func=cmd_scan)
 
     # score-paths
     sp = sub.add_parser(

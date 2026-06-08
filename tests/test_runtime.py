@@ -253,6 +253,109 @@ def test_cli_score_paths_requires_input_or_stdin():
 # --- CLI end-to-end --------------------------------------------------------
 
 
+def test_cli_scan_help_exits_zero():
+    with pytest.raises(SystemExit) as exc:
+        cli_main(["scan", "--help"])
+    assert exc.value.code == 0
+
+
+def test_cli_scan_orchestrates_skip_verify_and_skip_report(tmp_path: Path, monkeypatch):
+    """Phase E orchestration: with --skip-verify --skip-report, only the
+    enumerate + score-paths + scan-files stages fire. Sub-handlers are
+    monkeypatched so this test runs without the path/content models."""
+    from sharesift import cli as _cli
+
+    calls: list[str] = []
+
+    def fake_score_paths(args):
+        Path(args.output).write_text("", encoding="utf-8")
+        calls.append("score-paths")
+        return 0
+
+    def fake_scan_files(args):
+        Path(args.output).write_text("", encoding="utf-8")
+        calls.append("scan-files")
+        return 0
+
+    def fake_verify(args):
+        calls.append("verify")
+        return 0
+
+    def fake_render(args):
+        calls.append("render-report")
+        return 0
+
+    monkeypatch.setattr(_cli, "cmd_score_paths", fake_score_paths)
+    monkeypatch.setattr(_cli, "cmd_scan_files", fake_scan_files)
+    monkeypatch.setattr(_cli, "cmd_verify", fake_verify)
+    monkeypatch.setattr(_cli, "cmd_render_report", fake_render)
+
+    share = tmp_path / "share"
+    share.mkdir()
+    (share / "a.txt").write_text("alpha", encoding="utf-8")
+    (share / "b.txt").write_text("beta", encoding="utf-8")
+    output_dir = tmp_path / "out"
+
+    rc = cli_main([
+        "scan",
+        "--share", str(share),
+        "--output-dir", str(output_dir),
+        "--skip-verify",
+        "--skip-report",
+    ])
+    assert rc == 0
+    assert calls == ["score-paths", "scan-files"], (
+        f"unexpected stage sequence: {calls}"
+    )
+    # Intermediates we own should exist.
+    assert (output_dir / "files.txt").exists()
+    assert (output_dir / "paths.jsonl").exists()
+    assert (output_dir / "hits.jsonl").exists()
+    # Files we skipped should not exist.
+    assert not (output_dir / "verified.jsonl").exists()
+    assert not (output_dir / "report.html").exists()
+
+
+def test_cli_scan_full_pipeline_with_fakes(tmp_path: Path, monkeypatch, capsys):
+    """Full 5-stage pipeline with fakes; verify --json summary lists all
+    stages and reports the right output paths."""
+    from sharesift import cli as _cli
+
+    for name in ("cmd_score_paths", "cmd_scan_files", "cmd_verify", "cmd_render_report"):
+        def make_fake(stage):
+            def fake(args):
+                if getattr(args, "output", None):
+                    Path(args.output).write_text("", encoding="utf-8")
+                return 0
+            return fake
+        monkeypatch.setattr(_cli, name, make_fake(name))
+
+    share = tmp_path / "share"
+    share.mkdir()
+    (share / "f.txt").write_text("data", encoding="utf-8")
+    output_dir = tmp_path / "out"
+
+    rc = cli_main([
+        "--json",
+        "scan",
+        "--share", str(share),
+        "--output-dir", str(output_dir),
+    ])
+    assert rc == 0
+
+    err = capsys.readouterr().err
+    # Last line of stderr should be parseable JSON summary.
+    summary_line = err.strip().splitlines()[-1]
+    summary = json.loads(summary_line)
+    assert summary["command"] == "scan"
+    assert summary["stages_run"] == [
+        "enumerate", "score-paths", "scan-files", "verify", "render-report"
+    ]
+    assert summary["intermediates"]["report"].endswith("report.html")
+    assert summary["intermediates"]["verified"].endswith("verified.jsonl")
+    assert summary["exit_code"] == 0
+
+
 @SKIP_NO_PATH_MODEL
 def test_cli_score_paths_writes_jsonl(tmp_path: Path):
     input_file = tmp_path / "paths.txt"

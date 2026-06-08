@@ -52,8 +52,15 @@ class Output:
 
     def __init__(self, stream: TextIO | None = None) -> None:
         self._verbosity = Verbosity.NORMAL
-        self._stream = stream if stream is not None else sys.stderr
+        # When ``stream`` is None, resolve sys.stderr lazily at each write —
+        # otherwise tests using pytest ``capsys`` (which replaces sys.stderr
+        # between tests) and runtime tee'd redirects would miss our output.
+        self._explicit_stream = stream
         self._json_enabled = False
+
+    @property
+    def _stream(self) -> TextIO:
+        return self._explicit_stream if self._explicit_stream is not None else sys.stderr
 
     def configure(self, *, verbosity: Verbosity, json: bool = False) -> None:
         self._verbosity = verbosity
