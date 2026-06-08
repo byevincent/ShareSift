@@ -82,11 +82,53 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.24 — registry-hive + PuTTY `.ppk` parsers when real samples
-accessible; Stage 2 LoRA cross-distribution eval when weights
-tracked; more structured parsers (`wp-config.php` deeper extraction,
-AWS CLI `credentials` file); GitHub Action artifact upload for
-`harness_results.json` history.
+v0.25 — registry-hive + PuTTY `.ppk` parsers (need real samples);
+Stage 2 LoRA cross-distribution eval (need tracked weights); more
+structured parsers (`.pypirc`, gcloud credentials, gh CLI auth,
+KeyringFile); `tools/plot_harness_history.py` for visualising the
+MIN trajectory.
+
+## [0.24.0] — 2026-06-08
+
+Four new structured parsers (wp-config.php, AWS CLI credentials,
+`.netrc`, Maven settings.xml) + harness history tracking. The
+production stack stays the v0.20 cascade. Harness numbers held flat
+— same dynamic as v0.23.
+
+### Added
+
+- `src/sharesift/parsers/wp_config_php.py` — extracts DB_USER /
+  DB_PASSWORD / DB_HOST + the 8 WordPress auth keys/salts from
+  PHP `define()` calls. Skips boilerplate placeholders.
+- `src/sharesift/parsers/aws_cli_credentials.py` — parses INI
+  sections; emits per-profile access key / secret / session token.
+- `src/sharesift/parsers/netrc.py` — token-stream parser handling
+  multi-line, single-line, and default-block forms.
+- `src/sharesift/parsers/maven_settings_xml.py` — walks XML by
+  local-name (xmlns-agnostic) extracting server username/password.
+- `benchmarks/v0p22_eval/harness_history.jsonl` — append-only
+  record of MIN top-10 / MIN recall per release for trajectory
+  tracking.
+- `.github/workflows/eval_gate.yml` — added artifact upload step
+  for `harness_results.json` (90-day retention).
+
+### Findings
+
+| Metric | v0.23 | v0.24 |
+|---|---|---|
+| MIN top-10 precision | 0.20 | 0.20 |
+| MIN recall any-tier | 0.90 | 0.90 |
+
+Parser count: 18 → **22**. Held-out sets don't contain wp-config /
+AWS credentials / `.netrc` / Maven settings files, so the harness
+doesn't reward the added capacity. Same v0.23 framing: discipline
+prevents claiming an unmeasured improvement; doesn't prevent
+shipping components whose value is independently documented.
+
+### Notes
+
+- Tests added: 11. Full suite: **790 passing, 8 skipped, 0
+  regressions**.
 
 ## [0.23.0] — 2026-06-08
 

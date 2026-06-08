@@ -61,6 +61,14 @@ jobs:
         if: steps.data-check.outputs.available == 'true'
         run: uv run python tools/eval_harness.py
 
+      - name: Upload harness results as artifact
+        if: steps.data-check.outputs.available == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: harness-results-${{ github.sha }}
+          path: benchmarks/v0p22_eval/harness_results.json
+          retention-days: 90
+
       - name: Compare against previous release baseline
         if: steps.data-check.outputs.available == 'true'
         run: |

@@ -85,6 +85,11 @@ from sharesift.parsers import (  # noqa: E402
     cisco_running_config,
     veeam_config_xml,
     ansible_vault,
+    # v0.24 additions
+    wp_config_php,
+    aws_cli_credentials,
+    netrc,
+    maven_settings_xml,
 )
 
 
@@ -94,5 +99,7 @@ for mod in (
     groups_xml, settings_xml, keepass_config, openvpn_config,
     terraform_tfstate, docker_config_json, kube_config,
     cisco_running_config, veeam_config_xml, ansible_vault,
+    # v0.24
+    wp_config_php, aws_cli_credentials, netrc, maven_settings_xml,
 ):
     mod.register(_register)
