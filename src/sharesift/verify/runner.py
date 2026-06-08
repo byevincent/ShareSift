@@ -8,9 +8,9 @@ followup once we have a real engagement benchmark to tune against.
 
 from __future__ import annotations
 
-import sys
 from typing import Iterable
 
+from sharesift._output import out
 from sharesift.verify._pairs import CredentialPair, extract_user_password_pairs
 from sharesift.verify.base import VerifyConfig, VerifyResult
 from sharesift.verify.extractor import ExtractedCredential, extract_credentials
@@ -23,7 +23,6 @@ def verify_records(
     config: VerifyConfig | None = None,
     *,
     rate_limiter: RateLimiter | None = None,
-    progress: bool = False,
 ) -> list[dict]:
     """Verify credentials in each record; return enriched records.
 
@@ -35,7 +34,7 @@ def verify_records(
     rl = rate_limiter or RateLimiter(default_rate_per_sec=cfg.rate_limit_per_sec)
     supported = set(supported_credential_types())
 
-    out: list[dict] = []
+    results: list[dict] = []
     total_verified = 0
     for record in records:
         excerpt = record.get("content_excerpt")
@@ -59,7 +58,7 @@ def verify_records(
             reason = (
                 "no_content_excerpt" if not excerpt else "no_extractable_credential"
             )
-            out.append(_skipped(record, reason=reason))
+            results.append(_skipped(record, reason=reason))
             continue
 
         verifications = _verify_candidates(regex_candidates, excerpt or "", cfg, rl)
@@ -71,11 +70,11 @@ def verify_records(
         )
         new_record["verification_results"] = [v.to_dict() for v in verifications]
         new_record["verification_status"] = _aggregate_status(verifications)
-        out.append(new_record)
+        results.append(new_record)
         total_verified += 1
-        if progress and total_verified % 25 == 0:
-            print(f"  verified {total_verified} records", file=sys.stderr)
-    return out
+        if total_verified % 25 == 0:
+            out.info(f"  verified {total_verified} records")
+    return results
 
 
 def _verify_candidates(
@@ -123,7 +122,7 @@ def _verify_pairs(
     SMB user. Trying both is cheap (skipped → inconclusive on the
     targets that don't apply) and gives the operator full visibility.
     """
-    out: list[VerifyResult] = []
+    results: list[VerifyResult] = []
     for pair in pairs:
         context = {
             "username": pair.username,
@@ -137,14 +136,14 @@ def _verify_pairs(
             if verifier is None:
                 continue
             rl.acquire(verifier.service)
-            out.append(
+            results.append(
                 verifier.verify(
                     credential=pair.password,
                     config=config,
                     context={**context, "credential_type": cred_type},
                 )
             )
-    return out
+    return results
 
 
 def _aggregate_status(verifications: list[VerifyResult]) -> str:

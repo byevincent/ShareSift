@@ -168,9 +168,10 @@ def test_warning_suppression_default(recwarn):
     """
     import warnings
 
+    from sharesift._output import Verbosity
     from sharesift.cli import _install_warning_filters
 
-    _install_warning_filters()
+    _install_warning_filters(Verbosity.NORMAL)
     # Emit a FutureWarning that claims to come from a suppressed module.
     warnings.warn_explicit(
         "synthetic transformers deprecation",
@@ -183,6 +184,47 @@ def test_warning_suppression_default(recwarn):
     assert captured == [], (
         f"expected FutureWarning to be filtered; got {[str(w.message) for w in captured]}"
     )
+
+
+@SKIP_NO_PATH_MODEL
+def test_cli_quiet_silences_stderr(tmp_path, capsys):
+    """v0.18 Phase B: ``--quiet`` suppresses progress/info on stderr."""
+    input_file = tmp_path / "paths.txt"
+    output_file = tmp_path / "out.jsonl"
+    input_file.write_text("/etc/shadow\n", encoding="utf-8")
+    rc = cli_main(
+        ["--quiet", "score-paths", "--input", str(input_file), "--output", str(output_file)]
+    )
+    assert rc == 0
+    captured = capsys.readouterr()
+    assert captured.err == "", f"--quiet leaked stderr: {captured.err!r}"
+    # Main output untouched — JSONL still written to file.
+    assert output_file.read_text(encoding="utf-8").strip(), "main output missing"
+
+
+@SKIP_NO_PATH_MODEL
+def test_cli_verbose_emits_debug(tmp_path, capsys):
+    """v0.18 Phase B: ``--verbose`` adds model-dir / config debug lines."""
+    input_file = tmp_path / "paths.txt"
+    output_file = tmp_path / "out.jsonl"
+    input_file.write_text("/etc/shadow\n", encoding="utf-8")
+    rc = cli_main(
+        ["--verbose", "score-paths", "--input", str(input_file), "--output", str(output_file)]
+    )
+    assert rc == 0
+    err = capsys.readouterr().err
+    # Debug line for score-paths mentions model dirs.
+    assert "windows=" in err and "linux=" in err, (
+        f"--verbose did not emit debug detail: {err!r}"
+    )
+
+
+def test_cli_quiet_and_verbose_are_mutually_exclusive():
+    """argparse should reject ``-q -v`` together."""
+    with pytest.raises(SystemExit) as exc:
+        cli_main(["--quiet", "--verbose", "score-paths", "--stdin"])
+    # argparse exits 2 for usage errors.
+    assert exc.value.code == 2
 
 
 def test_cli_score_paths_help_exits_zero():

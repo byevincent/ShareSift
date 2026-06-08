@@ -33,15 +33,20 @@ import warnings
 from pathlib import Path
 
 from sharesift import __version__
+from sharesift._output import Verbosity, out
 from sharesift.path import PathClassifier
 from sharesift.pipeline import Scanner
 
 
-_NOISY_3P_MODULES = ("transformers", "peft", "urllib3", "bitsandbytes")
+_NOISY_3P_MODULES = ("transformers", "peft", "urllib3", "bitsandbytes", "sklearn")
+_NOISY_3P_CATEGORIES = (FutureWarning, DeprecationWarning, UserWarning)
 
 
-def _install_warning_filters() -> None:
-    for category in (FutureWarning, DeprecationWarning):
+def _install_warning_filters(verbosity: Verbosity) -> None:
+    # --verbose surfaces everything for debugging.
+    if verbosity >= Verbosity.VERBOSE:
+        return
+    for category in _NOISY_3P_CATEGORIES:
         for prefix in _NOISY_3P_MODULES:
             warnings.filterwarnings(
                 "ignore",
@@ -124,8 +129,12 @@ def _parse_target_file(target_file: Path | None) -> dict:
 
 def cmd_score_paths(args: argparse.Namespace) -> int:
     paths = _read_paths(args.input, args.stdin)
-    print(f"Loaded {len(paths)} paths", file=sys.stderr)
+    out.info(f"Loaded {len(paths)} paths")
     clf = _build_path_classifier(args)
+    out.debug(
+        f"path models: windows={args.windows_model_dir or 'default'}, "
+        f"linux={args.linux_model_dir or 'default'}"
+    )
     results = clf.score_batch(paths)
     records = [
         {
@@ -137,10 +146,7 @@ def cmd_score_paths(args: argparse.Namespace) -> int:
     ]
     _emit_jsonl(records, args.output)
     n_tiered = sum(1 for r in results if r.tier is not None)
-    print(
-        f"Wrote {len(records)} records ({n_tiered} tier-flagged)",
-        file=sys.stderr,
-    )
+    out.info(f"Wrote {len(records)} records ({n_tiered} tier-flagged)")
     return 0
 
 
@@ -150,7 +156,13 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
     from sharesift.content import ContentClassifier
 
     paths = _read_paths(args.input, args.stdin)
-    print(f"Loaded {len(paths)} paths", file=sys.stderr)
+    out.info(f"Loaded {len(paths)} paths")
+    out.debug(
+        f"content_model_dir={args.content_model_dir or 'default'}, "
+        f"device={args.device or 'auto'}, "
+        f"max_snippet_bytes={args.max_snippet_bytes}, "
+        f"force_content={args.force_content}"
+    )
 
     items: list[tuple[str, str | None]] = []
     for p_str in paths:
@@ -168,10 +180,7 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
         items.append((p_str, content))
 
     n_with_content = sum(1 for _, c in items if c is not None)
-    print(
-        f"{n_with_content}/{len(items)} files accessible for content scan",
-        file=sys.stderr,
-    )
+    out.info(f"{n_with_content}/{len(items)} files accessible for content scan")
 
     scanner = Scanner(
         path_classifier=_build_path_classifier(args),
@@ -187,10 +196,9 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
     n_yes = sum(1 for r in results if r.content_check == "yes")
     n_no = sum(1 for r in results if r.content_check == "no")
     n_skipped = sum(1 for r in results if r.content_check is None)
-    print(
+    out.info(
         f"Wrote {len(records)} records "
-        f"(content: {n_yes} yes / {n_no} no / {n_skipped} skipped)",
-        file=sys.stderr,
+        f"(content: {n_yes} yes / {n_no} no / {n_skipped} skipped)"
     )
     return 0
 
@@ -220,9 +228,9 @@ def cmd_render_report(args: argparse.Namespace) -> int:
     from sharesift.report import render_html
 
     records = _read_jsonl(args.input, args.stdin)
-    print(f"Loaded {len(records)} records", file=sys.stderr)
-    out = render_html(records, args.output, title=args.title)
-    print(f"Wrote {out} ({out.stat().st_size // 1024} KB)", file=sys.stderr)
+    out.info(f"Loaded {len(records)} records")
+    report_path = render_html(records, args.output, title=args.title)
+    out.info(f"Wrote {report_path} ({report_path.stat().st_size // 1024} KB)")
     return 0
 
 
@@ -230,7 +238,12 @@ def cmd_verify(args: argparse.Namespace) -> int:
     from sharesift.verify import VerifyConfig, verify_records
 
     records = _read_jsonl(args.input, args.stdin)
-    print(f"Loaded {len(records)} hit records", file=sys.stderr)
+    out.info(f"Loaded {len(records)} hit records")
+    out.debug(
+        f"rate_limit={args.rate_limit}, timeout={args.timeout}, "
+        f"dry_run={args.dry_run}, target_file={args.target_file}, "
+        f"only={args.only}"
+    )
 
     config = VerifyConfig(
         dry_run=args.dry_run,
@@ -242,21 +255,21 @@ def cmd_verify(args: argparse.Namespace) -> int:
     )
 
     if not args.dry_run and config.confirm_banner:
-        print(
+        # Safety banner — warn() so --quiet can't suppress it.
+        out.warn(
             "[!] Live verification will generate authentication attempts "
-            "against external services.",
-            file=sys.stderr,
+            "against external services."
         )
-        print("    Use --dry-run first. Press Ctrl+C in 3s to abort.", file=sys.stderr)
+        out.warn("    Use --dry-run first. Press Ctrl+C in 3s to abort.")
         try:
             import time as _time
 
             _time.sleep(3)
         except KeyboardInterrupt:
-            print("Aborted by user.", file=sys.stderr)
+            out.warn("Aborted by user.")
             return 1
 
-    verified = verify_records(records, config, progress=True)
+    verified = verify_records(records, config)
     _emit_jsonl(verified, args.output)
 
     by_status: dict[str, int] = {}
@@ -264,7 +277,7 @@ def cmd_verify(args: argparse.Namespace) -> int:
         s = r.get("verification_status", "skipped")
         by_status[s] = by_status.get(s, 0) + 1
     summary = ", ".join(f"{k}={v}" for k, v in sorted(by_status.items()))
-    print(f"Verification summary: {summary}", file=sys.stderr)
+    out.info(f"Verification summary: {summary}")
     return 0
 
 
@@ -306,7 +319,6 @@ def _build_path_classifier(args: argparse.Namespace) -> "PathClassifier":
 
 
 def main(argv: list[str] | None = None) -> int:
-    _install_warning_filters()
     parser = argparse.ArgumentParser(
         prog="sharesift",
         description=(
@@ -318,6 +330,20 @@ def main(argv: list[str] | None = None) -> int:
         "--version",
         action="version",
         version=f"%(prog)s {__version__}",
+    )
+    verbosity_group = parser.add_mutually_exclusive_group()
+    verbosity_group.add_argument(
+        "-q", "--quiet",
+        action="store_true",
+        help="Suppress progress and info messages on stderr; errors still print.",
+    )
+    verbosity_group.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help=(
+            "Emit debug detail (model dirs, batch sizes, timings) and "
+            "re-enable 3rd-party deprecation warnings."
+        ),
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -470,6 +496,14 @@ def main(argv: list[str] | None = None) -> int:
     rt.set_defaults(func=cmd_retrain_ranker)
 
     args = parser.parse_args(argv)
+    if args.quiet:
+        verbosity = Verbosity.QUIET
+    elif args.verbose:
+        verbosity = Verbosity.VERBOSE
+    else:
+        verbosity = Verbosity.NORMAL
+    out.configure(verbosity=verbosity)
+    _install_warning_filters(verbosity)
     return args.func(args)
 
 
