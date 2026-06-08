@@ -1,5 +1,5 @@
 {
-  "elapsed_s": 4.02,
+  "elapsed_s": 4.09,
   "per_set": [
     {
       "set": "msf3",
@@ -48,9 +48,9 @@
       "supplementary": true,
       "n_records": 43,
       "n_positive": 12,
-      "recall_any_tier": 0.9167,
-      "top_10_precision": 0.5,
-      "top_20_precision": 0.5
+      "recall_any_tier": 1.0,
+      "top_10_precision": 0.6,
+      "top_20_precision": 0.55
     }
   ],
   "headline": {

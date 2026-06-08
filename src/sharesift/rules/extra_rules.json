@@ -483,6 +483,103 @@
         "(?i)netlify[\\w. \\-]{0,20}[=:][\\s\\\"'`]{0,5}[a-z0-9=_\\-]{40}"
       ],
       "description": "Netlify access token (context-match) (ported from Gitleaks 2026-06-04, MIT)."
+    },
+    {
+      "rule_name": "ShareSiftKeepPypirc",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.pypirc",
+        "pypirc"
+      ],
+      "description": "PyPI upload token file \u2014 paired with v0.25 pypirc parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepNetrc",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.netrc",
+        "_netrc"
+      ],
+      "description": "curl/wget/git CLI auth tokens \u2014 paired with v0.24 netrc parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepGcloudCredentials",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "application_default_credentials\\.json",
+        "adc\\.json",
+        "credentials\\.db\\.json"
+      ],
+      "description": "GCP user-credential refresh tokens \u2014 paired with v0.25 gcloud_credentials parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepKeyringFile",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "keyring_pass\\.cfg",
+        "keyring_cryptfile_pass\\.cfg",
+        "keyringrc\\.cfg"
+      ],
+      "description": "Python keyring file-backend storage \u2014 paired with v0.25 keyring_credentials parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepAwsCliCredentialsByPath",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "\\.aws[/\\\\]credentials",
+        "\\.aws[/\\\\]config"
+      ],
+      "description": "AWS CLI credential / config files in .aws/ directory \u2014 paired with v0.24 aws_cli_credentials parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepMavenSettingsByPath",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "\\.m2[/\\\\]settings\\.xml",
+        "apache-maven[/\\\\]conf[/\\\\]settings\\.xml"
+      ],
+      "description": "Maven settings.xml in .m2 or apache-maven path \u2014 paired with v0.24 maven_settings_xml parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepGhCliConfigByPath",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Contains",
+      "wordlist": [
+        "\\.config[/\\\\]gh[/\\\\]hosts\\.yml",
+        "\\.config[/\\\\]gh[/\\\\]hosts\\.yaml"
+      ],
+      "description": "GitHub CLI OAuth tokens \u2014 paired with v0.25 gh_cli_config parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepPuttyPpkByExtension",
+      "triage": "Red",
+      "match_action": "CheckForKeys",
+      "match_location": "FileExtension",
+      "wordlist_type": "Exact",
+      "wordlist": [
+        "\\.ppk"
+      ],
+      "description": "PuTTY/WinSCP key file \u2014 paired with v0.26 putty_ppk parser."
     }
   ]
 }

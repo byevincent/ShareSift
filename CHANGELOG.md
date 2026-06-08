@@ -82,11 +82,55 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.30 — **close the parser-without-rule gap** (the .pypirc miss on
-the DiskForge benchmark — parsers v0.24/v0.25 added without paired
-filename rules in the engine); Azure + GCP verifiers (carryover);
-generate a larger DiskForge image to consider promoting it to
-primary; registry-hive parser when samples accessible.
+v0.31 — generate a larger DiskForge image (more negatives → realistic
+density, candidate for primary promotion); Azure + GCP verifiers
+(carryover); registry-hive parser when samples accessible.
+
+## [0.30.0] — 2026-06-08
+
+**Parser-without-rule gap closed.** The v0.29 DiskForge benchmark
+surfaced the `.pypirc` miss — parsers extract content, rules drive
+cascade tier; a parser without a paired rule leaves a recall hole
+on path-only enumeration. v0.30 adds 8 declarative rules in
+`extra_rules.json` covering all v0.24-v0.26 parser families.
+Engine: 120 → **128** rules.
+
+### Added
+
+| Rule | Match | Tier | Parser family |
+|---|---|---|---|
+| `ShareSiftKeepPypirc` | FileName | Red | v0.25 pypirc |
+| `ShareSiftKeepNetrc` | FileName | Red | v0.24 netrc |
+| `ShareSiftKeepGcloudCredentials` | FileName | Black | v0.25 gcloud_credentials |
+| `ShareSiftKeepKeyringFile` | FileName | Red | v0.25 keyring_credentials |
+| `ShareSiftKeepAwsCliCredentialsByPath` | FilePath (`.aws/`) | Black | v0.24 aws_cli_credentials |
+| `ShareSiftKeepMavenSettingsByPath` | FilePath (`.m2/`) | Yellow | v0.24 maven_settings_xml |
+| `ShareSiftKeepGhCliConfigByPath` | FilePath (`.config/gh/`) | Red | v0.25 gh_cli_config |
+| `ShareSiftKeepPuttyPpkByExtension` | FileExtension | Red | v0.26 putty_ppk |
+
+### Findings
+
+| Set | v0.29 | v0.30 |
+|---|---|---|
+| **DiskForge (supp)** | recall 0.917, top-10 0.50 | **recall 1.000**, top-10 0.60 |
+| MSF3 / CredData / MSF2 (primary) | unchanged | unchanged |
+| MIN top-10 / MIN recall (primary) | 0.20 / 0.90 | **0.20 / 0.90** |
+
+DiskForge caught all 12 plants; primary numbers unchanged because
+the new rules are filename- or path-context-distinctive enough not
+to false-positive on Linux server filesystems or source-code corpora.
+The harness confirmed: ambiguous filenames (`credentials`,
+`settings.xml`, `hosts.yml`) require path-context to avoid
+cross-distribution regression.
+
+### Notes
+
+- Tests added: 12. Each rule has both a fire-on-intended-path test
+  AND a no-FP-on-look-alike-path test (e.g.,
+  `test_aws_cli_credentials_does_not_fire_on_bare_credentials_filename`,
+  `test_maven_settings_xml_does_not_fire_on_vscode`,
+  `test_gh_cli_hosts_yml_does_not_fire_on_ansible_inventory`).
+- Full suite: **833 passing, 8 skipped, 0 regressions**.
 
 ## [0.29.0] — 2026-06-08
 
