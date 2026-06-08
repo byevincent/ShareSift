@@ -270,6 +270,77 @@ def _eval_creddata() -> dict:
     }
 
 
+def _eval_msf2() -> dict:
+    """Metasploitable 2: path classifier + filename-side rules.
+
+    Different distribution from MSF3 — Linux server filesystem
+    instead of Windows. Built in v0.27 by enumerating the public
+    tleemcjr/metasploitable2 docker image and labeling against
+    public walkthroughs (no ShareSift involvement in labeling).
+    """
+    from sharesift.content_rules import get_default_engine
+    from sharesift.path import PathClassifier
+
+    base = REPO_ROOT / "data" / "external" / "metasploitable2"
+    if not (base / "ground_truth.jsonl").exists():
+        return {"set": "msf2", "skipped": True}
+
+    ground = {r["path"]: r for r in _load_jsonl(base / "ground_truth.jsonl")}
+    paths = [
+        line.strip()
+        for line in (base / "file_list.txt").read_text(encoding="utf-8").splitlines()
+        if line.strip() and line.strip() in ground
+    ]
+
+    path_clf = PathClassifier()
+    rules = get_default_engine()
+
+    path_results = path_clf.score_batch(paths)
+
+    records: list[dict] = []
+    for p, p_result in zip(paths, path_results):
+        v = rules.evaluate(p, content=None)
+        records.append({
+            "path": p,
+            "positive": bool(ground[p].get("has_credential")),
+            "path_tier": p_result.tier,
+            "cascade_tier": v.tier,
+            "path_probability": p_result.probability,
+        })
+
+    scores = _score_with_dedup_penalty(records)
+
+    n_positive = sum(1 for r in records if r["positive"])
+    flagged = sum(
+        1 for r in records
+        if r["positive"] and (r["path_tier"] is not None or r["cascade_tier"] is not None)
+    )
+
+    sorted_pairs = sorted(zip(records, scores), key=lambda t: t[1], reverse=True)
+    seen = 0
+    k_full = None
+    for k, (r, _) in enumerate(sorted_pairs, 1):
+        if r["positive"]:
+            seen += 1
+        if seen == n_positive:
+            k_full = k
+            break
+
+    return {
+        "set": "msf2",
+        "n_records": len(records),
+        "n_positive": n_positive,
+        "recall_any_tier": round(flagged / max(1, n_positive), 4),
+        "top_10_precision": _top_k_precision(records, scores, 10),
+        "top_20_precision": _top_k_precision(records, scores, 20),
+        "top_50_precision": _top_k_precision(records, scores, 50),
+        "k_for_full_recall": k_full,
+        "precision_at_full_recall": (
+            round(n_positive / k_full, 4) if k_full else None
+        ),
+    }
+
+
 def _eval_engagement_corpus() -> dict:
     """Engagement corpus: path-only + tier label (supplementary; possibly
     training-contaminated)."""
@@ -338,6 +409,7 @@ def main(argv: list[str] | None = None) -> int:
     results = [
         _eval_msf3(),
         _eval_creddata(),
+        _eval_msf2(),
         _eval_engagement_corpus(),
     ]
     elapsed = round(time.monotonic() - t0, 2)

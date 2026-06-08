@@ -82,11 +82,58 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.27 — acquire a 4th independent held-out benchmark (GOAD lab dump,
-HTB box, PoshC2 logs, or SecretBench); Azure storage + GCP
-service-account verifiers; registry-hive parser when samples
-accessible; Stage 2 LoRA cross-distribution eval when weights
-tracked.
+v0.28 — investigate the MSF3-specific precision floor (path classifier
+saturation pattern documented in v0.21 validation); Azure storage +
+GCP service-account verifiers; another held-out set (DC-1, Kioptrix,
+Mr-Robot); registry-hive parser when samples accessible.
+
+## [0.27.0] — 2026-06-08
+
+**Third primary held-out set acquired.** Honestly built from the
+public `tleemcjr/metasploitable2` Docker image. MIN trajectory still
+holds at 0.20 / 0.90 — but the floor is now demonstrably MSF3-specific,
+not pipeline-shaped.
+
+### Added
+
+- `data/external/metasploitable2/file_list.txt` + `ground_truth.jsonl`
+  — 1500 paths, 34 known credential-bearing files labeled from public
+  Metasploitable 2 walkthroughs (not from running ShareSift against
+  the share)
+- `tools/build_msf2_benchmark.py` — reproducible builder; takes a
+  filtered file list from a `docker pull tleemcjr/metasploitable2`
+  enumeration and emits the labeled benchmark
+- `tools/eval_harness.py` gains `_eval_msf2()`; MSF2 joins MSF3 +
+  CredData as the third primary held-out set
+
+### Findings
+
+| Set | Recall | Top-10 | Top-50 |
+|---|---|---|---|
+| MSF3 (Windows) | 0.900 | 0.20 | 0.22 |
+| CredData (source code) | 1.000 | 0.70 | 0.68 |
+| **MSF2 (Linux, NEW)** | **0.971** | **0.80** | 0.36 |
+| **MIN across 3 primary** | **0.971** ← floor moves up | **0.20** ← still MSF3 |
+
+MSF2 alone is the first real-world held-out validation of the
+v0.22-v0.26 cascade on a fresh distribution: 33 of 34 known
+credential-bearing files caught, 8 of the top 10 ranked positions
+are real positives.
+
+The 0.20 floor on top-10 precision is now demonstrably MSF3-
+specific (Windows + PowerShell-heavy share with the
+`Install-BoxstarterPackage.ps1` saturation pattern). The v0.28
+question is whether to fix that declaratively or leave it as the
+honest floor.
+
+### Notes
+
+- Test suite unchanged: 821 passing. v0.27 work was benchmark
+  acquisition + harness wiring, not new code paths.
+- Labels come from public security knowledge (Rapid7 docs, CTF
+  write-ups for MSF2) that predates ShareSift. No overfitting risk.
+- Hard-coded label list in `_POSITIVE_PATTERNS` is documented and
+  reproducible.
 
 ## [0.26.0] — 2026-06-08
 

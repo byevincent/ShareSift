@@ -1,5 +1,5 @@
 {
-  "elapsed_s": 2.83,
+  "elapsed_s": 3.65,
   "per_set": [
     {
       "set": "msf3",
@@ -23,6 +23,17 @@
       "top_50_precision": 0.68
     },
     {
+      "set": "msf2",
+      "n_records": 1500,
+      "n_positive": 34,
+      "recall_any_tier": 0.9706,
+      "top_10_precision": 0.8,
+      "top_20_precision": 0.6,
+      "top_50_precision": 0.36,
+      "k_for_full_recall": 916,
+      "precision_at_full_recall": 0.0371
+    },
+    {
       "set": "engagement_corpus",
       "supplementary": true,
       "n_records": 401,
@@ -38,7 +49,8 @@
     "min_recall_across_primary": 0.9,
     "primary_sets": [
       "msf3",
-      "creddata"
+      "creddata",
+      "msf2"
     ]
   }
 }
