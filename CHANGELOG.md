@@ -82,11 +82,58 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.26 — registry-hive + PuTTY `.ppk` parsers (need samples); Stage 2
-LoRA cross-distribution eval (need tracked weights); a 4th
-independent held-out benchmark (GOAD, HTB box dump, or PoshC2
-logs); read-only verifiers for the v0.23 new credential types
-(Stripe, SendGrid, etc.).
+v0.27 — acquire a 4th independent held-out benchmark (GOAD lab dump,
+HTB box, PoshC2 logs, or SecretBench); Azure storage + GCP
+service-account verifiers; registry-hive parser when samples
+accessible; Stage 2 LoRA cross-distribution eval when weights
+tracked.
+
+## [0.26.0] — 2026-06-08
+
+4 read-only verifiers + PuTTY parser. MIN trajectory flat at
+0.20 / 0.90 for the 5th consecutive release.
+
+### Added
+
+- `src/sharesift/verify/stripe.py` — `GET /v1/account` Bearer
+- `src/sharesift/verify/sendgrid.py` — `GET /v3/user/profile` Bearer
+- `src/sharesift/verify/mailgun.py` — `GET /v3/domains` Basic
+- `src/sharesift/verify/twilio.py` — `GET /Accounts/<sid>.json` Basic;
+  requires Account SID via verify context
+- `src/sharesift/parsers/putty_ppk.py` — PuTTY/WinSCP key file
+  parser; surfaces v2/v3 + algorithm + encryption status; extracts
+  plaintext private body when `Encryption: none`, otherwise just
+  flags the encrypted file's presence
+
+Verifier coverage: 14 → **18** credential types.
+Parser count: 26 → **27**.
+
+### Honest deferral
+
+The v0.25 plan called for acquiring a 4th independent held-out
+benchmark. v0.26 surveyed available data and found no clean
+candidate (kingfisher_input has no negatives; engagement_corpus is
+either unlabeled prose or possibly-overfit synthetic paths; no
+GOAD / HTB / SecretBench on disk). The discipline says don't fake
+a 4th set to pad the chart. Deferred to v0.27 with explicit
+acquisition plans.
+
+### Findings
+
+| Metric | v0.25 | v0.26 |
+|---|---|---|
+| MIN top-10 precision | 0.20 | 0.20 |
+| MIN recall any-tier | 0.90 | 0.90 |
+
+5-release flat trajectory captured in
+`benchmarks/v0p22_eval/harness_history.jsonl`. Visualised by
+`tools/plot_harness_history.py`.
+
+### Notes
+
+- Tests added: 10 (7 verifier + 3 PPK). All HTTP mocked at
+  ``requests.request``; no live outbound calls in CI.
+- Full suite: **821 passing, 8 skipped, 0 regressions**.
 
 ## [0.25.0] — 2026-06-08
 

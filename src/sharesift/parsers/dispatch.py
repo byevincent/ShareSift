@@ -95,6 +95,8 @@ from sharesift.parsers import (  # noqa: E402
     gcloud_credentials,
     gh_cli_config,
     keyring_credentials,
+    # v0.26 additions
+    putty_ppk,
 )
 
 
@@ -108,5 +110,7 @@ for mod in (
     wp_config_php, aws_cli_credentials, netrc, maven_settings_xml,
     # v0.25
     pypirc, gcloud_credentials, gh_cli_config, keyring_credentials,
+    # v0.26
+    putty_ppk,
 ):
     mod.register(_register)

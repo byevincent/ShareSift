@@ -66,6 +66,27 @@ def _load_ldap() -> type[BaseVerifier]:
     return LDAPVerifier
 
 
+# v0.26: read-only verifiers for the v0.23 extractor credential types.
+def _load_stripe() -> type[BaseVerifier]:
+    from sharesift.verify.stripe import StripeVerifier
+    return StripeVerifier
+
+
+def _load_sendgrid() -> type[BaseVerifier]:
+    from sharesift.verify.sendgrid import SendGridVerifier
+    return SendGridVerifier
+
+
+def _load_mailgun() -> type[BaseVerifier]:
+    from sharesift.verify.mailgun import MailgunVerifier
+    return MailgunVerifier
+
+
+def _load_twilio() -> type[BaseVerifier]:
+    from sharesift.verify.twilio import TwilioVerifier
+    return TwilioVerifier
+
+
 # Each loader returns the verifier class on first access; cached by
 # Python's import system thereafter.
 _REGISTRY: dict[str, Callable[[], type[BaseVerifier]]] = {
@@ -100,6 +121,13 @@ _REGISTRY: dict[str, Callable[[], type[BaseVerifier]]] = {
     # from the parser dispatcher through to the verify runner.
     "smb_credential": _load_smb,
     "ldap_credential": _load_ldap,
+    # v0.26 read-only verifiers for the v0.23 extractor types.
+    "stripe_live_secret": _load_stripe,
+    "stripe_live_restricted": _load_stripe,
+    "sendgrid_api_key": _load_sendgrid,
+    "mailgun_api_key": _load_mailgun,
+    "twilio_account_sid": _load_twilio,
+    "twilio_api_key_sid": _load_twilio,
 }
 
 
