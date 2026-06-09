@@ -261,6 +261,42 @@ def test_wrong_port_raises_connection_error(samba_container):
 
 
 # --------------------------------------------------------------------
+# SMB3 encryption — the production default
+# --------------------------------------------------------------------
+
+
+def test_encrypt_true_works_against_modern_samba(samba_container):
+    """``encrypt=True`` is the SmbShare default. Operators should
+    get SMB3 message encryption against any SMB3-capable server
+    without flag wrangling. Validates that what the docs promise
+    actually works against Samba 4.x."""
+    auth = Auth(user=samba_container.user, password=samba_container.password)
+    share = SmbShare(_target(samba_container), auth)  # default encrypt=True
+    try:
+        entries = list(share.walk())
+        unc = rf"\\{samba_container.host}\{samba_container.share}\hello.txt"
+        data = share.read_bytes(unc)
+    finally:
+        share.close()
+
+    assert any(e.path.endswith("hello.txt") for e in entries)
+    assert data == b"hello world\n"
+
+
+def test_encrypt_true_works_with_pth(samba_container):
+    """PtH + SMB3 encryption together — the production pentester
+    workflow."""
+    auth = Auth(user=samba_container.user, hash=samba_container.nt_hash)
+    share = SmbShare(_target(samba_container), auth)  # default encrypt=True
+    try:
+        entries = list(share.walk())
+    finally:
+        share.close()
+
+    assert any(e.path.endswith("hello.txt") for e in entries)
+
+
+# --------------------------------------------------------------------
 # End-to-end with load_content_from_share — the real production path
 # --------------------------------------------------------------------
 
