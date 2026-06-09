@@ -119,6 +119,73 @@ def apply_dedup_penalty(records: list[dict]) -> list[dict]:
     return records
 
 
+_VERIFICATION_RANK = {
+    "passed": 4,         # LIVE — verified-now credential
+    "failed": 3,         # was real (revoked / wrong / expired)
+    "inconclusive": 2,   # couldn't determine
+    "skipped": 1,        # no verifier ran
+    None: 0,
+}
+
+_TIER_RANK = {
+    "Black": 4,
+    "Red": 3,
+    "Yellow": 2,
+    "Green": 1,
+    None: 0,
+}
+
+
+def sort_verifier_first(records: list[dict]) -> list[dict]:
+    """Sort hits so verified-live credentials surface first.
+
+    This is the **structural ShareSift advantage Snaffler can't
+    match**: Snaffler finds files; ShareSift finds files AND tells
+    operators which contain credentials that actually authenticate
+    right now. Reordering output to put ``verification_status="passed"``
+    records first turns "20 of 400 hits are live" from a footnote
+    into the operator's first impression.
+
+    Sort key (descending priority):
+
+    1. verification_status — ``passed`` > ``failed`` > ``inconclusive``
+       > ``skipped`` > missing
+    2. content_tier / path_tier — Black > Red > Yellow > Green > none
+    3. rank_score — the v0.44 dedup-penalized signal
+    4. path — stable tiebreaker
+
+    Records without verification fields fall back gracefully; mixing
+    verified and unverified records in one list works correctly
+    (unverified land at the bottom, ranked by tier + score among
+    themselves).
+    """
+    def key(r: dict) -> tuple:
+        tier = r.get("content_tier") or r.get("path_tier")
+        return (
+            -_VERIFICATION_RANK.get(r.get("verification_status"), 0),
+            -_TIER_RANK.get(tier, 0),
+            -float(r.get("rank_score") or r.get("probability") or 0.0),
+            r.get("path", ""),
+        )
+    return sorted(records, key=key)
+
+
+def live_marker(record: dict) -> str:
+    """Compact marker for tabular display.
+
+    ``[LIVE]`` for verified-passed records, ``[FAIL]`` for
+    failed-verification (was-real-but-now-revoked), empty string
+    otherwise. Used by the Snaffler-TSV converter and HTML report
+    to surface verification status at a glance.
+    """
+    status = record.get("verification_status")
+    if status == "passed":
+        return "[LIVE]"
+    if status == "failed":
+        return "[FAIL]"
+    return ""
+
+
 def sort_by_rank(records: list[dict]) -> list[dict]:
     """Return records sorted by ``rank_score`` descending. Falls back
     to ``probability`` then ``path`` for stable ordering when the

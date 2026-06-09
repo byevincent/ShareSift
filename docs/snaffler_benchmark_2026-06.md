@@ -187,6 +187,48 @@ still the faster pick. For typical engagement scanning where the
 share walk dominates wall-clock, the speed difference doesn't
 matter operationally.
 
+## Top-K precision (post-v0.44)
+
+The structural ranking weakness this benchmark identified turned out
+to be an unfixed bug from v0.21, not a fundamental limit. v0.44
+step 2 short-circuits the ranking when `cascade_tier == "Green"`
+(the rule engine's explicit "this is Relay-only, not credential"
+signal), respecting the v0.21 MSF3 lesson the previous
+`max(probability, cascade_tier_pseudo_p)` defeated.
+
+Internal eval harness numbers (current ShareSift cascade, no head-
+to-head against Snaffler):
+
+| Benchmark | top-10 before | top-10 after | top-20 | recall |
+|---|---|---|---|---|
+| MSF3 (Windows AD) | 0.20 | **0.80** (4×) | 0.45 | 0.90 |
+| CredData (text content) | 0.70 | 0.70 | 0.60 | 1.00 |
+| MSF2 (Linux server) | 1.00 | 1.00 | 0.70 | 1.00 |
+| engagement_corpus (supplementary) | 0.40 | **0.90** | 0.85 | 0.91 |
+| DiskForge (forensic) | 0.50 | 0.50 | 0.45 | 1.00 |
+| **MIN across primary** | **0.20** | **0.70** | 0.45 | 0.90 |
+
+**MIN top-10 = 0.70.** Chart was flat at 0.20 for 16+ releases.
+First movement since v0.18.
+
+MSF3 top-10 after fix:
+
+```
+ 1. BOOTSECT.BAK                                FP (Yellow)
+ 2. id_rsa (Administrator/.ssh)                 TP Black
+ 3. id_rsa (vagrant/.ssh)                       TP Black
+ 4. Winre.wim (Windows Recovery image)          FP (Yellow)
+ 5-10. authorized_keys, environment, etc.       TP Black
+```
+
+8 of 10 top-ranked files are real SSH credentials. The 2 FPs are
+legitimately-interesting Yellow-tier files (recovery image, boot
+backup) that operators would expect to see flagged.
+
+This top-K claim is now defensible across 3 primary benchmarks
+without per-benchmark tuning — same Green-zero logic applies
+everywhere.
+
 ## What this doesn't measure
 
 Six caveats that matter for the displacement narrative:

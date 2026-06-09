@@ -52,6 +52,7 @@ _KNOWN_SUBCOMMANDS = frozenset({
     "batch",
     "discover",
     "query",
+    "sort",
 })
 
 
@@ -1139,6 +1140,59 @@ def _ingest_hits_into_db(db, hits_jsonl: Path, target: str) -> None:
             )
 
 
+def cmd_sort(args: argparse.Namespace) -> int:
+    """v0.45: re-sort a hits.jsonl by the verifier-first key.
+
+    Useful after combining multiple per-target hits.jsonl files
+    from a batch scan into one engagement-level list — re-sorting
+    surfaces the verified-live credentials regardless of which
+    target they came from.
+
+        cat engagement/*/hits.jsonl > combined.jsonl
+        sharesift sort --input combined.jsonl --output ranked.jsonl
+
+    Records without verification_status fields fall back gracefully
+    to tier + rank_score sorting.
+    """
+    from sharesift.ranking import sort_verifier_first
+
+    start = time.monotonic()
+    records = _read_jsonl(args.input, args.stdin)
+    out.debug(f"Loaded {len(records)} records")
+
+    records = sort_verifier_first(records)
+
+    sink = sys.stdout if args.output is None else open(args.output, "w", encoding="utf-8")
+    try:
+        n = 0
+        for r in records:
+            sink.write(json.dumps(r) + "\n")
+            n += 1
+    finally:
+        if sink is not sys.stdout:
+            sink.close()
+
+    # Tally for the operator
+    by_status: dict[str, int] = {}
+    for r in records:
+        s = r.get("verification_status") or "no-verifier"
+        by_status[s] = by_status.get(s, 0) + 1
+    summary_line = ", ".join(f"{k}={v}" for k, v in sorted(by_status.items()))
+    out.info(f"sorted {n} records by verifier-first key: {summary_line}")
+
+    out.summary({
+        "command": "sort",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "input_count": len(records),
+        "output_count": n,
+        "verification_breakdown": by_status,
+        "output_path": str(args.output) if args.output else None,
+        "exit_code": 0,
+    })
+    return 0
+
+
 def cmd_to_snaffler_tsv(args: argparse.Namespace) -> int:
     """v0.36 step 4: convert ``hits.jsonl`` to Snaffler-compatible TSV.
 
@@ -1151,10 +1205,17 @@ def cmd_to_snaffler_tsv(args: argparse.Namespace) -> int:
             > scan.snaf.tsv
     """
     from sharesift.output import iter_snaffler_tsv_lines
+    from sharesift.ranking import sort_verifier_first
 
     start = time.monotonic()
     records = _read_jsonl(args.input, args.stdin)
     out.debug(f"Loaded {len(records)} records")
+
+    # v0.45: verifier-first sort. Live-verified credentials surface
+    # at the top of the TSV. Snaffler-TSV format itself unchanged
+    # (11 columns, downstream-tool-compatible) — just reordered.
+    if not getattr(args, "no_sort", False):
+        records = sort_verifier_first(records)
 
     sink = sys.stdout if args.output is None else open(args.output, "w", encoding="utf-8")
     try:
@@ -1237,6 +1298,13 @@ def cmd_verify(args: argparse.Namespace) -> int:
             return 1
 
     verified = verify_records(records, config)
+
+    # v0.45: verifier-first sort. Live-passing credentials surface
+    # at the top — the structural ShareSift advantage Snaffler can't
+    # match. Operators see [LIVE] hits before tier-only hits.
+    from sharesift.ranking import sort_verifier_first
+    verified = sort_verifier_first(verified)
+
     _emit_jsonl(verified, args.output)
 
     by_status: dict[str, int] = {}
@@ -1750,7 +1818,30 @@ def main(argv: list[str] | None = None) -> int:
     ts.add_argument("--input", type=Path, help="hits.jsonl path (or use --stdin)")
     ts.add_argument("--stdin", action="store_true", help="Read JSONL from stdin")
     ts.add_argument("--output", type=Path, default=None, help="Output TSV path (default stdout)")
+    ts.add_argument(
+        "--no-sort", action="store_true",
+        help=(
+            "Disable the v0.45 verifier-first sort. By default, "
+            "records are reordered so verified-passed (LIVE) "
+            "credentials appear at the top, then by tier + rank. "
+            "Pass --no-sort to preserve input order."
+        ),
+    )
     ts.set_defaults(func=cmd_to_snaffler_tsv)
+
+    # v0.45: sort — re-sort a JSONL by the verifier-first key
+    so = sub.add_parser(
+        "sort",
+        help=(
+            "Re-sort a hits.jsonl by the verifier-first key. "
+            "Live-passing credentials surface first, then by tier "
+            "+ rank. Useful after combining batch results."
+        ),
+    )
+    so.add_argument("--input", type=Path, help="hits.jsonl path (or use --stdin)")
+    so.add_argument("--stdin", action="store_true", help="Read JSONL from stdin")
+    so.add_argument("--output", type=Path, default=None, help="Output JSONL (default stdout)")
+    so.set_defaults(func=cmd_sort)
 
     # v0.35: implicit-scan dispatch. If the first non-flag positional
     # looks like an SMB target, inject ``scan`` so argparse routes there.

@@ -31,8 +31,10 @@ def test_to_snaffler_tsv_writes_file(tmp_path):
     # Drop trailing blank line if present
     lines = [ln for ln in lines if ln]
     assert len(lines) == 2
-    assert "Red" in lines[0]
-    assert "Black" in lines[1]
+    # v0.45: default verifier-first sort. With no verification on
+    # either record, sort is by tier — Black > Red.
+    assert "Black" in lines[0]
+    assert "Red" in lines[1]
     # 12 fields per line (tab-separated)
     assert all(len(line.split("\t")) == 12 for line in lines)
 
