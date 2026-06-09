@@ -1,6 +1,6 @@
 [project]
 name = "sharesift"
-version = "0.32.0"
+version = "0.33.0"
 description = "ML-augmented SMB share hunter (Snaffler successor)"
 requires-python = ">=3.10,<3.13"
 # Core runtime: pydantic for schemas + the Stage-1 path classifier
@@ -96,6 +96,10 @@ verify = [
     "pyyaml>=6.0",
     "paramiko>=3.3",
     "ldap3>=2.9",
+    # v0.33: pyjwt[crypto] for live GCP service-account verification (RS256 JWT
+    # signing → OAuth token exchange). Falls back to structural-only when not
+    # installed.
+    "pyjwt[crypto]>=2.0",
 ]
 verify-cloud = [
     "boto3>=1.28",

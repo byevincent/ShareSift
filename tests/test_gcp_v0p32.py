@@ -95,9 +95,13 @@ def test_extractor_does_not_match_partial_sa_json():
 # --- Verifier --------------------------------------------------------
 
 
-def test_verifier_passes_on_well_formed_sa_json():
-    from sharesift.verify.gcp_service_account import GcpServiceAccountVerifier
-    result = GcpServiceAccountVerifier().verify(
+def test_verifier_passes_structurally_when_live_path_unavailable(monkeypatch):
+    """When ``_try_live_verification`` returns None (pyjwt not installed
+    in production, or forced None in test), the verifier returns the
+    structural verdict. v0.32 behavior preserved as the fallback."""
+    from sharesift.verify import gcp_service_account as gcp_sa
+    monkeypatch.setattr(gcp_sa, "_try_live_verification", lambda data, config: None)
+    result = gcp_sa.GcpServiceAccountVerifier().verify(
         credential=_sa_json_blob(),
         config=VerifyConfig(),
         context={"credential_type": "gcp_service_account_json"},

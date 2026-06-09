@@ -82,9 +82,74 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.33 — **live OAuth GCP verification** (JWT signing + token exchange);
-registry-hive parser when samples accessible; optional DiskForge GCP SA
-JSON plant for end-to-end coverage.
+v0.34 — registry-hive parser when samples accessible (long-standing
+carryover); optional DiskForge GCP SA JSON plant for end-to-end
+cascade-to-verifier smoke; speculative engagement-log corpus as a 4th
+primary held-out set.
+
+## [0.33.0] — 2026-06-08
+
+**Second half of the v0.31 GCP gap closed.** v0.32 shipped the
+extractor expansion + structural verifier; v0.33 ships live OAuth
+verification with RS256 JWT signing and token exchange. Both halves
+of the v0.31 finding are now on the record.
+
+### Added
+
+- `pyjwt[crypto]>=2.0` added to the `verify` dependency group.
+  Pulls `cryptography` for RS256 signing. ~3 MB additional install
+  size; the verifier degrades gracefully to structural-only when
+  the dep isn't installed.
+- `_try_live_verification` helper in
+  `src/sharesift/verify/gcp_service_account.py`. Signs an RS256 JWT
+  with the SA's private_key, POSTs to
+  `https://oauth2.googleapis.com/token` (the documented OAuth
+  endpoint), maps the response:
+  - 200 + access_token → `passed` (validation_mode=live)
+  - 401 → `failed` (key revoked / invalid_grant)
+  - 400 → `failed` (malformed JWT)
+  - Timeout → `inconclusive`
+  - Connection error → `inconclusive`
+- 8 new tests in `tests/test_gcp_live_v0p33.py` covering the
+  live-OAuth paths. Synthetic 2048-bit RSA key generated at fixture
+  time using `cryptography`; OAuth HTTP mocked at `requests.post`.
+
+### Changed
+
+- `GcpServiceAccountVerifier._verify_inner` now tries the live path
+  after structural validation passes; falls back to structural
+  verdict if pyjwt isn't installed.
+- `test_verifier_passes_on_well_formed_sa_json` (v0.32) renamed to
+  `test_verifier_passes_structurally_when_live_path_unavailable` and
+  monkeypatches the live helper to None — the test still asserts the
+  structural fallback verdict.
+
+### Discipline notes
+
+- Read-only OAuth scope (`userinfo.email`). Verifier doesn't
+  enumerate cloud resources or mutate state. Same pattern as the
+  existing Stripe / SendGrid / Mailgun / Twilio / Azure verifiers.
+- 5-minute JWT expiry — minimal validity window for verification.
+- Mocked at `requests.post` in tests; no live outbound calls in CI.
+
+### Findings
+
+| Metric | v0.32 | v0.33 |
+|---|---|---|
+| GCP verification mode | structural only | **live + structural fallback** |
+| MIN top-10 / MIN recall (primary) | 0.20 / 0.90 | 0.20 / 0.90 |
+| Verifier coverage (count) | 20 | 20 (same types; deeper verification on GCP) |
+
+The harness numbers are unchanged because primary held-out sets
+don't contain GCP SA JSON files. Adding a DiskForge GCP plant for
+end-to-end smoke is queued for v0.34 but isn't load-bearing — the
+unit test coverage is exhaustive.
+
+### Notes
+
+- Test count: **857 passing**, 8 skipped (was 849 — +8 GCP live).
+- v0.31 finding ↦ v0.32 structural ↦ v0.33 live — full close across
+  two sprints, with explicit checkpoint releases.
 
 ## [0.32.0] — 2026-06-08
 
