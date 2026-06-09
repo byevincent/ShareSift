@@ -1314,7 +1314,7 @@
     },
     {
       "rule_name": "KeepSSHKeysByFileExtension",
-      "triage": "Black",
+      "triage": "Yellow",
       "match_action": "Snaffle",
       "match_location": "FileExtension",
       "wordlist_type": "Exact",
@@ -1323,7 +1323,7 @@
       ],
       "source_file": "FileRules/Keep/UserFiles/SSH/KeepSSHKeysByFileExtension.toml",
       "enumeration_scope": "FileEnumeration",
-      "description": "SSHKeys"
+      "description": "SSHKeys [v0.36] demoted from Black to Yellow as the floor tier; ShareSiftKeepPuttyPpkUnencrypted promotes to Black when the private body is plaintext. Closes Snaffler #191 \u2014 most .ppk files are passphrase-protected and not actionable without the passphrase, so the Black queue should reflect only the immediately-usable ones."
     },
     {
       "rule_name": "CertContentByEnding",

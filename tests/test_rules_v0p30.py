@@ -112,5 +112,13 @@ def test_gh_cli_hosts_yml_does_not_fire_on_ansible_inventory():
 
 
 def test_putty_ppk_extension_rule_fires():
-    assert _fires("/Users/alice/Documents/server.ppk", "PuttyPpk")
-    assert _fires(r"C:\Users\admin\Downloads\corp-prod.ppk", "PuttyPpk")
+    """v0.30: the path-side rule fires on .ppk files (paired with the
+    v0.26 putty_ppk parser).
+
+    v0.36 step 2: the ShareSiftKeepPuttyPpkByExtension rule was
+    removed in favor of using the Snaffler-ported
+    ``KeepSSHKeysByFileExtension`` rule as the Yellow floor; the
+    extension-only signal that this test cares about is still
+    present, just under the upstream rule name."""
+    assert _fires("/Users/alice/Documents/server.ppk", "SSHKeysByFileExtension")
+    assert _fires(r"C:\Users\admin\Downloads\corp-prod.ppk", "SSHKeysByFileExtension")

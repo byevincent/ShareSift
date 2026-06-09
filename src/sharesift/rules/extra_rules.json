@@ -571,15 +571,15 @@
       "description": "GitHub CLI OAuth tokens \u2014 paired with v0.25 gh_cli_config parser."
     },
     {
-      "rule_name": "ShareSiftKeepPuttyPpkByExtension",
-      "triage": "Red",
-      "match_action": "CheckForKeys",
-      "match_location": "FileExtension",
-      "wordlist_type": "Exact",
+      "rule_name": "ShareSiftKeepPuttyPpkUnencrypted",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
       "wordlist": [
-        "\\.ppk"
+        "PuTTY-User-Key-File-[23]:[\\s\\S]{0,500}Encryption:\\s*none\\b"
       ],
-      "description": "PuTTY/WinSCP key file \u2014 paired with v0.26 putty_ppk parser."
+      "description": "PuTTY .ppk with Encryption: none \u2014 the private key body is plaintext base64 and immediately usable. Promotes the Yellow extension match to Black. Closes Snaffler #191's volume problem by distinguishing high-value PPKs from passphrase-locked ones. Engine compiles with re.IGNORECASE only (no MULTILINE), so the pattern relies on \\b instead of $."
     },
     {
       "rule_name": "ShareSiftKeepTerraformState",
