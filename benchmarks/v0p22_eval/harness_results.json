@@ -1,5 +1,5 @@
 {
-  "elapsed_s": 4.21,
+  "elapsed_s": 4.29,
   "per_set": [
     {
       "set": "msf3",
@@ -38,7 +38,7 @@
       "supplementary": true,
       "n_records": 401,
       "n_positive": 92,
-      "recall_any_tier": 0.9022,
+      "recall_any_tier": 0.913,
       "top_10_precision": 0.6,
       "top_20_precision": 0.65,
       "top_50_precision": 0.74
@@ -49,8 +49,8 @@
       "n_records": 520,
       "n_positive": 13,
       "recall_any_tier": 1.0,
-      "top_10_precision": 0.6,
-      "top_20_precision": 0.55
+      "top_10_precision": 0.5,
+      "top_20_precision": 0.5
     }
   ],
   "headline": {

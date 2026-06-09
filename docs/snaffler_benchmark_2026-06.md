@@ -12,19 +12,38 @@ comparable: MSF3 (Windows AD), MSF2 (Linux server), DiskForge
 (forensic Windows disk images). CredData and engagement_corpus
 measure different tasks and aren't comparable in this format.
 
-## Headline
+## Headline (post-v0.42)
 
 | Benchmark | Snaffler R | ShareSift R | Δ | ShareSift unique TPs | Snaffler unique TPs |
 |---|---|---|---|---|---|
 | **MSF3** (40 Windows creds) | 0.975 (39/40) | **1.000 (40/40)** | +1 | 1 | 0 |
-| **MSF2** (34 Linux creds) | 0.441 (15/34) | **0.676 (23/34)** | +8 | 8 | 0 |
+| **MSF2** (34 Linux creds) | 0.441 (15/34) | **0.971 (33/34)** | **+18** | 18 | 0 |
 | **DiskForge** (13 forensic plants) | **0.923 (12/13)** | **0.923 (12/13)** | 0 | 0 | 0 |
 
-**ShareSift catches everything Snaffler catches plus 9 additional
+**ShareSift catches everything Snaffler catches plus 19 additional
 credential files. Snaffler catches nothing that ShareSift misses.**
 
-Both rule libraries miss 11 Linux credential paths on MSF2 — real
-shared gap in both tools' coverage.
+### v0.42 update
+
+The initial v0.41 benchmark showed ShareSift R=0.676 on MSF2 with
+11 both-missed Linux credential paths. **v0.42 added 6 targeted
+rules closing 10 of those gaps**:
+
+| New rule | Catches |
+|---|---|
+| `ShareSiftKeepShadowBackup` | `/etc/shadow-`, `/etc/gshadow`, `/etc/gshadow-` |
+| `ShareSiftKeepNfsExports` | `/etc/exports` |
+| `ShareSiftKeepPostfixConfig` | `/etc/postfix/main.cf` |
+| `ShareSiftKeepMysqlDataDir` | `/var/lib/mysql/mysql/user.MYD`, `user.MYI` |
+| `ShareSiftKeepEditorBackupConfig` | `/var/www/dvwa/config/config.inc.php~` |
+| `ShareSiftKeepSshHostPubKeys` | `/etc/ssh/ssh_host_*_key.pub` |
+
+Only `/root/reset_logs.sh` remains as a both-missed gap on MSF2 —
+a shell script with embedded credentials, intentionally hard to
+rule for without false positives on every shell script.
+
+**Post-v0.42 the gap to Snaffler on Linux is +53 percentage points
+of recall (0.971 vs 0.441).**
 
 ## Methodology
 

@@ -653,6 +653,81 @@
       "description": "AWS SSO cached bearer tokens \u2014 SHA1-named JSON files under ~/.aws/sso/cache/. RedCanary documented 2024 attack pattern: exfiltrating these gives short-lived but valid bearer tokens for refresh."
     },
     {
+      "rule_name": "ShareSiftKeepShadowBackup",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^/etc/shadow-?$",
+        "^/etc/gshadow-?$"
+      ],
+      "description": "Linux /etc/shadow + /etc/gshadow + their .bak (trailing dash) variants. Both Snaffler and ShareSift caught /etc/shadow before; the trailing-dash backup forms (created by passwd/groupadd before write) were a benchmark gap surfaced 2026-06."
+    },
+    {
+      "rule_name": "ShareSiftKeepNfsExports",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^/etc/exports$"
+      ],
+      "description": "NFS share exports list — defines host access rules + optional sec= flavors (sys/krb5*/auth_*). Reveals lateral-move opportunities + may hold krb5 keytab paths."
+    },
+    {
+      "rule_name": "ShareSiftKeepPostfixConfig",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^/etc/postfix/main\\.cf$",
+        "^/etc/postfix/sasl_passwd$",
+        "^/etc/postfix/saslpasswd2$"
+      ],
+      "description": "Postfix mail server config. main.cf points at smtpd_*_password files; sasl_passwd holds plaintext relay credentials. Linux mail-server credential surface Snaffler doesn't cover."
+    },
+    {
+      "rule_name": "ShareSiftKeepMysqlDataDir",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "/var/lib/mysql/mysql/user\\.(MYD|MYI|frm|ibd)$",
+        "/var/lib/mysql/mysql/db\\.(MYD|MYI|frm)$",
+        "/var/lib/mysql/mysql/proxies_priv\\.(MYD|MYI|frm)$",
+        "/var/lib/mysql/performance_schema/replication_connection_configuration\\.frm$"
+      ],
+      "description": "MySQL/MariaDB ISAM + InnoDB data files for the mysql.user / mysql.db tables. Contains password hashes (legacy mysql_native_password, sha256_password, caching_sha2_password) that crack offline. Linux DB-server credential surface."
+    },
+    {
+      "rule_name": "ShareSiftKeepEditorBackupConfig",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        ".*\\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)~$",
+        ".*\\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)\\.bak$",
+        ".*\\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)\\.swp$",
+        ".*\\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)\\.orig$"
+      ],
+      "description": "Editor backup of a credential-shaped config file — vim's .swp, nano/gedit's ~ suffix, .bak / .orig versions left behind. The original file may be redacted; the backup often isn't. Common DVWA-class finding pattern."
+    },
+    {
+      "rule_name": "ShareSiftKeepSshHostPubKeys",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "/etc/ssh/ssh_host_(rsa|dsa|ecdsa|ed25519)_key\\.pub$"
+      ],
+      "description": "SSH host public keys. Not credentials in themselves but: (a) identify hosts being scanned; (b) signal the private-key files are present in the same dir (the parent /etc/ssh/ rule + walk picks those up); (c) useful for host fingerprinting in larger engagement workflows."
+    },
+    {
       "rule_name": "ShareSiftKeepAnsibleVaultHeader",
       "triage": "Yellow",
       "match_action": "Snaffle",

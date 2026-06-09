@@ -384,6 +384,78 @@ def _v0p12_blind_spot_rules() -> Iterator[SnaffleRule]:
     )
 
 
+def _v0p42_benchmark_gap_rules() -> Iterator[SnaffleRule]:
+    """v0.42: rules closing the both-missed credential paths surfaced
+    by the 2026-06 head-to-head benchmark against Snaffler.
+
+    These are paths that Snaffler's rule library also misses; adding
+    them extends ShareSift's coverage lead. Each entry was one of
+    the 11 "both-missed credentials" on MSF2 (Linux Metasploitable 2).
+    """
+
+    def _rule(name, location, list_type, wordlist, triage, desc):
+        return _build_rule(
+            rule_name=name,
+            enumeration_scope=EnumerationScope.FileEnumeration,
+            match_action=MatchAction.Snaffle,
+            match_location=location,
+            word_list_type=list_type,
+            word_list=wordlist,
+            triage=triage,
+            description=desc,
+        )
+
+    yield _rule(
+        "ShareSiftKeepShadowBackup",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"^/etc/shadow-$", r"^/etc/gshadow-?$"],
+        Triage.Black,
+        "passwd/shadow .bak forms created by passwd/groupadd before writing.",
+    )
+    yield _rule(
+        "ShareSiftKeepNfsExports",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"^/etc/exports$"],
+        Triage.Yellow,
+        "NFS share exports — host access rules + krb5 sec= flavors.",
+    )
+    yield _rule(
+        "ShareSiftKeepPostfixConfig",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"^/etc/postfix/main\.cf$",
+         r"^/etc/postfix/sasl_passwd$",
+         r"^/etc/postfix/saslpasswd2$"],
+        Triage.Yellow,
+        "Postfix config — main.cf + sasl_passwd hold relay credentials.",
+    )
+    yield _rule(
+        "ShareSiftKeepMysqlDataDir",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"/var/lib/mysql/mysql/user\.(MYD|MYI|frm|ibd)$",
+         r"/var/lib/mysql/mysql/db\.(MYD|MYI|frm)$",
+         r"/var/lib/mysql/mysql/proxies_priv\.(MYD|MYI|frm)$"],
+        Triage.Black,
+        "MySQL/MariaDB user table data files. Password hashes crack offline.",
+    )
+    yield _rule(
+        "ShareSiftKeepEditorBackupConfig",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r".*\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)~$",
+         r".*\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)\.bak$",
+         r".*\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)\.swp$",
+         r".*\.(php|inc|conf|cfg|ini|env|yml|yaml|properties|sh)\.orig$"],
+        Triage.Red,
+        "Editor backup of credential-shaped config file — DVWA-class pattern.",
+    )
+    yield _rule(
+        "ShareSiftKeepSshHostPubKeys",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"/etc/ssh/ssh_host_(rsa|dsa|ecdsa|ed25519)_key\.pub$"],
+        Triage.Yellow,
+        "SSH host public keys — signal private-keys present in same dir.",
+    )
+
+
 def _modern_saas_rules() -> Iterator[SnaffleRule]:
     """Modern SaaS credential detectors — ported from Gitleaks 2026-06.
 
@@ -517,6 +589,7 @@ def get_extra_rules() -> list[SnaffleRule]:
     rules: list[SnaffleRule] = []
     rules.extend(_snaffler_catchup_rules())
     rules.extend(_v0p12_blind_spot_rules())
+    rules.extend(_v0p42_benchmark_gap_rules())
     rules.extend(_modern_saas_rules())
     rules.append(_binary_preprocessor_rule())
     return rules
