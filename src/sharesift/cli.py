@@ -49,6 +49,7 @@ _KNOWN_SUBCOMMANDS = frozenset({
     "render-report",
     "retrain-ranker",
     "to-snaffler-tsv",
+    "batch",
 })
 
 
@@ -600,6 +601,112 @@ def cmd_retrain_ranker(args: argparse.Namespace) -> int:
     return retrain_ranker.main(argv)
 
 
+def cmd_batch(args: argparse.Namespace) -> int:
+    """v0.37 step 3: scan multiple shares listed in a targets file.
+
+    Operator workflow:
+
+        nxc smb 10.10.10.0/24 -u u -p p --shares | awk '...' > targets.txt
+        sharesift batch --targets targets.txt -u user -p pass \\
+            --output-dir ./engagement
+
+    Each target gets its own subdirectory under ``--output-dir``
+    (named after host+share). A top-level ``batch_summary.jsonl``
+    records one record per target with the per-scan result.
+    """
+    start = time.monotonic()
+
+    targets_text = args.targets.read_text(encoding="utf-8")
+    targets = [
+        line.strip()
+        for line in targets_text.splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    ]
+    if not targets:
+        raise SystemExit(f"batch: no targets in {args.targets}")
+
+    base_output = args.output_dir
+    base_output.mkdir(parents=True, exist_ok=True)
+    summary_path = base_output / "batch_summary.jsonl"
+    out.info(f"batch: {len(targets)} target(s); summary → {summary_path}")
+
+    succeeded = 0
+    failed = 0
+    with summary_path.open("w", encoding="utf-8") as sink:
+        for i, target in enumerate(targets, 1):
+            out.info(f"[{i}/{len(targets)}] {target}")
+            # Compute per-target subdir
+            from sharesift.share import is_smb_target, parse_target
+
+            if is_smb_target(target):
+                t = parse_target(target)
+                subdir = base_output / f"sharesift-{t.host}-{t.share}"
+            else:
+                subdir = base_output / f"sharesift-{Path(target).name}"
+
+            inner_ns = _ns(
+                target=target,
+                share=None,
+                output_dir=subdir,
+                user=args.user,
+                password=args.password,
+                hash=args.hash,
+                kerberos=args.kerberos,
+                use_kcache=args.use_kcache,
+                domain=args.domain,
+                anonymous=args.anonymous,
+                encrypt=args.encrypt,
+                check=False,
+                skip_verify=args.skip_verify,
+                skip_report=args.skip_report,
+                windows_model_dir=None,
+                linux_model_dir=None,
+                content_model_dir=None,
+                device=None,
+                max_snippet_bytes=4096,
+                force_content=False,
+                target_file=None,
+                rate_limit=1.0,
+                timeout=10.0,
+                dry_run=False,
+                title=None,
+            )
+
+            try:
+                rc = cmd_scan(inner_ns)
+                ok = rc == 0
+            except SystemExit as exc:
+                ok = False
+                out.warn(f"  target failed: {exc}")
+            except Exception as exc:
+                ok = False
+                out.warn(f"  target raised: {type(exc).__name__}: {exc}")
+
+            record = {
+                "target": target,
+                "output_dir": str(subdir),
+                "ok": ok,
+            }
+            sink.write(json.dumps(record) + "\n")
+            sink.flush()
+            if ok:
+                succeeded += 1
+            else:
+                failed += 1
+
+    out.summary({
+        "command": "batch",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "targets_total": len(targets),
+        "targets_succeeded": succeeded,
+        "targets_failed": failed,
+        "summary_path": str(summary_path),
+        "exit_code": 0 if failed == 0 else 1,
+    })
+    return 0 if failed == 0 else 1
+
+
 def cmd_to_snaffler_tsv(args: argparse.Namespace) -> int:
     """v0.36 step 4: convert ``hits.jsonl`` to Snaffler-compatible TSV.
 
@@ -1011,6 +1118,34 @@ def main(argv: list[str] | None = None) -> int:
         "--n-estimators", type=int, default=200, help="LightGBM n_estimators (default 200)"
     )
     rt.set_defaults(func=cmd_retrain_ranker)
+
+    # v0.37 step 3: batch — scan multiple shares from a targets file
+    bt = sub.add_parser(
+        "batch",
+        help=(
+            "Scan multiple shares from a targets file. Each line is a "
+            "UNC or local path; same auth applies to all. Each target "
+            "gets its own output subdir."
+        ),
+    )
+    bt.add_argument(
+        "--targets", type=Path, required=True,
+        help="Text file with one target per line (# comments allowed).",
+    )
+    bt.add_argument(
+        "--output-dir", type=Path, required=True,
+        help="Base directory; per-target subdirs land here.",
+    )
+    bt.add_argument(
+        "--skip-verify", action="store_true",
+        help="Skip live verification stage per target.",
+    )
+    bt.add_argument(
+        "--skip-report", action="store_true",
+        help="Skip HTML report rendering per target.",
+    )
+    _add_smb_auth_args(bt)
+    bt.set_defaults(func=cmd_batch)
 
     # v0.36 step 4: to-snaffler-tsv
     ts = sub.add_parser(
