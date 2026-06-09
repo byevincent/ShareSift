@@ -242,6 +242,50 @@ class EngagementDB:
     # Queries
     # ------------------------------------------------------------------
 
+    def seen_files(self, host: str, share: str) -> set[str]:
+        """Return the set of ``rel_path`` values already recorded for
+        ``(host, share)``. Used by ``cmd_scan --resume`` to skip
+        files processed in a prior run."""
+        return {
+            row["rel_path"]
+            for row in self._conn.execute(
+                "SELECT rel_path FROM files WHERE host = ? AND share = ?",
+                (host, share),
+            )
+        }
+
+    def record_files_bulk(
+        self,
+        host: str,
+        share: str,
+        rel_paths: Iterable[tuple[str, int | None]],
+    ) -> int:
+        """Bulk-insert (rel_path, size) rows for one share. Skips
+        already-seen rows; returns the number actually inserted.
+        Faster than calling record_file() per path on big shares."""
+        now = _now()
+        rows = [(host, share, rp, size, None, now, now) for rp, size in rel_paths]
+        if not rows:
+            return 0
+        before = self._conn.execute(
+            "SELECT COUNT(*) FROM files WHERE host = ? AND share = ?",
+            (host, share),
+        ).fetchone()[0]
+        self._conn.executemany(
+            """
+            INSERT OR IGNORE INTO files(host, share, rel_path, size,
+                                        content_hash, first_seen, last_seen)
+            VALUES(?, ?, ?, ?, ?, ?, ?)
+            """,
+            rows,
+        )
+        self._conn.commit()
+        after = self._conn.execute(
+            "SELECT COUNT(*) FROM files WHERE host = ? AND share = ?",
+            (host, share),
+        ).fetchone()[0]
+        return after - before
+
     def query(self, sql: str, params: tuple = ()) -> list[sqlite3.Row]:
         """Run an operator-supplied SELECT. Returns Row objects (dict-
         accessible). Mutations should go through the typed record_*

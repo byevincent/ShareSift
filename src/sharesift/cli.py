@@ -539,6 +539,53 @@ def cmd_scan(args: argparse.Namespace) -> int:
             raise SystemExit(f"target: {share_path} does not exist")
     out.debug(f"enumerated {n_enumerated} files → {files_path}")
 
+    # v0.43: --resume — skip files already in the engagement DB.
+    # Requires --db; without --db, --resume errors. Files are recorded
+    # in the DB during cmd_scan_files so a subsequent --resume run on
+    # the same engagement skips them.
+    engagement_db = None
+    db_host_share: tuple[str, str] | None = None
+    if getattr(args, "db", None):
+        from sharesift.engagement import EngagementDB
+        engagement_db = EngagementDB(args.db)
+        if is_smb:
+            db_host_share = (smb_target.host, smb_target.share)
+            engagement_db.record_host(
+                smb_target.host, alive=True, port=smb_target.port,
+            )
+            engagement_db.record_share(
+                smb_target.host, smb_target.share, type_="disk",
+            )
+        else:
+            db_host_share = ("local", Path(target_str).name)
+        out.info(f"engagement db: {args.db}")
+
+    if getattr(args, "resume", False):
+        if engagement_db is None or db_host_share is None:
+            raise SystemExit("--resume requires --db")
+        seen = engagement_db.seen_files(*db_host_share)
+        if seen:
+            raw_paths = files_path.read_text(encoding="utf-8").splitlines()
+            host, share = db_host_share
+            if is_smb:
+                prefix = rf"\\{host}\{share}\\"
+            else:
+                prefix = str(Path(target_str)) + "/"
+            kept = []
+            n_skipped = 0
+            for p in raw_paths:
+                if not p.strip():
+                    continue
+                rel = p[len(prefix):] if p.startswith(prefix) else p
+                if rel in seen:
+                    n_skipped += 1
+                else:
+                    kept.append(p)
+            if n_skipped:
+                files_path.write_text("\n".join(kept) + "\n", encoding="utf-8")
+                out.info(f"  resume: skipping {n_skipped} files already in db; {len(kept)} new")
+                n_enumerated = len(kept)
+
     # v0.40: noise-exclusion filtering. Default globs strip
     # Windows/System32/*.dll, node_modules/, .git/, etc. so the
     # path classifier doesn't waste budget on guaranteed-noise.
@@ -635,6 +682,31 @@ def cmd_scan(args: argparse.Namespace) -> int:
         # v0.35: close the SMB session held open across walk + reads.
         if is_smb and smb_share is not None:
             smb_share.close()
+        # v0.43: persist walked files to engagement DB so --resume
+        # works on the next run. Done in finally so even partial
+        # progress is recoverable.
+        if engagement_db is not None and db_host_share is not None:
+            try:
+                host, share = db_host_share
+                if is_smb:
+                    prefix = rf"\\{host}\{share}\\"
+                else:
+                    prefix = str(Path(target_str)) + "/"
+                rel_paths: list[tuple[str, int | None]] = []
+                if files_path.exists():
+                    for p in files_path.read_text(encoding="utf-8").splitlines():
+                        p = p.strip()
+                        if not p:
+                            continue
+                        rel = p[len(prefix):] if p.startswith(prefix) else p
+                        rel_paths.append((rel, None))
+                n_recorded = engagement_db.record_files_bulk(host, share, rel_paths)
+                if n_recorded:
+                    out.debug(f"db: recorded {n_recorded} new files")
+            except Exception as exc:
+                out.warn(f"db record failed: {exc}")
+            finally:
+                engagement_db.close()
 
     out.summary({
         "command": "scan",
@@ -1354,6 +1426,27 @@ def main(argv: list[str] | None = None) -> int:
             "1 read thread, default noise exclusions, --max-file-size "
             "256K (cap reads aggressively). Use when scan visibility "
             "matters more than throughput."
+        ),
+    )
+    sc.add_argument(
+        "--db",
+        type=Path,
+        default=None,
+        help=(
+            "Path to a SQLite engagement datastore (.sharesift.db). "
+            "When set, hosts/shares/files are recorded as the scan "
+            "runs so the engagement is queryable via "
+            "``sharesift query --db ...``. Required for --resume."
+        ),
+    )
+    sc.add_argument(
+        "--resume",
+        action="store_true",
+        help=(
+            "Skip files already recorded in the engagement datastore "
+            "(requires --db). Use when a previous scan crashed or "
+            "was interrupted — re-run the same command with --resume "
+            "and ShareSift picks up where it left off."
         ),
     )
     sc.add_argument(
