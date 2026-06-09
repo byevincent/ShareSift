@@ -32,11 +32,21 @@ deps installed.
 
 from __future__ import annotations
 
+import sys
 from importlib.metadata import PackageNotFoundError, version as _pkg_version
+
+# Version fallback for PyInstaller-frozen binaries — importlib.metadata
+# can't find the package's dist-info inside the frozen tree, so use a
+# build-time-stamped fallback. Source of truth stays pyproject.toml.
+_FROZEN_VERSION_FALLBACK = "0.45.0"
 
 try:
     __version__ = _pkg_version("sharesift")
 except PackageNotFoundError:
-    __version__ = "unknown"
+    __version__ = (
+        _FROZEN_VERSION_FALLBACK
+        if getattr(sys, "frozen", False)
+        else "unknown"
+    )
 
 __all__ = ["__version__"]

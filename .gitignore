@@ -198,3 +198,8 @@ nohup.out
 benchmarks/v0p19/*/share/
 benchmarks/v0p19/*/paths.txt
 benchmarks/v0p19/*/scores.jsonl
+
+# v0.46: PyInstaller binary build artifacts
+dist-binary/
+build-pyinstaller/
+tools/sharesift.spec

@@ -42,14 +42,22 @@ See [docs/snaffler_benchmark_2026-06.md](docs/snaffler_benchmark_2026-06.md) for
 
 ## Install
 
-**Quick install** — drop a binary on Kali (no `git clone`, no `uv` setup):
+**Quick install** — drop a binary on Kali (no `git clone`, no `uv` setup, no Python required):
 
 ```bash
-# SMB-direct workflow (recommended for pentesters)
-pipx install 'sharesift[smb]'
+# Truly single-file binary — Stage 1 path classifier + rules + tier engine
+# + Snaffler-TSV + engagement DB + sort + query + export. ~77 MB, zero
+# Python prereq. Available from v0.46 onward.
+wget https://github.com/byevincent/ShareSift/releases/latest/download/sharesift
+chmod +x sharesift
+./sharesift --version
+```
 
-# Stage 1 only — path classifier (no torch, ~100MB)
-pipx install sharesift
+Or via pipx (needs Python 3.10+):
+
+```bash
+pipx install 'sharesift[smb]'      # SMB-direct workflow
+pipx install sharesift             # Stage 1 only
 ```
 
 **Full install from source** — if you want to develop, train, or run the content classifier:
