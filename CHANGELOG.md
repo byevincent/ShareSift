@@ -4,6 +4,109 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.45.0] — 2026-06-09
+
+The structural-weakness release. v0.44 fixes the ranking bug that
+held MIN top-10 flat at 0.20 for 16+ releases — chart jumps to 0.70.
+v0.45 wires verifier-first output sorting (the "Snaffler can't match
+this" pitch from the v0.36 audit). Combined v0.44+v0.45 ship;
+v0.44.0 tagged in git but only this v0.45.0 release page is created.
+
+### Added (v0.44 — ranking improvement)
+
+- **Filename-frequency dedup penalty in production** (was harness-
+  only since v0.22). ``cmd_score_paths`` and the cascade entry
+  points now emit ``rank_score`` and ``filename_frequency`` fields.
+  Operators running ``sharesift score-paths`` get the
+  v0.22-style ranking — pre-v0.44 they were seeing raw classifier
+  output (where Boxstarter installer .ps1 files dominated the
+  top-10).
+
+- **Green-tier zero-out** (`src/sharesift/ranking.py`). When
+  ``cascade_tier == "Green"`` (only Relay-action rules fired —
+  ``RelayPsByExtension``, ``RelayVBScriptByExtension``,
+  ``RelayConfigByExtension`` — these fire on every ``.ps1`` /
+  ``.vbs`` / ``.config``), the path classifier's probability is
+  short-circuited to 0. The v0.21 MSF3 validation found Green-tier
+  matches drown credentials when given ranking weight; the
+  ``_TIER_PSEUDO_P[Green] = 0.0`` fix in v0.22 only worked when
+  the ``max(probability, cascade_tier_pseudo_p)`` reduce didn't
+  let path_probability override. v0.44 closes that loophole.
+
+- **New module** ``sharesift.ranking`` with ``apply_dedup_penalty``,
+  ``sort_by_rank``, ``basename`` (UNC/Windows/POSIX-safe).
+
+### Harness impact
+
+| Benchmark | top-10 before | top-10 after | recall |
+|---|---|---|---|
+| MSF3 (Windows AD) | 0.20 | **0.80** (4×) | 0.90 |
+| CredData | 0.70 | 0.70 | 1.00 |
+| MSF2 (Linux server) | 1.00 | 1.00 | 1.00 |
+| engagement_corpus | 0.40 | **0.90** | 0.91 |
+| DiskForge | 0.50 | 0.50 | 1.00 |
+| **MIN top-10** | **0.20** | **0.70** | — |
+| **MIN recall** | **0.90** | **0.90** (preserved) | — |
+
+MIN top-10 = 0.70. Chart was flat at 0.20 for 16+ releases — first
+movement since the v0.18 era.
+
+### Added (v0.45 — verifier-first output)
+
+- **``sharesift.ranking.sort_verifier_first(records)``** — multi-key
+  sort: verification_status > tier > rank_score > path. The
+  structural ShareSift advantage Snaffler can't match: Snaffler
+  finds files, ShareSift finds files AND tells operators which
+  contain credentials that authenticate right now.
+
+- **Behavioral assertion**: a verified-passed Yellow ranks ABOVE
+  an unverified Black. Verification beats tier in ranking. The
+  v0.36 audit research called this out as "the single best
+  operator pitch."
+
+- **``cmd_verify`` output now sorted by default.** verified.jsonl
+  records emerge with live-passing credentials at the top.
+
+- **``cmd_to_snaffler_tsv`` default-sorts** before emitting; new
+  ``--no-sort`` flag preserves input order. The Snaffler-TSV format
+  itself is unchanged (11 columns, downstream-tool-compatible) —
+  only the row order changes. Efflanrs / SnafflerParser / Parsler
+  / snafflepy still ingest unchanged.
+
+- **New ``sharesift sort`` subcommand** for ad-hoc re-sort:
+
+      cat engagement/*/hits.jsonl > combined.jsonl
+      sharesift sort --input combined.jsonl --output ranked.jsonl
+
+- **``live_marker(record)``** — returns ``"[LIVE]"`` for
+  verified-passed, ``"[FAIL]"`` for failed-verification, empty
+  otherwise. Reserved for future HTML / TSV verbose display
+  surfaces.
+
+### Documentation
+
+- ``docs/snaffler_benchmark_2026-06.md`` — full benchmark doc gets
+  a new "Top-K precision (post-v0.44)" section with the
+  before/after table and MSF3 top-10 diagnostic showing real
+  credential files (id_rsa, authorized_keys, environment) now
+  dominate where Boxstarter installer noise used to be.
+
+- ``benchmarks/v0p22_eval/harness_history.jsonl`` — v0.44.0 entry
+  appended documenting the first MIN top-10 movement in 16+
+  releases.
+
+### Out of scope (deferred)
+
+- **PyInstaller single-file binary** carries from v0.38 (1.5GB
+  bundle problem). v0.46+ candidate.
+- **GhostWriter / SysReptor exporters** — operator-requested skip
+  for this batch; engagement DB is queryable via SQL, exporters
+  remain useful but not blocking.
+- **Path-prefix dedup penalty** (extend dedup to known-noise apps
+  like ``/wamp/``, ``/glassfish/``). Top-30 still has noise from
+  these apps. Worth experimenting — could overshoot like the v0.28
+  extension-penalty hypothesis. Defer pending careful test.
+
 ## [0.43.0] — 2026-06-09
 
 Benchmark-driven improvements + engagement-day polish. Combined
@@ -610,10 +713,9 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.44+ — top-K precision improvement (ranker re-calibration, the
-structural weakness from the v0.43 benchmark), PyInstaller
-single-file binary (still unsolved 1.5GB problem),
-GhostWriter / SysReptor exporters from the engagement datastore,
+v0.46+ — PyInstaller single-file binary (still unsolved 1.5GB
+problem), GhostWriter / SysReptor exporters, path-prefix dedup
+penalty (extend v0.44 dedup to known-noise apps like wamp/glassfish),
 status heartbeat, Markdown report bundle. See
 `docs/pentester_backlog.md` for the full friendliness roadmap.
 

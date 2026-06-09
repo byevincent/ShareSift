@@ -56,7 +56,7 @@ pipx install sharesift
 
 ```bash
 # Latest milestone release (recommended)
-git clone --branch v0.43.0 https://github.com/byevincent/ShareSift.git
+git clone --branch v0.45.0 https://github.com/byevincent/ShareSift.git
 # Or track main for unreleased work
 git clone https://github.com/byevincent/ShareSift.git
 
@@ -74,7 +74,7 @@ uv sync --extra smb
 
 Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
 
-Milestone releases: [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (current — benchmark-driven rule gap closure + resume after crash), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement-shape datastore), [v0.39.0](https://github.com/byevincent/ShareSift/releases/tag/v0.39.0) (network discovery), [v0.35.0](https://github.com/byevincent/ShareSift/releases/tag/v0.35.0) (SMB-direct), [v0.34.0](https://github.com/byevincent/ShareSift/releases/tag/v0.34.0), [v0.33.0](https://github.com/byevincent/ShareSift/releases/tag/v0.33.0), [v0.30.0](https://github.com/byevincent/ShareSift/releases/tag/v0.30.0), [v0.27.0](https://github.com/byevincent/ShareSift/releases/tag/v0.27.0), [v0.24.0](https://github.com/byevincent/ShareSift/releases/tag/v0.24.0). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
+Milestone releases: [v0.45.0](https://github.com/byevincent/ShareSift/releases/tag/v0.45.0) (current — top-K precision 0.20 → 0.70 + verifier-first output), [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (benchmark-driven rule gap closure + resume), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement-shape datastore), [v0.39.0](https://github.com/byevincent/ShareSift/releases/tag/v0.39.0) (network discovery), [v0.35.0](https://github.com/byevincent/ShareSift/releases/tag/v0.35.0) (SMB-direct), [v0.34.0](https://github.com/byevincent/ShareSift/releases/tag/v0.34.0), [v0.33.0](https://github.com/byevincent/ShareSift/releases/tag/v0.33.0), [v0.30.0](https://github.com/byevincent/ShareSift/releases/tag/v0.30.0), [v0.27.0](https://github.com/byevincent/ShareSift/releases/tag/v0.27.0), [v0.24.0](https://github.com/byevincent/ShareSift/releases/tag/v0.24.0). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
 
 ## Quick start
 
