@@ -85,6 +85,64 @@ class SmbShare:
         for path, size in sorted(collected, key=lambda x: x[0]):
             yield ShareEntry(path=path, size=size)
 
+    def read_bytes(
+        self, path: str, *, max_bytes: int | None = None
+    ) -> bytes | None:
+        """Read up to ``max_bytes`` from a file on this share.
+
+        ``path`` is a UNC string of the shape ``walk()`` yields:
+        ``\\\\host\\share\\rel\\to\\file``. UNCs that don't belong
+        to this share return ``None``.
+        """
+        rel = self._unc_to_rel(path)
+        if not rel:
+            return None
+        self._ensure_connected()
+
+        from smbprotocol.open import (
+            CreateDisposition,
+            CreateOptions,
+            FileAttributes,
+            FilePipePrinterAccessMask,
+            ImpersonationLevel,
+            Open,
+            ShareAccess,
+        )
+
+        cap = max_bytes if max_bytes is not None else 10 * 1024 * 1024
+        handle = Open(self._tree, rel)
+        try:
+            handle.create(
+                ImpersonationLevel.Impersonation,
+                FilePipePrinterAccessMask.FILE_READ_DATA,
+                FileAttributes.FILE_ATTRIBUTE_NORMAL,
+                ShareAccess.FILE_SHARE_READ,
+                CreateDisposition.FILE_OPEN,
+                CreateOptions.FILE_NON_DIRECTORY_FILE,
+            )
+            return handle.read(0, cap)
+        except Exception:
+            # Permission denied, end-of-file past start, file vanished
+            # between walk and read, etc. The cascade treats None as
+            # "skip this file" — matches LocalShare's OSError handling.
+            return None
+        finally:
+            try:
+                handle.close(False)
+            except Exception:
+                pass
+
+    def _unc_to_rel(self, unc_path: str) -> str | None:
+        """Strip the ``\\\\host\\share\\`` prefix to recover the path
+        relative to the share root. Case-insensitive on host/share
+        per SMB semantics. Returns ``None`` if the UNC doesn't
+        belong to this share."""
+        target_prefix = rf"\\{self._target.host}\{self._target.share}"
+        if not unc_path.lower().startswith(target_prefix.lower()):
+            return None
+        rel = unc_path[len(target_prefix):].lstrip("\\")
+        return rel or None
+
     def close(self) -> None:
         """Tear down tree + session + connection. Idempotent."""
         if self._tree is not None:

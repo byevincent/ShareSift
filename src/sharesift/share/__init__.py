@@ -63,3 +63,19 @@ class Share(Protocol):
         relies on this).
         """
         ...
+
+    def read_bytes(
+        self, path: str, *, max_bytes: int | None = None
+    ) -> bytes | None:
+        """Read up to ``max_bytes`` from the file at ``path``.
+
+        Returns ``None`` if the path doesn't exist, isn't a file, or
+        can't be read. Never raises on transient I/O errors —
+        callers treat ``None`` as "unreadable" the same way ``walk``
+        treats missing files.
+
+        ``max_bytes=None`` means "read the whole file." Callers
+        scanning a remote share should always pass a cap; the
+        default in ``load_content_from_share`` is 10 MB.
+        """
+        ...

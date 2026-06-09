@@ -22,21 +22,29 @@ Design:
 
 from __future__ import annotations
 
+import io
 from pathlib import Path
-from typing import Final
+from typing import TYPE_CHECKING, Final
 
-DEFAULT_MAX_BYTES: Final[int] = 1_048_576  # 1 MB cap to keep memory bounded
+if TYPE_CHECKING:
+    from sharesift.share import Share
+
+DEFAULT_MAX_BYTES: Final[int] = 1_048_576  # 1 MB cap on extracted text
+# v0.35 Sprint 3.5: cap on raw bytes read from a share before
+# extraction. Larger than DEFAULT_MAX_BYTES because PDFs / OOXML
+# can be 10× their extracted text size.
+DEFAULT_MAX_READ_BYTES: Final[int] = 10 * 1024 * 1024
 
 
-def _extract_pdf(path: Path) -> str | None:
-    """Best-effort text extraction from a PDF. Returns None if pypdf
-    isn't installed or the PDF can't be parsed."""
+def _extract_pdf_from_bytes(data: bytes) -> str | None:
+    """Best-effort text extraction from PDF bytes. Returns None if
+    pypdf isn't installed or the bytes don't parse."""
     try:
         import pypdf
     except ImportError:
         return None
     try:
-        reader = pypdf.PdfReader(str(path))
+        reader = pypdf.PdfReader(io.BytesIO(data))
     except Exception:
         # Encrypted PDFs without a password, malformed PDFs, etc.
         return None
@@ -49,6 +57,16 @@ def _extract_pdf(path: Path) -> str | None:
     if not chunks:
         return None
     return "\n".join(chunks)
+
+
+def _extract_pdf(path: Path) -> str | None:
+    """Backward-compat wrapper. New callers should pass bytes via
+    ``_extract_pdf_from_bytes`` directly."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    return _extract_pdf_from_bytes(data)
 
 
 # v0.23: OOXML (docx/xlsx/pptx) traversal. These files are ZIP archives
@@ -64,18 +82,18 @@ _OOXML_TEXT_MEMBERS = {
 }
 
 
-def _extract_ooxml(path: Path, ext: str) -> str | None:
-    """Best-effort text extraction from a .docx/.xlsx/.pptx file.
+def _extract_ooxml_from_bytes(data: bytes, ext: str) -> str | None:
+    """Best-effort text extraction from OOXML bytes.
 
     The file is a ZIP of XML. We open the relevant entries, strip the
     XML tags, and concatenate the text content. Anything that doesn't
-    parse cleanly returns None — caller falls back to None content.
+    parse cleanly returns None.
     """
     import xml.etree.ElementTree as ET
     import zipfile
 
     try:
-        zf = zipfile.ZipFile(str(path))
+        zf = zipfile.ZipFile(io.BytesIO(data))
     except (zipfile.BadZipFile, OSError):
         return None
 
@@ -129,33 +147,38 @@ def _read_text(path: Path) -> str | None:
         return None
 
 
-def load_content(
-    path: Path,
+def _extract_ooxml(path: Path, ext: str) -> str | None:
+    """Backward-compat path-based wrapper. New callers pass bytes via
+    ``_extract_ooxml_from_bytes`` directly."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    return _extract_ooxml_from_bytes(data, ext)
+
+
+def extract_text(
+    data: bytes,
+    ext: str,
     *,
     max_bytes: int = DEFAULT_MAX_BYTES,
     decode_base64: bool = False,
 ) -> str | None:
-    """Best-effort content extraction. Returns None for unreadable files.
+    """v0.35: pure bytes-in extractor. Dispatches on ``ext`` to the
+    right decoder, applies base64 post-processing, caps output text.
 
-    ``max_bytes`` caps the returned string. PDFs are extracted first,
-    then capped — partial extraction is preferred over silent skip.
-
-    ``decode_base64`` triggers the recursive base64 preprocessor.
-    Disabled by default because it doubles content size for files
-    that have legitimate base64 blobs (cert files, signed payloads)
-    and the rule engine catches those at the surface level too.
+    No I/O. Easy to test. Shared by both the path-based
+    ``load_content`` and the share-aware ``load_content_from_share``.
     """
-    if not path.exists() or not path.is_file():
-        return None
-
-    ext = path.suffix.lower()
-
     if ext == ".pdf":
-        text = _extract_pdf(path)
+        text = _extract_pdf_from_bytes(data)
     elif ext in (".docx", ".xlsx", ".pptx"):
-        text = _extract_ooxml(path, ext)
+        text = _extract_ooxml_from_bytes(data, ext)
     else:
-        text = _read_text(path)
+        try:
+            text = data.decode("utf-8", errors="replace")
+        except Exception:
+            return None
 
     if text is None:
         return None
@@ -166,6 +189,65 @@ def load_content(
     if max_bytes and len(text) > max_bytes:
         text = text[:max_bytes]
     return text
+
+
+def load_content(
+    path: Path,
+    *,
+    max_bytes: int = DEFAULT_MAX_BYTES,
+    decode_base64: bool = False,
+) -> str | None:
+    """Best-effort content extraction from a local file. Returns
+    None for unreadable files.
+
+    ``max_bytes`` caps the returned string. PDFs are extracted first,
+    then capped — partial extraction is preferred over silent skip.
+
+    ``decode_base64`` triggers the recursive base64 preprocessor.
+    Disabled by default because it doubles content size for files
+    that have legitimate base64 blobs (cert files, signed payloads)
+    and the rule engine catches those at the surface level too.
+
+    v0.35: backward-compat shim around :func:`extract_text`. Share-aware
+    callers should use :func:`load_content_from_share` instead.
+    """
+    if not path.exists() or not path.is_file():
+        return None
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    return extract_text(
+        data, path.suffix.lower(),
+        max_bytes=max_bytes, decode_base64=decode_base64,
+    )
+
+
+def load_content_from_share(
+    share: "Share",
+    path: str,
+    *,
+    max_bytes: int = DEFAULT_MAX_BYTES,
+    decode_base64: bool = False,
+    max_read_bytes: int = DEFAULT_MAX_READ_BYTES,
+) -> str | None:
+    """v0.35: share-aware content load. Works for both ``LocalShare``
+    (any local path) and ``SmbShare`` (UNC paths from ``walk``).
+
+    ``max_bytes`` caps the extracted text (same semantic as
+    :func:`load_content`). ``max_read_bytes`` caps the raw bytes
+    read off the share — larger than ``max_bytes`` because OOXML /
+    PDF compress text by 5-10×. v0.36's ``--max-file-size`` flag
+    will surface this parameter to operators.
+    """
+    data = share.read_bytes(path, max_bytes=max_read_bytes)
+    if data is None:
+        return None
+    ext = Path(path).suffix.lower()
+    return extract_text(
+        data, ext,
+        max_bytes=max_bytes, decode_base64=decode_base64,
+    )
 
 
 def _apply_base64_decoder(text: str) -> str:

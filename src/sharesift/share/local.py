@@ -16,9 +16,16 @@ if TYPE_CHECKING:
 
 
 class LocalShare:
-    """Read-only walk over a local directory."""
+    """Read-only walk + read over a local directory.
 
-    def __init__(self, root: Path | str) -> None:
+    ``root`` is only used by ``walk()``. ``read_bytes(path)`` works
+    against any path on the filesystem, not just paths under
+    ``root`` — this lets a ``LocalShare`` instance act as a generic
+    "filesystem reader" for callers that have absolute paths from a
+    previous walk or file list.
+    """
+
+    def __init__(self, root: Path | str = ".") -> None:
         self._root = Path(root)
 
     @property
@@ -32,3 +39,17 @@ class LocalShare:
             if not path.is_file():
                 continue
             yield ShareEntry(path=str(path), size=path.stat().st_size)
+
+    def read_bytes(
+        self, path: str, *, max_bytes: int | None = None
+    ) -> bytes | None:
+        p = Path(path)
+        try:
+            if not p.is_file():
+                return None
+            if max_bytes is None:
+                return p.read_bytes()
+            with p.open("rb") as fh:
+                return fh.read(max_bytes)
+        except OSError:
+            return None

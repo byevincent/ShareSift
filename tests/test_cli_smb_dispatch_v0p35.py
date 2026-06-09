@@ -234,6 +234,7 @@ class TestCmdScanSmbDispatch:
             target="//10.0.0.5/Finance",
             user="alice", password="pw",
             output_dir=tmp_path,
+            skip_verify=True, skip_report=True,
         )
 
         with (
@@ -241,6 +242,7 @@ class TestCmdScanSmbDispatch:
             patch("sharesift.share.smb.SmbShare.close"),
             patch("sharesift.share.smb.SmbShare.walk", return_value=iter(fake_entries)),
             patch("sharesift.cli.cmd_score_paths", return_value=0),
+            patch("sharesift.cli.cmd_scan_files", return_value=0),
         ):
             rc = cmd_scan(ns)
             assert rc == 0
@@ -257,6 +259,7 @@ class TestCmdScanSmbDispatch:
         ns = self._scan_ns(
             target="//10.0.0.5/Finance",
             user="alice", password="pw",
+            skip_verify=True, skip_report=True,
             # output_dir explicitly None
         )
         with (
@@ -264,20 +267,23 @@ class TestCmdScanSmbDispatch:
             patch("sharesift.share.smb.SmbShare.close"),
             patch("sharesift.share.smb.SmbShare.walk", return_value=iter([])),
             patch("sharesift.cli.cmd_score_paths", return_value=0),
+            patch("sharesift.cli.cmd_scan_files", return_value=0),
         ):
             cmd_scan(ns)
             assert (tmp_path / "sharesift-10.0.0.5-Finance").exists()
 
-    def test_smb_skips_content_stage_in_sprint_3(self, tmp_path):
-        """v0.35 Sprint 3 ships path-triage only for SMB; Sprint 3.5
-        closes the cascade. Confirm scan-files and verify don't run."""
+    def test_smb_threads_share_through_to_content_stage(self, tmp_path):
+        """v0.35 Sprint 3.5: cmd_scan threads the live SmbShare into
+        cmd_scan_files via the ``_share`` namespace attribute so SMB
+        content reads use the active session, not Path() construction."""
         from sharesift.cli import cmd_scan
-        from sharesift.share import ShareEntry
+        from sharesift.share import ShareEntry, SmbShare
 
         ns = self._scan_ns(
             target="//host/share",
             user="alice", password="pw",
             output_dir=tmp_path,
+            skip_verify=True, skip_report=True,
         )
 
         with (
@@ -286,14 +292,50 @@ class TestCmdScanSmbDispatch:
             patch("sharesift.share.smb.SmbShare.walk", return_value=iter([])),
             patch("sharesift.cli.cmd_score_paths", return_value=0) as mock_sp,
             patch("sharesift.cli.cmd_scan_files", return_value=0) as mock_sf,
-            patch("sharesift.cli.cmd_verify", return_value=0) as mock_v,
-            patch("sharesift.cli.cmd_render_report", return_value=0) as mock_r,
         ):
             cmd_scan(ns)
             mock_sp.assert_called_once()
-            mock_sf.assert_not_called()
-            mock_v.assert_not_called()
-            mock_r.assert_not_called()
+            mock_sf.assert_called_once()
+            # cmd_scan_files received an SmbShare via ``_share``
+            sf_args = mock_sf.call_args.args[0]
+            assert isinstance(sf_args._share, SmbShare)
+
+    def test_smb_share_closes_after_scan_files_completes(self, tmp_path):
+        """Session lifecycle: close() runs after both walk + content
+        stage finish, not in the middle."""
+        from sharesift.cli import cmd_scan
+
+        close_calls: list[float] = []
+        sf_calls: list[float] = []
+
+        def record_close(self):
+            import time
+            close_calls.append(time.monotonic())
+
+        def record_scan_files(ns):
+            import time
+            sf_calls.append(time.monotonic())
+            return 0
+
+        ns = self._scan_ns(
+            target="//host/share",
+            user="alice", password="pw",
+            output_dir=tmp_path,
+            skip_verify=True, skip_report=True,
+        )
+        with (
+            patch("sharesift.share.smb.SmbShare._ensure_connected"),
+            patch.object(__import__("sharesift.share.smb", fromlist=["SmbShare"]).SmbShare,
+                         "close", record_close),
+            patch("sharesift.share.smb.SmbShare.walk", return_value=iter([])),
+            patch("sharesift.cli.cmd_score_paths", return_value=0),
+            patch("sharesift.cli.cmd_scan_files", side_effect=record_scan_files),
+        ):
+            cmd_scan(ns)
+
+        assert len(close_calls) == 1
+        assert len(sf_calls) == 1
+        assert sf_calls[0] < close_calls[0]
 
 
 class TestCmdScanLocalDispatchPreserved:

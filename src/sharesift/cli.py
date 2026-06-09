@@ -290,12 +290,19 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
     # v0.20: route through load_content so PDFs (via pypdf) and the
     # base64 preprocessor become available. PDFs that previously
     # returned UnicodeDecodeError (then empty) now extract text.
-    from sharesift.extract import load_content
+    # v0.35 Sprint 3.5: when ``share`` is provided (e.g. cmd_scan
+    # threading an SmbShare), content reads go through the share
+    # interface so SMB targets work end-to-end.
+    from sharesift.extract import load_content, load_content_from_share
 
     items: list[tuple[str, str | None]] = []
+    cap = args.max_snippet_bytes or 1_048_576
+    share_obj = getattr(args, "_share", None)
     for p_str in paths:
-        p = Path(p_str)
-        content = load_content(p, max_bytes=args.max_snippet_bytes or 1_048_576)
+        if share_obj is not None:
+            content = load_content_from_share(share_obj, p_str, max_bytes=cap)
+        else:
+            content = load_content(Path(p_str), max_bytes=cap)
         items.append((p_str, content))
 
     n_with_content = sum(1 for _, c in items if c is not None)
@@ -418,14 +425,17 @@ def cmd_scan(args: argparse.Namespace) -> int:
             output_dir = Path(f"./sharesift-{Path(target_str).name}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Stage 0: enumerate.
+    # Stage 0: enumerate. The Share for content reads is decided
+    # here: SmbShare for UNC targets, LocalShare for local paths.
+    # The SMB session stays open through cmd_scan_files so reads
+    # reuse the connection — closed in the ``finally`` at the end
+    # of cmd_scan.
     files_path = output_dir / "files.txt"
+    share_for_reads: SmbShare | LocalShare | None = None
     if is_smb:
+        share_for_reads = smb_share
         out.info(f"[1/5] enumerating files under {smb_share.root}")
-        try:
-            entries = list(smb_share.walk())
-        finally:
-            smb_share.close()
+        entries = list(smb_share.walk())
         files_path.write_text(
             "\n".join(e.path for e in entries) + "\n", encoding="utf-8"
         )
@@ -433,14 +443,18 @@ def cmd_scan(args: argparse.Namespace) -> int:
     else:
         share_path = Path(target_str)
         if share_path.is_dir():
+            share_for_reads = LocalShare(share_path)
             out.info(f"[1/5] enumerating files under {share_path}")
-            entries = list(LocalShare(share_path).walk())
+            entries = list(share_for_reads.walk())
             files_path.write_text(
                 "\n".join(e.path for e in entries) + "\n", encoding="utf-8"
             )
             n_enumerated = len(entries)
         elif share_path.is_file():
-            # Treat as a pre-existing file list.
+            # Treat as a pre-existing file list. Reads go through a
+            # rootless LocalShare so absolute paths in the file list
+            # work without per-file Path() construction.
+            share_for_reads = LocalShare()
             out.info(f"[1/5] using file list {share_path}")
             files_path.write_text(
                 share_path.read_text(encoding="utf-8"), encoding="utf-8"
@@ -453,20 +467,6 @@ def cmd_scan(args: argparse.Namespace) -> int:
             raise SystemExit(f"target: {share_path} does not exist")
     out.debug(f"enumerated {n_enumerated} files → {files_path}")
 
-    # Sprint 3 honest gap: SMB targets walk + path-triage cleanly, but
-    # ``scan-files`` (content cascade) and ``verify`` need Sprint 3.5's
-    # Share-aware ``load_content`` refactor before they can read UNC
-    # paths. Until then we run path triage only and skip the content
-    # stages with an explicit notice.
-    if is_smb:
-        out.warn(
-            "v0.35 Sprint 3.5 (in progress) will close the content "
-            "cascade for SMB targets; running path triage only for now."
-        )
-        args.skip_content_stage = True
-    else:
-        args.skip_content_stage = False
-
     # Silence sub-handler summaries — we emit one combined summary at the end.
     was_json = out.json_enabled
     if was_json:
@@ -477,9 +477,7 @@ def cmd_scan(args: argparse.Namespace) -> int:
     report_input = hits_path
     verified_path: Path | None = None
     report_path: Path | None = None
-    stages_run: list[str] = ["enumerate", "score-paths"]
-    if not args.skip_content_stage:
-        stages_run.append("scan-files")
+    stages_run: list[str] = ["enumerate", "score-paths", "scan-files"]
 
     try:
         # Stage 1: score-paths
@@ -492,27 +490,26 @@ def cmd_scan(args: argparse.Namespace) -> int:
             linux_model_dir=args.linux_model_dir,
         ))
 
-        # Stage 2: scan-files (deferred for SMB targets until Sprint 3.5)
-        if not args.skip_content_stage:
-            out.info(f"[3/5] content scan → {hits_path}")
-            cmd_scan_files(_ns(
-                input=files_path,
-                stdin=False,
-                output=hits_path,
-                windows_model_dir=args.windows_model_dir,
-                linux_model_dir=args.linux_model_dir,
-                content_model_dir=args.content_model_dir,
-                device=args.device,
-                max_snippet_bytes=args.max_snippet_bytes,
-                force_content=args.force_content,
-                debug=False,
-            ))
-        else:
-            # No hits file produced; report input falls back to paths.
-            report_input = paths_path
+        # Stage 2: scan-files. Share-aware via ``_share`` namespace
+        # attribute — cmd_scan_files routes reads through the share
+        # when set (so SMB content reads use the live session).
+        out.info(f"[3/5] content scan → {hits_path}")
+        cmd_scan_files(_ns(
+            input=files_path,
+            stdin=False,
+            output=hits_path,
+            windows_model_dir=args.windows_model_dir,
+            linux_model_dir=args.linux_model_dir,
+            content_model_dir=args.content_model_dir,
+            device=args.device,
+            max_snippet_bytes=args.max_snippet_bytes,
+            force_content=args.force_content,
+            debug=False,
+            _share=share_for_reads,
+        ))
 
-        # Stage 3: verify (optional, requires content stage)
-        if not args.skip_verify and not args.skip_content_stage:
+        # Stage 3: verify (optional)
+        if not args.skip_verify:
             verified_path = output_dir / "verified.jsonl"
             out.info(f"[4/5] verify → {verified_path}")
             cmd_verify(_ns(
@@ -529,9 +526,8 @@ def cmd_scan(args: argparse.Namespace) -> int:
             report_input = verified_path
             stages_run.append("verify")
 
-        # Stage 4: render-report (optional, skipped when there are no
-        # content-stage hits to render)
-        if not args.skip_report and not args.skip_content_stage:
+        # Stage 4: render-report (optional)
+        if not args.skip_report:
             report_path = output_dir / "report.html"
             out.info(f"[5/5] report → {report_path}")
             cmd_render_report(_ns(
@@ -544,6 +540,9 @@ def cmd_scan(args: argparse.Namespace) -> int:
     finally:
         if was_json:
             out.configure(verbosity=out.verbosity, json=True)
+        # v0.35: close the SMB session held open across walk + reads.
+        if is_smb and smb_share is not None:
+            smb_share.close()
 
     out.summary({
         "command": "scan",
@@ -557,7 +556,7 @@ def cmd_scan(args: argparse.Namespace) -> int:
         "intermediates": {
             "files": str(files_path),
             "paths": str(paths_path),
-            "hits": str(hits_path) if not args.skip_content_stage else None,
+            "hits": str(hits_path),
             "verified": str(verified_path) if verified_path else None,
             "report": str(report_path) if report_path else None,
         },
