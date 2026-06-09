@@ -53,6 +53,7 @@ _KNOWN_SUBCOMMANDS = frozenset({
     "discover",
     "query",
     "sort",
+    "export",
 })
 
 
@@ -1140,6 +1141,59 @@ def _ingest_hits_into_db(db, hits_jsonl: Path, target: str) -> None:
             )
 
 
+def cmd_export(args: argparse.Namespace) -> int:
+    """v0.46: emit engagement findings in operator report formats.
+
+    Supports Markdown (paste into any reporting tool), GhostWriter
+    CSV (direct import), and SysReptor JSON (project-findings
+    format).
+
+        sharesift export --db engagement.db --format markdown --output findings.md
+        sharesift export --db engagement.db --format ghostwriter --output findings.csv
+        sharesift export --db engagement.db --format sysreptor --output sysreptor.json
+
+    All formats use the same finding ordering: verified-live first,
+    then by tier, then by host+share+path.
+    """
+    from sharesift.engagement import (
+        EngagementDB,
+        to_ghostwriter_csv,
+        to_markdown,
+        to_sysreptor_json,
+    )
+
+    start = time.monotonic()
+    db = EngagementDB(args.db)
+    try:
+        if args.format == "markdown":
+            text = to_markdown(db, title=args.title)
+        elif args.format == "ghostwriter":
+            text = to_ghostwriter_csv(db)
+        elif args.format == "sysreptor":
+            text = to_sysreptor_json(db, project_name=args.title)
+        else:
+            raise SystemExit(f"unsupported format: {args.format}")
+    finally:
+        db.close()
+
+    if args.output is None:
+        sys.stdout.write(text)
+    else:
+        args.output.write_text(text, encoding="utf-8")
+        out.info(f"wrote {args.output} ({len(text):,} chars)")
+
+    out.summary({
+        "command": "export",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "db_path": str(args.db),
+        "format": args.format,
+        "output_path": str(args.output) if args.output else None,
+        "exit_code": 0,
+    })
+    return 0
+
+
 def cmd_sort(args: argparse.Namespace) -> int:
     """v0.45: re-sort a hits.jsonl by the verifier-first key.
 
@@ -1828,6 +1882,31 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     ts.set_defaults(func=cmd_to_snaffler_tsv)
+
+    # v0.46: export — emit engagement findings in report formats
+    ex = sub.add_parser(
+        "export",
+        help=(
+            "Emit engagement findings in operator report formats: "
+            "markdown (paste anywhere), ghostwriter (CSV import), "
+            "sysreptor (JSON import)."
+        ),
+    )
+    ex.add_argument("--db", type=Path, required=True, help="Path to .sharesift.db")
+    ex.add_argument(
+        "--format", required=True,
+        choices=["markdown", "ghostwriter", "sysreptor"],
+        help="Output format.",
+    )
+    ex.add_argument(
+        "--output", type=Path, default=None,
+        help="Write to file (default: stdout).",
+    )
+    ex.add_argument(
+        "--title", default=None,
+        help="Engagement / report title (used by markdown + sysreptor).",
+    )
+    ex.set_defaults(func=cmd_export)
 
     # v0.45: sort — re-sort a JSONL by the verifier-first key
     so = sub.add_parser(

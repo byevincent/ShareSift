@@ -12,5 +12,15 @@ that survives crashes, supports incremental crawls, and answers
 """
 
 from sharesift.engagement.db import EngagementDB
+from sharesift.engagement.export import (
+    to_ghostwriter_csv,
+    to_markdown,
+    to_sysreptor_json,
+)
 
-__all__ = ["EngagementDB"]
+__all__ = [
+    "EngagementDB",
+    "to_ghostwriter_csv",
+    "to_markdown",
+    "to_sysreptor_json",
+]
