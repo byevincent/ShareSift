@@ -580,6 +580,88 @@
         "\\.ppk"
       ],
       "description": "PuTTY/WinSCP key file \u2014 paired with v0.26 putty_ppk parser."
+    },
+    {
+      "rule_name": "ShareSiftKeepTerraformState",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^terraform\\.tfstate$",
+        "^terraform\\.tfstate\\.backup$",
+        ".+\\.tfstate$",
+        ".+\\.tfstate\\.backup$"
+      ],
+      "description": "Terraform state files \u2014 routinely contain plaintext provider credentials (AWS access keys, Azure SP, GCP SA) inlined into resource state. GitGuardian State of Secrets 2025 flagged tfstate as a top-5 cloud cred leak vector."
+    },
+    {
+      "rule_name": "ShareSiftKeepVaultToken",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.vault-token$"
+      ],
+      "description": "HashiCorp Vault bearer token cache \u2014 default ~/.vault-token location written by ``vault login``. Live bearer until token TTL expires."
+    },
+    {
+      "rule_name": "ShareSiftKeepPulumiCredentials",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.pulumi[/\\\\]credentials\\.json$"
+      ],
+      "description": "Pulumi Cloud credentials file \u2014 stores access tokens for cloud automation. Path-anchored to avoid FP on bare ``credentials.json``."
+    },
+    {
+      "rule_name": "ShareSiftKeepTerraformCloudCredentials",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.terraform\\.d[/\\\\]credentials\\.tfrc\\.json$"
+      ],
+      "description": "Terraform Cloud / Terraform Enterprise API tokens \u2014 written by ``terraform login``. Tokens have infra-write scope."
+    },
+    {
+      "rule_name": "ShareSiftKeepAzureModernCliCache",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.azure[/\\\\]msal_token_cache\\.json$",
+        "[/\\\\]\\.azure[/\\\\]service_principal_entries\\.json$",
+        "[/\\\\]\\.azure[/\\\\]accessTokens\\.json$"
+      ],
+      "description": "Modern Azure CLI auth cache \u2014 post-2023 ``az login`` writes MSAL-shape tokens to msal_token_cache.json; service_principal_entries.json holds SP credentials; legacy accessTokens.json still appears in mixed-version environments."
+    },
+    {
+      "rule_name": "ShareSiftKeepAwsSsoCache",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "[/\\\\]\\.aws[/\\\\]sso[/\\\\]cache[/\\\\][a-f0-9]+\\.json$"
+      ],
+      "description": "AWS SSO cached bearer tokens \u2014 SHA1-named JSON files under ~/.aws/sso/cache/. RedCanary documented 2024 attack pattern: exfiltrating these gives short-lived but valid bearer tokens for refresh."
+    },
+    {
+      "rule_name": "ShareSiftKeepAnsibleVaultHeader",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^\\$ANSIBLE_VAULT;[0-9]+\\.[0-9]+;AES256"
+      ],
+      "description": "Ansible Vault encrypted file header \u2014 content is AES256-encrypted, but the file signals high-value infra creds. Operator action: capture for offline crack against the vault password."
     }
   ]
 }
