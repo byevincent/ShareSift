@@ -4,6 +4,106 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.46.0] — 2026-06-09
+
+The "drop a binary on Kali" release. Closes the three remaining
+items from the v0.45 honest assessment: engagement-DB exporters
+(GhostWriter / SysReptor), PyInstaller single-file binary (1.5GB →
+77MB), path-prefix dedup investigation (deferred — risk/reward
+isn't there).
+
+### Added — engagement DB exporters
+
+New ``sharesift export`` subcommand emits findings in three
+operator-friendly formats:
+
+    sharesift export --db engagement.db --format markdown \
+        --output findings.md --title "Acme Q3 2026"
+
+    sharesift export --db engagement.db --format ghostwriter \
+        --output findings.csv
+
+    sharesift export --db engagement.db --format sysreptor \
+        --output sysreptor.json
+
+- **Markdown** — universally pasteable into any reporting tool
+  (Dradis, GhostWriter, SysReptor, Notion, Slack, plain delivery
+  docs). Summary stats + findings grouped by tier; per-finding
+  with path, host, share, RW marker, snippet truncated to 500
+  chars.
+- **GhostWriter CSV** — direct CSV import format with columns
+  GhostWriter's findings page expects. Tier maps to severity
+  (Black→Critical, Red→High, Yellow→Medium, Green→Low). Standard
+  "Rotate the credential" recommendation; operator customizes
+  per-finding before delivery.
+- **SysReptor JSON** — ``projects/v1`` format with lowercased
+  severities per SysReptor schema. Metadata block preserves
+  ``sharesift_rule`` + ``first_seen`` + ``share_writable`` for
+  downstream queries.
+
+All three use consistent finding ordering: tier (Black > Red >
+Yellow > Green) > host > share > rel_path. Pre-joined query
+returns hits + share access + file size in one round-trip.
+
+### Added — PyInstaller single-file binary (77 MB)
+
+v0.38's deferred PyInstaller item now solved. **20× smaller** than
+the v0.38 1.5GB attempt:
+
+    wget https://github.com/byevincent/ShareSift/releases/latest/download/sharesift
+    chmod +x sharesift
+    ./sharesift --version
+    # sharesift 0.46.0
+
+The binary covers:
+- ``score-paths`` (Stage 1 LightGBM + rule engine + tier engine)
+- ``scan-files`` (rule + extractor cascade)
+- ``to-snaffler-tsv``
+- ``sort`` (verifier-first)
+- ``query`` (engagement DB)
+- ``export`` (Markdown / GhostWriter CSV / SysReptor JSON)
+
+What it does NOT cover (operators pipx install for these):
+- SMB-direct (smbprotocol excluded, saves ~30 MB)
+- ``discover`` (impacket excluded, saves ~100 MB)
+- ``verify`` (requests/paramiko/ldap3/jwt/boto3 excluded, saves
+  ~50 MB)
+- ``render-report`` (jinja2 excluded)
+- Content classifier (torch excluded, saves ~1.5 GB)
+
+The size reduction came from two changes:
+
+1. **Minimal build venv.** Default dev venv has torch+nvidia+triton+
+   bitsandbytes (5.4GB). Building from a 325MB venv with only
+   Stage-1 deps prevents transitive pulls.
+2. **Aggressive excludes.** 30+ excluded modules + sklearn data
+   trim. ``strip=False`` + ``upx=False`` because both corrupt
+   scipy's OpenBLAS shared lib.
+
+New build script ``tools/build_pyinstaller.py`` generates the
+spec file and invokes pyinstaller. The spec itself is gitignored;
+the build script is source of truth.
+
+### Deferred — path-prefix dedup penalty
+
+Diagnostic on MSF3 top-30 post-v0.45 shows top-10 = 8/10 TPs
+(real SSH credentials), top-11 = SAM file (TP), top-12-30 dominated
+by duplicate ``brndlog.bak`` files (Internet Explorer cache
+backup, FPs). The duplicates already have heavy filename dedup
+(rank ~0.113); pushing them further requires rule-action-aware
+logic (treat Yellow-from-Relay-only as Green). That's a
+research-y change pattern with v0.28's falsified extension-penalty
+as a cautionary precedent. Defer with explicit risk/reward
+acknowledgement: top-10 is already 0.80, not worth disturbing.
+
+### Out of scope
+
+- Status heartbeat — operator UX polish, defer
+- Markdown report bundle — different from the Markdown exporter
+  (which exports findings JSON-style); the bundle would be the
+  HTML report's Markdown twin. Defer.
+- Resume after crash — already shipped in v0.43.
+
 ## [0.45.0] — 2026-06-09
 
 The structural-weakness release. v0.44 fixes the ranking bug that
@@ -713,11 +813,10 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.46+ — PyInstaller single-file binary (still unsolved 1.5GB
-problem), GhostWriter / SysReptor exporters, path-prefix dedup
-penalty (extend v0.44 dedup to known-noise apps like wamp/glassfish),
-status heartbeat, Markdown report bundle. See
-`docs/pentester_backlog.md` for the full friendliness roadmap.
+v0.47+ — status heartbeat (operator visibility on long scans),
+path-prefix dedup w/ rule-action awareness (research-y, treat
+Yellow-from-Relay as Green), Markdown report bundle (HTML report's
+Markdown twin). See `docs/pentester_backlog.md`.
 
 ## [0.34.0] — 2026-06-08
 

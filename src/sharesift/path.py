@@ -25,6 +25,7 @@ and ``sharesift.tier`` — single source of truth, shared across both models.
 
 from __future__ import annotations
 
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -38,6 +39,21 @@ from sharesift.tier import (
     TierThresholds,
     probability_to_tier,
 )
+
+
+def _resolve_model_dir(relpath: str) -> Path:
+    """Resolve a model dir relative to the bundle root when frozen.
+
+    PyInstaller ``--onefile`` extracts bundled data into a temp dir
+    accessible via ``sys._MEIPASS``. The spec bundles models as
+    ``models/path_classifier_v0_{windows,linux}/`` relative to that
+    root. When not frozen, fall back to repo-relative (matches the
+    pre-frozen default, where CLI commands are typically invoked from
+    the repo root).
+    """
+    if getattr(sys, "frozen", False):
+        return Path(sys._MEIPASS) / relpath  # type: ignore[attr-defined]
+    return Path(relpath)
 
 
 class _OODCalibratedModel:
@@ -107,8 +123,8 @@ class _BetaCalibratedModel:
         return (probs >= 0.5).astype(int)
 
 
-DEFAULT_WINDOWS_MODEL_DIR = Path("models/path_classifier_v0_windows")
-DEFAULT_LINUX_MODEL_DIR = Path("models/path_classifier_v0_linux")
+DEFAULT_WINDOWS_MODEL_DIR = _resolve_model_dir("models/path_classifier_v0_windows")
+DEFAULT_LINUX_MODEL_DIR = _resolve_model_dir("models/path_classifier_v0_linux")
 _CALIBRATED_ARTIFACT = "calibrated.joblib"
 
 

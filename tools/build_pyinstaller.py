@@ -217,9 +217,18 @@ exe = EXE(
 
 
 def main() -> int:
-    if shutil.which("pyinstaller") is None:
-        print("ERROR: pyinstaller not installed. Run:", file=sys.stderr)
-        print("  uv run pip install pyinstaller", file=sys.stderr)
+    # Invoke PyInstaller through THIS interpreter's `-m PyInstaller`. A
+    # bare `pyinstaller` on PATH typically resolves to ~/.local/bin
+    # which is hardcoded to system python and picks up its
+    # site-packages — defeating the whole point of the minimal build
+    # venv (50MB venv-installed deps become a 1.6GB binary because
+    # transitive deps come from the system).
+    try:
+        import PyInstaller  # noqa: F401
+    except ImportError:
+        print("ERROR: PyInstaller not installed in this interpreter.", file=sys.stderr)
+        print(f"  Interpreter: {sys.executable}", file=sys.stderr)
+        print("  Run: pip install pyinstaller", file=sys.stderr)
         return 1
 
     # Write the spec
@@ -234,10 +243,12 @@ def main() -> int:
     if work_dir.exists():
         shutil.rmtree(work_dir)
 
-    # Run PyInstaller
+    # Run PyInstaller via `python -m PyInstaller` so it uses THIS
+    # interpreter's site-packages (the minimal build venv), not
+    # whatever the `pyinstaller` shim on PATH points at.
     cmd = [
-        "pyinstaller",
-        "--clean",
+        sys.executable,
+        "-m", "PyInstaller",
         "--noconfirm",
         "--distpath", str(DIST_DIR),
         "--workpath", str(work_dir),
