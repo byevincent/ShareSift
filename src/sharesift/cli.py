@@ -300,12 +300,29 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
     items: list[tuple[str, str | None]] = []
     cap = args.max_snippet_bytes or 1_048_576
     share_obj = getattr(args, "_share", None)
-    for p_str in paths:
-        if share_obj is not None:
-            content = load_content_from_share(share_obj, p_str, max_bytes=cap)
-        else:
-            content = load_content(Path(p_str), max_bytes=cap)
-        items.append((p_str, content))
+    # v0.38: parallel reads via thread pool for SMB targets. Lab tested
+    # safe with smbprotocol up to 8 workers on one Connection; default
+    # 4 is the sweet spot (diminishing returns above, credit-flow
+    # failures at 16+). Local-FS reads skip threading — overhead
+    # exceeds any benefit on sub-millisecond opens.
+    n_threads = max(1, getattr(args, "read_threads", 4) or 1)
+    use_threads = share_obj is not None and n_threads > 1 and len(paths) > 1
+
+    if share_obj is None:
+        for p_str in paths:
+            items.append((p_str, load_content(Path(p_str), max_bytes=cap)))
+    elif not use_threads:
+        for p_str in paths:
+            items.append((p_str, load_content_from_share(share_obj, p_str, max_bytes=cap)))
+    else:
+        from concurrent.futures import ThreadPoolExecutor
+
+        def _read(p: str) -> tuple[str, str | None]:
+            return p, load_content_from_share(share_obj, p, max_bytes=cap)
+
+        out.debug(f"parallel reads: {n_threads} threads")
+        with ThreadPoolExecutor(max_workers=n_threads) as ex:
+            items = list(ex.map(_read, paths))
 
     n_with_content = sum(1 for _, c in items if c is not None)
     out.info(f"{n_with_content}/{len(items)} files accessible for content scan")
@@ -514,6 +531,7 @@ def cmd_scan(args: argparse.Namespace) -> int:
             device=args.device,
             max_snippet_bytes=args.max_snippet_bytes,
             force_content=args.force_content,
+            read_threads=getattr(args, "read_threads", 4),
             debug=False,
             _share=share_for_reads,
         ))
@@ -665,6 +683,7 @@ def cmd_batch(args: argparse.Namespace) -> int:
                 device=None,
                 max_snippet_bytes=4096,
                 force_content=False,
+                read_threads=getattr(args, "read_threads", 4),
                 target_file=None,
                 rate_limit=1.0,
                 timeout=10.0,
@@ -955,6 +974,15 @@ def main(argv: list[str] | None = None) -> int:
     sc.add_argument("--max-snippet-bytes", type=int, default=4096)
     sc.add_argument("--force-content", action="store_true")
     sc.add_argument(
+        "--read-threads",
+        type=int,
+        default=4,
+        help=(
+            "Worker threads for parallel content reads on SMB targets "
+            "(default 4; pass 1 to force sequential)."
+        ),
+    )
+    sc.add_argument(
         "--target-file",
         type=Path,
         default=None,
@@ -1009,6 +1037,18 @@ def main(argv: list[str] | None = None) -> int:
         "--force-content",
         action="store_true",
         help="Run content scan even on paths the path stage didn't flag.",
+    )
+    sf.add_argument(
+        "--read-threads",
+        type=int,
+        default=4,
+        help=(
+            "Worker threads for parallel content reads on SMB targets "
+            "(default 4; pass 1 to force sequential; effective only "
+            "with --share that's an SmbShare). Lab-validated thread-"
+            "safe with smbprotocol up to 8 workers; 16+ may hit SMB "
+            "credit-flow control limits."
+        ),
     )
     sf.add_argument(
         "--debug",
@@ -1143,6 +1183,10 @@ def main(argv: list[str] | None = None) -> int:
     bt.add_argument(
         "--skip-report", action="store_true",
         help="Skip HTML report rendering per target.",
+    )
+    bt.add_argument(
+        "--read-threads", type=int, default=4,
+        help="Parallel content-read threads per target (default 4).",
     )
     _add_smb_auth_args(bt)
     bt.set_defaults(func=cmd_batch)
