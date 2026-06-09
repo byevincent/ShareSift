@@ -131,6 +131,55 @@ class _CompiledRule:
     raw_wordlist: list[str]
 
 
+def _load_rule_records(path: Path) -> list[dict]:
+    """Load rule records from a JSON or TOML file, normalized to the
+    internal flat dict shape (``rule_name``, ``triage``, ``match_action``,
+    ``match_location``, ``wordlist_type``, ``wordlist``, ``description``).
+
+    Two on-disk schemas are accepted:
+
+    * **ShareSift JSON** — flat ``{"rules": [{"rule_name": ..., ...}]}``.
+      One rule per array entry. This is the schema for
+      ``snaffler_default.json`` and ``extra_rules.json``.
+    * **Snaffler TOML** — ``[[ClassifierRules]]`` blocks with PascalCase
+      keys (``RuleName``, ``Triage``, ``MatchAction``, ``MatchLocation``,
+      ``WordListType``, ``WordList``). Drop a Snaffler-formatted rule
+      file straight into a ShareSift rules directory and it loads
+      unchanged.
+
+    Any other extension raises ``ValueError`` — silent format-detection
+    failures hide bugs.
+    """
+    suffix = path.suffix.lower()
+    if suffix == ".json":
+        data = json.loads(path.read_text(encoding="utf-8"))
+        return list(data.get("rules", []))
+    if suffix == ".toml":
+        import tomllib
+        with path.open("rb") as f:
+            data = tomllib.load(f)
+        return [_snaffler_toml_to_record(b) for b in data.get("ClassifierRules", [])]
+    raise ValueError(f"unsupported rule file extension: {suffix} ({path})")
+
+
+def _snaffler_toml_to_record(block: dict) -> dict:
+    """Convert a Snaffler ``[[ClassifierRules]]`` block (PascalCase) to
+    the internal flat dict shape (snake_case). ``MatchLength`` is
+    ignored — it's Snaffler-specific match-context sizing that
+    ShareSift doesn't model."""
+    return {
+        "rule_name": block.get("RuleName", ""),
+        "triage": block.get("Triage", ""),
+        "match_action": block.get("MatchAction", ""),
+        "match_location": block.get("MatchLocation", ""),
+        "wordlist_type": block.get("WordListType", "Exact"),
+        "wordlist": block.get("WordList") or [],
+        "description": block.get("Description", ""),
+        "enumeration_scope": block.get("EnumerationScope", ""),
+        "source_file": block.get("source_file", ""),
+    }
+
+
 def _compile_one(pattern: str, wordlist_type: str) -> re.Pattern[str]:
     if wordlist_type == "Regex":
         return re.compile(pattern, re.IGNORECASE)
@@ -157,14 +206,18 @@ class ContentRuleEngine:
         # v0.21: load BOTH snaffler_default.json (88 base) and
         # extra_rules.json (v0.12 blind-spot + Gitleaks modern SaaS).
         # Callers can pin to a single file for tests by passing a 1-element list.
+        # v0.37: parameter accepts ``.toml`` files as well — both Snaffler's
+        # native ``[[ClassifierRules]]`` schema and ShareSift's flat JSON
+        # schema are supported. Name kept for backward compat (existing
+        # tests pass it as a kwarg).
         if rules_json_paths is None:
             rules_json_paths = [_RULES_JSON]
             if _EXTRA_RULES_JSON.exists():
                 rules_json_paths.append(_EXTRA_RULES_JSON)
         self._compiled: list[_CompiledRule] = []
         for path in rules_json_paths:
-            data = json.loads(path.read_text(encoding="utf-8"))
-            for rec in data.get("rules", []):
+            records = _load_rule_records(path)
+            for rec in records:
                 location = rec.get("match_location")
                 action = rec.get("match_action")
                 tier = rec.get("triage")
