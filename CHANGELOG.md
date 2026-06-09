@@ -4,6 +4,76 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.41.0] — 2026-06-09
+
+Engagement-shape datastore + OpSec polish. v0.40 and v0.41 ship
+together as a single GitHub release; the v0.40.0 tag exists for
+historical accuracy but only the v0.41.0 release page is created.
+
+### Added (v0.40)
+
+- **Default noise-exclusion globs** — 53 patterns covering Windows
+  System32/SysWOW64 binaries, winsxs/, Prefetch/, dev directories
+  (node_modules/, .git/objects/, __pycache__/, venv/, vendor/),
+  OS caches (Library/Caches/, AppData/Local/Temp/), binary
+  artifacts (*.pyc, *.so, *.dll), heavy media (*.iso, *.vmdk,
+  *.mp4, *.jpg). Snaffler issue #178 et al. (operators getting
+  buried in System32 noise) addressed by default. Operator flags
+  `--exclude-glob PATTERN` (repeatable) and `--no-default-excludes`.
+
+- **`--max-file-size` flag** with human-readable suffix parsing
+  (5M, 100K, 1G). Caps bytes read per file at the share level;
+  default 10M. Prevents accidentally pulling a 5GB VMDK or
+  NTUSER.DAT over the wire.
+
+- **SQLite engagement datastore** (`src/sharesift/engagement/`):
+  one `.sharesift.db` per pentest holding hosts / shares / files /
+  hits. Schema includes `first_seen` / `last_seen` per row for
+  incremental-crawl resume in v0.42+. WAL journal mode + indexes
+  on `hits(tier)`, `hits(rule)`, `files(content_hash)`.
+
+- **`sharesift batch --db PATH`** populates the datastore as the
+  batch runs. Each target's host + share + per-rule hits land in
+  the DB. Per-target failures don't abort the batch.
+
+- **`sharesift query` subcommand** for ad-hoc SQL + pre-baked
+  presets:
+
+      sharesift query --db engagement.db --summary
+      sharesift query --db engagement.db --preset live-creds
+      sharesift query --db engagement.db --preset writable-shares
+      sharesift query --db engagement.db "SELECT host, COUNT(*) FROM hits GROUP BY host"
+
+  Pre-baked presets: `live-creds`, `writable-shares`,
+  `hosts-by-hits`, `rules-by-hits`, `blacks`. Output as aligned
+  text (default) or JSONL (`--json`). Writes rejected — operator
+  goes through `scan` / `batch` for mutations.
+
+### Added (v0.41)
+
+- **`--stealth` preset** on `scan` — OpSec-conscious one-flag
+  wrapper:
+  - `--max-file-size` = `256K` (cap reads aggressively)
+  - `--read-threads` = 1 (no parallelism noise on the wire)
+  - SMB3 encryption stays on (default)
+
+  Explicit operator overrides win — passing `--max-file-size` or
+  `--read-threads` alongside `--stealth` keeps the explicit values.
+
+### Out of scope (deferred)
+
+- **PyInstaller single-file binary** carries to v0.42. Initial
+  bundle was 1.5GB; needs sklearn submodule trimming + a Stage-1-
+  only build mode.
+- **Resume after crash** — the `first_seen` / `last_seen` schema
+  primitives are in place; v0.42 wires the actual skip-already-
+  seen-files logic.
+- **GhostWriter / SysReptor exporters** — engagement DB is now
+  queryable via SQL; v0.42 adds typed exporters for the common
+  report formats.
+
+See `docs/v0p41_results.md`.
+
 ## [0.39.0] — 2026-06-09
 
 Network-wide share discovery. The headline pitch that's been
@@ -423,13 +493,12 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.40 — distribution + engagement-shape: PyInstaller single-file
-binary (proper bundle-size investigation), SQLite engagement
-datastore (smbcrawler-style), resume after crash, content-hash
-dedup, GhostWriter / SysReptor exporters. v0.41+ — OpSec polish
-(noise exclusions, `--stealth` preset, status heartbeat, Markdown
-report bundle). See `docs/pentester_backlog.md` for the full
-friendliness roadmap.
+v0.42+ — PyInstaller single-file binary (proper bundle-size
+investigation), resume after crash + content-hash dedup (wires the
+v0.40 first_seen/last_seen primitives), GhostWriter / SysReptor
+exporters from the engagement datastore, status heartbeat,
+Markdown report bundle. See `docs/pentester_backlog.md` for the
+full friendliness roadmap.
 
 ## [0.34.0] — 2026-06-08
 
