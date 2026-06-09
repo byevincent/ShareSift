@@ -50,6 +50,7 @@ _KNOWN_SUBCOMMANDS = frozenset({
     "retrain-ranker",
     "to-snaffler-tsv",
     "batch",
+    "discover",
 })
 
 
@@ -619,6 +620,83 @@ def cmd_retrain_ranker(args: argparse.Namespace) -> int:
     return retrain_ranker.main(argv)
 
 
+def cmd_discover(args: argparse.Namespace) -> int:
+    """v0.39 step 1: list shares on a remote SMB host.
+
+    Composes with ``batch``:
+
+        sharesift discover //10.10.10.5 -u u -p p > targets.txt
+        sharesift batch --targets targets.txt -u u -p p \\
+            --output-dir ./engagement
+
+    Default output is one UNC per line for disk shares. Non-file
+    shares (IPC, printer, device) are commented out so they pass
+    through ``batch`` (which strips ``#`` comments) without
+    triggering scans. Pass ``--all-types`` to include them
+    uncommented.
+    """
+    start = time.monotonic()
+
+    from sharesift.share.discovery import enumerate_shares
+
+    # Parse the target — accept ``//host`` or ``\\host`` or bare host.
+    target_str = args.target.lstrip("/\\")
+    if "/" in target_str or "\\" in target_str:
+        # Has a share part (//host/share) — strip it, we discover all
+        host = target_str.replace("\\", "/").split("/", 1)[0]
+    else:
+        host = target_str
+    # Port suffix: host:port
+    port = args.port or 445
+    if ":" in host:
+        host, _, port_str = host.partition(":")
+        port = int(port_str)
+
+    auth = _build_auth_from_args(args)
+    if auth is None and not getattr(args, "anonymous", False):
+        # Discovery often works anonymously even when scan auth is set;
+        # default to anonymous when no creds are passed.
+        from sharesift.share import Auth
+        auth = Auth(anonymous=True)
+
+    out.info(f"discover: {host}:{port}")
+    try:
+        shares = enumerate_shares(host, auth, port=port)
+    except Exception as exc:
+        out.error(f"discover failed: {type(exc).__name__}: {exc}")
+        return 1
+
+    out.info(f"found {len(shares)} share(s)")
+
+    if args.format == "json":
+        import json as _json
+        for s in shares:
+            line = _json.dumps({
+                "host": host, "share": s.name,
+                "type": s.type, "comment": s.comment,
+                "unc": rf"\\{host}\{s.name}",
+            })
+            print(line)
+    else:
+        # Text format — composes with batch (which strips # comments).
+        for s in shares:
+            comment_marker = "" if (s.is_file_share() or args.all_types) else "# "
+            type_note = f"  # {s.type}" + (f" — {s.comment}" if s.comment else "")
+            print(f"{comment_marker}//{host}/{s.name}{type_note}")
+
+    out.summary({
+        "command": "discover",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "host": host,
+        "port": port,
+        "shares_total": len(shares),
+        "shares_file_type": sum(1 for s in shares if s.is_file_share()),
+        "exit_code": 0,
+    })
+    return 0
+
+
 def cmd_batch(args: argparse.Namespace) -> int:
     """v0.37 step 3: scan multiple shares listed in a targets file.
 
@@ -1158,6 +1236,39 @@ def main(argv: list[str] | None = None) -> int:
         "--n-estimators", type=int, default=200, help="LightGBM n_estimators (default 200)"
     )
     rt.set_defaults(func=cmd_retrain_ranker)
+
+    # v0.39 step 1: discover — list shares on a remote host
+    ds = sub.add_parser(
+        "discover",
+        help=(
+            "List shares on a remote SMB host via NetrShareEnum. "
+            "Composes with ``batch``: pipe stdout into a targets "
+            "file, then ``sharesift batch --targets ...``."
+        ),
+    )
+    ds.add_argument(
+        "target",
+        help="Host to enumerate — //host, \\\\host, or bare host (with optional :port).",
+    )
+    ds.add_argument(
+        "--port", type=int, default=None,
+        help="SMB port (default 445; ignored if target includes ``:port``).",
+    )
+    ds.add_argument(
+        "--format", choices=["text", "json"], default="text",
+        help=(
+            "Output format. ``text`` (default) emits one ``//host/share`` "
+            "UNC per line — disk shares uncommented, others as ``# ...`` "
+            "so they pass through ``batch`` without scanning. ``json`` "
+            "emits one record per share with host/share/type/comment/unc."
+        ),
+    )
+    ds.add_argument(
+        "--all-types", action="store_true",
+        help="Emit non-file shares (IPC, printer, device) uncommented too.",
+    )
+    _add_smb_auth_args(ds)
+    ds.set_defaults(func=cmd_discover)
 
     # v0.37 step 3: batch — scan multiple shares from a targets file
     bt = sub.add_parser(

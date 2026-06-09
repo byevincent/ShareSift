@@ -24,6 +24,13 @@ sharesift = "sharesift.cli:main"
 smb = [
     "smbprotocol>=1.16.1",
 ]
+# v0.39: NetrShareEnum-backed share discovery for network-wide
+# enumeration. Adds impacket as a network-enum extra so the smb
+# extra (smbprotocol pure-Python NTLM) stays lean for operators
+# who already know which share to scan.
+network-enum = [
+    "impacket>=0.12.0",
+]
 
 [build-system]
 requires = ["hatchling"]
