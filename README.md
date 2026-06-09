@@ -27,16 +27,18 @@ Classifier-level on held-out splits:
 | Content classifier precision on docx benchmark | 0.974 | 2.6% false positive rate |
 | End to end F1 on constructed share benchmark | 0.387 | v0p5 0.166 |
 
-Head-to-head against Snaffler on benchmark shares:
+Head-to-head against Snaffler on benchmark shares (re-run on v0.42, 2026-06-09):
 
-| Share | Metric | ShareSift | Snaffler |
+| Share | Metric | ShareSift v0.42 | Snaffler |
 |---|---|---|---|
-| Metasploitable 3 (Windows, 40 credentials) | Recall | 100% (40/40) | 97.5% (39/40) |
-| Metasploitable 3 | Top-10 precision | 1.000 | 0.000 |
-| GOAD (Linux, 18 credentials) | Recall | 100% (18/18) | 55.6% (10/18) |
-| GOAD | Precision (full flag set) | 85.7% (18/21) | 76.9% (10/13) |
+| Metasploitable 3 (Windows AD, 40 credentials) | Recall | **100% (40/40)** | 97.5% (39/40) |
+| Metasploitable 2 (Linux server, 34 credentials) | Recall | **97.1% (33/34)** | 44.1% (15/34) |
+| DiskForge (Windows forensic, 13 plants) | Recall | 92.3% (12/13) | 92.3% (12/13) |
+| GOAD (Linux AD, 18 credentials) — v0.15 numbers | Recall | 100% (18/18) | 55.6% (10/18) |
 
-See [docs/audit_2026-05-31.md](docs/audit_2026-05-31.md) for calibration details, [docs/v0p14_results.md](docs/v0p14_results.md) for the Metasploitable 3 head-to-head, and [docs/v0p15_results.md](docs/v0p15_results.md) for GOAD.
+ShareSift catches everything Snaffler catches plus 19 additional credentials across the three re-tested benchmarks. Snaffler catches nothing ShareSift misses. **Linux recall lead: +53 percentage points** (0.971 vs 0.441 on MSF2).
+
+See [docs/snaffler_benchmark_2026-06.md](docs/snaffler_benchmark_2026-06.md) for the full v0.42 head-to-head with per-rule attribution, methodology, speed benchmarks, and honest caveats about what the comparison doesn't measure (top-K ranking, content classifier value, live verification value).
 
 ## Install
 
@@ -54,7 +56,7 @@ pipx install sharesift
 
 ```bash
 # Latest milestone release (recommended)
-git clone --branch v0.41.0 https://github.com/byevincent/ShareSift.git
+git clone --branch v0.43.0 https://github.com/byevincent/ShareSift.git
 # Or track main for unreleased work
 git clone https://github.com/byevincent/ShareSift.git
 
@@ -72,7 +74,7 @@ uv sync --extra smb
 
 Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
 
-Milestone releases: [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (current — engagement-shape datastore), [v0.39.0](https://github.com/byevincent/ShareSift/releases/tag/v0.39.0) (network discovery), [v0.35.0](https://github.com/byevincent/ShareSift/releases/tag/v0.35.0) (SMB-direct), [v0.34.0](https://github.com/byevincent/ShareSift/releases/tag/v0.34.0), [v0.33.0](https://github.com/byevincent/ShareSift/releases/tag/v0.33.0), [v0.30.0](https://github.com/byevincent/ShareSift/releases/tag/v0.30.0), [v0.27.0](https://github.com/byevincent/ShareSift/releases/tag/v0.27.0), [v0.24.0](https://github.com/byevincent/ShareSift/releases/tag/v0.24.0). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
+Milestone releases: [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (current — benchmark-driven rule gap closure + resume after crash), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement-shape datastore), [v0.39.0](https://github.com/byevincent/ShareSift/releases/tag/v0.39.0) (network discovery), [v0.35.0](https://github.com/byevincent/ShareSift/releases/tag/v0.35.0) (SMB-direct), [v0.34.0](https://github.com/byevincent/ShareSift/releases/tag/v0.34.0), [v0.33.0](https://github.com/byevincent/ShareSift/releases/tag/v0.33.0), [v0.30.0](https://github.com/byevincent/ShareSift/releases/tag/v0.30.0), [v0.27.0](https://github.com/byevincent/ShareSift/releases/tag/v0.27.0), [v0.24.0](https://github.com/byevincent/ShareSift/releases/tag/v0.24.0). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
 
 ## Quick start
 

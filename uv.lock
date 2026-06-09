@@ -3219,7 +3219,7 @@ wheels = [
 
 [[package]]
 name = "sharesift"
-version = "0.41.0"
+version = "0.43.0"
 source = { editable = "." }
 dependencies = [
     { name = "betacal" },

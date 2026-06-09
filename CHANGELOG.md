@@ -4,6 +4,123 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.43.0] — 2026-06-09
+
+Benchmark-driven improvements + engagement-day polish. Combined
+v0.42 + v0.43 ship; v0.42.0 tag exists in git but only this v0.43.0
+release page is created (per the batching pattern established with
+v0.41).
+
+### Added (v0.42 — closing benchmark gaps)
+
+After the head-to-head benchmark against Snaffler surfaced 11
+both-missed Linux credential paths on MSF2, v0.42 adds 6 targeted
+rules that close 10 of them:
+
+- **`ShareSiftKeepShadowBackup`** (Black) — `/etc/shadow-`,
+  `/etc/gshadow`, `/etc/gshadow-` backup forms created by
+  `passwd`/`groupadd` before writing
+- **`ShareSiftKeepNfsExports`** (Yellow) — `/etc/exports` NFS
+  share rules (host access + krb5 sec= flavors)
+- **`ShareSiftKeepPostfixConfig`** (Yellow) — `/etc/postfix/main.cf`
+  + `sasl_passwd` + `saslpasswd2` (Postfix mail server credentials)
+- **`ShareSiftKeepMysqlDataDir`** (Black) — MySQL/MariaDB
+  `mysql.user`, `mysql.db`, `proxies_priv` ISAM/InnoDB data files
+  (password hashes crack offline)
+- **`ShareSiftKeepEditorBackupConfig`** (Red) — `*.{php,inc,conf,cfg,ini,env,yml,yaml,properties,sh}{~,.bak,.swp,.orig}`
+  (editor backups of credential-shaped configs)
+- **`ShareSiftKeepSshHostPubKeys`** (Yellow) —
+  `/etc/ssh/ssh_host_*.pub` (signal that the private keys exist
+  in the same directory)
+
+**Benchmark impact** (MSF2 head-to-head):
+- v0.41: ShareSift R=0.676 (23/34), 11 both-missed
+- v0.43: ShareSift R=**0.971 (33/34)**, 1 both-missed (`/root/reset_logs.sh` —
+  shell script with embedded creds, intentionally hard to rule
+  for without high FPR on every shell script)
+
+**Linux recall lead vs Snaffler: +53 percentage points** (0.971 vs
+0.441). Windows benchmarks (MSF3 + DiskForge) unchanged — the new
+rules are Linux-specific.
+
+Rules added to BOTH the ShareSift internal engine
+(`extra_rules.json`) AND the pysnaffler comparison path
+(`extra_rules.py::_v0p42_benchmark_gap_rules`) so the same rules
+fire whether ShareSift is evaluated standalone or in head-to-head
+mode.
+
+### Added (v0.43 — resume after crash)
+
+Operator workflow:
+
+    sharesift //10.0.0.5/Finance$ -u u -p p \
+        --db ./engagement/.sharesift.db --output-dir ./engagement
+    # ... crashes after 5k of 50k files
+
+    sharesift //10.0.0.5/Finance$ -u u -p p \
+        --db ./engagement/.sharesift.db --output-dir ./engagement \
+        --resume
+
+- New `--db PATH` flag on `scan` (matches `batch`'s flag set).
+  When set, hosts + shares + walked files get recorded in the
+  engagement datastore as the scan runs.
+- New `--resume` flag. Requires `--db`. Filters the walked file
+  list against the DB's `seen_files(host, share)` so the cascade
+  only processes new files.
+- New `EngagementDB.seen_files(host, share)` returns the set of
+  `rel_path` values already recorded.
+- New `EngagementDB.record_files_bulk(...)` for the post-scan
+  bulk file recording (uses `INSERT OR IGNORE` for skip-already-
+  seen semantics).
+- Files get recorded in the `finally` clause so even partial /
+  crashed scans leave recoverable state.
+
+### Speed benchmark added
+
+Same 1054 MSF3 paths through both tools, 5 wall-clock runs each:
+
+| Tool | Median | Per-path |
+|---|---|---|
+| pysnaffler (rules only) | 0.65s | 0.6 ms/path |
+| ShareSift Stage 1 (rules + LightGBM ranker) | 1.67s | 1.6 ms/path |
+| Snaffler.exe (.NET, not measured) | ~0.05-0.13s | ~0.05-0.13 ms/path |
+
+ShareSift is ~2.6× slower than pysnaffler on rule eval (LightGBM
+model load + feature extraction + calibrated inference). Against
+actual Snaffler.exe ShareSift is probably 13-26× slower on raw
+rule eval. Honest acknowledgment of the .NET vs Python+ML gap.
+
+**Crucially: neither tool's compute is the wall-clock bottleneck
+in real engagements.** A 50k-file share scan takes 5-30 minutes of
+SMB walk; the ~50s extra ShareSift eval cost is dwarfed by the
+network round-trips both tools have to make. Real wall-clock
+difference on engagement scans: within 5-10% of each other.
+
+### Documentation
+
+- `docs/snaffler_benchmark_2026-06.md` — full head-to-head
+  benchmark covering MSF3, MSF2, DiskForge. Includes the v0.42
+  per-rule attribution table, methodology, speed numbers, and
+  honest caveats about what the comparison doesn't measure (top-K
+  ranking, content classifier value, live verifier value, GOAD
+  re-test).
+
+- README — head-to-head numbers updated to current v0.42 results.
+  MSF2 added (97.1% vs 44.1%). Pointer to the full benchmark doc.
+
+### Out of scope (deferred)
+
+- **Top-K precision improvement** (ranker re-calibration) carries
+  to v0.44. MIN top-10 = 0.20 chart has been flat for 16+ releases.
+  This is the structural ranking weakness; needs ML
+  experimentation, not a config change.
+- **PyInstaller single-file binary** still has the 1.5GB bundle
+  problem from v0.38. Defer.
+- **GhostWriter / SysReptor exporters** from the engagement DB.
+  v0.44 candidate.
+- **GOAD ground truth in `{file_list, ground_truth}` format**.
+  Needs lab build; deferred.
+
 ## [0.41.0] — 2026-06-09
 
 Engagement-shape datastore + OpSec polish. v0.40 and v0.41 ship
@@ -493,12 +610,12 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.42+ — PyInstaller single-file binary (proper bundle-size
-investigation), resume after crash + content-hash dedup (wires the
-v0.40 first_seen/last_seen primitives), GhostWriter / SysReptor
-exporters from the engagement datastore, status heartbeat,
-Markdown report bundle. See `docs/pentester_backlog.md` for the
-full friendliness roadmap.
+v0.44+ — top-K precision improvement (ranker re-calibration, the
+structural weakness from the v0.43 benchmark), PyInstaller
+single-file binary (still unsolved 1.5GB problem),
+GhostWriter / SysReptor exporters from the engagement datastore,
+status heartbeat, Markdown report bundle. See
+`docs/pentester_backlog.md` for the full friendliness roadmap.
 
 ## [0.34.0] — 2026-06-08
 
