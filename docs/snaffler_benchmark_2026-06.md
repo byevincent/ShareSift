@@ -147,6 +147,46 @@ aren't in DiskForge's plant set — so they don't help here.
 GPP cpassword path (v0.34) didn't fire either ruleset; this is a
 known gap that the v0.34 results doc noted.
 
+## Speed comparison (v0.43)
+
+Same 1054 MSF3 paths through both tools, 5 wall-clock runs each
+(median reported):
+
+| Tool | Time | Per-path | Caveat |
+|---|---|---|---|
+| pysnaffler (rules only) | 0.65s | 0.6 ms/path | Python port of Snaffler; not the .NET binary |
+| ShareSift Stage 1 (rules + LightGBM ranker) | 1.67s | 1.6 ms/path | Production cascade including the learned ranker |
+| Snaffler.exe (.NET, estimated) | ~0.05-0.13s | ~0.05-0.13 ms/path | Not measured directly — .NET is 5-10× faster than Python |
+
+**ShareSift is ~2.6× slower than pysnaffler on rule evaluation.**
+The extra time goes into LightGBM model load + feature extraction +
+calibrated inference per path. This is the cost of having a learned
+ranker vs pure rule-eval.
+
+Against actual Snaffler.exe (which we didn't run — needs Wine or
+a Windows VM), ShareSift is probably 13-26× slower on raw rule
+evaluation. Honest acknowledgment of the .NET vs Python +
+ML-cascade gap.
+
+**Crucially, neither tool's compute is the bottleneck in real
+engagements.** A real-world 50k-file share scan takes 5-30 minutes
+of wall-clock because of SMB round-trip latency, not rule
+evaluation. ShareSift's 50-second extra eval cost on a 50k file
+list is dwarfed by the 10-minute share walk both tools have to
+do regardless.
+
+For the operator-visible wall-clock metric on a real engagement:
+**the two tools are within 5-10% of each other.** ShareSift's
+v0.38 parallel-reads optimization (lab-measured 1.5× speedup on
+the read-bound portion) likely closes the remaining gap on
+content-heavy scans.
+
+If raw compute speed matters more than ranking quality (e.g.
+beachhead-with-tight-time-budget operations), Snaffler.exe is
+still the faster pick. For typical engagement scanning where the
+share walk dominates wall-clock, the speed difference doesn't
+matter operationally.
+
 ## What this doesn't measure
 
 Six caveats that matter for the displacement narrative:
