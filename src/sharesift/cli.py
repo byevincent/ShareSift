@@ -51,6 +51,7 @@ _KNOWN_SUBCOMMANDS = frozenset({
     "to-snaffler-tsv",
     "batch",
     "discover",
+    "query",
 })
 
 
@@ -419,6 +420,16 @@ def cmd_scan(args: argparse.Namespace) -> int:
     """
     start = time.monotonic()
 
+    # v0.40: --stealth preset wires OpSec-conscious defaults.
+    # Operator can override individual settings by passing them
+    # explicitly alongside --stealth.
+    if getattr(args, "stealth", False):
+        if not getattr(args, "max_file_size", None):
+            args.max_file_size = "256K"
+        if getattr(args, "read_threads", None) is None or args.read_threads == 4:
+            args.read_threads = 1
+        # encrypt is already True by default; --stealth doesn't undo --no-encrypt
+
     # v0.35: target resolution. Positional ``target`` (the canonical
     # form) wins over the legacy ``--share`` flag. SMB-shaped targets
     # build an ``SmbShare`` with the auth flag bundle; everything
@@ -672,6 +683,93 @@ def cmd_retrain_ranker(args: argparse.Namespace) -> int:
     return retrain_ranker.main(argv)
 
 
+def cmd_query(args: argparse.Namespace) -> int:
+    """v0.40: ad-hoc SQL queries against an engagement datastore.
+
+    Operator workflow:
+
+        sharesift query --db engagement.db --summary
+        sharesift query --db engagement.db "SELECT host, share FROM shares WHERE can_write = 1"
+        sharesift query --db engagement.db --preset live-creds
+
+    Pre-baked presets cover the common engagement questions
+    (Black/Red findings, writable shares, hosts with most hits).
+    """
+    from sharesift.engagement import EngagementDB
+
+    import json as _json
+
+    db = EngagementDB(args.db)
+    try:
+        if args.summary:
+            summary = db.summary()
+            if args.json:
+                print(_json.dumps(summary, indent=2))
+            else:
+                for k, v in summary.items():
+                    print(f"  {k:24} {v}")
+            return 0
+
+        if args.preset:
+            sql = _PRESET_QUERIES.get(args.preset)
+            if not sql:
+                raise SystemExit(
+                    f"unknown preset: {args.preset!r}. Known: "
+                    + ", ".join(sorted(_PRESET_QUERIES.keys()))
+                )
+        elif args.sql:
+            sql = args.sql
+        else:
+            raise SystemExit(
+                "query: pass --summary, --preset NAME, or SQL as positional"
+            )
+
+        rows = db.query(sql)
+        if not rows:
+            out.info("0 rows")
+            return 0
+
+        if args.json:
+            for row in rows:
+                print(_json.dumps(dict(row)))
+        else:
+            cols = list(rows[0].keys())
+            widths = {c: max(len(c), max(len(str(r[c])) for r in rows)) for c in cols}
+            header = "  ".join(c.ljust(widths[c]) for c in cols)
+            print(header)
+            print("  ".join("-" * widths[c] for c in cols))
+            for r in rows:
+                print("  ".join(str(r[c]).ljust(widths[c]) for c in cols))
+            out.info(f"({len(rows)} rows)")
+        return 0
+    finally:
+        db.close()
+
+
+_PRESET_QUERIES = {
+    "live-creds": (
+        "SELECT host, share, rel_path, rule, tier, snippet FROM hits "
+        "WHERE tier IN ('Black', 'Red') ORDER BY tier, host, share"
+    ),
+    "writable-shares": (
+        "SELECT host, share, type FROM shares WHERE can_write = 1 "
+        "ORDER BY host, share"
+    ),
+    "hosts-by-hits": (
+        "SELECT host, COUNT(*) AS hit_count FROM hits "
+        "GROUP BY host ORDER BY hit_count DESC"
+    ),
+    "rules-by-hits": (
+        "SELECT rule, COUNT(*) AS hit_count, COUNT(DISTINCT host) AS hosts "
+        "FROM hits GROUP BY rule ORDER BY hit_count DESC LIMIT 30"
+    ),
+    "blacks": (
+        "SELECT host, share, rel_path, rule, snippet FROM hits "
+        "WHERE tier = 'Black' ORDER BY host, share"
+    ),
+}
+
+
 def cmd_discover(args: argparse.Namespace) -> int:
     """v0.39 step 1: list shares on a remote SMB host.
 
@@ -814,6 +912,15 @@ def cmd_batch(args: argparse.Namespace) -> int:
     summary_path = base_output / "batch_summary.jsonl"
     out.info(f"batch: {len(targets)} target(s); summary → {summary_path}")
 
+    # v0.40: optional engagement DB. When --db is set, populate
+    # hosts / shares / hits as targets process so the operator gets
+    # a queryable .sharesift.db at the end (or to resume from).
+    engagement_db = None
+    if getattr(args, "db", None):
+        from sharesift.engagement import EngagementDB
+        engagement_db = EngagementDB(args.db)
+        out.info(f"engagement db: {args.db}")
+
     succeeded = 0
     failed = 0
     with summary_path.open("w", encoding="utf-8") as sink:
@@ -825,6 +932,9 @@ def cmd_batch(args: argparse.Namespace) -> int:
             if is_smb_target(target):
                 t = parse_target(target)
                 subdir = base_output / f"sharesift-{t.host}-{t.share}"
+                if engagement_db is not None:
+                    engagement_db.record_host(t.host, alive=True, port=t.port)
+                    engagement_db.record_share(t.host, t.share, type_="disk")
             else:
                 subdir = base_output / f"sharesift-{Path(target).name}"
 
@@ -879,6 +989,17 @@ def cmd_batch(args: argparse.Namespace) -> int:
             else:
                 failed += 1
 
+            # v0.40: harvest per-target hits.jsonl into the
+            # engagement DB so it stays the source of truth.
+            if ok and engagement_db is not None:
+                hits_jsonl = subdir / "hits.jsonl"
+                if hits_jsonl.exists():
+                    _ingest_hits_into_db(engagement_db, hits_jsonl, target)
+
+    db_summary = engagement_db.summary() if engagement_db is not None else None
+    if engagement_db is not None:
+        engagement_db.close()
+
     out.summary({
         "command": "batch",
         "version": __version__,
@@ -887,9 +1008,55 @@ def cmd_batch(args: argparse.Namespace) -> int:
         "targets_succeeded": succeeded,
         "targets_failed": failed,
         "summary_path": str(summary_path),
+        "db_path": str(args.db) if getattr(args, "db", None) else None,
+        "db_summary": db_summary,
         "exit_code": 0 if failed == 0 else 1,
     })
     return 0 if failed == 0 else 1
+
+
+def _ingest_hits_into_db(db, hits_jsonl: Path, target: str) -> None:
+    """Load a per-target hits.jsonl into the engagement DB. The
+    record schema comes from cmd_scan_files. ``host`` and ``share``
+    derive from the target UNC; ``rel_path`` is the path field."""
+    from sharesift.share import is_smb_target, parse_target
+
+    if is_smb_target(target):
+        t = parse_target(target)
+        host = t.host
+        share = t.share
+        prefix = rf"\\{host}\{share}\\"
+    else:
+        host = "local"
+        share = Path(target).name
+        prefix = str(Path(target)) + "/"
+
+    for line in hits_jsonl.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            rec = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        path = rec.get("path") or ""
+        if path.startswith(prefix):
+            rel = path[len(prefix):]
+        else:
+            rel = path
+        size = rec.get("size")
+        if size is not None:
+            db.record_file(host, share, rel, size=size)
+        else:
+            db.record_file(host, share, rel)
+        # Each matched rule emits a hit row
+        for m in (rec.get("content_matches") or []):
+            rule = m.get("rule_name") or "?"
+            tier = m.get("tier") or rec.get("content_tier") or rec.get("path_tier")
+            snippet = m.get("match_context") or rec.get("content_excerpt") or ""
+            db.record_hit(
+                host, share, rel, rule,
+                tier=tier, snippet=snippet[:512] if snippet else None,
+            )
 
 
 def cmd_to_snaffler_tsv(args: argparse.Namespace) -> int:
@@ -1180,6 +1347,16 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     sc.add_argument(
+        "--stealth",
+        action="store_true",
+        help=(
+            "OpSec-conscious preset: SMB3 encryption on (default), "
+            "1 read thread, default noise exclusions, --max-file-size "
+            "256K (cap reads aggressively). Use when scan visibility "
+            "matters more than throughput."
+        ),
+    )
+    sc.add_argument(
         "--target-file",
         type=Path,
         default=None,
@@ -1356,6 +1533,30 @@ def main(argv: list[str] | None = None) -> int:
     )
     rt.set_defaults(func=cmd_retrain_ranker)
 
+    # v0.40 step 3: query — ad-hoc SQL against an engagement datastore
+    qr = sub.add_parser(
+        "query",
+        help=(
+            "Run SQL or pre-baked queries against a SQLite "
+            "engagement datastore (.sharesift.db file)."
+        ),
+    )
+    qr.add_argument("--db", type=Path, required=True, help="Path to .sharesift.db")
+    qr.add_argument("--summary", action="store_true",
+                    help="Print high-level engagement stats and exit.")
+    qr.add_argument(
+        "--preset", default=None,
+        choices=sorted(_PRESET_QUERIES.keys()),
+        help="Run a pre-baked query by name.",
+    )
+    qr.add_argument(
+        "sql", nargs="?", default=None,
+        help="Raw SELECT statement (read-only; writes go through scan).",
+    )
+    qr.add_argument("--json", action="store_true", dest="json",
+                    help="Emit one JSON record per row.")
+    qr.set_defaults(func=cmd_query)
+
     # v0.39 step 1: discover — list shares on a remote host
     ds = sub.add_parser(
         "discover",
@@ -1423,6 +1624,15 @@ def main(argv: list[str] | None = None) -> int:
     bt.add_argument(
         "--read-threads", type=int, default=4,
         help="Parallel content-read threads per target (default 4).",
+    )
+    bt.add_argument(
+        "--db", type=Path, default=None,
+        help=(
+            "Path to a SQLite engagement datastore (.sharesift.db). "
+            "When set, populates hosts/shares/files/hits across all "
+            "targets so the engagement is queryable via "
+            "``sharesift query --db ...``."
+        ),
     )
     _add_smb_auth_args(bt)
     bt.set_defaults(func=cmd_batch)
