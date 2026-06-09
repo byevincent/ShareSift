@@ -4,6 +4,92 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.39.0] — 2026-06-09
+
+Network-wide share discovery. The headline pitch that's been
+promised since the v0.37 results doc — `sharesift //10.10.10.0/24
+-u user -p pass` — actually works now. impacket-backed
+NetrShareEnum behind a new `discover` subcommand, with CIDR
+iteration and concurrent TCP liveness probing.
+
+### Added
+
+- **`sharesift discover` subcommand** for share enumeration on
+  remote SMB hosts. Single-host and CIDR both supported:
+
+      sharesift discover //10.10.10.5 -u user -p pass         # single
+      sharesift discover //10.10.10.0/24 -u user -p pass      # subnet
+      sharesift discover //10.10.10.5 --no-pass               # anon
+
+  Composes with `batch`:
+
+      sharesift discover //10.10.10.0/24 -u u -p p > targets.txt
+      sharesift batch --targets targets.txt -u u -p p --output-dir ./out
+
+- **`network-enum` optional extra** adding `impacket>=0.12.0`.
+  Stays separate from the `smb` extra so operators who only need
+  single-share scanning don't pull in impacket's larger dep tree.
+  Missing-extra raises `SystemExit` with the three-line install
+  guide (same pattern as v0.37's `smb` extra).
+
+- **`src/sharesift/share/discovery.py`**:
+  - `ShareSummary(name, type, comment)` dataclass with
+    `.is_file_share()` heuristic
+  - `enumerate_shares(host, auth)` — single-host NetrShareEnum
+    via impacket's `SMBConnection.listShares()`. Type-bitfield
+    classification handles SPECIAL overlay (high bit) + base type
+    (disk/printer/device/ipc)
+  - `expand_target_to_hosts(target)` — CIDR / UNC / port parser
+    that returns the host list. `.hosts()` excludes network +
+    broadcast for IPv4 /24+
+  - `probe_smb_alive(host, port, timeout)` — fast TCP connect for
+    liveness
+
+- **Output formats**:
+  - `--format text` (default) — one `//host/share` UNC per line;
+    non-file shares (IPC, printer, device) get `# ` prefix so
+    `batch` (which strips `#` comments) ignores them. Composes
+    cleanly with `batch`.
+  - `--format json` — one record per share: `{host, share, type,
+    comment, unc}`
+  - `--all-types` includes non-file shares uncommented
+
+- **Per-host fault tolerance** in CIDR mode: per-host failures
+  (auth fail, RPC error) log a warning and continue with the next
+  host. Single-host targets surface the error and exit 1.
+
+### Auth dispatch
+
+`enumerate_shares` accepts the same `Auth` dataclass as `SmbShare`:
+- Password → `conn.login(user, password, domain)`
+- PtH → `conn.login(user, '', domain, lmhash, nthash)`
+- Kerberos → `conn.kerberosLogin(user, ..., useCache=True)` (reads
+  ccache from `KRB5CCNAME`)
+- Anonymous → null session login
+
+The `discover` subcommand reuses the same `_add_smb_auth_args`
+flag set used by `scan` / `scan-files` / `batch`, so muscle memory
+transfers.
+
+### Performance
+
+CIDR mode uses `ThreadPoolExecutor` for concurrent TCP probes
+(default 32 workers) to skip dead hosts before paying impacket's
+auth cost. Share enumeration on live hosts is sequential — adding
+parallelism there hits the same SMB credit-flow control issues
+that v0.38 limited per-Connection.
+
+### Out of scope (deferred)
+
+- **PyInstaller single-file binary** — bundle-size investigation
+  carries to v0.40. The initial onefile attempt pulled 1.5 GB.
+- **Parallel share enumeration across hosts** — sequential is
+  fine for /24-sized CIDRs (~30s per dead-host-skipped pass);
+  larger subnets would benefit from concurrent impacket sessions
+  but threading impacket has unknown safety properties.
+
+See `docs/v0p39_results.md`.
+
 ## [0.38.0] — 2026-06-09
 
 Parallel SMB content reads. Single-focus release: addresses the
@@ -337,15 +423,13 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.39 — distribution + network discovery: PyInstaller single-file
-binary (with proper bundle-size investigation), impacket-backed
-NetrShareEnum for network-wide share discovery
-(`sharesift //10.10.10.0/24 -u u -p p`). v0.40 — engagement-shape:
-SQLite engagement datastore (smbcrawler-style), resume after
-crash, content-hash dedup, GhostWriter / SysReptor exporters.
-v0.41+ — OpSec polish (noise exclusions, `--stealth` preset,
-status heartbeat, Markdown report bundle). See
-`docs/pentester_backlog.md` for the full friendliness roadmap.
+v0.40 — distribution + engagement-shape: PyInstaller single-file
+binary (proper bundle-size investigation), SQLite engagement
+datastore (smbcrawler-style), resume after crash, content-hash
+dedup, GhostWriter / SysReptor exporters. v0.41+ — OpSec polish
+(noise exclusions, `--stealth` preset, status heartbeat, Markdown
+report bundle). See `docs/pentester_backlog.md` for the full
+friendliness roadmap.
 
 ## [0.34.0] — 2026-06-08
 
