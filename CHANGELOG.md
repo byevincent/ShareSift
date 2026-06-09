@@ -4,6 +4,67 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.37.0] — 2026-06-09
+
+Drop-in compatibility with Snaffler's rule-authoring workflow, plus
+the pentester install / multi-target workflows. v0.36 made the case
+that ShareSift's finder is better than Snaffler's; v0.37 makes the
+case that ShareSift fits the pentester loadout ergonomically.
+
+### Added
+
+- **Snaffler TOML rule format**. The content-rule engine now accepts
+  both ShareSift's native JSON ``{"rules": [...]}`` schema AND
+  Snaffler's ``[[ClassifierRules]]`` TOML schema. A pentester's
+  existing Snaffler rule TOML file drops straight into ShareSift's
+  rules directory without conversion. Format dispatch is by file
+  extension; PascalCase keys (RuleName, Triage, MatchAction,
+  MatchLocation, WordListType, WordList, Description) map to the
+  internal snake_case record shape. ``tomllib`` is stdlib (Python
+  3.11+) so no new dependency.
+- **`pipx install` distribution.** The package was already
+  pipx-ready (proper ``[project.scripts]`` entry point). v0.37
+  documents the workflow as the recommended operator install:
+
+      pipx install 'sharesift[smb]'    # SMB-direct workflow
+      sharesift //10.10.10.5/Finance$ -u user -p pass
+
+  README install section restructured: pipx workflow leads ("Quick
+  install — drop a binary on Kali"), full-source install demoted to
+  "if you want to develop, train, or run the content classifier."
+
+- **Friendlier missing-extra error.** When SMB targets are used
+  without the ``[smb]`` extra, the operator now sees a three-line
+  install guide naming pipx, pip, and uv install paths instead of
+  a raw ``ModuleNotFoundError``.
+
+- **`sharesift batch` subcommand** for multi-target scans:
+
+      sharesift batch --targets targets.txt -u user -p pass \\
+          --output-dir ./engagement
+
+  Each line in ``--targets`` is a UNC or local path; comments
+  (``#``) and empty lines are ignored. Each target gets its own
+  subdirectory; a top-level ``batch_summary.jsonl`` records the
+  per-target outcome. Per-target failure doesn't abort the batch.
+  Auth flags propagate; ``--skip-verify`` / ``--skip-report`` work
+  per-target. Closes the "shell-loop ShareSift over a target list"
+  gap that the v0.35 single-target shape left.
+
+### Out of scope (deferred)
+
+- **Multi-threaded SMB walk + reads** — smbprotocol's worker-thread
+  model needs investigation against the credit-flow control we
+  surfaced in v0.35. Defer to v0.38.
+- **Network-wide share enumeration via NetrShareEnum** — needs
+  impacket as a dependency. Defer to v0.38 alongside
+  multi-threading.
+- **PyInstaller single-file binary** — pipx covers the install-friction
+  case for now. PyInstaller for Stage-1 + verifiers only adds value
+  for fully-offline Kali boxes; defer to v0.38.
+
+See `docs/v0p37_results.md` and `docs/pentester_backlog.md`.
+
 ## [0.36.0] — 2026-06-09
 
 The Snaffler-displacement release. v0.35 made ShareSift remote-share-
@@ -223,14 +284,13 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.37 — speed + distribution arc: concurrent SMB reads (multi-
-threaded walk), network-wide share discovery (`sharesift
-//10.10.10.0/24 -u user -p pass`), TOML rule format (operator
-familiarity with Snaffler ruleset syntax), `pipx install sharesift`,
-PyInstaller single-file binary. v0.38 — engagement-shape arc:
+v0.38 — speed + network arc: concurrent SMB reads (multi-threaded
+walk + reads), network-wide share discovery via NetrShareEnum
+(`sharesift //10.10.10.0/24 -u u -p p`), PyInstaller single-file
+binary for fully-offline Kali boxes. v0.39 — engagement-shape:
 SQLite engagement datastore (smbcrawler-style), resume after
 crash, content-hash dedup, GhostWriter / SysReptor exporters.
-v0.39+ — OpSec polish (noise exclusions, `--stealth` preset,
+v0.40+ — OpSec polish (noise exclusions, `--stealth` preset,
 status heartbeat, Markdown report bundle). See
 `docs/pentester_backlog.md` for the full friendliness roadmap.
 
