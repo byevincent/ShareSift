@@ -82,10 +82,55 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.34 — registry-hive parser when samples accessible (long-standing
-carryover); optional DiskForge GCP SA JSON plant for end-to-end
-cascade-to-verifier smoke; speculative engagement-log corpus as a 4th
-primary held-out set.
+v0.35 — registry-hive parser when samples accessible (10+ release
+carryover; still blocked on source). Otherwise the natural pause
+point — the v0.22-v0.34 arc is the substantive product. Next
+meaningful leverage requires real engagement data or external
+users, neither of which lives in the iteration loop.
+
+## [0.34.0] — 2026-06-08
+
+End-to-end smoke for the v0.31→v0.33 GCP fix. DiskForge gets a
+synthetic GCP service-account JSON plant; integration tests confirm
+the planted file flows through the v0.32 extractor and the v0.33
+verifier in both structural and live modes.
+
+### Added
+
+- `tools/diskforge_v0p31/files/plant/gcp_service_account.json` —
+  synthetic SA JSON with a real 2048-bit RSA private key generated
+  by `build_manifest.py`. The key is freshly generated per
+  benchmark build; no real Google account is involved.
+- 13th DiskForge plant entry in `build_manifest.py` at
+  `/Users/Administrator/Documents/gcp_service_account.json`.
+- `tests/test_gcp_diskforge_integration_v0p34.py` — 4 integration
+  tests that read the planted SA JSON and confirm:
+  - Extractor catches `gcp_service_account_json` from the file's content
+  - Structural verifier returns `validation_mode=structural` with the
+    correct `client_email`
+  - Live verifier signs a real RS256 JWT (>200 chars) and accepts
+    a mocked OAuth 200
+
+### Findings
+
+| Metric | v0.33 | v0.34 |
+|---|---|---|
+| DiskForge plants (supp) | 12 | **13** |
+| DiskForge recall (supp) | 1.000 | 1.000 |
+| DiskForge top-10 (supp) | 0.60 | 0.60 |
+| MIN top-10 / MIN recall (primary) | 0.20 / 0.90 | 0.20 / 0.90 |
+
+The cascade catches all 13 plants without rule changes — the GCP
+SA JSON's filename (`gcp_service_account.json`) matches existing
+filename rules from v0.30's GCP credential family additions.
+
+### Notes
+
+- Test count: **861 passing**, 8 skipped (was 857 — +4 integration).
+- The v0.31 finding (extractor doesn't surface private_key + verifier
+  needs JWT signing) is now fully closed: v0.32 expanded the
+  extractor, v0.33 added live verification, v0.34 confirms end-to-end
+  with a planted file.
 
 ## [0.33.0] — 2026-06-08
 

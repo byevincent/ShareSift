@@ -66,6 +66,10 @@
                 "target": "/Users/Administrator/.config/gh"
               },
               {
+                "source": "/files/plant/gcp_service_account.json",
+                "target": "/Users/Administrator/Documents"
+              },
+              {
                 "source": "/files/decoys/decoy_00001.dll",
                 "target": "/Windows/System32"
               },

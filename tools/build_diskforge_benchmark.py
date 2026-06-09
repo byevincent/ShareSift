@@ -40,6 +40,9 @@ _PLANT_LABELS: dict[str, str] = {
     "/inetpub/wordpress/wp-config.php.bak": "wp_config_db_password",
     "/Users/Administrator/Documents/server.ppk": "putty_ppk_unencrypted",
     "/Users/Administrator/.config/gh/hosts.yml": "gh_cli_oauth_token",
+    # v0.34 GCP SA JSON plant — end-to-end smoke for v0.32 extractor +
+    # v0.33 live verifier on a planted disk.
+    "/Users/Administrator/Documents/gcp_service_account.json": "gcp_service_account_json",
     # v0.29 nested-fallback variants (kept so the v0.29 build still labels)
     "/Windows/Panther/Unattend.xml/unattend.xml": "windows_install_password",
     "/inetpub/wwwroot/web.config/web.config": "iis_connection_string",
