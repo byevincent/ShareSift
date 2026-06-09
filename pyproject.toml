@@ -20,6 +20,11 @@ dependencies = [
 [project.scripts]
 sharesift = "sharesift.cli:main"
 
+[project.optional-dependencies]
+smb = [
+    "smbprotocol>=1.16.1",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

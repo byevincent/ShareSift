@@ -2587,6 +2587,19 @@ wheels = [
 ]
 
 [[package]]
+name = "pyspnego"
+version = "0.12.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+    { name = "sspilib", marker = "sys_platform == 'win32'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7d/84/58577bd1b14293650879de0579ec263a1d8350f1d6d227226cf776b5a6a6/pyspnego-0.12.1.tar.gz", hash = "sha256:ff4fb6df38202a012ea2a0f43091ae9680878443f0ea61c9ea0e2e8152a4b810", size = 226027, upload-time = "2026-03-02T20:16:09.74Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/dd/9f/4da6a1b9611af2397289b77d6fd08f5fe8f1f34dabc3bf85b0638d655e64/pyspnego-0.12.1-py3-none-any.whl", hash = "sha256:7237cb47985ccf5da512106ddb2731e4f9cefec00991f76c054488eb95fb1a2d", size = 130247, upload-time = "2026-03-02T20:16:08.331Z" },
+]
+
+[[package]]
 name = "pytest"
 version = "9.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -3126,6 +3139,11 @@ dependencies = [
     { name = "tqdm" },
 ]
 
+[package.optional-dependencies]
+smb = [
+    { name = "smbprotocol" },
+]
+
 [package.dev-dependencies]
 content-inference = [
     { name = "accelerate" },
@@ -3190,8 +3208,10 @@ requires-dist = [
     { name = "numpy", specifier = ">=1.26" },
     { name = "pydantic", specifier = ">=2.0" },
     { name = "scikit-learn", specifier = ">=1.5" },
+    { name = "smbprotocol", marker = "extra == 'smb'", specifier = ">=1.16.1" },
     { name = "tqdm", specifier = ">=4.66" },
 ]
+provides-extras = ["smb"]
 
 [package.metadata.requires-dev]
 content-inference = [
@@ -3269,6 +3289,19 @@ wheels = [
 ]
 
 [[package]]
+name = "smbprotocol"
+version = "1.16.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+    { name = "pyspnego" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/33/76/c32681e925fc859578d4e41e4bd3ef7e2b9e7d06141f703eec032875b28a/smbprotocol-1.16.1.tar.gz", hash = "sha256:ad7a31662792817c6da3629a3cfb96a51d8213e993ebd0c0a7ee750d2b1f8ec8", size = 186164, upload-time = "2026-04-02T03:01:28.961Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/79/43/8acc58e24f78af82300a8ebdd457face4c6e4b27f7b52885a239724d3e21/smbprotocol-1.16.1-py3-none-any.whl", hash = "sha256:0f9c35b2a0103314da06aecaffa8821f060a9773ad82cc0d7f29130083d598b4", size = 126532, upload-time = "2026-04-02T03:01:27.718Z" },
+]
+
+[[package]]
 name = "smmap"
 version = "5.0.3"
 source = { registry = "https://pypi.org/simple" }
@@ -3284,6 +3317,20 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/a2/87/a6771e1546d97e7e041b6ae58d80074f81b7d5121207425c964ddf5cfdbd/sniffio-1.3.1.tar.gz", hash = "sha256:f4324edc670a0f49750a81b895f35c3adb843cca46f0530f79fc1babb23789dc", size = 20372, upload-time = "2024-02-25T23:20:04.057Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl", hash = "sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2", size = 10235, upload-time = "2024-02-25T23:20:01.196Z" },
+]
+
+[[package]]
+name = "sspilib"
+version = "0.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a7/e6/d0d74b18bed8c16949fddc0401005c072947ae7bf1bab982ed28f9ebc2d8/sspilib-0.5.0.tar.gz", hash = "sha256:b62f7f2602aa1add0505eee2417e2df24421224cb411e53bf3ae42a71b62fe98", size = 59920, upload-time = "2025-12-03T00:31:05.564Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6d/cb/7cc967b48d182cb012229ccc9f9e3fd5e245b7f0c80667297ddded580877/sspilib-0.5.0-cp310-cp310-win32.whl", hash = "sha256:8dab68e994d24a08f854d36ac96409b3b8cc03fdebc590925f76f9d733c3a902", size = 475882, upload-time = "2025-12-03T00:30:23.403Z" },
+    { url = "https://files.pythonhosted.org/packages/7b/0d/7746ade4e3c4dba6c6d9b2afe3c3903f4bcab2da6b300b5d81afee089196/sspilib-0.5.0-cp310-cp310-win_amd64.whl", hash = "sha256:9e1947df07110ee1861009fc117bd089a7710403f3f5c488fb52a6e00b7c5b84", size = 563068, upload-time = "2025-12-03T00:30:24.605Z" },
+    { url = "https://files.pythonhosted.org/packages/8d/fb/6821418037e9d78179153e770e2b0280956f28f4bf51069dcbcc0348505d/sspilib-0.5.0-cp310-cp310-win_arm64.whl", hash = "sha256:28d0eb944f7ff70bc99fe729d06fa230aec1649c5bc216809e359cd0c77d4840", size = 486370, upload-time = "2025-12-03T00:30:26.21Z" },
+    { url = "https://files.pythonhosted.org/packages/ce/1b/dd9066491168933b0f7ab6e396ac58cc024c8954e95264c38e3dc9363d7c/sspilib-0.5.0-cp311-abi3-win32.whl", hash = "sha256:fcb57b41b3200ef2e6e8846e2a13799d20b35b796267f2f75cc65e3883e8eeb6", size = 451246, upload-time = "2025-12-03T00:30:36.685Z" },
+    { url = "https://files.pythonhosted.org/packages/17/6a/a11abf90172ff580ac2f9ade3496d868e05e851c4ecf487dd5baeb966b1d/sspilib-0.5.0-cp311-abi3-win_amd64.whl", hash = "sha256:ca2a21a4e90db563c2cec639c66b3a29ea53129a0c55ff1e4154a02937f6bd45", size = 540777, upload-time = "2025-12-03T00:30:38.44Z" },
+    { url = "https://files.pythonhosted.org/packages/45/05/983876d281b9e7926f1c9126e72de8bd5928b1de45433163f54d4e217502/sspilib-0.5.0-cp311-abi3-win_arm64.whl", hash = "sha256:6893bad16f122fc3c4bd908461b9728694465c05ca97c22f7e2094791c4ee3cb", size = 470353, upload-time = "2025-12-03T00:30:39.63Z" },
 ]
 
 [[package]]
