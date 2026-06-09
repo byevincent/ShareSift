@@ -404,14 +404,17 @@ def cmd_scan(args: argparse.Namespace) -> int:
             )
         smb_share = SmbShare(smb_target, auth, encrypt=args.encrypt)
 
-    # ``--check`` short-circuits: auth + tree-connect + exit.
+    # ``--check`` short-circuits: auth + tree-connect + share-access
+    # probe + exit. The probe is two cheap CREATE round-trips; closes
+    # Snaffler #184 by reporting accurate R/W status (Snaffler reports
+    # writable shares as R).
     if args.check:
         if not is_smb:
             raise SystemExit("--check only applies to SMB targets")
         try:
-            with smb_share:
-                pass  # __enter__ does Connection + Session + TreeConnect
-            out.info(f"auth ok; tree-connected to {smb_share.root}")
+            with smb_share as live:
+                access = live.probe_share_access()
+            out.info(f"auth ok; tree-connected to {smb_share.root} [{access.display}]")
             return 0
         except Exception as exc:
             out.error(f"auth failed: {exc}")
@@ -436,6 +439,11 @@ def cmd_scan(args: argparse.Namespace) -> int:
     if is_smb:
         share_for_reads = smb_share
         out.info(f"[1/5] enumerating files under {smb_share.root}")
+        # v0.36 step 3: probe share-level R/W (Snaffler #184). Cheap
+        # 2 round-trips, runs before walk so the summary always has
+        # the verdict even on empty shares.
+        share_access = smb_share.probe_share_access()
+        out.info(f"share access: {share_access.display}")
         entries = list(smb_share.walk())
         files_path.write_text(
             "\n".join(e.path for e in entries) + "\n", encoding="utf-8"
@@ -551,6 +559,11 @@ def cmd_scan(args: argparse.Namespace) -> int:
         "elapsed_s": round(time.monotonic() - start, 3),
         "target": target_str,
         "target_kind": "smb" if is_smb else "local",
+        "share_access": (
+            smb_share.share_access.display
+            if (is_smb and smb_share is not None and smb_share.share_access)
+            else None
+        ),
         "output_dir": str(output_dir),
         "input_count": n_enumerated,
         "stages_run": stages_run,

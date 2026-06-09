@@ -17,13 +17,14 @@ from typing import Iterator, Protocol, runtime_checkable
 
 from sharesift.share.auth import Auth, build_credential
 from sharesift.share.local import LocalShare
-from sharesift.share.smb import SmbShare
+from sharesift.share.smb import ShareAccess, SmbShare
 from sharesift.share.target import SmbTarget, is_smb_target, parse_target
 
 __all__ = [
     "Auth",
     "LocalShare",
     "Share",
+    "ShareAccess",
     "ShareEntry",
     "SmbShare",
     "SmbTarget",

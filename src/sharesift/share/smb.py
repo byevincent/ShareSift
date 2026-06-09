@@ -13,6 +13,7 @@ Sprint 2 ships walking only. Content-read methods join the
 from __future__ import annotations
 
 import uuid
+from dataclasses import dataclass
 from typing import Iterator, TYPE_CHECKING
 
 from sharesift.share.auth import Auth, build_credential
@@ -20,6 +21,35 @@ from sharesift.share.auth import Auth, build_credential
 if TYPE_CHECKING:
     from sharesift.share import ShareEntry
     from sharesift.share.target import SmbTarget
+
+
+@dataclass(frozen=True)
+class ShareAccess:
+    """Pentester-facing share-level access verdict.
+
+    Closes Snaffler #184 — Snaffler reports writable shares as ``R``
+    (read-only) due to a bug in its effective-access calculation,
+    silently throwing away the most operationally valuable finding
+    (write access to a juicy share). ShareSift probes both rights
+    explicitly via two cheap SMB2 CREATE exchanges on the share
+    root: one with FILE_READ_DATA, one with FILE_WRITE_DATA. The
+    server returns STATUS_ACCESS_DENIED when we don't have the
+    requested right.
+    """
+
+    can_read: bool
+    can_write: bool
+
+    @property
+    def display(self) -> str:
+        """Snaffler-compatible R/W marker — used by the TSV output
+        column 4/5 (CanRead) and column 5/6 (CanWrite)."""
+        parts = []
+        if self.can_read:
+            parts.append("R")
+        if self.can_write:
+            parts.append("W")
+        return "".join(parts) or "-"
 
 
 # FileIdBothDirectoryInformation — full metadata per entry
@@ -57,10 +87,86 @@ class SmbShare:
         self._connection = None
         self._session = None
         self._tree = None
+        self._share_access: ShareAccess | None = None
 
     @property
     def root(self) -> str:
         return self._target.unc
+
+    @property
+    def share_access(self) -> ShareAccess | None:
+        """Share-level R/W verdict from the probe in
+        ``_ensure_connected``. ``None`` if the share isn't connected
+        yet (no probe has run)."""
+        return self._share_access
+
+    def probe_share_access(self) -> ShareAccess:
+        """Run two SMB2 CREATE exchanges on the share root to probe
+        read + write access. Cheap (~2 round-trips), non-destructive
+        (no file is created or modified), and indistinguishable from
+        normal SMB access pattern on the wire.
+
+        Idempotent — caches the result on the instance.
+        """
+        if self._share_access is not None:
+            return self._share_access
+        self._ensure_connected()
+        # Probe the share root (a directory) with the right access
+        # verbs: FILE_LIST_DIRECTORY → "can read", FILE_ADD_FILE → "can
+        # write to share root."
+        can_read = self._probe_access_mask("FILE_LIST_DIRECTORY")
+        can_write = self._probe_access_mask("FILE_ADD_FILE")
+        self._share_access = ShareAccess(can_read=can_read, can_write=can_write)
+        return self._share_access
+
+    def _probe_access_mask(self, mask_name: str) -> bool:
+        """Try opening the share root with the named access right.
+
+        Returns True if the server granted it, False on
+        STATUS_ACCESS_DENIED. Other exceptions propagate — the caller
+        treats them as "probe inconclusive" which is honest, not
+        "no access" which would be wrong.
+        """
+        from smbprotocol.open import (
+            CreateDisposition,
+            CreateOptions,
+            DirectoryAccessMask,
+            FileAttributes,
+            ImpersonationLevel,
+            Open,
+            ShareAccess as SmbShareAccess,
+        )
+
+        access = getattr(DirectoryAccessMask, mask_name)
+        handle = Open(self._tree, self._target.root_path or "")
+        try:
+            handle.create(
+                ImpersonationLevel.Impersonation,
+                access,
+                FileAttributes.FILE_ATTRIBUTE_DIRECTORY,
+                SmbShareAccess.FILE_SHARE_READ | SmbShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.FILE_OPEN,
+                CreateOptions.FILE_DIRECTORY_FILE,
+            )
+            return True
+        except Exception as exc:
+            # smbprotocol surfaces ACCESS_DENIED as
+            # smbprotocol.exceptions.AccessDenied (or a generic
+            # SMBResponseException with the same status). Both → False.
+            name = type(exc).__name__
+            msg = str(exc)
+            if (
+                "AccessDenied" in name
+                or "STATUS_ACCESS_DENIED" in msg
+                or "0xc0000022" in msg.lower()
+            ):
+                return False
+            raise
+        finally:
+            try:
+                handle.close(False)
+            except Exception:
+                pass
 
     def walk(self) -> Iterator["ShareEntry"]:
         """Recursive walk yielding files only, in deterministic

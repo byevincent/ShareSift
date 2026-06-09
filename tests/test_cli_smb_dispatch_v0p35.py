@@ -19,6 +19,11 @@ from sharesift.cli import (
     _build_auth_from_args,
     _rewrite_argv_for_implicit_scan,
 )
+from sharesift.share import ShareAccess
+
+# v0.36 step 3: cmd_scan auto-probes share R/W. Mocked tests need a
+# fixed verdict back so the probe doesn't try to actually talk SMB.
+_RW_ACCESS = ShareAccess(can_read=True, can_write=False)
 
 
 # --------------------------------------------------------------------
@@ -192,13 +197,18 @@ class TestCmdScanSmbDispatch:
             user="alice", password="pw",
             check=True,
         )
-        with patch("sharesift.share.smb.SmbShare._ensure_connected") as mock_conn:
+        with (
+            patch("sharesift.share.smb.SmbShare._ensure_connected") as mock_conn,
+            patch("sharesift.share.smb.SmbShare.close") as mock_close,
+            patch("sharesift.share.smb.SmbShare.probe_share_access",
+                  return_value=_RW_ACCESS) as mock_probe,
+        ):
             mock_conn.return_value = None
-            with patch("sharesift.share.smb.SmbShare.close") as mock_close:
-                rc = cmd_scan(ns)
-                assert rc == 0
-                mock_conn.assert_called_once()
-                mock_close.assert_called_once()
+            rc = cmd_scan(ns)
+            assert rc == 0
+            mock_conn.assert_called_once()
+            mock_close.assert_called_once()
+            mock_probe.assert_called_once()
 
     def test_check_mode_returns_1_on_auth_failure(self):
         from sharesift.cli import cmd_scan
@@ -240,6 +250,8 @@ class TestCmdScanSmbDispatch:
         with (
             patch("sharesift.share.smb.SmbShare._ensure_connected"),
             patch("sharesift.share.smb.SmbShare.close"),
+            patch("sharesift.share.smb.SmbShare.probe_share_access",
+                  return_value=_RW_ACCESS),
             patch("sharesift.share.smb.SmbShare.walk", return_value=iter(fake_entries)),
             patch("sharesift.cli.cmd_score_paths", return_value=0),
             patch("sharesift.cli.cmd_scan_files", return_value=0),
@@ -265,6 +277,8 @@ class TestCmdScanSmbDispatch:
         with (
             patch("sharesift.share.smb.SmbShare._ensure_connected"),
             patch("sharesift.share.smb.SmbShare.close"),
+            patch("sharesift.share.smb.SmbShare.probe_share_access",
+                  return_value=_RW_ACCESS),
             patch("sharesift.share.smb.SmbShare.walk", return_value=iter([])),
             patch("sharesift.cli.cmd_score_paths", return_value=0),
             patch("sharesift.cli.cmd_scan_files", return_value=0),
@@ -289,6 +303,8 @@ class TestCmdScanSmbDispatch:
         with (
             patch("sharesift.share.smb.SmbShare._ensure_connected"),
             patch("sharesift.share.smb.SmbShare.close"),
+            patch("sharesift.share.smb.SmbShare.probe_share_access",
+                  return_value=_RW_ACCESS),
             patch("sharesift.share.smb.SmbShare.walk", return_value=iter([])),
             patch("sharesift.cli.cmd_score_paths", return_value=0) as mock_sp,
             patch("sharesift.cli.cmd_scan_files", return_value=0) as mock_sf,
@@ -327,6 +343,8 @@ class TestCmdScanSmbDispatch:
             patch("sharesift.share.smb.SmbShare._ensure_connected"),
             patch.object(__import__("sharesift.share.smb", fromlist=["SmbShare"]).SmbShare,
                          "close", record_close),
+            patch("sharesift.share.smb.SmbShare.probe_share_access",
+                  return_value=_RW_ACCESS),
             patch("sharesift.share.smb.SmbShare.walk", return_value=iter([])),
             patch("sharesift.cli.cmd_score_paths", return_value=0),
             patch("sharesift.cli.cmd_scan_files", side_effect=record_scan_files),
