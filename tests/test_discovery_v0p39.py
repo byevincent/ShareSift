@@ -221,6 +221,67 @@ class TestEnumerateShares:
 # --- missing-extra friendliness ----------------------------------
 
 
+class TestExpandTargetToHosts:
+    """v0.39 step 2: target string → host list expansion."""
+
+    def test_single_ip_returns_one_host(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        assert expand_target_to_hosts("10.0.0.5") == ["10.0.0.5"]
+
+    def test_unc_double_slash_strips_prefix(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        assert expand_target_to_hosts("//10.0.0.5") == ["10.0.0.5"]
+
+    def test_unc_with_share_strips_share(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        assert expand_target_to_hosts("//10.0.0.5/Finance") == ["10.0.0.5"]
+
+    def test_hostname_returns_one(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        assert expand_target_to_hosts("dc01.corp.local") == ["dc01.corp.local"]
+
+    def test_port_suffix_stripped(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        assert expand_target_to_hosts("10.0.0.5:1445") == ["10.0.0.5"]
+
+    def test_cidr_24_expands_to_254_hosts(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        hosts = expand_target_to_hosts("10.0.0.0/24")
+        assert len(hosts) == 254  # /24 excludes network + broadcast
+        assert hosts[0] == "10.0.0.1"
+        assert hosts[-1] == "10.0.0.254"
+
+    def test_cidr_with_unc_prefix(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        hosts = expand_target_to_hosts("//10.0.0.0/30")
+        # /30 = 4 addresses, .hosts() skips network + broadcast → 2
+        assert len(hosts) == 2
+
+    def test_single_host_cidr_32(self):
+        from sharesift.share.discovery import expand_target_to_hosts
+        hosts = expand_target_to_hosts("10.0.0.5/32")
+        assert hosts == ["10.0.0.5"]
+
+
+class TestProbeSmbAlive:
+    """Liveness probe (TCP connect to :445)."""
+
+    def test_unreachable_returns_false(self):
+        from sharesift.share.discovery import probe_smb_alive
+        # An unused high port on localhost — connect refused, fast
+        assert probe_smb_alive("127.0.0.1", port=59999, timeout=0.5) is False
+
+    def test_invalid_host_returns_false_fast(self):
+        from sharesift.share.discovery import probe_smb_alive
+        import time
+        t0 = time.monotonic()
+        result = probe_smb_alive("127.0.0.99", port=59998, timeout=0.5)
+        elapsed = time.monotonic() - t0
+        assert result is False
+        # Should fail well before the timeout — connection refused, not timeout
+        assert elapsed < 1.0
+
+
 def test_missing_impacket_extra_yields_friendly_error():
     """Same pattern as the v0.37 smb extra: clear install guide
     instead of raw ImportError."""

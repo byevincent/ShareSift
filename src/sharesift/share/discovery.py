@@ -140,6 +140,66 @@ def _strip_terminator(value) -> str:
     return value.rstrip("\x00")
 
 
+def expand_target_to_hosts(target: str) -> list[str]:
+    """Expand a discover target string into a list of host strings.
+
+    Accepts:
+
+    - ``host`` or ``//host`` or ``\\\\host`` → single host
+    - ``host/share`` or ``//host/share`` → strip the share, single host
+    - ``CIDR`` (``10.0.0.0/24``) or ``//CIDR`` → iterate every host
+      in the network (excluding network + broadcast for IPv4 /24+)
+    - ``host:port`` → handled by the caller's port parsing — this
+      function strips the ``:port`` suffix before returning
+
+    Returns a list of bare host strings (no leading slashes, no
+    port suffix). Order matches the network iteration order for
+    CIDRs.
+    """
+    import ipaddress
+
+    # Strip leading // or \\
+    t = target.lstrip("/\\").replace("\\", "/")
+    # Strip /share if present (host/share → host)
+    if "/" in t:
+        # But preserve CIDR: 10.0.0.0/24 has /24 as the mask, not a share
+        head, _, tail = t.partition("/")
+        if tail.isdigit() and len(tail) <= 2:
+            # Looks like a CIDR mask — keep the whole thing
+            pass
+        else:
+            t = head
+    # Strip :port
+    if ":" in t and not t.startswith("["):
+        host_or_net, _, _ = t.partition(":")
+        t = host_or_net
+
+    # Is it a CIDR?
+    try:
+        net = ipaddress.ip_network(t, strict=False)
+    except ValueError:
+        # Single hostname or single IP
+        return [t]
+
+    if net.num_addresses == 1:
+        return [str(net.network_address)]
+
+    # Use .hosts() to skip network + broadcast for IPv4
+    return [str(h) for h in net.hosts()]
+
+
+def probe_smb_alive(host: str, port: int = 445, timeout: float = 1.5) -> bool:
+    """Quick TCP connect to test liveness. Skip hosts where 445
+    isn't reachable so we don't waste time on impacket auth.
+    """
+    import socket
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except OSError:
+        return False
+
+
 def _classify_type(type_int: int) -> str:
     is_special = bool(type_int & _STYPE_SPECIAL)
     base = type_int & ~_STYPE_SPECIAL & 0x0FFFFFFF

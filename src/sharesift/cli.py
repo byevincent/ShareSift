@@ -637,61 +637,97 @@ def cmd_discover(args: argparse.Namespace) -> int:
     """
     start = time.monotonic()
 
-    from sharesift.share.discovery import enumerate_shares
+    from sharesift.share.discovery import (
+        enumerate_shares,
+        expand_target_to_hosts,
+        probe_smb_alive,
+    )
 
-    # Parse the target — accept ``//host`` or ``\\host`` or bare host.
-    target_str = args.target.lstrip("/\\")
-    if "/" in target_str or "\\" in target_str:
-        # Has a share part (//host/share) — strip it, we discover all
-        host = target_str.replace("\\", "/").split("/", 1)[0]
-    else:
-        host = target_str
-    # Port suffix: host:port
     port = args.port or 445
-    if ":" in host:
-        host, _, port_str = host.partition(":")
-        port = int(port_str)
+    # Extract port from target if present (preserves CIDR parsing —
+    # ``10.0.0.0/24:1445`` isn't valid but we tolerate ``host:port``).
+    bare_target = args.target.lstrip("/\\").replace("\\", "/")
+    if ":" in bare_target and "/" not in bare_target.partition(":")[0]:
+        head, _, port_str = bare_target.partition(":")
+        try:
+            port = int(port_str.partition("/")[0])
+            bare_target = head + ("/" + port_str.partition("/")[2] if "/" in port_str else "")
+        except ValueError:
+            pass
+
+    hosts = expand_target_to_hosts(args.target)
+    is_cidr = len(hosts) > 1
 
     auth = _build_auth_from_args(args)
-    if auth is None and not getattr(args, "anonymous", False):
-        # Discovery often works anonymously even when scan auth is set;
-        # default to anonymous when no creds are passed.
+    if auth is None:
         from sharesift.share import Auth
         auth = Auth(anonymous=True)
 
-    out.info(f"discover: {host}:{port}")
-    try:
-        shares = enumerate_shares(host, auth, port=port)
-    except Exception as exc:
-        out.error(f"discover failed: {type(exc).__name__}: {exc}")
-        return 1
-
-    out.info(f"found {len(shares)} share(s)")
-
-    if args.format == "json":
-        import json as _json
-        for s in shares:
-            line = _json.dumps({
-                "host": host, "share": s.name,
-                "type": s.type, "comment": s.comment,
-                "unc": rf"\\{host}\{s.name}",
-            })
-            print(line)
+    if is_cidr:
+        out.info(f"discover: {len(hosts)} hosts in {args.target}")
+        # Concurrent TCP liveness probe — skip dead hosts before impacket
+        from concurrent.futures import ThreadPoolExecutor
+        with ThreadPoolExecutor(max_workers=min(32, len(hosts))) as ex:
+            live_map = list(ex.map(
+                lambda h: (h, probe_smb_alive(h, port=port)),
+                hosts,
+            ))
+        live_hosts = [h for h, alive in live_map if alive]
+        out.info(f"{len(live_hosts)}/{len(hosts)} hosts have SMB on :{port}")
     else:
-        # Text format — composes with batch (which strips # comments).
-        for s in shares:
-            comment_marker = "" if (s.is_file_share() or args.all_types) else "# "
-            type_note = f"  # {s.type}" + (f" — {s.comment}" if s.comment else "")
-            print(f"{comment_marker}//{host}/{s.name}{type_note}")
+        out.info(f"discover: {hosts[0]}:{port}")
+        live_hosts = hosts
+
+    total_shares = 0
+    total_file_shares = 0
+    hosts_succeeded = 0
+    hosts_failed = 0
+
+    import json as _json
+    for host in live_hosts:
+        try:
+            shares = enumerate_shares(host, auth, port=port)
+            hosts_succeeded += 1
+        except SystemExit:
+            # missing-extra error — re-raise; can't recover
+            raise
+        except Exception as exc:
+            hosts_failed += 1
+            if is_cidr:
+                out.warn(f"  {host}: {type(exc).__name__}: {exc}")
+            else:
+                out.error(f"discover failed: {type(exc).__name__}: {exc}")
+                return 1
+            continue
+
+        total_shares += len(shares)
+        total_file_shares += sum(1 for s in shares if s.is_file_share())
+
+        if args.format == "json":
+            for s in shares:
+                print(_json.dumps({
+                    "host": host, "share": s.name,
+                    "type": s.type, "comment": s.comment,
+                    "unc": rf"\\{host}\{s.name}",
+                }))
+        else:
+            for s in shares:
+                comment_marker = "" if (s.is_file_share() or args.all_types) else "# "
+                type_note = f"  # {s.type}" + (f" — {s.comment}" if s.comment else "")
+                print(f"{comment_marker}//{host}/{s.name}{type_note}")
 
     out.summary({
         "command": "discover",
         "version": __version__,
         "elapsed_s": round(time.monotonic() - start, 3),
-        "host": host,
+        "target": args.target,
         "port": port,
-        "shares_total": len(shares),
-        "shares_file_type": sum(1 for s in shares if s.is_file_share()),
+        "hosts_total": len(hosts),
+        "hosts_live": len(live_hosts),
+        "hosts_succeeded": hosts_succeeded,
+        "hosts_failed": hosts_failed,
+        "shares_total": total_shares,
+        "shares_file_type": total_file_shares,
         "exit_code": 0,
     })
     return 0
@@ -1248,7 +1284,13 @@ def main(argv: list[str] | None = None) -> int:
     )
     ds.add_argument(
         "target",
-        help="Host to enumerate — //host, \\\\host, or bare host (with optional :port).",
+        help=(
+            "Host or CIDR to enumerate. Accepts ``//host``, "
+            "``\\\\host``, bare host, or CIDR like ``//10.0.0.0/24`` "
+            "(network + broadcast excluded). Single host: enumerate "
+            "shares directly. CIDR: concurrent TCP probe on :445 "
+            "first, then enumerate the live hosts."
+        ),
     )
     ds.add_argument(
         "--port", type=int, default=None,
