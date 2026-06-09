@@ -260,6 +260,14 @@ def cmd_score_paths(args: argparse.Namespace) -> int:
         }
         for r in results
     ]
+    # v0.44: apply the filename-frequency dedup penalty so
+    # production output matches what the eval harness has been
+    # using since v0.22. Top-K precision on MSF3 was 0.20 without
+    # this, 0.0 with the raw classifier output. Records gain
+    # ``rank_score`` and ``filename_frequency`` fields; the
+    # original ``probability`` and ``tier`` are preserved.
+    from sharesift.ranking import apply_dedup_penalty
+    apply_dedup_penalty(records)
     _emit_jsonl(records, args.output)
     n_tiered = sum(1 for r in results if r.tier is not None)
     out.info(f"Wrote {len(records)} records ({n_tiered} tier-flagged)")

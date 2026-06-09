@@ -1,5 +1,5 @@
 {
-  "elapsed_s": 4.29,
+  "elapsed_s": 4.78,
   "per_set": [
     {
       "set": "msf3",
@@ -9,8 +9,8 @@
       "top_10_precision": 0.2,
       "top_20_precision": 0.15,
       "top_50_precision": 0.22,
-      "k_for_full_recall": 1049,
-      "precision_at_full_recall": 0.0381
+      "k_for_full_recall": 1053,
+      "precision_at_full_recall": 0.038
     },
     {
       "set": "creddata",
@@ -26,10 +26,10 @@
       "set": "msf2",
       "n_records": 1500,
       "n_positive": 34,
-      "recall_any_tier": 0.9706,
-      "top_10_precision": 0.8,
-      "top_20_precision": 0.6,
-      "top_50_precision": 0.36,
+      "recall_any_tier": 1.0,
+      "top_10_precision": 1.0,
+      "top_20_precision": 0.75,
+      "top_50_precision": 0.42,
       "k_for_full_recall": 916,
       "precision_at_full_recall": 0.0371
     },
@@ -39,8 +39,8 @@
       "n_records": 401,
       "n_positive": 92,
       "recall_any_tier": 0.913,
-      "top_10_precision": 0.6,
-      "top_20_precision": 0.65,
+      "top_10_precision": 0.4,
+      "top_20_precision": 0.5,
       "top_50_precision": 0.74
     },
     {

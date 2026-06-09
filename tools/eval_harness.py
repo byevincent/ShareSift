@@ -86,50 +86,32 @@ _TIER_PSEUDO_P = {
 
 
 def _score_with_dedup_penalty(records: list[dict]) -> list[float]:
-    """Versatile ranking score.
+    """Versatile ranking score with the v0.22 filename-frequency penalty.
 
-    Combines two universal signals:
+    v0.44: extracted to ``sharesift.ranking.apply_dedup_penalty``
+    so the production CLI uses the same logic. This shim adapts
+    the harness's record shape (``path_probability`` /
+    ``cascade_tier``) to the production shape (``probability`` /
+    ``tier``) and returns the float scores the harness consumes.
 
-    1. ``max(path_probability, cascade_pseudo_p)`` — the best
-       per-file evidence we have from Stage 1 + the v0.20 cascade.
-    2. **Filename-frequency penalty** (v0.22) — files whose basename
-       appears N times in the same share are likely package-manager
-       installations, build artifacts, or boilerplate. The v0.14
-       LightGBM ranker learned this; we replicate it declaratively
-       as ``score / sqrt(filename_frequency)``.
-
-    **NOT IN USE: Extension-frequency penalty.** v0.28 tried adding
-    an ``score / sqrt(extension_frequency)`` divisor on the theory
-    that minority-extension files carry more credential signal. The
-    harness rejected it: MSF3 top-10 dropped 0.20 → 0.10 AND MSF2
-    dropped 0.80 → 0.40. Real Linux credential files live in
-    common-extension types (.conf, .cnf, .php) which the penalty
-    tanked. The hypothesis was wrong-shaped; the discipline said
-    back out rather than iterate against the harness. See
-    ``docs/v0p28_results.md`` for the falsified-hypothesis writeup.
-
-    No per-benchmark tuning. ``filename_frequency`` is computed at
-    scoring time from the records list alone — same logic on every
-    benchmark, no learned weights. Applied uniformly to all primary
-    held-out sets.
+    See ``sharesift.ranking`` for the rationale and v0.28's
+    falsified extension-penalty hypothesis.
     """
-    from collections import Counter
+    from sharesift.ranking import apply_dedup_penalty
 
-    filenames = [_basename(r.get("path", "")) for r in records]
-    freq = Counter(filenames)
-
-    scores: list[float] = []
-    for r, fname in zip(records, filenames):
-        per_file_evidence = max(
-            r.get("path_probability") or 0.0,
-            _TIER_PSEUDO_P[r.get("cascade_tier")],
-        )
-        # sqrt penalty: 1 occurrence = unchanged; 4 = halved; 16 = quartered.
-        # Sub-linear so legitimate-but-common credential filenames (like
-        # `.env`) still rank when other signals fire.
-        penalty_divisor = max(1.0, freq[fname]) ** 0.5
-        scores.append(per_file_evidence / penalty_divisor)
-    return scores
+    # Adapt to the production record shape so the shared function
+    # finds the right fields.
+    adapted = [
+        {
+            "path": r.get("path", ""),
+            "probability": r.get("path_probability"),
+            "tier": None,
+            "cascade_tier": r.get("cascade_tier"),
+        }
+        for r in records
+    ]
+    apply_dedup_penalty(adapted)
+    return [r["rank_score"] for r in adapted]
 
 
 def _basename(path: str) -> str:
