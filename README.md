@@ -41,7 +41,11 @@ See [docs/audit_2026-05-31.md](docs/audit_2026-05-31.md) for calibration details
 ## Install
 
 ```bash
+# Latest milestone release (recommended)
+git clone --branch v0.34.0 https://github.com/byevincent/ShareSift.git
+# Or track main for unreleased work
 git clone https://github.com/byevincent/ShareSift.git
+
 cd ShareSift
 
 # Stage 1 only (path classifier, ~100MB)
@@ -52,6 +56,8 @@ uv sync --group content-inference
 ```
 
 Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
+
+Milestone releases: [v0.34.0](https://github.com/byevincent/ShareSift/releases/tag/v0.34.0) (current), [v0.33.0](https://github.com/byevincent/ShareSift/releases/tag/v0.33.0), [v0.30.0](https://github.com/byevincent/ShareSift/releases/tag/v0.30.0), [v0.27.0](https://github.com/byevincent/ShareSift/releases/tag/v0.27.0), [v0.24.0](https://github.com/byevincent/ShareSift/releases/tag/v0.24.0). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
 
 ## Quick start
 
