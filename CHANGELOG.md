@@ -4,6 +4,63 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.36.0] — 2026-06-09
+
+The Snaffler-displacement release. v0.35 made ShareSift remote-share-
+addressable; v0.36 makes it unambiguously better than Snaffler at the
+finding job — more rules, smarter triage, correct R/W reporting, and
+drop-in compatibility with the existing Snaffler output tooling.
+
+### Added
+
+- **7 modern credential rules** Snaffler doesn't ship: Terraform state
+  files (`.tfstate` / `.tfstate.backup`), HashiCorp Vault tokens
+  (`~/.vault-token`), Pulumi credentials, Terraform Cloud (`~/.terraform.d/credentials.tfrc.json`),
+  modern Azure CLI MSAL cache (`~/.azure/msal_token_cache.json` +
+  `service_principal_entries.json` + legacy `accessTokens.json`), AWS
+  SSO cache (`~/.aws/sso/cache/*.json`), and Ansible Vault encrypted
+  file headers. Total ShareSift rules: **144 vs Snaffler's 89** — 1.6×
+  rule coverage, including the cloud / infra credential surfaces that
+  appeared 2023-2026.
+- **PPK encryption-aware tier resolution** (Snaffler #191). Encrypted
+  `.ppk` files stay Yellow; only unencrypted (Encryption: none) keys
+  promote to Black via the new `ShareSiftKeepPuttyPpkUnencrypted`
+  content rule. Snaffler still flags every `.ppk` as if it were
+  immediately actionable — most are passphrase-locked and not.
+- **Share-level R/W access probe** (Snaffler #184). New
+  `ShareAccess(can_read, can_write)` dataclass and
+  `SmbShare.probe_share_access()` method probe both rights via two
+  cheap SMB2 CREATE round-trips on the share root. Snaffler reports
+  writable shares as `R` due to a known bug; ShareSift gets it right.
+  Surfaced in `--check` output (`auth ok; tree-connected to \\host\share [RW]`)
+  and the scan summary JSON.
+- **Snaffler-compatible TSV output** — new `sharesift to-snaffler-tsv`
+  subcommand emits the 11-column line format that SnafflerParser,
+  Efflanrs, Parsler, and snafflepy already parse. Operators don't
+  have to choose between ShareSift's finding capability and Snaffler's
+  downstream-tool ecosystem.
+- **`src/sharesift/output/` module** with `record_to_snaffler_tsv`
+  and `iter_snaffler_tsv_lines` — pure formatter functions, easily
+  composable into other tools.
+
+### Changed
+
+- **`KeepSSHKeysByFileExtension`** (Snaffler-ported) demoted from
+  Black to Yellow. It's the only Snaffler rule covering `.ppk` files,
+  and Black-on-all-ppk defeats the encryption-aware promotion. The
+  rule's TOML docstring documents the v0.36 override.
+
+### Out of scope (deferred)
+
+- TOML rule format (operator UX — Snaffler-style rules drop straight
+  in) bundles with v0.37 alongside the multi-threaded SMB walk + the
+  network-wide share discovery work. Thin release on its own.
+- Per-file R/W in Snaffler-TSV output (W/M columns stay empty). The
+  share-level verdict is known; threading it into per-record output
+  is a follow-on commit.
+
+See `docs/v0p36_results.md` and `docs/pentester_backlog.md`.
+
 ## [0.35.0] — 2026-06-08
 
 SMB-direct. ShareSift no longer requires mounting a CIFS share to
@@ -166,14 +223,16 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.36 — OpSec arc: default noise-exclusion patterns, `--max-file-size`
-cap (chunked SMB reads), live-streaming hits to stdout, Snaffler-
-compatible TSV output, tier vocabulary realignment, `--stealth`
-preset, Markdown report bundle. See `docs/pentester_backlog.md`
-for the full friendliness roadmap. v0.37 — distribution
-(`pipx install sharesift`, single-file binary, Cobalt Strike /
-Sliver SOCKS examples). v0.40 — path classifier as a BOF via
-`treelite`-compiled trees.
+v0.37 — speed + distribution arc: concurrent SMB reads (multi-
+threaded walk), network-wide share discovery (`sharesift
+//10.10.10.0/24 -u user -p pass`), TOML rule format (operator
+familiarity with Snaffler ruleset syntax), `pipx install sharesift`,
+PyInstaller single-file binary. v0.38 — engagement-shape arc:
+SQLite engagement datastore (smbcrawler-style), resume after
+crash, content-hash dedup, GhostWriter / SysReptor exporters.
+v0.39+ — OpSec polish (noise exclusions, `--stealth` preset,
+status heartbeat, Markdown report bundle). See
+`docs/pentester_backlog.md` for the full friendliness roadmap.
 
 ## [0.34.0] — 2026-06-08
 
