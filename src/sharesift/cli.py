@@ -309,19 +309,29 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
     n_threads = max(1, getattr(args, "read_threads", 4) or 1)
     use_threads = share_obj is not None and n_threads > 1 and len(paths) > 1
 
+    # v0.40: --max-file-size cap on raw bytes read from the share.
+    # Already-parsed by cmd_scan into max_file_size_bytes (a plain
+    # int); falls back to DEFAULT_MAX_READ_BYTES from extract.py.
+    from sharesift.extract import DEFAULT_MAX_READ_BYTES
+    max_read = getattr(args, "max_file_size_bytes", None) or DEFAULT_MAX_READ_BYTES
+
     if share_obj is None:
         for p_str in paths:
             items.append((p_str, load_content(Path(p_str), max_bytes=cap)))
     elif not use_threads:
         for p_str in paths:
-            items.append((p_str, load_content_from_share(share_obj, p_str, max_bytes=cap)))
+            items.append((p_str, load_content_from_share(
+                share_obj, p_str, max_bytes=cap, max_read_bytes=max_read,
+            )))
     else:
         from concurrent.futures import ThreadPoolExecutor
 
         def _read(p: str) -> tuple[str, str | None]:
-            return p, load_content_from_share(share_obj, p, max_bytes=cap)
+            return p, load_content_from_share(
+                share_obj, p, max_bytes=cap, max_read_bytes=max_read,
+            )
 
-        out.debug(f"parallel reads: {n_threads} threads")
+        out.debug(f"parallel reads: {n_threads} threads, max_file_size={max_read}")
         with ThreadPoolExecutor(max_workers=n_threads) as ex:
             items = list(ex.map(_read, paths))
 
@@ -365,6 +375,29 @@ def cmd_scan_files(args: argparse.Namespace) -> int:
         "exit_code": 0,
     })
     return 0
+
+
+_SIZE_SUFFIXES = {"": 1, "k": 1024, "m": 1024**2, "g": 1024**3}
+
+
+def _parse_size(text: str | None) -> int | None:
+    """Parse a human-readable size like ``100K``, ``5M``, ``1G``,
+    or a bare int. Returns bytes. None passes through."""
+    if text is None:
+        return None
+    t = text.strip().lower()
+    if not t:
+        return None
+    suffix = ""
+    if t[-1] in _SIZE_SUFFIXES:
+        suffix = t[-1]
+        t = t[:-1]
+    try:
+        return int(float(t) * _SIZE_SUFFIXES[suffix])
+    except (KeyError, ValueError):
+        raise SystemExit(
+            f"invalid size: {text!r} — use N, NK, NM, or NG"
+        )
 
 
 def _ns(**kwargs: object) -> argparse.Namespace:
@@ -495,6 +528,24 @@ def cmd_scan(args: argparse.Namespace) -> int:
             raise SystemExit(f"target: {share_path} does not exist")
     out.debug(f"enumerated {n_enumerated} files → {files_path}")
 
+    # v0.40: noise-exclusion filtering. Default globs strip
+    # Windows/System32/*.dll, node_modules/, .git/, etc. so the
+    # path classifier doesn't waste budget on guaranteed-noise.
+    from sharesift.share.exclusions import filter_paths
+
+    if not getattr(args, "no_default_excludes", False) or getattr(args, "exclude_glob", None):
+        raw_paths = files_path.read_text(encoding="utf-8").splitlines()
+        raw_paths = [p for p in raw_paths if p.strip()]
+        kept, n_excluded = filter_paths(
+            raw_paths,
+            extra_globs=getattr(args, "exclude_glob", None) or (),
+            use_defaults=not getattr(args, "no_default_excludes", False),
+        )
+        if n_excluded:
+            files_path.write_text("\n".join(kept) + "\n", encoding="utf-8")
+            out.info(f"  excluded {n_excluded} noise files; {len(kept)} remain")
+            n_enumerated = len(kept)
+
     # Silence sub-handler summaries — we emit one combined summary at the end.
     was_json = out.json_enabled
     if was_json:
@@ -533,6 +584,7 @@ def cmd_scan(args: argparse.Namespace) -> int:
             max_snippet_bytes=args.max_snippet_bytes,
             force_content=args.force_content,
             read_threads=getattr(args, "read_threads", 4),
+            max_file_size_bytes=_parse_size(getattr(args, "max_file_size", None)),
             debug=False,
             _share=share_for_reads,
         ))
@@ -1094,6 +1146,37 @@ def main(argv: list[str] | None = None) -> int:
         help=(
             "Worker threads for parallel content reads on SMB targets "
             "(default 4; pass 1 to force sequential)."
+        ),
+    )
+    sc.add_argument(
+        "--exclude-glob",
+        action="append",
+        default=None,
+        help=(
+            "Glob pattern excluded from enumeration; repeatable. "
+            "Operator's patterns add to the default exclusions unless "
+            "--no-default-excludes is also set."
+        ),
+    )
+    sc.add_argument(
+        "--no-default-excludes",
+        action="store_true",
+        help=(
+            "Disable the v0.40 default exclusion patterns "
+            "(Windows/System32/*.dll, node_modules/, .git/, *.iso, "
+            "media files, etc.). Use when you want to scan everything."
+        ),
+    )
+    sc.add_argument(
+        "--max-file-size",
+        type=str,
+        default=None,
+        help=(
+            "Cap bytes read per file. Accepts human-readable: 100K, "
+            "5M, 1G. Default 10M; stops accidentally pulling a "
+            "5GB VMDK or NTUSER.DAT over the wire. Files larger than "
+            "the cap are read up to the cap (partial extraction "
+            "rather than skip)."
         ),
     )
     sc.add_argument(
