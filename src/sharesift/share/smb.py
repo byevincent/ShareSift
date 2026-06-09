@@ -31,6 +31,13 @@ _FILE_ID_BOTH_DIR_INFO = 37
 # during the walk recursion.
 _FILE_ATTR_DIRECTORY = 0x10
 
+# SMB2 reads consume credits: 1 credit per 64 KB. Initial credit
+# budget on a fresh connection is 64 (= 4 MB max single read), and
+# Samba won't grant more until the client has done other exchanges.
+# A 1 MB cap (= 16 credits) leaves headroom and covers the realistic
+# size of credential / config files. Larger files chunk in v0.36.
+_MAX_SINGLE_READ = 1 * 1024 * 1024
+
 
 class SmbShare:
     """Read-only walk of a remote SMB share."""
@@ -109,7 +116,12 @@ class SmbShare:
             ShareAccess,
         )
 
-        cap = max_bytes if max_bytes is not None else 10 * 1024 * 1024
+        # Clamp to three limits: caller's max_bytes, server's
+        # negotiated max_read_size, and our SMB credit-budget-safe
+        # ceiling (1 MB). Without the credit clamp, fresh
+        # connections fail on requests over ~4 MB.
+        requested = max_bytes if max_bytes is not None else 10 * 1024 * 1024
+        cap = min(requested, self._connection.max_read_size, _MAX_SINGLE_READ)
         handle = Open(self._tree, rel)
         try:
             handle.create(
