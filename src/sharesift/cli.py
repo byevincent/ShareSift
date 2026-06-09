@@ -48,6 +48,7 @@ _KNOWN_SUBCOMMANDS = frozenset({
     "verify",
     "render-report",
     "retrain-ranker",
+    "to-snaffler-tsv",
 })
 
 
@@ -586,6 +587,45 @@ def cmd_retrain_ranker(args: argparse.Namespace) -> int:
     return retrain_ranker.main(argv)
 
 
+def cmd_to_snaffler_tsv(args: argparse.Namespace) -> int:
+    """v0.36 step 4: convert ``hits.jsonl`` to Snaffler-compatible TSV.
+
+    Operator workflow: run a scan, then pipe the JSONL output through
+    this command to produce TSV that SnafflerParser / Efflanrs /
+    Parsler / snafflepy can ingest unchanged.
+
+        sharesift //host/share -u u -p p
+        sharesift to-snaffler-tsv < ./sharesift-host-share/hits.jsonl \\
+            > scan.snaf.tsv
+    """
+    from sharesift.output import iter_snaffler_tsv_lines
+
+    start = time.monotonic()
+    records = _read_jsonl(args.input, args.stdin)
+    out.debug(f"Loaded {len(records)} records")
+
+    sink = sys.stdout if args.output is None else open(args.output, "w", encoding="utf-8")
+    try:
+        n = 0
+        for line in iter_snaffler_tsv_lines(records):
+            sink.write(line + "\n")
+            n += 1
+    finally:
+        if sink is not sys.stdout:
+            sink.close()
+
+    out.summary({
+        "command": "to-snaffler-tsv",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "input_count": len(records),
+        "output_count": n,
+        "output_path": str(args.output) if args.output else None,
+        "exit_code": 0,
+    })
+    return 0
+
+
 def cmd_render_report(args: argparse.Namespace) -> int:
     from sharesift.report import render_html
 
@@ -958,6 +998,20 @@ def main(argv: list[str] | None = None) -> int:
         "--n-estimators", type=int, default=200, help="LightGBM n_estimators (default 200)"
     )
     rt.set_defaults(func=cmd_retrain_ranker)
+
+    # v0.36 step 4: to-snaffler-tsv
+    ts = sub.add_parser(
+        "to-snaffler-tsv",
+        help=(
+            "Convert a hits.jsonl file to Snaffler-compatible TSV that "
+            "SnafflerParser / Efflanrs / Parsler / snafflepy ingest "
+            "unchanged. Reads stdin or --input; writes stdout or --output."
+        ),
+    )
+    ts.add_argument("--input", type=Path, help="hits.jsonl path (or use --stdin)")
+    ts.add_argument("--stdin", action="store_true", help="Read JSONL from stdin")
+    ts.add_argument("--output", type=Path, default=None, help="Output TSV path (default stdout)")
+    ts.set_defaults(func=cmd_to_snaffler_tsv)
 
     # v0.35: implicit-scan dispatch. If the first non-flag positional
     # looks like an SMB target, inject ``scan`` so argparse routes there.
