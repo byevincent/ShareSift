@@ -4,6 +4,90 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.35.0] — 2026-06-08
+
+SMB-direct. ShareSift no longer requires mounting a CIFS share to
+scan it — operators point the tool at a UNC + credentials and it
+talks SMB2/3 natively. First deliberate adoption-friction release
+after the v0.22–v0.34 discipline arc.
+
+### Added
+
+- **SMB-direct backend** via `smbprotocol` (jborean93) + pyspnego's
+  pure-Python NTLM. No `gss-ntlmssp` system package, no
+  `NTLM_USER_FILE` env-var ceremony, no impacket fallback needed.
+  New `smb` optional dep group; `pyspnego` and `cryptography` come
+  in transitively.
+- **`Share` protocol** (`src/sharesift/share/`) with `walk()` and
+  `read_bytes()` methods. Two implementations: `LocalShare` (wraps
+  filesystem) and `SmbShare` (wraps smbprotocol). Cascade reads go
+  through the protocol so the same code path handles both.
+- **Implicit-scan CLI dispatch.** First positional that looks like
+  a UNC (`//host/share` or `\\host\share`) auto-routes to the
+  `scan` subcommand. Result:
+
+      sharesift //10.0.0.5/Finance$ -u user -p pass
+
+  is the canonical operator workflow. No `scan` keyword, no
+  `--share` flag, no `--output-dir` ceremony for the default case.
+
+- **NetExec-compatible auth flags** on `scan`:
+  `-u/--user`, `-p/--password`, `-H/--hash` (NT or `LM:NT` PtH),
+  `-k/--kerberos`, `--use-kcache` (alias matching nxc),
+  `-d/--domain`, `--no-pass`/`--anonymous`, `--encrypt`/`--no-encrypt`.
+- **`--check` mode** — auth + tree-connect + exit. Pre-flight before
+  committing to a long scan. Pulled forward from the v0.36
+  pentester-friendliness backlog.
+- **Default output dir** computed when omitted:
+  `./sharesift-<host>-<share>/` for SMB targets,
+  `./sharesift-<basename>/` for local paths.
+- **`extract.py` decomposition** — new pure `extract_text(data, ext, …)`
+  + share-aware `load_content_from_share(share, path, …)`. The
+  existing path-based `load_content(path)` is preserved as a
+  backward-compat wrapper; 40+ existing tests pass unchanged.
+- **Live SMB integration tests** against `dperson/samba` 4.x
+  (`tests/test_smb_share_integration_v0p35.py`, `tests/conftest.py`).
+  21 tests gated behind `SHARESIFT_SMB_TESTS=1`. Two real bugs
+  surfaced by the live suite that mocks couldn't catch:
+  SMB credit-based flow control limiting cold-connection reads
+  (fixed by clamping single reads to 1MB) and bind-mount file
+  permission mismatches (fixed in the fixture).
+- **`docs/pentester_backlog.md`** — stable home for the 28-item
+  operator-friendliness backlog mapped to v0.36/v0.37/v0.40.
+
+### Changed
+
+- **`sharesift scan` flag set** — `--share` (v0.18) is now optional
+  and demoted to "legacy alias"; positional `target` is the
+  canonical form. `--output-dir` is now optional (computed default).
+  Existing scripts that pass `--share` and `--output-dir` continue
+  to work unchanged.
+- **`LocalShare(root=".")`** — root is now optional (defaults to
+  current directory) so the class works as a generic filesystem
+  reader for callers that don't walk.
+
+### Performance / behavior
+
+- **Single SMB reads capped at 1 MB.** Realistic credential / config
+  files are well under this. Larger files (10+ MB PDFs/OOXML) need
+  chunked reads — deferred to v0.36 alongside `--max-file-size`.
+- **SMB3 message encryption on by default** (`--encrypt` is the
+  default). Works against modern Samba 4.x and Windows Server 2012+.
+  Operators hitting legacy SMB1-only targets use Snaffler / smbclient
+  for that long tail.
+
+### Out of scope (explicitly deferred)
+
+- SMB1 support — smbprotocol drops it by design. Modern only.
+- AES-key Kerberos auth — flag reserved but not wired in v0.35.
+- Snaffler-compatible TSV output, tier vocabulary realignment,
+  `--stealth` preset, Markdown report bundle — v0.36 OpSec arc.
+- `pipx` packaging, single-file binary, Cobalt Strike Aggressor
+  docs — v0.37 distribution arc.
+- BOF path classifier (via `treelite` AOT compilation) — v0.40.
+
+See `docs/v0p35_results.md` and `docs/v0p35_smb_direct_plan.md`.
+
 ## [0.18.0] — 2026-06-07
 
 CLI ergonomics. Full execution of the Phase B–F plan that v0.17.1
@@ -82,11 +166,14 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.35 — registry-hive parser when samples accessible (10+ release
-carryover; still blocked on source). Otherwise the natural pause
-point — the v0.22-v0.34 arc is the substantive product. Next
-meaningful leverage requires real engagement data or external
-users, neither of which lives in the iteration loop.
+v0.36 — OpSec arc: default noise-exclusion patterns, `--max-file-size`
+cap (chunked SMB reads), live-streaming hits to stdout, Snaffler-
+compatible TSV output, tier vocabulary realignment, `--stealth`
+preset, Markdown report bundle. See `docs/pentester_backlog.md`
+for the full friendliness roadmap. v0.37 — distribution
+(`pipx install sharesift`, single-file binary, Cobalt Strike /
+Sliver SOCKS examples). v0.40 — path classifier as a BOF via
+`treelite`-compiled trees.
 
 ## [0.34.0] — 2026-06-08
 

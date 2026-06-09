@@ -42,7 +42,7 @@ See [docs/audit_2026-05-31.md](docs/audit_2026-05-31.md) for calibration details
 
 ```bash
 # Latest milestone release (recommended)
-git clone --branch v0.34.0 https://github.com/byevincent/ShareSift.git
+git clone --branch v0.35.0 https://github.com/byevincent/ShareSift.git
 # Or track main for unreleased work
 git clone https://github.com/byevincent/ShareSift.git
 
@@ -53,28 +53,51 @@ uv sync
 
 # Both stages (adds ~3GB of torch and transformers)
 uv sync --group content-inference
+
+# SMB-direct support (no mount required) — adds smbprotocol + pyspnego
+uv sync --extra smb
 ```
 
 Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
 
-Milestone releases: [v0.34.0](https://github.com/byevincent/ShareSift/releases/tag/v0.34.0) (current), [v0.33.0](https://github.com/byevincent/ShareSift/releases/tag/v0.33.0), [v0.30.0](https://github.com/byevincent/ShareSift/releases/tag/v0.30.0), [v0.27.0](https://github.com/byevincent/ShareSift/releases/tag/v0.27.0), [v0.24.0](https://github.com/byevincent/ShareSift/releases/tag/v0.24.0). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
+Milestone releases: [v0.35.0](https://github.com/byevincent/ShareSift/releases/tag/v0.35.0) (current — SMB-direct), [v0.34.0](https://github.com/byevincent/ShareSift/releases/tag/v0.34.0), [v0.33.0](https://github.com/byevincent/ShareSift/releases/tag/v0.33.0), [v0.30.0](https://github.com/byevincent/ShareSift/releases/tag/v0.30.0), [v0.27.0](https://github.com/byevincent/ShareSift/releases/tag/v0.27.0), [v0.24.0](https://github.com/byevincent/ShareSift/releases/tag/v0.24.0). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
 
 ## Quick start
 
-### One shot — `sharesift scan`
+### Remote SMB share (no mount required, v0.35+)
 
-The recommended entry point. Enumerates the share, runs both classifier stages, verifies extracted credentials, and renders an HTML report — all in one call.
+Point ShareSift at a UNC + credentials and it walks the share over SMB2/3 directly. Auth flags match netexec conventions (`-u/-p/-H/-k/-d`).
 
 ```bash
-uv run sharesift scan \
-    --share /mnt/downloaded_share \
-    --output-dir ./scan-out
+# Password auth
+uv run sharesift //10.10.10.5/Finance$ -u user -p pass
+
+# Pass-the-hash (NT hash or LM:NT)
+uv run sharesift //10.10.10.5/Finance$ -u CORP/user -H 'aad3b435b51404eeaad3b435b51404ee:27c4...'
+
+# Kerberos (reads ticket from KRB5CCNAME)
+uv run sharesift //dc01.corp.local/SYSVOL$ -u alice -k --use-kcache
+
+# Anonymous / null session
+uv run sharesift //10.10.10.5/Public --no-pass
+
+# Pre-flight: confirm creds work before committing to a long walk
+uv run sharesift //10.10.10.5/Finance$ -u user -p pass --check
+```
+
+Output lands in `./sharesift-<host>-<share>/` by default (override with `--output-dir`). The full one-shot pipeline runs (enumerate → triage → content scan → verify → HTML report) using the live SMB session for content reads — no local mount required.
+
+### Local / mounted share
+
+```bash
+uv run sharesift /mnt/downloaded_share
 
 # Or to skip live verification + the report and just get triaged hits:
-uv run sharesift scan \
-    --share /mnt/downloaded_share \
-    --output-dir ./scan-out \
+uv run sharesift /mnt/downloaded_share \
     --skip-verify --skip-report
+
+# Explicit subcommand form (legacy v0.18 flag set, still supported):
+uv run sharesift scan --share /mnt/downloaded_share --output-dir ./scan-out
 ```
 
 Intermediates land in `--output-dir`:
