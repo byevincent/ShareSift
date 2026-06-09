@@ -252,15 +252,19 @@ def cmd_scan(args: argparse.Namespace) -> int:
     share: Path = args.share
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Stage 0: enumerate.
+    # Stage 0: enumerate. v0.35: share-walking goes through the
+    # ``Share`` abstraction so the SMB-direct backend (Sprint 2) can
+    # slot in without touching this dispatch.
+    from sharesift.share import LocalShare
+
     files_path = output_dir / "files.txt"
     if share.is_dir():
         out.info(f"[1/5] enumerating files under {share}")
-        files = sorted(p for p in share.rglob("*") if p.is_file())
+        entries = list(LocalShare(share).walk())
         files_path.write_text(
-            "\n".join(str(p) for p in files) + "\n", encoding="utf-8"
+            "\n".join(e.path for e in entries) + "\n", encoding="utf-8"
         )
-        n_enumerated = len(files)
+        n_enumerated = len(entries)
     elif share.is_file():
         # Treat as a pre-existing file list.
         out.info(f"[1/5] using file list {share}")
