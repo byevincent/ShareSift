@@ -40,6 +40,18 @@ See [docs/audit_2026-05-31.md](docs/audit_2026-05-31.md) for calibration details
 
 ## Install
 
+**Quick install** — drop a binary on Kali (no `git clone`, no `uv` setup):
+
+```bash
+# SMB-direct workflow (recommended for pentesters)
+pipx install 'sharesift[smb]'
+
+# Stage 1 only — path classifier (no torch, ~100MB)
+pipx install sharesift
+```
+
+**Full install from source** — if you want to develop, train, or run the content classifier:
+
 ```bash
 # Latest milestone release (recommended)
 git clone --branch v0.36.0 https://github.com/byevincent/ShareSift.git

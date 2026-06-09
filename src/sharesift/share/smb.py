@@ -297,9 +297,20 @@ class SmbShare:
         if self._tree is not None:
             return
 
-        from smbprotocol.connection import Connection
-        from smbprotocol.session import Session
-        from smbprotocol.tree import TreeConnect
+        try:
+            from smbprotocol.connection import Connection
+            from smbprotocol.session import Session
+            from smbprotocol.tree import TreeConnect
+        except ImportError as exc:
+            # v0.37: friendlier message for the pipx-install case where
+            # the operator forgot the smb extra.
+            raise SystemExit(
+                "SMB-direct support requires the smb extra. Install:\n"
+                "    pipx install 'sharesift[smb]'   # if using pipx\n"
+                "    pip install 'sharesift[smb]'    # if using pip\n"
+                "    uv sync --extra smb             # if using uv\n"
+                f"(missing: {exc.name})"
+            ) from exc
 
         username, password, auth_protocol = build_credential(self._auth)
 
