@@ -126,6 +126,32 @@ Cascade entry points (`Scanner.scan_batch`,
 filesystem path. Internal calls to `os.walk` and `open()` go through
 the share interface.
 
+### Phase 1.5 — Share content-read methods (added 2026-06-08)
+
+Discovered during Sprint 2 → 3 transition: the original plan
+extended ``Share`` only with ``walk()``, but ``extract.py::load_content``
+does ``Path(p).read_text()`` / ``zipfile.ZipFile(str(p))`` /
+``pypdf.PdfReader(str(p))`` on the walked paths. For SMB targets
+those paths are UNC strings — none of those calls work.
+
+Closing this gap requires extending the ``Share`` protocol with
+content-read methods and refactoring ``load_content`` to take a
+``Share`` plus a relative path instead of a ``Path``.
+
+| Change | Detail |
+|---|---|
+| ``Share`` protocol gets ``read_bytes(path: str, *, max_bytes: int \| None = None) -> bytes \| None`` | One method, returns full bytes (caller wraps in BytesIO for pypdf / zipfile) |
+| ``LocalShare.read_bytes`` | ``Path(path).read_bytes()`` with ``max_bytes`` cap and OSError → None |
+| ``SmbShare.read_bytes`` | smbprotocol ``Open(tree, rel).read(0, max_bytes)`` against an already-established session |
+| ``extract.py::load_content(share, path, *, max_bytes, decode_base64)`` | Refactor to take a ``Share`` + path string. PDF and OOXML use ``BytesIO(share.read_bytes(path))``. |
+| ``cmd_scan_files`` | Pass the active ``Share`` through to ``load_content`` instead of constructing ``Path`` per file |
+| Cascade entry point in ``pipeline.py`` | Accepts a ``Share`` instead of bare paths |
+
+Why this matters: without it, ``sharesift //host/share -u user -p
+pass`` walks correctly but ``scan-files`` fails on UNC paths. The
+v0.35 ship gate requires end-to-end SMB → walk → content scan →
+verify, so this phase is non-negotiable.
+
 ### Phase 2 — CLI dispatch (UNC positional + auth flags)
 
 `src/sharesift/cli.py` changes:
@@ -282,14 +308,21 @@ pattern for MSF2 tests).
 |---|---|---|
 | 1 | Phase 1 — `Share` abstraction + `LocalShare` refactor (no behavior change) | 0.5 day |
 | 2 | Phase 1 — `SmbShare` + `Auth` + UNC parser | 0.75 day |
-| 3 | Phase 2 — CLI first-arg dispatch + auth flag wiring | 0.5 day |
+| 3 | Phase 2 — CLI first-arg dispatch + auth flag wiring + ``--check`` mode | 0.5 day |
+| 3.5 | Phase 1.5 — Share content-read methods + extract.py refactor | 0.5 day |
 | 4 | Phase 4 — Test fixtures (Samba container) + unit + integration tests | 1 day |
 | 5 | Phase 3 — Auth dispatch refinements based on test findings | 0.25 day |
 | 6 | Phase 5 — Docs, README, CHANGELOG, results doc | 0.5 day |
 | 7 | Ship + tag + GitHub release | 0.25 day |
 
-Total: ~3.75 days. Plan-gated, one-file-at-a-time per the
+Total: ~4.25 days. Plan-gated, one-file-at-a-time per the
 established workflow.
+
+``--check`` mode (Sprint 3): ``sharesift //host/share -u user -p
+pass --check`` auths + tree-connects + exits with success/failure.
+No walk, no content scan. Pentester-friendly pre-flight before
+committing to a long scan. Added to v0.35 from the friendliness
+backlog because it's cheap.
 
 ## Follow-on arc (recap)
 

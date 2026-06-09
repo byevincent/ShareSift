@@ -38,6 +38,116 @@ from sharesift._output import Verbosity, out
 from sharesift.path import PathClassifier
 from sharesift.pipeline import Scanner
 
+# v0.35: subcommand set used by the implicit-scan argv rewriter to
+# distinguish "the user typed a subcommand" from "the user typed a
+# share/target as the first positional." Update if subcommands change.
+_KNOWN_SUBCOMMANDS = frozenset({
+    "scan",
+    "score-paths",
+    "scan-files",
+    "verify",
+    "render-report",
+    "retrain-ranker",
+})
+
+
+def _rewrite_argv_for_implicit_scan(argv: list[str]) -> list[str]:
+    """v0.35: when the first non-flag arg looks like an SMB target,
+    inject ``scan`` so argparse dispatches to that subcommand.
+
+    Local filesystem paths are NOT auto-detected — too easy to
+    confuse with a filename like ``report.jsonl``. SMB-shaped targets
+    (``//host/share``, ``\\\\host\\share``) are unambiguous.
+
+    Any explicit subcommand wins; the rewriter is a no-op when the
+    user typed one.
+    """
+    from sharesift.share import is_smb_target
+
+    for i, arg in enumerate(argv):
+        if arg.startswith("-"):
+            continue
+        if arg in _KNOWN_SUBCOMMANDS:
+            return argv
+        if is_smb_target(arg):
+            return argv[:i] + ["scan"] + argv[i:]
+        return argv
+    return argv
+
+
+def _add_smb_auth_args(p: argparse.ArgumentParser) -> None:
+    """v0.35: add nxc-style SMB auth flags to a subparser.
+
+    Flag set deliberately mirrors ``netexec`` so muscle-memory
+    transfers. ``-H`` is "hash" (PtH), never "host" — target host
+    comes from the positional ``target``.
+    """
+    p.add_argument("-u", "--user", help="Username for SMB auth.")
+    p.add_argument(
+        "-p", "--password", help="Password for NTLM auth."
+    )
+    p.add_argument(
+        "-H", "--hash",
+        help=(
+            "NT hash or ``LM:NT`` for Pass-the-Hash. Bare NT-only "
+            "form fills LM with the standard blank hash."
+        ),
+    )
+    p.add_argument(
+        "-k", "--kerberos", action="store_true",
+        help="Use Kerberos auth (ticket read from ``KRB5CCNAME``).",
+    )
+    p.add_argument(
+        "--use-kcache", action="store_true",
+        help="Alias for ``--kerberos``; matches netexec convention.",
+    )
+    p.add_argument(
+        "-d", "--domain", help="Auth domain (qualifies the user as DOMAIN\\\\user)."
+    )
+    p.add_argument(
+        "--no-pass", "--anonymous", dest="anonymous", action="store_true",
+        help="Null session / anonymous auth.",
+    )
+    p.add_argument(
+        "--encrypt", dest="encrypt", action="store_true", default=True,
+        help="SMB3 message encryption (default on).",
+    )
+    p.add_argument(
+        "--no-encrypt", dest="encrypt", action="store_false",
+        help="Disable SMB3 encryption (legacy Samba configs).",
+    )
+    p.add_argument(
+        "--check", action="store_true",
+        help=(
+            "Pre-flight: auth + tree-connect, then exit. No walk, "
+            "no content scan. Confirm creds before committing to a "
+            "long scan."
+        ),
+    )
+
+
+def _build_auth_from_args(args: argparse.Namespace):
+    """Build :class:`sharesift.share.Auth` from CLI args, or return
+    None if no auth flags were set."""
+    from sharesift.share import Auth
+
+    kerberos = bool(getattr(args, "kerberos", False) or getattr(args, "use_kcache", False))
+    password = getattr(args, "password", None)
+    hash_ = getattr(args, "hash", None)
+    anonymous = bool(getattr(args, "anonymous", False))
+
+    if not any([password, hash_, kerberos, anonymous]):
+        return None
+
+    return Auth(
+        user=getattr(args, "user", None),
+        password=password,
+        hash=hash_,
+        kerberos=kerberos,
+        domain=getattr(args, "domain", None),
+        anonymous=anonymous,
+    )
+
 
 _NOISY_3P_MODULES = ("transformers", "peft", "urllib3", "bitsandbytes", "sklearn")
 _NOISY_3P_CATEGORIES = (FutureWarning, DeprecationWarning, UserWarning)
@@ -248,33 +358,114 @@ def cmd_scan(args: argparse.Namespace) -> int:
     produces one block, not five.
     """
     start = time.monotonic()
-    output_dir: Path = args.output_dir
-    share: Path = args.share
+
+    # v0.35: target resolution. Positional ``target`` (the canonical
+    # form) wins over the legacy ``--share`` flag. SMB-shaped targets
+    # build an ``SmbShare`` with the auth flag bundle; everything
+    # else falls through to the v0.18 ``LocalShare`` / file-list path.
+    from sharesift.share import (
+        LocalShare,
+        SmbShare,
+        is_smb_target,
+        parse_target,
+    )
+
+    target_str: str | None = args.target
+    if target_str is None and args.share is not None:
+        target_str = str(args.share)
+    if target_str is None:
+        raise SystemExit(
+            "scan: target required — pass a UNC/path as positional or "
+            "use the legacy --share flag"
+        )
+    if args.target and args.share:
+        raise SystemExit(
+            "scan: target and --share are mutually exclusive"
+        )
+
+    is_smb = is_smb_target(target_str)
+    smb_target = parse_target(target_str) if is_smb else None
+    smb_share: SmbShare | None = None
+    if is_smb:
+        auth = _build_auth_from_args(args)
+        if auth is None:
+            raise SystemExit(
+                "SMB target requires auth — pass one of: "
+                "-u/-p (password), -H (PtH), -k/--use-kcache (Kerberos), "
+                "or --no-pass for anonymous"
+            )
+        smb_share = SmbShare(smb_target, auth, encrypt=args.encrypt)
+
+    # ``--check`` short-circuits: auth + tree-connect + exit.
+    if args.check:
+        if not is_smb:
+            raise SystemExit("--check only applies to SMB targets")
+        try:
+            with smb_share:
+                pass  # __enter__ does Connection + Session + TreeConnect
+            out.info(f"auth ok; tree-connected to {smb_share.root}")
+            return 0
+        except Exception as exc:
+            out.error(f"auth failed: {exc}")
+            return 1
+
+    # Output dir default.
+    output_dir: Path | None = args.output_dir
+    if output_dir is None:
+        if is_smb:
+            output_dir = Path(f"./sharesift-{smb_target.host}-{smb_target.share}")
+        else:
+            output_dir = Path(f"./sharesift-{Path(target_str).name}")
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Stage 0: enumerate. v0.35: share-walking goes through the
-    # ``Share`` abstraction so the SMB-direct backend (Sprint 2) can
-    # slot in without touching this dispatch.
-    from sharesift.share import LocalShare
-
+    # Stage 0: enumerate.
     files_path = output_dir / "files.txt"
-    if share.is_dir():
-        out.info(f"[1/5] enumerating files under {share}")
-        entries = list(LocalShare(share).walk())
+    if is_smb:
+        out.info(f"[1/5] enumerating files under {smb_share.root}")
+        try:
+            entries = list(smb_share.walk())
+        finally:
+            smb_share.close()
         files_path.write_text(
             "\n".join(e.path for e in entries) + "\n", encoding="utf-8"
         )
         n_enumerated = len(entries)
-    elif share.is_file():
-        # Treat as a pre-existing file list.
-        out.info(f"[1/5] using file list {share}")
-        files_path.write_text(share.read_text(encoding="utf-8"), encoding="utf-8")
-        n_enumerated = sum(
-            1 for line in files_path.read_text(encoding="utf-8").splitlines() if line.strip()
-        )
     else:
-        raise SystemExit(f"--share: {share} does not exist")
+        share_path = Path(target_str)
+        if share_path.is_dir():
+            out.info(f"[1/5] enumerating files under {share_path}")
+            entries = list(LocalShare(share_path).walk())
+            files_path.write_text(
+                "\n".join(e.path for e in entries) + "\n", encoding="utf-8"
+            )
+            n_enumerated = len(entries)
+        elif share_path.is_file():
+            # Treat as a pre-existing file list.
+            out.info(f"[1/5] using file list {share_path}")
+            files_path.write_text(
+                share_path.read_text(encoding="utf-8"), encoding="utf-8"
+            )
+            n_enumerated = sum(
+                1 for line in files_path.read_text(encoding="utf-8").splitlines()
+                if line.strip()
+            )
+        else:
+            raise SystemExit(f"target: {share_path} does not exist")
     out.debug(f"enumerated {n_enumerated} files → {files_path}")
+
+    # Sprint 3 honest gap: SMB targets walk + path-triage cleanly, but
+    # ``scan-files`` (content cascade) and ``verify`` need Sprint 3.5's
+    # Share-aware ``load_content`` refactor before they can read UNC
+    # paths. Until then we run path triage only and skip the content
+    # stages with an explicit notice.
+    if is_smb:
+        out.warn(
+            "v0.35 Sprint 3.5 (in progress) will close the content "
+            "cascade for SMB targets; running path triage only for now."
+        )
+        args.skip_content_stage = True
+    else:
+        args.skip_content_stage = False
 
     # Silence sub-handler summaries — we emit one combined summary at the end.
     was_json = out.json_enabled
@@ -286,7 +477,9 @@ def cmd_scan(args: argparse.Namespace) -> int:
     report_input = hits_path
     verified_path: Path | None = None
     report_path: Path | None = None
-    stages_run = ["enumerate", "score-paths", "scan-files"]
+    stages_run: list[str] = ["enumerate", "score-paths"]
+    if not args.skip_content_stage:
+        stages_run.append("scan-files")
 
     try:
         # Stage 1: score-paths
@@ -299,23 +492,27 @@ def cmd_scan(args: argparse.Namespace) -> int:
             linux_model_dir=args.linux_model_dir,
         ))
 
-        # Stage 2: scan-files
-        out.info(f"[3/5] content scan → {hits_path}")
-        cmd_scan_files(_ns(
-            input=files_path,
-            stdin=False,
-            output=hits_path,
-            windows_model_dir=args.windows_model_dir,
-            linux_model_dir=args.linux_model_dir,
-            content_model_dir=args.content_model_dir,
-            device=args.device,
-            max_snippet_bytes=args.max_snippet_bytes,
-            force_content=args.force_content,
-            debug=False,
-        ))
+        # Stage 2: scan-files (deferred for SMB targets until Sprint 3.5)
+        if not args.skip_content_stage:
+            out.info(f"[3/5] content scan → {hits_path}")
+            cmd_scan_files(_ns(
+                input=files_path,
+                stdin=False,
+                output=hits_path,
+                windows_model_dir=args.windows_model_dir,
+                linux_model_dir=args.linux_model_dir,
+                content_model_dir=args.content_model_dir,
+                device=args.device,
+                max_snippet_bytes=args.max_snippet_bytes,
+                force_content=args.force_content,
+                debug=False,
+            ))
+        else:
+            # No hits file produced; report input falls back to paths.
+            report_input = paths_path
 
-        # Stage 3: verify (optional)
-        if not args.skip_verify:
+        # Stage 3: verify (optional, requires content stage)
+        if not args.skip_verify and not args.skip_content_stage:
             verified_path = output_dir / "verified.jsonl"
             out.info(f"[4/5] verify → {verified_path}")
             cmd_verify(_ns(
@@ -332,8 +529,9 @@ def cmd_scan(args: argparse.Namespace) -> int:
             report_input = verified_path
             stages_run.append("verify")
 
-        # Stage 4: render-report (optional)
-        if not args.skip_report:
+        # Stage 4: render-report (optional, skipped when there are no
+        # content-stage hits to render)
+        if not args.skip_report and not args.skip_content_stage:
             report_path = output_dir / "report.html"
             out.info(f"[5/5] report → {report_path}")
             cmd_render_report(_ns(
@@ -351,14 +549,15 @@ def cmd_scan(args: argparse.Namespace) -> int:
         "command": "scan",
         "version": __version__,
         "elapsed_s": round(time.monotonic() - start, 3),
-        "share": str(share),
+        "target": target_str,
+        "target_kind": "smb" if is_smb else "local",
         "output_dir": str(output_dir),
         "input_count": n_enumerated,
         "stages_run": stages_run,
         "intermediates": {
             "files": str(files_path),
             "paths": str(paths_path),
-            "hits": str(hits_path),
+            "hits": str(hits_path) if not args.skip_content_stage else None,
             "verified": str(verified_path) if verified_path else None,
             "report": str(report_path) if report_path else None,
         },
@@ -552,17 +751,35 @@ def main(argv: list[str] | None = None) -> int:
         ),
     )
     sc.add_argument(
+        "target",
+        nargs="?",
+        default=None,
+        help=(
+            "Scan target — SMB UNC (``//host/share`` or "
+            "``\\\\host\\share``) or local path. The recommended "
+            "canonical form; pass auth flags alongside for SMB."
+        ),
+    )
+    sc.add_argument(
         "--share",
         type=Path,
-        required=True,
-        help="Directory to scan, or a file listing paths (one per line).",
+        default=None,
+        help=(
+            "(Legacy v0.18 alias) directory to scan, or a file "
+            "listing paths. Use the positional target instead."
+        ),
     )
     sc.add_argument(
         "--output-dir",
         type=Path,
-        required=True,
-        help="Directory where intermediates (files.txt, paths.jsonl, hits.jsonl, ...) land.",
+        default=None,
+        help=(
+            "Directory where intermediates land. Defaults to "
+            "``./sharesift-<host>-<share>/`` for SMB targets or "
+            "``./sharesift-<basename>/`` for local paths."
+        ),
     )
+    _add_smb_auth_args(sc)
     sc.add_argument(
         "--skip-verify",
         action="store_true",
@@ -742,6 +959,12 @@ def main(argv: list[str] | None = None) -> int:
         "--n-estimators", type=int, default=200, help="LightGBM n_estimators (default 200)"
     )
     rt.set_defaults(func=cmd_retrain_ranker)
+
+    # v0.35: implicit-scan dispatch. If the first non-flag positional
+    # looks like an SMB target, inject ``scan`` so argparse routes there.
+    if argv is None:
+        argv = sys.argv[1:]
+    argv = _rewrite_argv_for_implicit_scan(argv)
 
     args = parser.parse_args(argv)
     if args.quiet:
