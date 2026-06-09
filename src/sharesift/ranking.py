@@ -75,7 +75,7 @@ def basename(path: str) -> str:
 
 def apply_dedup_penalty(records: list[dict]) -> list[dict]:
     """Add a ``rank_score`` field to each record reflecting the
-    filename-frequency penalty.
+    filename-frequency penalty + the v0.21 Green-tier zero-out.
 
     Records are expected to be the v0.20 cascade output shape
     (``path``, ``probability``, ``tier`` for Stage 1; optionally
@@ -83,22 +83,36 @@ def apply_dedup_penalty(records: list[dict]) -> list[dict]:
 
     The returned list is the same objects (mutated in place) with
     ``rank_score`` added. Original ``probability`` and ``tier``
-    are preserved unchanged so downstream consumers that expect the
-    raw signal still get it.
+    are preserved unchanged.
 
-    Operator-facing tools should sort by ``rank_score`` descending
-    for top-K presentation; ``probability`` alone is the
-    pre-dedup signal.
+    **v0.44 step 2: Green-tier zero-out.** When the cascade tier
+    is explicitly Green (Relay-action match — RelayPsByExtension,
+    RelayVBScriptByExtension, RelayConfigByExtension, etc. fire on
+    every ``.ps1`` / ``.vbs`` / ``.config``), the path classifier's
+    probability is IGNORED. The v0.21 MSF3 validation showed Relay
+    matches drown genuine credentials when given any positive
+    weight — but the previous ``max(prob, tier_pseudo_p)`` logic
+    let path_probability=1.0 override cascade_tier=Green via the
+    max. That defeated the v0.21 lesson. v0.44 fixes it by
+    short-circuiting to 0 when cascade_tier is Green.
+
+    Operator-facing tools sort by ``rank_score`` descending for
+    top-K presentation.
     """
     filenames = [basename(r.get("path", "")) for r in records]
     freq = Counter(filenames)
 
     for r, fname in zip(records, filenames):
-        per_file_evidence = max(
-            float(r.get("probability") or 0.0),
-            _TIER_PSEUDO_P.get(r.get("cascade_tier"), 0.0),
-            _TIER_PSEUDO_P.get(r.get("tier"), 0.0),
-        )
+        # v0.44 step 2: explicit Green cascade tier zeros evidence
+        # (no Relay-rule-only file ranks against credentials).
+        if r.get("cascade_tier") == "Green":
+            per_file_evidence = 0.0
+        else:
+            per_file_evidence = max(
+                float(r.get("probability") or 0.0),
+                _TIER_PSEUDO_P.get(r.get("cascade_tier"), 0.0),
+                _TIER_PSEUDO_P.get(r.get("tier"), 0.0),
+            )
         penalty_divisor = max(1.0, float(freq[fname])) ** 0.5
         r["rank_score"] = round(per_file_evidence / penalty_divisor, 6)
         r["filename_frequency"] = freq[fname]

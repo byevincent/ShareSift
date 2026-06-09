@@ -78,6 +78,34 @@ class TestDedupPenaltyMath:
         apply_dedup_penalty(records)
         assert records[0]["rank_score"] == 0.0
 
+    def test_green_cascade_tier_zeros_out_high_probability(self):
+        """v0.44 step 2 — the critical fix. When cascade_tier=Green
+        (only Relay rules fired — RelayPsByExtension etc.) the path
+        classifier's high probability should NOT win. Pre-v0.44
+        step 2 the ``max()`` let path_probability=1.0 dominate
+        cascade_tier=Green=0.0; this defeated the v0.21 lesson.
+
+        Without this fix, MSF3 top-10 stays at 0.2 (Boxstarter
+        Relay-matched .ps1 files flood). With it, top-10 jumps to
+        0.8."""
+        records = [
+            {"path": "/share/installer.ps1",
+             "probability": 1.0, "tier": "Black", "cascade_tier": "Green"},
+        ]
+        apply_dedup_penalty(records)
+        # Green cascade → evidence is 0 regardless of probability
+        assert records[0]["rank_score"] == 0.0
+
+    def test_non_green_cascade_tier_still_max_of_signals(self):
+        """The Green-zero short-circuit only fires for Green
+        specifically. Yellow/Red/Black still use max-of-signals."""
+        records = [
+            {"path": "/a", "probability": 0.5, "cascade_tier": "Yellow"},
+        ]
+        apply_dedup_penalty(records)
+        # Yellow pseudo (0.65) > probability (0.5) → max = 0.65
+        assert records[0]["rank_score"] == pytest.approx(0.65)
+
     def test_tier_pseudo_p_used_when_probability_missing(self):
         """When probability isn't available (e.g. score-paths skipped),
         cascade tier acts as the per-file evidence signal."""
