@@ -817,6 +817,91 @@
         "--pass(?:word|phrase)\\s+[^-\\s][^\\s]*"
       ],
       "description": "Double-dash CLI password flags: --password=value, --passphrase=value, --password value, --passphrase value. Snaffler's KeepPassOrKeyInCode catches single-dash -password but not the GNU-style double-dash form (gpg --batch --passphrase=, openssl, mysqldump --password). Closes Snaffler #158's TP gap."
+    },
+    {
+      "rule_name": "ShareSiftKeepCiscoEnableSecret",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(^|\\n)\\s*enable\\s+secret\\s+[0-7]\\s+\\S+",
+        "(^|\\n)\\s*enable\\s+password\\s+\\S+",
+        "(^|\\n)\\s*username\\s+\\S+\\s+(privilege\\s+\\d+\\s+)?(password|secret)\\s+[0-7]?\\s*\\S+",
+        "(^|\\n)\\s*password\\s+7\\s+[0-9A-F]{4,}"
+      ],
+      "description": "Cisco IOS enable secret / password / username password commands. Type 0 = cleartext, type 5 = MD5, type 7 = trivially reversible Vigenere obfuscation, type 8/9 = modern PBKDF2/scrypt. Even type-8 is offline-crackable. Red. Closes Snaffler #78 thread (Cisco config rules contributed by hkelley)."
+    },
+    {
+      "rule_name": "ShareSiftKeepCiscoSnmpCommunity",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(^|\\n)\\s*snmp-server\\s+community\\s+\\S+\\s+RW\\b"
+      ],
+      "description": "Cisco SNMP RW community string — write access to device. Often corp-wide standard string. Red on RW match (RO is Yellow via separate rule)."
+    },
+    {
+      "rule_name": "ShareSiftKeepCiscoSnmpCommunityRo",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(^|\\n)\\s*snmp-server\\s+community\\s+\\S+\\s+RO\\b"
+      ],
+      "description": "Cisco SNMP RO community — read access. Still useful for AD/network enumeration. Yellow per #78 (hkelley's tier split)."
+    },
+    {
+      "rule_name": "ShareSiftKeepFileZillaSavedSites",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "FileZilla\\\\sitemanager\\.xml$",
+        "/FileZilla/sitemanager\\.xml$"
+      ],
+      "description": "FileZilla SiteManager saved FTP/SFTP credentials. Pre-3.26 plaintext; modern XOR-obfuscated (trivially reversible). Operator-flagged in Snaffler #135 thread as a high-value file Snaffler should match. Black."
+    },
+    {
+      "rule_name": "ShareSiftKeepFileZillaRecentServers",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "FileZilla\\\\recentservers\\.xml$",
+        "/FileZilla/recentservers\\.xml$"
+      ],
+      "description": "FileZilla recent-connections list. Hostnames + usernames + sometimes passwords. Yellow per #135 scope."
+    },
+    {
+      "rule_name": "ShareSiftKeepDotNetAppSettingsConnString",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\"ConnectionStrings?\"\\s*:\\s*\\{[^}]{0,500}Password\\s*=\\s*[^;\"]+",
+        "\"DefaultConnection\"\\s*:\\s*\"[^\"]{0,500}Password\\s*=\\s*[^;\"]+"
+      ],
+      "description": "Modern .NET appsettings.json embedded connection string with Password=. Existing KeepDbConnStringPw matches XML Web.config; this catches the JSON variant. Per Snaffler #67 hkelley thread on SQL connection-string tiering. Red."
+    },
+    {
+      "rule_name": "ShareSiftKeepBrowserSavedCreds",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(Chrome|Chromium|Edge|Brave-Browser|Opera Software\\\\Opera)\\\\User Data\\\\[^\\\\]+\\\\Login Data$",
+        "/(google-chrome|chromium|microsoft-edge|BraveSoftware/Brave-Browser|opera)/[^/]+/Login Data$",
+        "/Library/Application Support/(Google/Chrome|Microsoft Edge|BraveSoftware/Brave-Browser)/[^/]+/Login Data$"
+      ],
+      "description": "Chromium-base browser saved-passwords SQLite DB (Chrome / Edge / Brave / Opera). Generalizes the v0.47 Firefox-shaped rule to other browsers — Snaffler #46's scope was 'browser stored password databases' not Firefox-specific. Windows AppData, Linux dotdir, and macOS Application Support path shapes all covered. Black."
     }
   ]
 }

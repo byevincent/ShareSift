@@ -34,6 +34,7 @@ from sharesift.path import PathClassifier
 
 CORPUS_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "corpus.jsonl"
 HELDOUT_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "heldout.jsonl"
+HELDOUT_V2_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "heldout_v2.jsonl"
 
 # Tier rank for compare. Higher = juicier.
 _TIER_RANK = {"Black": 4, "Red": 3, "Yellow": 2, "Green": 1, None: 0}
@@ -63,33 +64,29 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--set",
-        choices=("corpus", "heldout", "both"),
+        choices=("corpus", "heldout", "heldout_v2", "all"),
         default="corpus",
         help="Which probe set to score (default: corpus).",
     )
     args = parser.parse_args()
 
     probes: list[dict] = []
-    if args.set in ("corpus", "both"):
-        if not CORPUS_PATH.exists():
-            print(f"ERROR: corpus not found at {CORPUS_PATH}", file=sys.stderr)
-            return 1
-        probes.extend(
-            json.loads(line) for line in CORPUS_PATH.read_text().splitlines() if line.strip()
-        )
-        print(f"Loaded {len(probes)} probes from {CORPUS_PATH.name}", file=sys.stderr)
-    if args.set in ("heldout", "both"):
-        if not HELDOUT_PATH.exists():
-            print(f"ERROR: heldout not found at {HELDOUT_PATH}", file=sys.stderr)
+    selected = {args.set} if args.set != "all" else {"corpus", "heldout", "heldout_v2"}
+    for name, path in (
+        ("corpus", CORPUS_PATH),
+        ("heldout", HELDOUT_PATH),
+        ("heldout_v2", HELDOUT_V2_PATH),
+    ):
+        if name not in selected:
+            continue
+        if not path.exists():
+            print(f"ERROR: {name} not found at {path}", file=sys.stderr)
             return 1
         before = len(probes)
         probes.extend(
-            json.loads(line) for line in HELDOUT_PATH.read_text().splitlines() if line.strip()
+            json.loads(line) for line in path.read_text().splitlines() if line.strip()
         )
-        print(
-            f"Loaded {len(probes) - before} probes from {HELDOUT_PATH.name}",
-            file=sys.stderr,
-        )
+        print(f"Loaded {len(probes) - before} probes from {path.name}", file=sys.stderr)
 
     path_clf = PathClassifier()
     content_eng = ContentRuleEngine()

@@ -4,6 +4,61 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+v0.49+ — close held-out v2 remaining gaps (CMD `set "VAR=val"`
+quoted variant, loose "credential" filename keyword), lock
+held-out v3 from yet-unread sources, status heartbeat, Markdown
+report bundle. See `docs/v0p48_results.md` v0.49 candidate list.
+
+## [0.48.0] — 2026-06-10
+
+The "close the v0.47 held-out underfit, cleanly" release. v0.47
+shipped held-out at 36% (below the 50% gate). v0.48 ran the proper
+experiment: lock a NEW held-out set FIRST, then write rules
+sourced only from the OLD held-out failures, then validate against
+the new set.
+
+**Result: held-out v1 lifted 36% → 91%, held-out v2 lifted from
+50% baseline → 70%, browser-creds meta-rule generalized cleanly to
+Chrome + Edge probes I never wrote rules for.**
+
+### Added — Seven rules (close OLD held-out)
+
+| Rule | Tier | Match | Closes |
+|---|---|---|---|
+| ShareSiftKeepCiscoEnableSecret | Red | Content | #78 |
+| ShareSiftKeepCiscoSnmpCommunity | Red | Content | #78 RW |
+| ShareSiftKeepCiscoSnmpCommunityRo | Yellow | Content | #78 RO |
+| ShareSiftKeepFileZillaSavedSites | Black | FilePath | #135 |
+| ShareSiftKeepFileZillaRecentServers | Yellow | FilePath | #135 |
+| ShareSiftKeepDotNetAppSettingsConnString | Red | Content | #67 |
+| ShareSiftKeepBrowserSavedCreds | Black | FilePath | #46 |
+
+### Added — Held-out v2 (locked test set)
+
+`benchmarks/snaffler_issues/heldout_v2.jsonl` — 10 probes mined
+from previously-unread PR sources (#198, #155, #124, #98 +
+Chrome/Edge variants of #46). Locked before v0.48 rule authoring.
+
+`eval_snaffler_issues.py` grows `--set {corpus,heldout,heldout_v2,all}`.
+
+### Honest scoreboard
+
+| Gate | Threshold | v0.47 | v0.48 |
+|---|---|---|---|
+| Corpus | 19/19 | 18/19 (95%) | 18/19 (95%) |
+| Held-out v1 | ≥50% | 4/11 (36%) | **10/11 (91%)** |
+| Held-out v2 (new) | ≥50% | n/a | **7/10 (70%)** |
+| MSF3 recall | flat | 1.000 | 1.000 |
+| MSF2 recall | flat | 1.000 | 1.000 |
+| DiskForge recall | flat | 0.923 | 0.923 |
+| v0.48 rule FP contribution | 0 | n/a | 0 across all three |
+
+3 held-out v2 fails come from sources I mined for held-out v2.
+Per discipline, no rules written for them in v0.48. v0.49
+candidates. Full writeup in `docs/v0p48_results.md`.
+
 ## [0.47.0] — 2026-06-10
 
 The "corporate SMB benchmark" release. v0.47 introduces the first

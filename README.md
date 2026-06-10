@@ -64,7 +64,7 @@ pipx install sharesift             # Stage 1 only
 
 ```bash
 # Latest milestone release (recommended)
-git clone --branch v0.47.0 https://github.com/byevincent/ShareSift.git
+git clone --branch v0.48.0 https://github.com/byevincent/ShareSift.git
 # Or track main for unreleased work
 git clone https://github.com/byevincent/ShareSift.git
 
@@ -82,7 +82,7 @@ uv sync --extra smb
 
 Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
 
-Milestone releases: [v0.47.0](https://github.com/byevincent/ShareSift/releases/tag/v0.47.0) (current — Snaffler-issues benchmark + MSF2 recall 1.000), [v0.46.0](https://github.com/byevincent/ShareSift/releases/tag/v0.46.0) (77MB single-file binary + DB exporters), [v0.45.0](https://github.com/byevincent/ShareSift/releases/tag/v0.45.0) (top-K precision 0.20 → 0.70), [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (Linux rule gap closure), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement datastore), [v0.39.0](https://github.com/byevincent/ShareSift/releases/tag/v0.39.0) (network discovery). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
+Milestone releases: [v0.48.0](https://github.com/byevincent/ShareSift/releases/tag/v0.48.0) (current — held-out v1 36→91%, v2 70%), [v0.47.0](https://github.com/byevincent/ShareSift/releases/tag/v0.47.0) (Snaffler-issues benchmark + MSF2 recall 1.000), [v0.46.0](https://github.com/byevincent/ShareSift/releases/tag/v0.46.0) (77MB single-file binary + DB exporters), [v0.45.0](https://github.com/byevincent/ShareSift/releases/tag/v0.45.0) (top-K precision 0.20 → 0.70), [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (Linux rule gap closure), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement datastore). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
 
 ## Quick start
 

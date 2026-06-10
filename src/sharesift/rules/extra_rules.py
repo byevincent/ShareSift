@@ -665,6 +665,93 @@ def _v0p47_snaffler_issues_rules() -> Iterator[SnaffleRule]:
     )
 
 
+def _v0p48_held_out_close_rules() -> Iterator[SnaffleRule]:
+    """v0.48: rules closing v0.47's held-out underfit. Sourced from
+    OLD held-out issue threads (#78 Cisco config rules, #135 FileZilla
+    saved sites, #67 SQL connection strings) — these were locked at
+    v0.47-rule authoring time. v0.48 verified them against a NEW
+    held-out set (heldout_v2.jsonl) mined from previously-unread PR
+    sources (#198 CMD set, #155 Azure CLI, #98 credential filename
+    keyword) — the browser-creds meta-rule below generalized cleanly
+    to Chrome + Edge probes (parallel pattern). See
+    docs/v0p48_results.md.
+    """
+
+    def _rule(name, location, list_type, wordlist, triage, desc):
+        return _build_rule(
+            rule_name=name,
+            enumeration_scope=EnumerationScope.FileEnumeration,
+            match_action=MatchAction.Snaffle,
+            match_location=location,
+            word_list_type=list_type,
+            word_list=wordlist,
+            triage=triage,
+            description=desc,
+        )
+
+    yield _rule(
+        "ShareSiftKeepCiscoEnableSecret",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [
+            r"(^|\n)\s*enable\s+secret\s+[0-7]\s+\S+",
+            r"(^|\n)\s*enable\s+password\s+\S+",
+            r"(^|\n)\s*username\s+\S+\s+(privilege\s+\d+\s+)?(password|secret)\s+[0-7]?\s*\S+",
+            r"(^|\n)\s*password\s+7\s+[0-9A-F]{4,}",
+        ],
+        Triage.Red,
+        "Cisco IOS enable secret/password + type-7 obfuscated. Closes Snaffler #78.",
+    )
+    yield _rule(
+        "ShareSiftKeepCiscoSnmpCommunity",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [r"(^|\n)\s*snmp-server\s+community\s+\S+\s+RW\b"],
+        Triage.Red,
+        "Cisco SNMP RW community — write access to device. Closes #78 RW tier.",
+    )
+    yield _rule(
+        "ShareSiftKeepCiscoSnmpCommunityRo",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [r"(^|\n)\s*snmp-server\s+community\s+\S+\s+RO\b"],
+        Triage.Yellow,
+        "Cisco SNMP RO community — read access. Closes #78 RO tier.",
+    )
+    yield _rule(
+        "ShareSiftKeepFileZillaSavedSites",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"FileZilla\\sitemanager\.xml$", r"/FileZilla/sitemanager\.xml$"],
+        Triage.Black,
+        "FileZilla SiteManager saved FTP/SFTP creds. Closes Snaffler #135.",
+    )
+    yield _rule(
+        "ShareSiftKeepFileZillaRecentServers",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"FileZilla\\recentservers\.xml$", r"/FileZilla/recentservers\.xml$"],
+        Triage.Yellow,
+        "FileZilla recent-connections list. Closes #135 recentservers scope.",
+    )
+    yield _rule(
+        "ShareSiftKeepDotNetAppSettingsConnString",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [
+            r"\"ConnectionStrings?\"\s*:\s*\{[^}]{0,500}Password\s*=\s*[^;\"]+",
+            r"\"DefaultConnection\"\s*:\s*\"[^\"]{0,500}Password\s*=\s*[^;\"]+",
+        ],
+        Triage.Red,
+        ".NET appsettings.json connection string with embedded Password=. Closes #67.",
+    )
+    yield _rule(
+        "ShareSiftKeepBrowserSavedCreds",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [
+            r"(Chrome|Chromium|Edge|Brave-Browser|Opera Software\\Opera)\\User Data\\[^\\]+\\Login Data$",
+            r"/(google-chrome|chromium|microsoft-edge|BraveSoftware/Brave-Browser|opera)/[^/]+/Login Data$",
+            r"/Library/Application Support/(Google/Chrome|Microsoft Edge|BraveSoftware/Brave-Browser)/[^/]+/Login Data$",
+        ],
+        Triage.Black,
+        "Chromium-base browser saved-passwords SQLite (Chrome/Edge/Brave/Opera). Generalizes v0.47 Firefox rule to Snaffler #46's full browser scope.",
+    )
+
+
 def get_extra_rules() -> list[SnaffleRule]:
     """Return all extra rules (catch-up + blind-spot + modern SaaS + binary preprocessor)."""
     rules: list[SnaffleRule] = []
@@ -672,6 +759,7 @@ def get_extra_rules() -> list[SnaffleRule]:
     rules.extend(_v0p12_blind_spot_rules())
     rules.extend(_v0p42_benchmark_gap_rules())
     rules.extend(_v0p47_snaffler_issues_rules())
+    rules.extend(_v0p48_held_out_close_rules())
     rules.extend(_modern_saas_rules())
     rules.append(_binary_preprocessor_rule())
     return rules
