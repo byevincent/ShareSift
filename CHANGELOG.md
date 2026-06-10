@@ -11,6 +11,34 @@ autounattend.txt extension, MSI installer tier cap), lock held-out
 v5 from yet-deeper sources, .eml MIME-body content rule. See
 `docs/v0p50_results.md` v0.51 candidate list.
 
+## [0.50.1] — 2026-06-10
+
+Artifact polish — no code changes, no rule changes. Documents the
+methodology and refreshes the headline numbers so the project is
+discoverable as an artifact rather than a development log.
+
+### Added
+
+- `docs/methodology.md` — the held-out discipline cycle explained,
+  with two verified generalization signals (v0.48 browser-creds
+  Firefox→Chrome+Edge, v0.50 SCCMContentLib$ #112→#186) and a
+  calibrated novelty claim ("held-out testing isn't novel; using it
+  as a release discipline for a rule-based credential hunter
+  appears to be") backed by per-tool research against Snaffler /
+  TruffleHog / Gitleaks / Kingfisher / detect-secrets / MANSPIDER.
+- `docs/v0p50_benchmark_sweep.md` — full 12-benchmark scorecard
+  with raw counts and honest provenance breakdown (strict-creds vs
+  LLM-tier vs extraction-heuristic ground truth).
+- `tools/run_full_sweep.py` — reproducibility script. `git clone`,
+  run, get the same numbers.
+
+### Changed
+
+- `README.md` Performance section refreshed: v0.42 head-to-head and
+  classifier-internal PR AUCs replaced with v0.50 cascade numbers
+  (MSF2 → 100%, DiskForge → 100%) and the 4-generation held-out
+  trajectory. Drops the stale GOAD v0.15 row.
+
 ## [0.50.0] — 2026-06-10
 
 The "close v0.49 held-out v3 + lock v4 from open PRs" release.

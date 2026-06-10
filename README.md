@@ -16,29 +16,33 @@ ShareSift adds an ML layer on top. The path classifier beats Snaffler on recall 
 
 ## Performance
 
-Classifier-level on held-out splits:
+v0.50 — 7700 paths across 12 benchmarks. The clean numbers:
 
-| Metric | ShareSift | Baseline |
-|---|---|---|
-| Windows path classifier PR AUC, Snaffler blind benchmark | 0.985 | Snaffler has no ML |
-| Linux path classifier PR AUC, Linux rule blind benchmark | 0.99 | Rule pack F1 0.45 |
-| Linux F1 vs hand curated rule pack | +52 pp | Rule pack F1 0.45 |
-| Content classifier F1 on docx benchmark (v0p6) | 0.776 | v0p5 0.385 |
-| Content classifier precision on docx benchmark | 0.974 | 2.6% false positive rate |
-| End to end F1 on constructed share benchmark | 0.387 | v0p5 0.166 |
-
-Head-to-head against Snaffler on benchmark shares (re-run on v0.42, 2026-06-09):
-
-| Share | Metric | ShareSift v0.42 | Snaffler |
+| Benchmark | Metric | ShareSift v0.50 | Notes |
 |---|---|---|---|
-| Metasploitable 3 (Windows AD, 40 credentials) | Recall | **100% (40/40)** | 97.5% (39/40) |
-| Metasploitable 2 (Linux server, 34 credentials) | Recall | **97.1% (33/34)** | 44.1% (15/34) |
-| DiskForge (Windows forensic, 13 plants) | Recall | 92.3% (12/13) | 92.3% (12/13) |
-| GOAD (Linux AD, 18 credentials) — v0.15 numbers | Recall | 100% (18/18) | 55.6% (10/18) |
+| Metasploitable 3 (Windows AD, 40 creds) | Recall | **100% (40/40)** | All Snaffler-tracked creds caught |
+| Metasploitable 2 (Linux server, 34 creds) | Recall | **100% (34/34)** | Up from v0.42's 97.1% — Linux rule sweep |
+| DiskForge (Windows forensic, 13 plants) | Recall | **100% (13/13)** | Up from v0.42's 92.3% — cascade closes the gap |
+| Snaffler-blind Windows (500 paths) | F1 / P / R | 0.842 / **0.984** / 0.736 | When ShareSift fires, it's right 98% of the time |
+| Linux rule-blind (500 paths) | F1 / P / R | **0.944** / 0.911 / 0.980 | Best calibrated result. Benchmark built to exclude every path a Snaffler rule already catches — this is the increment over Snaffler |
+| Snaffler-issues operator-grounded | Pass rate | **31/31 closed** + 7/10 open | 4 generations of held-out (see below) |
 
-ShareSift catches everything Snaffler catches plus 19 additional credentials across the three re-tested benchmarks. Snaffler catches nothing ShareSift misses. **Linux recall lead: +53 percentage points** (0.971 vs 0.441 on MSF2).
+### The discipline trajectory
 
-See [docs/snaffler_benchmark_2026-06.md](docs/snaffler_benchmark_2026-06.md) for the full v0.42 head-to-head with per-rule attribution, methodology, speed benchmarks, and honest caveats about what the comparison doesn't measure (top-K ranking, content classifier value, live verification value).
+ShareSift uses a discipline-honest research cycle: lock the next test set BEFORE writing rules that close the previous one's failures. Four generations as of v0.50:
+
+| Generation | Source PRs | Pre-rule baseline | Post-rule | Closed at |
+|---|---|---:|---:|---|
+| v1 | #78 Cisco, #135 FileZilla, #67 ADO | 36% | **100%** | v0.49 |
+| v2 | #198 CMD-set, #155 Azure CLI, #98 cred-filename, Chrome/Edge | 50% | **100%** | v0.49 |
+| v3 | #154 -password, #140 Kerberos, #139 MDE, #112 SCCM | 90%¹ | **100%** | v0.50 |
+| v4 | OPEN PRs #192 PPK, #186 SCCM-broad | **60%²** | 70% | (locked at v0.50) |
+
+¹ v3 baseline at 90% reflects pysnaffler bundling upstream rules from PRs #140 and #112 (both merged). Not a strict generalization test.
+
+² v4 uses OPEN PRs that pysnaffler does NOT bundle. The 60%→70% post-rule lift came from the SCCMContentLib$ rule (authored from v3-locked PR #112) catching PR #186's reg-export probe it was never authored against — a real generalization signal.
+
+See [docs/methodology.md](docs/methodology.md) for the full discipline cycle explanation and [docs/v0p50_benchmark_sweep.md](docs/v0p50_benchmark_sweep.md) for the complete 12-benchmark scorecard with raw counts and the honest provenance breakdown.
 
 ## Install
 
@@ -64,7 +68,7 @@ pipx install sharesift             # Stage 1 only
 
 ```bash
 # Latest milestone release (recommended)
-git clone --branch v0.50.0 https://github.com/byevincent/ShareSift.git
+git clone --branch v0.50.1 https://github.com/byevincent/ShareSift.git
 # Or track main for unreleased work
 git clone https://github.com/byevincent/ShareSift.git
 
