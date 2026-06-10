@@ -8,10 +8,16 @@ Samba 4.12 on 2026-06-08.
 from __future__ import annotations
 
 import pytest
-from spnego._credential import NTLMHash
 
-from sharesift.share import Auth, build_credential
-from sharesift.share.auth import BLANK_LM_HASH, _parse_hash
+# These tests exercise the smbprotocol-backed Auth path, which depends
+# on spnego (transitive via smbprotocol). CI runs without the [smb]
+# extra, so collect-skip the module when spnego isn't installed.
+pytest.importorskip("spnego")
+
+from spnego._credential import NTLMHash  # noqa: E402
+
+from sharesift.share import Auth, build_credential  # noqa: E402
+from sharesift.share.auth import BLANK_LM_HASH, _parse_hash  # noqa: E402
 
 
 class TestAuthValidation:

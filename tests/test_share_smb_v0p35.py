@@ -15,9 +15,15 @@ from __future__ import annotations
 from unittest.mock import MagicMock, patch
 
 import pytest
-from spnego._credential import NTLMHash
 
-from sharesift.share import Auth, ShareEntry, SmbShare, SmbTarget
+# These tests mock smbprotocol but still import NTLMHash from spnego at
+# the module level. CI runs without the [smb] extra, so collect-skip
+# the module when spnego isn't installed.
+pytest.importorskip("spnego")
+
+from spnego._credential import NTLMHash  # noqa: E402
+
+from sharesift.share import Auth, ShareEntry, SmbShare, SmbTarget  # noqa: E402
 
 
 # --------------------------------------------------------------------
