@@ -6,12 +6,19 @@ Live SMB integration tests against ``dperson/samba`` are Sprint 4.
 
 from __future__ import annotations
 
+import importlib.util
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from sharesift.share import Auth, LocalShare, ShareEntry, SmbShare, SmbTarget
+
+_HAS_SMBPROTOCOL = importlib.util.find_spec("smbprotocol") is not None
+_needs_smbprotocol = pytest.mark.skipif(
+    not _HAS_SMBPROTOCOL,
+    reason="needs [smb] extra (smbprotocol)",
+)
 
 
 # --------------------------------------------------------------------
@@ -97,6 +104,7 @@ class TestSmbShareUncToRel:
         assert share._unc_to_rel(r"\\10.0.0.5\Finance\F.TXT") == "F.TXT"
 
 
+@_needs_smbprotocol
 class TestSmbShareReadBytes:
     def test_returns_none_for_non_matching_unc(self):
         share = _smb_share()

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -13,6 +14,12 @@ from sharesift.share.discovery import (
     _decode_share,
     _strip_terminator,
     enumerate_shares,
+)
+
+_HAS_IMPACKET = importlib.util.find_spec("impacket") is not None
+_needs_impacket = pytest.mark.skipif(
+    not _HAS_IMPACKET,
+    reason="needs [network-enum] extra (impacket)",
 )
 
 
@@ -115,6 +122,7 @@ class TestDecodeShare:
 # --- enumerate_shares (full mocked impacket) ----------------------
 
 
+@_needs_impacket
 class TestEnumerateShares:
     def test_password_auth_invokes_login_correctly(self):
         with patch("impacket.smbconnection.SMBConnection") as MockConn:

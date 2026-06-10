@@ -13,11 +13,18 @@ v0.36.1 follow-up alongside record-level plumbing.
 
 from __future__ import annotations
 
+import importlib.util
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from sharesift.share import Auth, ShareAccess, SmbShare, SmbTarget
+
+_HAS_SMBPROTOCOL = importlib.util.find_spec("smbprotocol") is not None
+_needs_smbprotocol = pytest.mark.skipif(
+    not _HAS_SMBPROTOCOL,
+    reason="needs [smb] extra (smbprotocol)",
+)
 
 
 def _share() -> SmbShare:
@@ -60,6 +67,7 @@ class TestShareAccessDisplay:
 # --- probe_share_access ------------------------------------------
 
 
+@_needs_smbprotocol
 class TestProbeShareAccess:
     def test_both_opens_succeed_yields_RW(self):
         share = _share()
