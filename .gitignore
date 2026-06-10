@@ -203,3 +203,6 @@ benchmarks/v0p19/*/scores.jsonl
 dist-binary/
 build-pyinstaller/
 tools/sharesift.spec
+
+# v0.47: raw Snaffler issue dumps regenerable via tools/mine_snaffler_issues.py
+benchmarks/snaffler_issues/raw/
