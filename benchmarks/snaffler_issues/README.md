@@ -32,9 +32,31 @@ is a real-world FP.
    each probe. Path probes go through `PathClassifier`; content
    probes go through `ContentRuleEngine`.
 
-## Current state (v0.46.0 baseline)
+## Two probe sets — training + held-out
 
-19 probes — 18 miss + 1 fp. **8 pass, 11 fail.**
+- `corpus.jsonl` (19 probes) — visible while authoring v0.47 rules.
+  Use to surface gaps and validate rule semantics.
+- `heldout.jsonl` (11 probes) — locked away. Sources are Snaffler
+  issues #78 (Cisco config rules), #135 (filezilla.xml /
+  credentials.xml), #67 (SQL connection strings) — operator
+  comment threads NOT consulted while authoring training-corpus
+  rules. Re-run after each rule shipment to test whether the
+  rule generalized or only memorized.
+
+If training passes 19/19 but held-out passes <50%, the rules
+overfit. v0.28's falsified extension-frequency hypothesis (MSF2
+top-10 0.80 → 0.40) is the precedent.
+
+## v0.46.0 baselines
+
+| Set | Result |
+|---|---|
+| corpus | 8 / 19 (42%) |
+| heldout | 1 / 11 (9%) |
+
+Held-out 9% is the honest pre-rule generalization signal —
+existing cascade catches only Cisco SNMP RW (via existing
+`KeepNetConfigCreds`).
 
 The 11 failures are the v0.47 rule-addition target list. Grouped
 by engagement impact:

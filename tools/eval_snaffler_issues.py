@@ -1,8 +1,8 @@
 """v0.47 step 3: score ShareSift against the Snaffler-issues corpus.
 
-Reads ``benchmarks/snaffler_issues/corpus.jsonl`` — one probe per
-line, each with an expected tier — and reports how the current
-cascade handles each one. Two probe types:
+Reads ``benchmarks/snaffler_issues/{corpus,heldout}.jsonl`` — one
+probe per line, each with an expected tier — and reports how the
+current cascade handles each one. Two probe types:
 
 * ``probe_type: "path"`` — score via ``PathClassifier``, compare the
   returned tier to ``expected_tier``.
@@ -33,6 +33,7 @@ from sharesift.content_rules import ContentRuleEngine
 from sharesift.path import PathClassifier
 
 CORPUS_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "corpus.jsonl"
+HELDOUT_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "heldout.jsonl"
 
 # Tier rank for compare. Higher = juicier.
 _TIER_RANK = {"Black": 4, "Red": 3, "Yellow": 2, "Green": 1, None: 0}
@@ -53,11 +54,38 @@ def _tier_leq(actual: str | None, expected: str) -> bool:
 
 
 def main() -> int:
-    if not CORPUS_PATH.exists():
-        print(f"ERROR: corpus not found at {CORPUS_PATH}", file=sys.stderr)
-        return 1
-    probes = [json.loads(line) for line in CORPUS_PATH.read_text().splitlines() if line.strip()]
-    print(f"Loaded {len(probes)} probes from {CORPUS_PATH.name}", file=sys.stderr)
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--set",
+        choices=("corpus", "heldout", "both"),
+        default="corpus",
+        help="Which probe set to score (default: corpus).",
+    )
+    args = parser.parse_args()
+
+    probes: list[dict] = []
+    if args.set in ("corpus", "both"):
+        if not CORPUS_PATH.exists():
+            print(f"ERROR: corpus not found at {CORPUS_PATH}", file=sys.stderr)
+            return 1
+        probes.extend(
+            json.loads(line) for line in CORPUS_PATH.read_text().splitlines() if line.strip()
+        )
+        print(f"Loaded {len(probes)} probes from {CORPUS_PATH.name}", file=sys.stderr)
+    if args.set in ("heldout", "both"):
+        if not HELDOUT_PATH.exists():
+            print(f"ERROR: heldout not found at {HELDOUT_PATH}", file=sys.stderr)
+            return 1
+        before = len(probes)
+        probes.extend(
+            json.loads(line) for line in HELDOUT_PATH.read_text().splitlines() if line.strip()
+        )
+        print(
+            f"Loaded {len(probes) - before} probes from {HELDOUT_PATH.name}",
+            file=sys.stderr,
+        )
 
     path_clf = PathClassifier()
     content_eng = ContentRuleEngine()
