@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+  <settings pass="oobeSystem">
+    <component name="Microsoft-Windows-Shell-Setup">
+      <AutoLogon>
+        <Password><Value>FAKE-LegacyAnswerPw-2024!</Value><PlainText>true</PlainText></Password>
+      </AutoLogon>
+    </component>
+  </settings>
+</unattend>

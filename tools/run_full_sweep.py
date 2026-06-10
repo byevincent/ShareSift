@@ -83,6 +83,96 @@ for bench in ["metasploitable3", "metasploitable2", "diskforge_win10"]:
     results.append(score_recall_only(f"{bench} cascade-recall", paths, gt))
 
 
+# diskforge_winshare_v1 — real-share-content corpus with full P/R/F1.
+# Scored at all three keep policies (Yellow+ / Red+ / Black) — a tiered
+# tool measured at one threshold lies about what it's actually doing.
+ws_paths_file = REPO / "data" / "external" / "diskforge_winshare_v1" / "file_list.txt"
+ws_gt_file = REPO / "data" / "external" / "diskforge_winshare_v1" / "ground_truth.jsonl"
+if ws_paths_file.exists():
+    ws_paths = ws_paths_file.read_text().splitlines()
+    ws_labels = []
+    for line in ws_gt_file.read_text().splitlines():
+        if line.strip():
+            r = json.loads(line)
+            ws_labels.append((r["path"], bool(r["has_credential"])))
+    items = ws_labels
+    print(f"[score] diskforge_winshare_v1 (3 keep policies, {len(items)} paths)", flush=True)
+    paths = [p for p, _ in items]
+    labels = [j for _, j in items]
+    tiers = cascade_tiers(paths)
+    for label_name, threshold in [("Yellow+", 2), ("Red+", 3), ("Black-only", 4)]:
+        tp = fp = tn = fn = 0
+        for label, t in zip(labels, tiers):
+            kept = RANKS.get(t, 0) >= threshold
+            if label and kept: tp += 1
+            elif label: fn += 1
+            elif kept: fp += 1
+            else: tn += 1
+        P = tp / max(1, tp + fp)
+        R = tp / max(1, tp + fn) if (tp + fn) else float("nan")
+        F1 = 2 * P * R / max(1e-9, P + R) if (tp + fn) else float("nan")
+        results.append({
+            "name": f"diskforge_winshare_v1 ShareSift ({label_name})",
+            "N": len(items),
+            "TP": tp, "FP": fp, "TN": tn, "FN": fn,
+            "P": round(P, 3), "R": round(R, 3), "F1": round(F1, 3),
+        })
+
+    # Same corpus scored with upstream Snaffler defaults only — head-to-head.
+    try:
+        from pysnaffler.ruleset import SnafflerRuleSet
+
+        snaffler = SnafflerRuleSet.load_default_ruleset()
+
+        class _SmbFile:
+            __slots__ = ("fullpath", "name", "size")
+
+            def __init__(self, fullpath: str, name: str, size: int = 1024):
+                self.fullpath = fullpath
+                self.name = name
+                self.size = size
+
+        def snaffler_tier(path: str) -> str | None:
+            name = path.replace("\\", "/").rsplit("/", 1)[-1] or path
+            try:
+                keep, rules = snaffler.enum_file(_SmbFile(path, name))
+            except Exception:
+                return None
+            if not keep or not rules:
+                return None
+            best = 0
+            for r in rules:
+                t = getattr(r, "triage", None)
+                tname = t.name if hasattr(t, "name") else str(t)
+                best = max(best, RANKS.get(tname, 0))
+            inv = {v: k for k, v in RANKS.items()}
+            return inv.get(best)
+
+        print(f"[score] diskforge_winshare_v1 Snaffler-only ({len(items)} paths)", flush=True)
+        snaffler_tiers = [snaffler_tier(p) for p in paths]
+        for label_name, threshold in [("Yellow+", 2), ("Red+", 3), ("Black-only", 4)]:
+            tp = fp = tn = fn = 0
+            for label, t in zip(labels, snaffler_tiers):
+                kept = RANKS.get(t, 0) >= threshold
+                if label and kept: tp += 1
+                elif label: fn += 1
+                elif kept: fp += 1
+                else: tn += 1
+            P = tp / max(1, tp + fp)
+            R = tp / max(1, tp + fn) if (tp + fn) else float("nan")
+            F1 = 2 * P * R / max(1e-9, P + R) if (tp + fn) else float("nan")
+            results.append({
+                "name": f"diskforge_winshare_v1 Snaffler-only ({label_name})",
+                "N": len(items),
+                "TP": tp, "FP": fp, "TN": tn, "FN": fn,
+                "P": round(P, 3), "R": round(R, 3), "F1": round(F1, 3),
+            })
+    except ImportError:
+        print("[skip] pysnaffler not installed — head-to-head omitted "
+              "(install via `uv sync --group pysnaffler-integration`)",
+              flush=True)
+
+
 def load_label_juicy(jsonl: Path) -> list[tuple[str, bool]]:
     items = []
     for line in jsonl.read_text().splitlines():

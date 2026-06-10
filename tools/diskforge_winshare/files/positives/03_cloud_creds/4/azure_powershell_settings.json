@@ -1,0 +1,8 @@
+{
+  "Subscriptions": [
+    {"Id": "99999999-8888-7777-6666-555555555555", "Name": "corp-prod"}
+  ],
+  "Accounts": [
+    {"Id": "svc_az@corp.onmicrosoft.com", "Credential": "FAKE-AzPSCred-2024-base64placeholder=="}
+  ]
+}

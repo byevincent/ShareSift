@@ -38,7 +38,7 @@ from importlib.metadata import PackageNotFoundError, version as _pkg_version
 # Version fallback for PyInstaller-frozen binaries — importlib.metadata
 # can't find the package's dist-info inside the frozen tree, so use a
 # build-time-stamped fallback. Source of truth stays pyproject.toml.
-_FROZEN_VERSION_FALLBACK = "0.50.1"
+_FROZEN_VERSION_FALLBACK = "0.51.0"
 
 try:
     __version__ = _pkg_version("sharesift")

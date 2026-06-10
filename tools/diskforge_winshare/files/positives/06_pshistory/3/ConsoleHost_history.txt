@@ -1,0 +1,2 @@
+New-LocalUser -Name 'temp_helper' -Password (ConvertTo-SecureString 'FAKE-TempHelper-2024!' -AsPlainText -Force)
+Reset-ADAccountPassword -Identity contractor01 -NewPassword (ConvertTo-SecureString 'FAKE-Contractor-2024!' -AsPlainText -Force)

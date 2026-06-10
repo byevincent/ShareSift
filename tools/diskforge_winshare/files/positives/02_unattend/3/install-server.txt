@@ -1,0 +1,7 @@
+[OOBESystem]
+ProductKey=FAKE-PROD-KEY-12345-67890-XXXXX
+AutoLogon=Yes
+AdminPassword=FAKE-DeployBootstrap-2024!
+JoinDomain=corp.local
+DomainAdmin=svc_join
+DomainAdminPassword=FAKE-DomainJoinPw-2024!

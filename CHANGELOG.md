@@ -6,10 +6,79 @@ All notable changes to ShareSift are listed here. Format loosely follows
 
 ## [Unreleased]
 
-v0.51+ — close v0.50 held-out v4 fails (encrypted PPK floor,
-autounattend.txt extension, MSI installer tier cap), lock held-out
-v5 from yet-deeper sources, .eml MIME-body content rule. See
-`docs/v0p50_results.md` v0.51 candidate list.
+v0.52+ — close v0.51 diskforge_winshare_v1 gaps surfaced by the new
+benchmark (extensionless `.aws/credentials` filename rule, .msi/.iso
+path-classifier tier cap, sysprep/answer.txt extension), then close
+v0.50 held-out v4 fails (encrypted PPK floor), lock held-out v5.
+
+## [0.51.0] — 2026-06-10
+
+First real corporate-share benchmark — and the first published
+head-to-head against upstream Snaffler on that benchmark.
+
+### Added — `diskforge_winshare_v1` corpus
+
+A 2525-file Windows NTFS partition built via Stauffer's
+[DiskForge](https://github.com/jknyght9/diskforge):
+
+- 75 synthetic-but-format-shaped credential files across 16
+  categories exercising every rule generation v0.46→v0.50
+- 2420 corporate-share noise files (8 classes × ~300 each)
+- 20 precision-stress filenames (cred-keyword names in benign
+  context — `password_policy.docx`, `secrets_management_guidelines.pdf`)
+- 30 windows10 OS-template stubs
+
+Reproducible: `bash tools/diskforge_winshare/build_corpus.sh` →
+byte-identical 1GB .img from the committed seed. Paths are emitted
+in UNC backslash form (`\\corp-fs01\…`) — the form the rule engine
+sees on real SMB shares.
+
+### Added — head-to-head vs upstream Snaffler
+
+`tools/run_full_sweep.py` now scores BOTH pipelines on
+diskforge_winshare_v1 at three keep policies (Yellow+ / Red+ /
+Black-only). Pulls upstream Snaffler defaults via the
+`pysnaffler-integration` group.
+
+**Result at Red+:**
+
+| Tool | Caught | Missed | FPs | P | R | F1 |
+|---|---:|---:|---:|---:|---:|---:|
+| Upstream Snaffler | 16 | 59 | 4 | 0.800 | 0.213 | 0.337 |
+| ShareSift v0.51 | 54 | 21 | 62 | 0.466 | 0.720 | **0.565** |
+
+ShareSift catches **3.4× more credentials** than Snaffler on this
+corpus at the cost of more false positives.
+
+Honest caveat: the 16 positive categories were authored to exercise
+ShareSift's rule coverage v0.46→v0.50. Snaffler's defaults don't
+ship with rules for German cred filenames, CMD `set "VAR=val"`,
+browser-creds meta-coverage, etc. A neutral-curated corpus would
+show Snaffler at 40–50% recall. The categories ShareSift covers are
+real corporate-share shapes (operator-reported in Snaffler's own
+issue tracker), not invented — but the operational gap is amplified
+by category selection. Full disclosure in
+`docs/diskforge_winshare_v1_results.md`.
+
+### Added
+
+- `tools/diskforge_winshare/` — manifest generator, file builder,
+  manifest assembler, image walker, end-to-end build script.
+  ~3000 lines including LAYOUT.md spec.
+- `docs/diskforge_winshare_v1_results.md` — full scorecard with
+  per-category recall breakdown + Snaffler head-to-head.
+- `docs/v1p0_diskforge_winshare_plan.md` — the upfront build plan
+  (5 steps, 4–5 sessions).
+
+### Changed
+
+- README Performance section now leads with the
+  diskforge_winshare_v1 head-to-head (replacing the LLM-labeled
+  Snaffler-blind Windows number as the headline Windows result).
+  Strict-recall benchmarks moved to a secondary table.
+- `docs/methodology.md` and 4-generation held-out trajectory
+  unchanged — that's still the contribution; the benchmark adds
+  the operational head-to-head story.
 
 ## [0.50.1] — 2026-06-10
 

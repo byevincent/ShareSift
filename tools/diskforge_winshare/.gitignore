@@ -1,0 +1,9 @@
+# Generated noise files — derived from generate_files.py
+# (positives stay committed; they're the interesting + reviewable part)
+files/noise/
+
+# Generated manifest (derived from positives_map.json via build_manifest.py)
+manifest.json
+
+# DiskForge .img output
+output/

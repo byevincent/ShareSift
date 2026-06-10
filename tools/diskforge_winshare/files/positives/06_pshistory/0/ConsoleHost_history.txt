@@ -1,0 +1,4 @@
+Connect-VIServer -Server vcenter.corp.local -User administrator@vsphere.local -Password 'FAKE-VSphereAdmin-2024!'
+Enter-PSSession -ComputerName dc01.corp.local -Credential (New-Object PSCredential -ArgumentList 'corp\Administrator', (ConvertTo-SecureString 'FAKE-DomainAdmin-2024!' -AsPlainText -Force))
+Invoke-Sqlcmd -ServerInstance sql01.corp.local -Username sa -Password 'FAKE-SaPassword-2024!' -Query 'SELECT @@VERSION'
+$cred = Get-Credential -UserName 'corp\svc_backup' -Message 'Backup creds'

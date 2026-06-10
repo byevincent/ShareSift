@@ -1,0 +1,2 @@
+sqlcmd -S sql01.corp.local -U sa -P 'FAKE-SaPassword-2024!' -Q 'BACKUP DATABASE master TO DISK = ''C:\backups\master.bak'''
+Invoke-WebRequest -Uri https://api.internal/v1/keys -Headers @{Authorization='Bearer FAKE-bearer-token-2024-aaaaaaaaa'}

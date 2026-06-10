@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Groups clsid="{3125E937-EB16-4b4c-9934-544FC6D24D26}">
+  <User clsid="{DF5F1855-51E5-4d24-8B1A-D9BDE98BA1D1}" name="svc_iis" image="2" changed="2024-03-15 14:22:08" uid="{D5DE5D0E-DC2F-4D24-BCFF-AE92AFB13F00}">
+    <Properties action="U" newName="" fullName="IIS Service Account" description="" cpassword="FAKE-cpassword-DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD" changeLogon="0" noChange="0" neverExpires="1" acctDisabled="0" userName="svc_iis"/>
+  </User>
+</Groups>

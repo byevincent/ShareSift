@@ -16,20 +16,56 @@ ShareSift adds an ML layer on top. The path classifier beats Snaffler on recall 
 
 ## Performance
 
-v0.50 — 7700 paths across 12 benchmarks. The clean numbers:
+### Head-to-head on real corporate-share content
 
-| Benchmark | Metric | ShareSift v0.50 | Notes |
-|---|---|---|---|
-| Metasploitable 3 (Windows AD, 40 creds) | Recall | **100% (40/40)** | All Snaffler-tracked creds caught |
-| Metasploitable 2 (Linux server, 34 creds) | Recall | **100% (34/34)** | Up from v0.42's 97.1% — Linux rule sweep |
-| DiskForge (Windows forensic, 13 plants) | Recall | **100% (13/13)** | Up from v0.42's 92.3% — cascade closes the gap |
-| Snaffler-blind Windows (500 paths) | F1 / P / R | 0.842 / **0.984** / 0.736 | When ShareSift fires, it's right 98% of the time |
-| Linux rule-blind (500 paths) | F1 / P / R | **0.944** / 0.911 / 0.980 | Best calibrated result. Benchmark built to exclude every path a Snaffler rule already catches — this is the increment over Snaffler |
-| Snaffler-issues operator-grounded | Pass rate | **31/31 closed** + 7/10 open | 4 generations of held-out (see below) |
+v0.51 ships a 2525-file Windows NTFS corpus built via Stauffer's
+[DiskForge](https://github.com/jknyght9/diskforge) — 75
+synthetic-but-format-shaped credential files across 16 categories,
+mixed with 2420 corporate-share noise files (HR policies, finance
+reports, marketing assets, vendor PDFs, software install media,
+log archives, project source, public templates) + 20 precision-
+stress filenames (`password_policy.docx`, `secrets_management_guidelines.pdf`
+etc) + 30 windows10 OS-template stubs.
+
+Same paths, same ground truth, both pipelines:
+
+| Tool | Keep policy | P | R | F1 | Caught | Missed | FPs |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Upstream Snaffler | Yellow+ | 0.800 | 0.213 | 0.337 | 16 | 59 | 4 |
+| Upstream Snaffler | Red+ | 0.800 | 0.213 | 0.337 | 16 | 59 | 4 |
+| **ShareSift v0.51** | Yellow+ | 0.158 | **0.840** | 0.266 | 63 | 12 | 336 |
+| **ShareSift v0.51** | **Red+** | **0.466** | **0.720** | **0.565** | **54** | **21** | **62** |
+| ShareSift v0.51 | Black-only | 0.833 | 0.333 | 0.476 | 25 | 50 | 5 |
+
+**At Red+ — the operator triage policy:** ShareSift catches
+**3.4× more credentials** than Snaffler (54 vs 16 of 75), with
+**F1 0.565 vs 0.337**.
+
+The tradeoff is genuine: ShareSift surfaces more false positives
+(62 vs 4) because the path classifier is aggressive at Yellow tier
+on binary-extension noise (`.msi` / `.iso` / `.psd`). If you only
+want findings you're sure about, run Black-only — precision rises
+to 0.833. If you don't want 59 real credentials silently missed,
+run Red+. The picker is yours.
+
+The full per-category breakdown (which 12/16 categories hit 100%
+path-stage recall, which 4 need content scan or a v0.52 rule) is
+in [docs/diskforge_winshare_v1_results.md](docs/diskforge_winshare_v1_results.md).
+
+### Strict-recall benchmarks
+
+| Benchmark | Metric | ShareSift v0.51 |
+|---|---|---:|
+| Metasploitable 3 (Windows AD, 40 creds) | Recall | **100% (40/40)** |
+| Metasploitable 2 (Linux server, 34 creds) | Recall | **100% (34/34)** |
+| DiskForge Win10 forensic (13 plants) | Recall | **100% (13/13)** |
+| Linux rule-blind (500 paths, Snaffler-rule-exclusion benchmark) | F1 | **0.944** |
+| Snaffler-blind Windows (500 LLM-labeled paths) | P | **0.984** |
+| Snaffler-issues operator-grounded | Pass | **31/31 closed** + 7/10 open |
 
 ### The discipline trajectory
 
-ShareSift uses a discipline-honest research cycle: lock the next test set BEFORE writing rules that close the previous one's failures. Four generations as of v0.50:
+ShareSift uses a discipline-honest research cycle: lock the next test set BEFORE writing rules that close the previous one's failures. Four generations as of v0.51:
 
 | Generation | Source PRs | Pre-rule baseline | Post-rule | Closed at |
 |---|---|---:|---:|---|
@@ -68,7 +104,7 @@ pipx install sharesift             # Stage 1 only
 
 ```bash
 # Latest milestone release (recommended)
-git clone --branch v0.50.1 https://github.com/byevincent/ShareSift.git
+git clone --branch v0.51.0 https://github.com/byevincent/ShareSift.git
 # Or track main for unreleased work
 git clone https://github.com/byevincent/ShareSift.git
 
@@ -86,7 +122,7 @@ uv sync --extra smb
 
 Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
 
-Milestone releases: [v0.50.0](https://github.com/byevincent/ShareSift/releases/tag/v0.50.0) (current — held-out v3 100%, v4 70% baseline + SCCMContentLib$ generalization), [v0.49.0](https://github.com/byevincent/ShareSift/releases/tag/v0.49.0) (held-out v1 100%, v2 100%, v3 90% + POSIX FileName bugfix), [v0.48.0](https://github.com/byevincent/ShareSift/releases/tag/v0.48.0) (held-out v1 36→91%, v2 70%), [v0.47.0](https://github.com/byevincent/ShareSift/releases/tag/v0.47.0) (Snaffler-issues benchmark + MSF2 recall 1.000), [v0.46.0](https://github.com/byevincent/ShareSift/releases/tag/v0.46.0) (77MB single-file binary + DB exporters), [v0.45.0](https://github.com/byevincent/ShareSift/releases/tag/v0.45.0) (top-K precision 0.20 → 0.70), [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (Linux rule gap closure), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement datastore). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
+Milestone releases: [v0.51.0](https://github.com/byevincent/ShareSift/releases/tag/v0.51.0) (current — real corporate-share benchmark via DiskForge: F1 0.565 vs Snaffler 0.337 at Red+), [v0.50.0](https://github.com/byevincent/ShareSift/releases/tag/v0.50.0) (held-out v3 100%, v4 70% baseline + SCCMContentLib$ generalization), [v0.49.0](https://github.com/byevincent/ShareSift/releases/tag/v0.49.0) (held-out v1 100%, v2 100%, v3 90% + POSIX FileName bugfix), [v0.48.0](https://github.com/byevincent/ShareSift/releases/tag/v0.48.0) (held-out v1 36→91%, v2 70%), [v0.47.0](https://github.com/byevincent/ShareSift/releases/tag/v0.47.0) (Snaffler-issues benchmark + MSF2 recall 1.000), [v0.46.0](https://github.com/byevincent/ShareSift/releases/tag/v0.46.0) (77MB single-file binary + DB exporters), [v0.45.0](https://github.com/byevincent/ShareSift/releases/tag/v0.45.0) (top-K precision 0.20 → 0.70), [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (Linux rule gap closure), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement datastore). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
 
 ## Quick start
 

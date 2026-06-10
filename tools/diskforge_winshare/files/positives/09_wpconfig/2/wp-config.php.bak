@@ -1,0 +1,6 @@
+<?php
+define('DB_NAME', 'corp_blog');
+define('DB_USER', 'wp_blog_old');
+define('DB_PASSWORD', 'FAKE-WpMainOld-2023!');
+define('DB_HOST', 'mysql01.corp.local');
+?>

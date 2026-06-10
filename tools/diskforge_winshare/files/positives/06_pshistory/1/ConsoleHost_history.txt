@@ -1,0 +1,3 @@
+az login --username svc-deploy@corp.onmicrosoft.com --password 'FAKE-AzDeploy-2024!'
+gh auth login --with-token <<< 'ghp_FAKEGitHubPATFOR2024BenchmarkOnlyAAAAAAAAAA'
+docker login registry.corp.local -u svc_deploy -p 'FAKE-RegistryPw-2024!'
