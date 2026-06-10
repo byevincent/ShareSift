@@ -4,6 +4,72 @@ All notable changes to ShareSift are listed here. Format loosely follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [0.47.0] — 2026-06-10
+
+The "corporate SMB benchmark" release. v0.47 introduces the first
+benchmark grounded in real operator complaints — mined from five
+years of SnaffCon/Snaffler issue tracker — then adds 7 rules
+targeting the gaps it surfaces. **Held-out generalization is
+partial (36%) and documented rather than tuned away.**
+
+### Added — Snaffler-issues benchmark
+
+Three tools + two probe sets, all under
+`benchmarks/snaffler_issues/`:
+
+- `tools/mine_snaffler_issues.py` — fetches all 198 issues + PRs
+  via `gh api`. Raw dumps gitignored (regenerable).
+- `tools/bucket_snaffler_issues.py` — heuristic-classify by signal
+  type (miss/fp/feat/bug/q/unk).
+- `tools/eval_snaffler_issues.py` — score ShareSift cascade
+  against each probe. Path probes → `PathClassifier`; content
+  probes → `ContentRuleEngine`; max-tier across both = verdict.
+  `--set {corpus,heldout,both}`.
+
+Hand-curated:
+- `corpus.jsonl` (19 probes) — training signal from issues #46,
+  #31, #107, #119, #53, #158, #191.
+- `heldout.jsonl` (11 probes) — locked from issues #78, #135,
+  #67. Sources not consulted while authoring v0.47 rules.
+
+### Added — Seven corporate-SMB rules
+
+In `src/sharesift/rules/extra_rules.json` (+ Python mirror in
+`extra_rules.py` for pysnaffler compat):
+
+| Rule | Tier | Match | Closes |
+|---|---|---|---|
+| ShareSiftKeepFirefoxSavedCreds | Black | FilePath | #46 |
+| ShareSiftKeepGppPolicyXml | Black | FilePath | #31 |
+| ShareSiftKeepGermanCredFilenames | Red | FileName | #53 |
+| ShareSiftKeepWireguardPrivateKey | Black | Content | #119 |
+| ShareSiftKeepOpenvpnAuthUserPassRef | Red | Content | #119 |
+| ShareSiftKeepCiscoAnyconnectXml | Yellow | FileName | #119 |
+| ShareSiftKeepDoubleDashPassphrase | Red | Content | #158 |
+
+### Improved — MSF2 recall to 1.000
+
+`/root/reset_logs.sh` — the one both-missed credential on MSF2
+since v0.41 — is now caught. Recall lifts 33/34 → 34/34. Emerges
+from ML path classifier picking up signal as the rule library
+grew; not directly attributable to a v0.47 rule.
+
+### Honest scoreboard
+
+| Gate | Threshold | Result |
+|---|---|---|
+| Corpus | 19/19 | 18/19 (95%) |
+| Held-out | ≥50% | **4/11 (36%) — below gate** |
+| MSF3 recall | flat | 1.000 (40/40, held) |
+| MSF2 recall | flat | **1.000 (34/34, +1)** |
+| DiskForge recall | flat | 0.923 (12/13, held) |
+| v0.47 rule FP contribution | 0 | 0 across all three |
+
+Held-out below 50% is an underfitting result (rules too narrow to
+catch parallel patterns), not overfitting (rules don't introduce
+FPs anywhere). Full reasoning + v0.48 candidate list in
+`docs/v0p47_results.md`.
+
 ## [0.46.0] — 2026-06-09
 
 The "drop a binary on Kali" release. Closes the three remaining
@@ -813,10 +879,12 @@ First public release. Phase A of the v0.18 CLI ergonomics plan.
 
 ## [Unreleased]
 
-v0.47+ — status heartbeat (operator visibility on long scans),
-path-prefix dedup w/ rule-action awareness (research-y, treat
-Yellow-from-Relay as Green), Markdown report bundle (HTML report's
-Markdown twin). See `docs/pentester_backlog.md`.
+v0.48+ — re-lock held-out with new probe sources, Cisco IOS
+content rules (enable secret/password/type-7, SNMP communities),
+FileZilla saved-sites path rule, ADO/ASP.NET connection-string
+tightening, browser-creds meta-rule (Chrome + Edge Login Data),
+status heartbeat, Markdown report bundle. See `docs/v0p47_results.md`
+v0.48 candidate list.
 
 ## [0.34.0] — 2026-06-08
 

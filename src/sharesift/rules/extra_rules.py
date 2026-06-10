@@ -584,12 +584,94 @@ def _binary_preprocessor_rule() -> SnaffleRule:
     )
 
 
+def _v0p47_snaffler_issues_rules() -> Iterator[SnaffleRule]:
+    """v0.47: rules derived from mining the SnaffCon/Snaffler issue
+    tracker for real-world operator complaints. See
+    ``benchmarks/snaffler_issues/`` for the corpus + scorer.
+
+    Each rule cites the Snaffler issue number that surfaced the gap.
+    Held-out generalization (parallel patterns from issues #78, #135,
+    #67 not used during rule authoring) lifted from 1/11 → 4/11
+    (9% → 36%) — documented as partial generalization per
+    docs/v0p47_results.md.
+    """
+
+    def _rule(name, location, list_type, wordlist, triage, desc):
+        return _build_rule(
+            rule_name=name,
+            enumeration_scope=EnumerationScope.FileEnumeration,
+            match_action=MatchAction.Snaffle,
+            match_location=location,
+            word_list_type=list_type,
+            word_list=wordlist,
+            triage=triage,
+            description=desc,
+        )
+
+    yield _rule(
+        "ShareSiftKeepFirefoxSavedCreds",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [
+            r"Mozilla\\Firefox\\Profiles\\[^\\]+\\(logins\.json|logins-backup\.json|key4\.db|key3\.db)$",
+            r"/\.mozilla/firefox/[^/]+/(logins\.json|logins-backup\.json|key4\.db|key3\.db)$",
+        ],
+        Triage.Black,
+        "Firefox saved-passwords surface: logins.json + key4.db NSS database. Closes Snaffler #46.",
+    )
+    yield _rule(
+        "ShareSiftKeepGppPolicyXml",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"SYSVOL\\.+\\Policies\\.+\\(Groups|Drives|Services|ScheduledTasks|DataSources|Printers)\.xml$"],
+        Triage.Black,
+        "GPP XML under SYSVOL Policies — historical cpassword (MS14-025) surface. Closes Snaffler #31.",
+    )
+    yield _rule(
+        "ShareSiftKeepGermanCredFilenames",
+        MatchLoc.FileName, MatchListType.Regex,
+        [r"(Kennw(oe|ö|o)rter|Passw(oe|ö|o)rter|Anmeldedaten|Logindaten|Zug(ae|ä|a)ng(e|es)?|Schl(ue|ü|u)ssel)"],
+        Triage.Red,
+        "German credential-keyword filenames. Corporate-Europe coverage. Closes Snaffler #53.",
+    )
+    yield _rule(
+        "ShareSiftKeepWireguardPrivateKey",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [r"(^|\n)\s*PrivateKey\s*=\s*[A-Za-z0-9+/]{42,44}={0,2}\s*(\n|$)"],
+        Triage.Black,
+        "WireGuard config with embedded base64 Curve25519 private key. Black on content match. Closes Snaffler #119.",
+    )
+    yield _rule(
+        "ShareSiftKeepOpenvpnAuthUserPassRef",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [r"(^|\n)\s*auth-user-pass\s+[^\s#]+"],
+        Triage.Red,
+        "OpenVPN auth-user-pass directive pointing at a credential file. Closes Snaffler #119 content gap.",
+    )
+    yield _rule(
+        "ShareSiftKeepCiscoAnyconnectXml",
+        MatchLoc.FileName, MatchListType.Regex,
+        [r"anyconnect.*\.xml$", r"vpn(server|profile)s?\.xml$"],
+        Triage.Yellow,
+        "Cisco AnyConnect XML profile. Closes Snaffler #119 modern-VPN gap.",
+    )
+    yield _rule(
+        "ShareSiftKeepDoubleDashPassphrase",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [
+            r"--pass(?:word|phrase)\s*=\s*\S+",
+            r"--pass(?:word|phrase)\s+[^-\s][^\s]*",
+        ],
+        Triage.Red,
+        "Double-dash CLI password flags (--password=, --passphrase=). Closes Snaffler #158 TP gap.",
+    )
+
+
 def get_extra_rules() -> list[SnaffleRule]:
     """Return all extra rules (catch-up + blind-spot + modern SaaS + binary preprocessor)."""
     rules: list[SnaffleRule] = []
     rules.extend(_snaffler_catchup_rules())
     rules.extend(_v0p12_blind_spot_rules())
     rules.extend(_v0p42_benchmark_gap_rules())
+    rules.extend(_v0p47_snaffler_issues_rules())
     rules.extend(_modern_saas_rules())
     rules.append(_binary_preprocessor_rule())
     return rules

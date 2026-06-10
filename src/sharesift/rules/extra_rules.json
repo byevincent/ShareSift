@@ -737,6 +737,86 @@
         "^\\$ANSIBLE_VAULT;[0-9]+\\.[0-9]+;AES256"
       ],
       "description": "Ansible Vault encrypted file header \u2014 content is AES256-encrypted, but the file signals high-value infra creds. Operator action: capture for offline crack against the vault password."
+    },
+    {
+      "rule_name": "ShareSiftKeepFirefoxSavedCreds",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "Mozilla\\\\Firefox\\\\Profiles\\\\[^\\\\]+\\\\(logins\\.json|logins-backup\\.json|key4\\.db|key3\\.db)$",
+        "/\\.mozilla/firefox/[^/]+/(logins\\.json|logins-backup\\.json|key4\\.db|key3\\.db)$"
+      ],
+      "description": "Firefox profile saved-passwords surface: logins.json holds encrypted login records, key4.db / key3.db are the NSS key databases that decrypt them. Either file alone is high-value; pair recovered = cleartext recovery. Windows AppData and Linux dotdir profiles both covered. Closes Snaffler #46."
+    },
+    {
+      "rule_name": "ShareSiftKeepGppPolicyXml",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "SYSVOL\\\\.+\\\\Policies\\\\.+\\\\(Groups|Drives|Services|ScheduledTasks|DataSources|Printers)\\.xml$"
+      ],
+      "description": "Group Policy Preferences XML under SYSVOL Policies. Groups.xml / Drives.xml / Services.xml / ScheduledTasks.xml / DataSources.xml / Printers.xml historically embedded AES-256 'cpassword' (MS14-025) reversible to cleartext. Even on patched DCs, legacy XML often remains. Black AD-engagement primitive. Closes Snaffler #31."
+    },
+    {
+      "rule_name": "ShareSiftKeepGermanCredFilenames",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(Kennw(oe|\u00f6|o)rter|Passw(oe|\u00f6|o)rter|Anmeldedaten|Logindaten|Zug(ae|\u00e4|a)ng(e|es)?|Schl(ue|\u00fc|u)ssel)"
+      ],
+      "description": "German credential-keyword filenames. ML path classifier returns ~0.0 on non-English vocab. Corporate-Europe coverage gap. Operator (#53) reported their German keyword rules silently shadowed by Snaffler's English defaults; the pure ShareSift engine doesn't have the ordering issue but lacked the vocab. Covers both umlaut and 'oe'/'ae'/'ue' transliterated spellings."
+    },
+    {
+      "rule_name": "ShareSiftKeepWireguardPrivateKey",
+      "triage": "Black",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(^|\\n)\\s*PrivateKey\\s*=\\s*[A-Za-z0-9+/]{42,44}={0,2}\\s*(\\n|$)"
+      ],
+      "description": "WireGuard config file with embedded PrivateKey. The 32-byte Curve25519 private key is base64-encoded (44 chars w/ trailing '='). The file IS the credential \u2014 possession = VPN access. Black on match. Operator (#119) flagged that VPN credentials in plaintext is a common corporate-share finding."
+    },
+    {
+      "rule_name": "ShareSiftKeepOpenvpnAuthUserPassRef",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(^|\\n)\\s*auth-user-pass\\s+[^\\s#]+"
+      ],
+      "description": "OpenVPN config with auth-user-pass directive pointing at a credential file. The directive's argument is a relative or absolute path containing user+pass on two lines. Promotes the path-tier (.ovpn) Yellow to Red because the file points at a real creds artifact. Closes the Snaffler-#119 'VPN creds' content-side gap."
+    },
+    {
+      "rule_name": "ShareSiftKeepCiscoAnyconnectXml",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "anyconnect.*\\.xml$",
+        "vpn(server|profile)s?\\.xml$"
+      ],
+      "description": "Cisco AnyConnect Secure Mobility Client XML profile. Lists VPN concentrators, per-tunnel auth methods, sometimes group credentials / certificate paths. Yellow as path-tier signal; operator workflow inspects content. Closes Snaffler #119's modern-VPN gap."
+    },
+    {
+      "rule_name": "ShareSiftKeepDoubleDashPassphrase",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "--pass(?:word|phrase)\\s*=\\s*\\S+",
+        "--pass(?:word|phrase)\\s+[^-\\s][^\\s]*"
+      ],
+      "description": "Double-dash CLI password flags: --password=value, --passphrase=value, --password value, --passphrase value. Snaffler's KeepPassOrKeyInCode catches single-dash -password but not the GNU-style double-dash form (gpg --batch --passphrase=, openssl, mysqldump --password). Closes Snaffler #158's TP gap."
     }
   ]
 }

@@ -43,6 +43,10 @@ def _tier_geq(actual: str | None, expected: str) -> bool:
     return _TIER_RANK.get(actual, 0) >= _TIER_RANK.get(expected, 0)
 
 
+def _max_tier(a: str | None, b: str | None) -> str | None:
+    return a if _TIER_RANK.get(a, 0) >= _TIER_RANK.get(b, 0) else b
+
+
 def _tier_leq(actual: str | None, expected: str) -> bool:
     """For FP probes: PASS when actual is no HIGHER than expected.
 
@@ -103,22 +107,22 @@ def main() -> int:
         actual_tier: str | None
         explanation = ""
 
-        if probe["probe_type"] == "path":
-            results = path_clf.score_batch([probe["path"]])
-            res = results[0]
-            actual_tier = res.tier
-            explanation = f"p={res.probability:.3f}"
-        elif probe["probe_type"] == "content":
-            verdict = content_eng.evaluate(probe["path"], probe.get("content_snippet"))
-            actual_tier = verdict.tier
-            if verdict.matches:
-                rule_names = ",".join(m.rule_name for m in verdict.matches[:3])
-                explanation = f"matches={rule_names}"
-            else:
-                explanation = "no-match"
+        # Production cascade is Stage 1 (path classifier) + rule engine.
+        # We take the MAX-tier verdict across both for path probes; for
+        # content probes the rule engine sees the content, the path
+        # classifier sees just the path, take MAX of both.
+        path_res = path_clf.score_batch([probe["path"]])[0]
+        rule_verdict = content_eng.evaluate(probe["path"], probe.get("content_snippet"))
+        ml_tier = path_res.tier
+        rule_tier = rule_verdict.tier
+        actual_tier = _max_tier(ml_tier, rule_tier)
+        explanation_bits = [f"p={path_res.probability:.3f}"]
+        if rule_verdict.matches:
+            rule_names = ",".join(m.rule_name for m in rule_verdict.matches[:3])
+            explanation_bits.append(f"matches={rule_names}")
         else:
-            print(f"  SKIP {probe_id}: unknown probe_type", file=sys.stderr)
-            continue
+            explanation_bits.append("no-rule")
+        explanation = " ".join(explanation_bits)
 
         if signal == "miss":
             ok = _tier_geq(actual_tier, expected)
