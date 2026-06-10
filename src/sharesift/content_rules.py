@@ -252,8 +252,12 @@ class ContentRuleEngine:
         (e.g., when the file failed to read). FileContentAsString rules
         are skipped in that case.
         """
-        filename = Path(path).name
-        extension = Path(path).suffix or ""
+        # POSIX Path() treats backslash as a normal char, so Windows/UNC
+        # paths under a Linux scanner have their basename mis-detected
+        # as the entire path. Split on both separators.
+        tail = path.replace("\\", "/").rsplit("/", 1)[-1]
+        filename = tail or Path(path).name
+        extension = Path(filename).suffix or ""
         matches: list[RuleMatch] = []
         for rule in self._compiled:
             target = self._target_for(rule.location, path, filename, extension, content)

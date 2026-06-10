@@ -32,16 +32,27 @@ is a real-world FP.
    each probe. Path probes go through `PathClassifier`; content
    probes go through `ContentRuleEngine`.
 
-## Two probe sets — training + held-out
+## Probe sets — training + 3 generations of held-out
 
 - `corpus.jsonl` (19 probes) — visible while authoring v0.47 rules.
   Use to surface gaps and validate rule semantics.
-- `heldout.jsonl` (11 probes) — locked away. Sources are Snaffler
-  issues #78 (Cisco config rules), #135 (filezilla.xml /
-  credentials.xml), #67 (SQL connection strings) — operator
-  comment threads NOT consulted while authoring training-corpus
-  rules. Re-run after each rule shipment to test whether the
-  rule generalized or only memorized.
+- `heldout.jsonl` (11 probes, "v1") — locked at v0.47 rule-authoring
+  time. Sources: #78 (Cisco config), #135 (filezilla.xml /
+  credentials.xml), #67 (SQL connection strings).
+- `heldout_v2.jsonl` (10 probes) — locked at v0.48 rule-authoring
+  time. Sources: #198 (CMD `set`), #155 (Azure CLI), #124 (XML
+  password tag), #98 (credential filename keyword), and Chrome /
+  Edge variants of #46 (browser saved creds).
+- `heldout_v3.jsonl` (10 probes) — locked at v0.49 rule-authoring
+  time. Sources: #154 (single-dash `-password`), #140 (Kerberos
+  keytab / CCACHE / krb5cc), #139 (MDE Linux mdatp_managed.json),
+  #112 (SCCM REMINST/SMSTemp/.var, Variables.dat, Policy.xml,
+  SCCMContentLib$ share).
+
+The discipline: each version locks the NEXT held-out set BEFORE
+writing the rules that close the PREVIOUS one's failures. Rules
+shipped in v0.N can only reference sources that were locked at or
+before v0.(N-1).
 
 If training passes 19/19 but held-out passes <50%, the rules
 overfit. v0.28's falsified extension-frequency hypothesis (MSF2

@@ -902,6 +902,28 @@
         "/Library/Application Support/(Google/Chrome|Microsoft Edge|BraveSoftware/Brave-Browser)/[^/]+/Login Data$"
       ],
       "description": "Chromium-base browser saved-passwords SQLite DB (Chrome / Edge / Brave / Opera). Generalizes the v0.47 Firefox-shaped rule to other browsers — Snaffler #46's scope was 'browser stored password databases' not Firefox-specific. Windows AppData, Linux dotdir, and macOS Application Support path shapes all covered. Black."
+    },
+    {
+      "rule_name": "ShareSiftKeepCmdSetQuotedAssignment",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "(^|\\n)\\s*set\\s+\"[A-Z_][A-Z0-9_]*(password|passwd|passphrase|pwd|secret|token|apikey|api_key|cred|credential|auth_key|access_key)[A-Z0-9_]*\\s*=\\s*[^\"]+\""
+      ],
+      "description": "Windows CMD quoted-string set: set \"VAR=val\" where VAR contains a credential-shaped token. Existing upstream KeepPassOrKeyInCode regex requires the value-side to be quoted; the quoted-set form puts the quote OUTSIDE the assignment, so the value-side has no quote and upstream misses. Closes the v0.48 held-out v2 'pgpassword-quoted' fail. Per Snaffler #198. Red."
+    },
+    {
+      "rule_name": "ShareSiftKeepCredentialFilenameKeyword",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileName",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "^[A-Za-z0-9_\\-]*credentials?[A-Za-z0-9_\\-]*\\.(csv|xlsx|xls|tsv|json|xml|yaml|yml|txt|sql|db|sqlite|kdbx|zip|tar|tgz|tar\\.gz|bak|7z|rar)$"
+      ],
+      "description": "Filename contains 'credential' or 'credentials' AND extension is a data/export/archive format (xlsx, csv, json, sql, zip, kdbx, ...). KeepNameContainsGreen tags 'credential' Green; this rule promotes to Red when the extension is an export/data shape (high prior that the file IS a creds dump rather than a policy doc). Per Snaffler #98 — operator added 'credential' to KeepFilenameContainsPamOrPwdVault after seeing it across engagements. Red."
     }
   ]
 }

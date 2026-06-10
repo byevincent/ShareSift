@@ -752,6 +752,46 @@ def _v0p48_held_out_close_rules() -> Iterator[SnaffleRule]:
     )
 
 
+def _v0p49_held_out_v2_close_rules() -> Iterator[SnaffleRule]:
+    """v0.49: rules closing v0.48's held-out v2 underfit. Sourced from
+    v2-locked sources only — #198 (CMD set quoted variant) and #98
+    (loose 'credential' filename keyword). Held-out v3 is locked
+    (Kerberos/SCCM/MDE/single-dash-password from #140/#112/#139/#154)
+    BEFORE these rules were authored. See docs/v0p49_results.md.
+    """
+
+    def _rule(name, location, list_type, wordlist, triage, desc):
+        return _build_rule(
+            rule_name=name,
+            enumeration_scope=EnumerationScope.FileEnumeration,
+            match_action=MatchAction.Snaffle,
+            match_location=location,
+            word_list_type=list_type,
+            word_list=wordlist,
+            triage=triage,
+            description=desc,
+        )
+
+    yield _rule(
+        "ShareSiftKeepCmdSetQuotedAssignment",
+        MatchLoc.FileContentAsString, MatchListType.Regex,
+        [
+            r'(^|\n)\s*set\s+"[A-Z_][A-Z0-9_]*(password|passwd|passphrase|pwd|secret|token|apikey|api_key|cred|credential|auth_key|access_key)[A-Z0-9_]*\s*=\s*[^"]+"',
+        ],
+        Triage.Red,
+        'Windows CMD quoted-string set: set "VAR=val" with cred-shaped VAR. Upstream KeepPassOrKeyInCode misses because quote sits outside the assignment. Closes Snaffler #198 quoted variant.',
+    )
+    yield _rule(
+        "ShareSiftKeepCredentialFilenameKeyword",
+        MatchLoc.FileName, MatchListType.Regex,
+        [
+            r"^[A-Za-z0-9_\-]*credentials?[A-Za-z0-9_\-]*\.(csv|xlsx|xls|tsv|json|xml|yaml|yml|txt|sql|db|sqlite|kdbx|zip|tar|tgz|tar\.gz|bak|7z|rar)$",
+        ],
+        Triage.Red,
+        "Filename contains 'credential(s)' AND extension is a data/export/archive shape. Promotes the Snaffler Green default to Red because export-shape extension implies a creds dump, not a policy doc. Closes Snaffler #98.",
+    )
+
+
 def get_extra_rules() -> list[SnaffleRule]:
     """Return all extra rules (catch-up + blind-spot + modern SaaS + binary preprocessor)."""
     rules: list[SnaffleRule] = []
@@ -760,6 +800,7 @@ def get_extra_rules() -> list[SnaffleRule]:
     rules.extend(_v0p42_benchmark_gap_rules())
     rules.extend(_v0p47_snaffler_issues_rules())
     rules.extend(_v0p48_held_out_close_rules())
+    rules.extend(_v0p49_held_out_v2_close_rules())
     rules.extend(_modern_saas_rules())
     rules.append(_binary_preprocessor_rule())
     return rules

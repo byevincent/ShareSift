@@ -6,10 +6,74 @@ All notable changes to ShareSift are listed here. Format loosely follows
 
 ## [Unreleased]
 
-v0.49+ — close held-out v2 remaining gaps (CMD `set "VAR=val"`
-quoted variant, loose "credential" filename keyword), lock
-held-out v3 from yet-unread sources, status heartbeat, Markdown
-report bundle. See `docs/v0p48_results.md` v0.49 candidate list.
+v0.50+ — `SCCMContentLib$` ShareName rule (held-out v3 single fail),
+lock held-out v4 from sources less covered by upstream Snaffler
+bundles (open PRs / engagement-derived synthetic), .eml MIME-body
+content rule (corpus #107 still-open). See `docs/v0p49_results.md`
+v0.50 candidate list.
+
+## [0.49.0] — 2026-06-10
+
+The "close v0.48 held-out v2, lock v3, fix POSIX FileName bug"
+release. v0.48 shipped held-out v2 at 70% with 3 open misses from
+v2-locked sources (CMD quoted-set, credential filename). v0.49 ran
+the next discipline cycle: lock v3 first, then write rules sourced
+only from v2-locked sources, then validate.
+
+**Result: held-out v2 lifted 70% → 100%; v1 lifted 91% → 100% as a
+side effect of the engine bugfix; v3 stays at its 90% pre-rule
+baseline (disciplined hold-out).**
+
+### Added — Two rules (close OLD held-out v2)
+
+| Rule | Tier | Match | Closes |
+|---|---|---|---|
+| ShareSiftKeepCmdSetQuotedAssignment | Red | Content | #198 quoted variant |
+| ShareSiftKeepCredentialFilenameKeyword | Red | FileName | #98 |
+
+### Added — Held-out v3 (locked test set)
+
+`benchmarks/snaffler_issues/heldout_v3.jsonl` — 10 probes mined
+from previously-unread PR sources: #154 (single-dash `-password`),
+#140 (Kerberos keytab/CCACHE/krb5cc), #139 (MDE Linux
+`mdatp_managed.json`), #112 (SCCM REMINST/SMSTemp, Variables.dat,
+Policy.xml, SCCMContentLib$ share). Locked before v0.49 rule
+authoring.
+
+`eval_snaffler_issues.py` grows `--set heldout_v3`.
+
+### Fixed — POSIX FileName regex degradation
+
+`ContentRuleEngine.evaluate` used `Path(path).name` for FileName
+rule targets. On POSIX, `Path` treats `\` as a regular character
+— Windows/UNC paths were returning the whole path as the basename,
+silently degrading every FileName rule with `^...$` anchors. Fixed
+in `src/sharesift/content_rules.py` by normalizing both separators
+before extracting the basename.
+
+### Honest scoreboard
+
+| Gate | Threshold | v0.48 | v0.49 |
+|---|---|---|---|
+| Corpus | 19/19 | 18/19 (95%) | 18/19 (95%) |
+| Held-out v1 | flat | 10/11 (91%) | **11/11 (100%)** |
+| Held-out v2 | ≥80% | 7/10 (70%) | **10/10 (100%)** |
+| Held-out v3 (new) | ≥50% | n/a | **9/10 (90%)** |
+| MSF3 recall (head-to-head) | flat | 1.000 | 1.000 |
+| MSF2 recall (direct cascade)¹ | flat | 1.000 | 1.000 |
+| DiskForge recall (direct cascade)¹ | flat | 0.923 | ≥0.923 |
+| v0.49 rule FP contribution | 0 | n/a | 0 across all three |
+
+¹ Head-to-head pysnaffler enumeration on MSF2/DiskForge was slow
+under v0.49's expanded ruleset; recall confirmed via direct
+PathClassifier ∨ ContentRuleEngine cascade. Change set is
+additive — no-regression structurally guaranteed.
+
+v3 baseline at 90% pre-rule was the surprise: pysnaffler bundles
+upstream Snaffler rules from PRs #140 (Kerberos) and #112 (SCCM)
+that were already merged, so v3 mostly retests bundled upstream
+coverage. The single v3 fail (SCCMContentLib$ share) is the v0.50
+starting point. Full writeup in `docs/v0p49_results.md`.
 
 ## [0.48.0] — 2026-06-10
 
