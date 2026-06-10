@@ -792,6 +792,35 @@ def _v0p49_held_out_v2_close_rules() -> Iterator[SnaffleRule]:
     )
 
 
+def _v0p50_held_out_v3_close_rules() -> Iterator[SnaffleRule]:
+    """v0.50: rules closing v0.49's held-out v3 underfit. Sourced from
+    v3-locked sources only — #112 (SCCMContentLib$ ShareName). Held-out
+    v4 is locked (open PRs #192 unencrypted PPK + #186 SCCM ContentLib
+    rules) BEFORE these rules were authored. See
+    docs/v0p50_results.md.
+    """
+
+    def _rule(name, location, list_type, wordlist, triage, desc):
+        return _build_rule(
+            rule_name=name,
+            enumeration_scope=EnumerationScope.FileEnumeration,
+            match_action=MatchAction.Snaffle,
+            match_location=location,
+            word_list_type=list_type,
+            word_list=wordlist,
+            triage=triage,
+            description=desc,
+        )
+
+    yield _rule(
+        "ShareSiftKeepSccmContentLibShare",
+        MatchLoc.FilePath, MatchListType.Regex,
+        [r"\\SCCMContentLib\$\\"],
+        Triage.Yellow,
+        "Files under an \\\\<host>\\SCCMContentLib$\\ share — CMLoot target. Per PR #112 (v3-locked).",
+    )
+
+
 def get_extra_rules() -> list[SnaffleRule]:
     """Return all extra rules (catch-up + blind-spot + modern SaaS + binary preprocessor)."""
     rules: list[SnaffleRule] = []
@@ -801,6 +830,7 @@ def get_extra_rules() -> list[SnaffleRule]:
     rules.extend(_v0p47_snaffler_issues_rules())
     rules.extend(_v0p48_held_out_close_rules())
     rules.extend(_v0p49_held_out_v2_close_rules())
+    rules.extend(_v0p50_held_out_v3_close_rules())
     rules.extend(_modern_saas_rules())
     rules.append(_binary_preprocessor_rule())
     return rules

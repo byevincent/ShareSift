@@ -6,11 +6,59 @@ All notable changes to ShareSift are listed here. Format loosely follows
 
 ## [Unreleased]
 
-v0.50+ — `SCCMContentLib$` ShareName rule (held-out v3 single fail),
-lock held-out v4 from sources less covered by upstream Snaffler
-bundles (open PRs / engagement-derived synthetic), .eml MIME-body
-content rule (corpus #107 still-open). See `docs/v0p49_results.md`
-v0.50 candidate list.
+v0.51+ — close v0.50 held-out v4 fails (encrypted PPK floor,
+autounattend.txt extension, MSI installer tier cap), lock held-out
+v5 from yet-deeper sources, .eml MIME-body content rule. See
+`docs/v0p50_results.md` v0.51 candidate list.
+
+## [0.50.0] — 2026-06-10
+
+The "close v0.49 held-out v3 + lock v4 from open PRs" release.
+v0.49 shipped v3 at 90% with the single SCCMContentLib$ share fail.
+v0.50 ran the next cycle: lock v4 from OPEN Snaffler PRs (sources
+upstream Snaffler does NOT bundle — tighter generalization test),
+then add 1 rule sourced only from v3-locked PR #112.
+
+**Result: held-out v3 → 100%; held-out v4 baseline 60% → 70% via
+the SCCMContentLib$ rule generalizing to a v4 PR #186 probe I
+never wrote a rule for.**
+
+### Added — One rule (close OLD held-out v3)
+
+| Rule | Tier | Match | Closes |
+|---|---|---|---|
+| ShareSiftKeepSccmContentLibShare | Yellow | FilePath | #112 SCCMContentLib$ share |
+
+### Added — Held-out v4 (locked test set)
+
+`benchmarks/snaffler_issues/heldout_v4.jsonl` — 10 probes mined
+from OPEN PRs #192 (unencrypted PPK detection via `Encryption:
+none` content marker) and #186 (SCCM Indexing — broad
+DataLib/FileLib/PkgLib/SMSPKG coverage). Locked before v0.50 rule
+authoring. Critical property: these PRs are still open, so
+pysnaffler does NOT bundle their rules — a tighter generalization
+test than v3 was.
+
+`eval_snaffler_issues.py` grows `--set heldout_v4`.
+
+### Honest scoreboard
+
+| Gate | Threshold | v0.49 | v0.50 |
+|---|---|---|---|
+| Corpus | 19/19 | 18/19 (95%) | 18/19 (95%) |
+| Held-out v1 | flat | 11/11 (100%) | 11/11 (100%) |
+| Held-out v2 | flat | 10/10 (100%) | 10/10 (100%) |
+| Held-out v3 | ≥95% | 9/10 (90%) | **10/10 (100%)** |
+| Held-out v4 (new) | ≥50% | n/a | **7/10 (70%)** |
+| MSF3 recall (cascade) | flat | 1.000 | 1.000 |
+| MSF2 recall (cascade) | flat | 1.000 | 1.000 |
+| DiskForge recall (cascade) | flat | ≥0.923 | 1.000 |
+| v0.50 rule FP contribution | 0 | n/a | 0 across all three |
+
+The generalization signal: SCCMContentLib$ rule (sourced from PR
+#112, v3-locked) catches PR #186's reg-export probe I never wrote
+a rule for. v0.48's browser-creds analogue at v0.50. Full writeup
+in `docs/v0p50_results.md`.
 
 ## [0.49.0] — 2026-06-10
 

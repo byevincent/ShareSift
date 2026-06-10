@@ -48,6 +48,13 @@ is a real-world FP.
   keytab / CCACHE / krb5cc), #139 (MDE Linux mdatp_managed.json),
   #112 (SCCM REMINST/SMSTemp/.var, Variables.dat, Policy.xml,
   SCCMContentLib$ share).
+- `heldout_v4.jsonl` (10 probes) — locked at v0.50 rule-authoring
+  time. Sources: OPEN PRs #192 (unencrypted PPK content detection
+  via `Encryption: none`) and #186 (SCCM Indexing — DataLib /
+  FileLib / PkgLib / SMSPKG scripts, configs, certs, unattend
+  files, installer FPs). Critical: these PRs are still open, so
+  pysnaffler does NOT bundle their rules — tighter generalization
+  test than v3 was.
 
 The discipline: each version locks the NEXT held-out set BEFORE
 writing the rules that close the PREVIOUS one's failures. Rules

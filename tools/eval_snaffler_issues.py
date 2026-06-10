@@ -36,6 +36,7 @@ CORPUS_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "corpus.jsonl"
 HELDOUT_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "heldout.jsonl"
 HELDOUT_V2_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "heldout_v2.jsonl"
 HELDOUT_V3_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "heldout_v3.jsonl"
+HELDOUT_V4_PATH = REPO_ROOT / "benchmarks" / "snaffler_issues" / "heldout_v4.jsonl"
 
 # Tier rank for compare. Higher = juicier.
 _TIER_RANK = {"Black": 4, "Red": 3, "Yellow": 2, "Green": 1, None: 0}
@@ -65,7 +66,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--set",
-        choices=("corpus", "heldout", "heldout_v2", "heldout_v3", "all"),
+        choices=("corpus", "heldout", "heldout_v2", "heldout_v3", "heldout_v4", "all"),
         default="corpus",
         help="Which probe set to score (default: corpus).",
     )
@@ -74,13 +75,14 @@ def main() -> int:
     probes: list[dict] = []
     selected = (
         {args.set} if args.set != "all"
-        else {"corpus", "heldout", "heldout_v2", "heldout_v3"}
+        else {"corpus", "heldout", "heldout_v2", "heldout_v3", "heldout_v4"}
     )
     for name, path in (
         ("corpus", CORPUS_PATH),
         ("heldout", HELDOUT_PATH),
         ("heldout_v2", HELDOUT_V2_PATH),
         ("heldout_v3", HELDOUT_V3_PATH),
+        ("heldout_v4", HELDOUT_V4_PATH),
     ):
         if name not in selected:
             continue

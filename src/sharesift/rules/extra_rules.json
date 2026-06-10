@@ -924,6 +924,17 @@
         "^[A-Za-z0-9_\\-]*credentials?[A-Za-z0-9_\\-]*\\.(csv|xlsx|xls|tsv|json|xml|yaml|yml|txt|sql|db|sqlite|kdbx|zip|tar|tgz|tar\\.gz|bak|7z|rar)$"
       ],
       "description": "Filename contains 'credential' or 'credentials' AND extension is a data/export/archive format (xlsx, csv, json, sql, zip, kdbx, ...). KeepNameContainsGreen tags 'credential' Green; this rule promotes to Red when the extension is an export/data shape (high prior that the file IS a creds dump rather than a policy doc). Per Snaffler #98 — operator added 'credential' to KeepFilenameContainsPamOrPwdVault after seeing it across engagements. Red."
+    },
+    {
+      "rule_name": "ShareSiftKeepSccmContentLibShare",
+      "triage": "Yellow",
+      "match_action": "Snaffle",
+      "match_location": "FilePath",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\\\\SCCMContentLib\\$\\\\"
+      ],
+      "description": "Files under an \\\\<host>\\SCCMContentLib$\\ share. PR #112 adds a ShareEnumeration rule KeepSCCMShares targeting the share itself (path readability is the find); ShareSift's content rule engine does not enumerate ShareName scope, so this fires on FilePath instead — any file under SCCMContentLib$ is interesting because the share is the CMLoot target. Closes the only v3 open fail (heldout-v3-112-sccm-contentlib-share). Source: PR #112 (v3-locked). Yellow."
     }
   ]
 }
