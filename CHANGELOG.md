@@ -10,6 +10,52 @@ v0.56+ — GOAD-validated head-to-head benchmark of `sharesift hunt`
 vs `Snaffler.exe -s -d corp.local`. Harness ships in v0.53; lab
 validation gated on standing up GOAD.
 
+## [0.55.1] — 2026-06-11
+
+Three Kerberos ccache findings from the HTB Sauna smoke test
+(EGOTISTICAL-BANK.LOCAL). All three surfaced live; the
+clock-skew fix is the biggest operational win because HTB labs
+commonly run ~7h ahead of attacker-box time.
+
+### Fixed — `Auth(kerberos=True)` no longer requires `-u`
+
+The user principal lives in the ccache; pre-v0.55.1 ShareSift
+forced a redundant `-u <principal>` on the CLI. `Auth.__post_init__`
+now exempts the kerberos path from the user-required check.
+
+### Fixed — impacket `kerberosLogin` was called without `kdcHost`
+
+Without an explicit KDC host, impacket falls back to a DNS lookup
+for `<realm>:88` which fails on attacker boxes without proper
+`resolv.conf`. New `Auth.kdc_host` field; both
+`share.discovery._do_login` and `share.smb_impacket._do_login`
+now pass `kdcHost=auth.kdc_host or target_host`, falling back to
+the SMB target for the AD case where DC == target.
+
+### Fixed — Auto clock-skew shim for impacket Kerberos
+
+New `share.auth.install_kerberos_clock_offset()` reads the ccache's
+`authtime`, compares to local clock, and (if offset > 60s)
+monkey-patches `impacket.krb5.kerberosv5.datetime` to add the
+offset to all `datetime.datetime.now(tz)` calls. Surgical — only
+impacket's krb5 module is affected; the rest of Python sees real
+time. Called automatically from both impacket login dispatch
+sites when `auth.kerberos=True`.
+
+### Live-validated against HTB Sauna
+
+`KRB5CCNAME=/tmp/fsmith.ccache sharesift hunt //10.129.13.53 --use-kcache`:
+clock skew (~7h) → corrected, kdcHost defaulted to target, no
+`-u` required. Hunt advances past the AP-REQ to
+`KDC_ERR_S_PRINCIPAL_UNKNOWN` — the SPN-on-IP issue is standard
+engagement-prep (operator adds `SAUNA.EGOTISTICAL-BANK.LOCAL → IP`
+to `/etc/hosts` and uses the FQDN as the target).
+
+### Tests added: 14
+
+`test_kerberos_fixes_v0p55p1.py`. Full suite: 1439 passed, 29
+skipped, 0 failed.
+
 ## [0.55.0] — 2026-06-11
 
 DFS namespace root walking — closes the Multimaster DFS scenario

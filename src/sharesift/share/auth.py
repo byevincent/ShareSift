@@ -12,12 +12,84 @@ and the reference impl at ``/tmp/smb_lab/validate_v2.py``.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from typing import Any
 
 # Standard blank LM hash — used when the operator passes a bare NT
 # hash (modern systems don't store LM hashes anymore).
 BLANK_LM_HASH = "aad3b435b51404eeaad3b435b51404ee"
+
+
+def install_kerberos_clock_offset(ccache_path: str | None = None) -> int | None:
+    """v0.55.1: detect clock skew from a Kerberos ccache and patch
+    impacket's krb5 module to use the offset.
+
+    HTB labs frequently run with clocks several hours off (Sauna
+    surfaced ~7h ahead on 2026-06-11). KRB_AP_ERR_SKEW (Clock skew
+    too great) breaks any Kerberos auth from an unsynced attacker
+    box. Standard fix is ``ntpdate <DC>`` but that needs root.
+
+    This helper reads the ccache's TGT ``authtime`` (the server's
+    clock at issue) and compares to local time. If the offset is
+    >60 seconds, it monkey-patches
+    ``impacket.krb5.kerberosv5.datetime`` to add the offset to all
+    ``datetime.datetime.now(tz)`` calls. The patch is surgical —
+    only impacket's krb5 module is affected; the rest of Python
+    sees real time.
+
+    Returns the offset in seconds (positive = server ahead of
+    local), or None if no ccache / no offset / impacket not
+    importable.
+    """
+    import time
+    import datetime as _dt
+
+    path = ccache_path or os.environ.get("KRB5CCNAME")
+    if not path or not os.path.isfile(path):
+        return None
+
+    try:
+        from impacket.krb5.ccache import CCache
+        import impacket.krb5.kerberosv5 as krbmod
+    except ImportError:
+        return None
+
+    try:
+        ccache = CCache.loadFile(path)
+        if not ccache.credentials:
+            return None
+        authtime = ccache.credentials[0]["time"]["authtime"]
+    except Exception:
+        return None
+
+    offset = int(authtime) - int(time.time())
+    if abs(offset) < 60:
+        # Within tolerance — no shim needed.
+        return 0
+
+    # Already patched? Don't double-wrap.
+    if getattr(krbmod, "_sharesift_clock_offset", None) is not None:
+        return krbmod._sharesift_clock_offset
+
+    original_datetime_module = krbmod.datetime
+    original_datetime_class = original_datetime_module.datetime
+
+    class _OffsetDatetime(original_datetime_class):
+        @classmethod
+        def now(cls, tz=None):
+            return original_datetime_class.now(tz) + _dt.timedelta(
+                seconds=offset,
+            )
+
+    class _ShimDatetimeModule:
+        timezone = original_datetime_module.timezone
+        timedelta = original_datetime_module.timedelta
+        datetime = _OffsetDatetime
+
+    krbmod.datetime = _ShimDatetimeModule
+    krbmod._sharesift_clock_offset = offset
+    return offset
 
 
 @dataclass(frozen=True)
@@ -39,6 +111,12 @@ class Auth:
     kerberos: bool = False
     domain: str | None = None
     anonymous: bool = False
+    # v0.55.1: explicit KDC host for impacket's kerberosLogin. When
+    # None, the caller falls back to the SMB target host (works for
+    # AD hunts where DC == target). Surfaced on HTB Sauna 2026-06-11
+    # where impacket tried to resolve EGOTISTICAL-BANK.LOCAL:88 via
+    # DNS and failed.
+    kdc_host: str | None = None
 
     def __post_init__(self) -> None:
         set_modes = sum(
@@ -54,8 +132,13 @@ class Auth:
                 "Auth modes are mutually exclusive — pick one of "
                 "password / hash / kerberos / anonymous"
             )
-        if not self.anonymous and not self.user:
-            raise ValueError("Auth requires a user (unless anonymous=True)")
+        # Kerberos via ccache: the user principal is encoded in the
+        # ticket — operator doesn't need to also pass -u. Validated
+        # against HTB Sauna 2026-06-11 (would've forced -u redundantly).
+        if not self.anonymous and not self.kerberos and not self.user:
+            raise ValueError(
+                "Auth requires a user (unless anonymous=True or kerberos=True)"
+            )
 
 
 def _qualify(user: str | None, domain: str | None) -> str | None:

@@ -75,7 +75,7 @@ def enumerate_shares(
 
     conn = SMBConnection(host, host, sess_port=port, timeout=timeout)
     try:
-        _do_login(conn, auth)
+        _do_login(conn, auth, host)
         raw = conn.listShares()
     finally:
         try:
@@ -86,8 +86,12 @@ def enumerate_shares(
     return [_decode_share(s) for s in raw]
 
 
-def _do_login(conn, auth: "Auth") -> None:
-    """Dispatch to the right impacket login method based on Auth."""
+def _do_login(conn, auth: "Auth", host: str = "") -> None:
+    """Dispatch to the right impacket login method based on Auth.
+
+    ``host`` is the SMB target — used as the default KDC for
+    Kerberos auth when ``auth.kdc_host`` isn't set explicitly.
+    """
     domain = auth.domain or ""
 
     if auth.anonymous:
@@ -102,10 +106,19 @@ def _do_login(conn, auth: "Auth") -> None:
         return
 
     if auth.kerberos:
-        # impacket reads the ccache from KRB5CCNAME when useCache=True
+        # impacket reads the ccache from KRB5CCNAME when useCache=True.
+        # v0.55.1: pass kdcHost explicitly — without it impacket
+        # tries to resolve <realm>:88 via DNS which fails on
+        # engagement attacker boxes without proper resolv.conf.
+        kdc_host = auth.kdc_host or host
+        # v0.55.1: auto-detect clock skew from ccache (HTB labs
+        # are commonly ~7h ahead of attacker box time).
+        from sharesift.share.auth import install_kerberos_clock_offset
+        install_kerberos_clock_offset()
         conn.kerberosLogin(
             auth.user or "", "", domain=domain,
-            lmhash="", nthash="", aesKey="", useCache=True,
+            lmhash="", nthash="", aesKey="",
+            kdcHost=kdc_host, useCache=True,
         )
         return
 

@@ -138,9 +138,14 @@ class ImpacketSmbWalker:
             return
 
         if self._auth.kerberos:
+            kdc_host = self._auth.kdc_host or self._target.host
+            # v0.55.1: auto-detect clock skew from ccache.
+            from sharesift.share.auth import install_kerberos_clock_offset
+            install_kerberos_clock_offset()
             conn.kerberosLogin(
                 self._auth.user or "", "", domain=domain,
-                lmhash="", nthash="", aesKey="", useCache=True,
+                lmhash="", nthash="", aesKey="",
+                kdcHost=kdc_host, useCache=True,
             )
             return
 
