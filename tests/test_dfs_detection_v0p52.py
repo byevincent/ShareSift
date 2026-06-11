@@ -34,10 +34,13 @@ class TestDfsGuidance:
         msg = dfs_guidance(r"\\corp.local\departments\hr")
         assert "corp.local" in msg
 
-    def test_guidance_mentions_v0p53_followup(self):
+    def test_guidance_mentions_v0p53_resolution(self):
         msg = dfs_guidance(r"\\corp.local\dfs\hr")
         assert "v0.53" in msg
 
-    def test_guidance_includes_actionable_command(self):
+    def test_guidance_mentions_auto_resolution(self):
+        """v0.53 changed the guidance: instead of "find the
+        fileserver manually," it now says "auto-resolution will
+        handle it." Verify the new informational framing."""
         msg = dfs_guidance(r"\\corp.local\dfs\hr")
-        assert "nxc smb" in msg or "sharesift hunt" in msg
+        assert "auto-resolution" in msg.lower() or "resolver" in msg.lower()

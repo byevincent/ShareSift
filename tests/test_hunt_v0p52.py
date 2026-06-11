@@ -329,10 +329,13 @@ class TestHuntShareFiltering:
         assert rc == 1  # nothing writable → no targets
 
 
-class TestHuntDfsSkipping:
-    """v0.52: DFS-shaped UNCs are detected and skipped with guidance."""
+class TestHuntDfsHandling:
+    """v0.53: DFS-shaped UNCs are passed through to SmbShare for
+    automatic referral resolution. --detect-dfs is informational
+    only — does not skip."""
 
-    def test_dfs_unc_skipped(self, tmp_path):
+    def test_dfs_unc_not_skipped_with_detect_dfs(self, tmp_path):
+        """v0.53 change from v0.52: --detect-dfs only logs, never skips."""
         cli.out.configure(verbosity=cli.Verbosity.QUIET, json=False)
 
         # The mocked enumerate returns ONE disk share on a domain-shaped
@@ -367,9 +370,10 @@ class TestHuntDfsSkipping:
         ), patch("sharesift.share.SmbShare", SmbShare):
             rc = cli.cmd_hunt(args)
 
-        # DFS-shaped \\corp.local\Finance triggers the skip path —
-        # no targets remain → exit 1
-        assert rc == 1
-        # SmbShare should NOT have been invoked because DFS detection
-        # happens before the probe
-        SmbShare.assert_not_called()
+        # v0.53: DFS UNC goes through to SmbShare (which handles
+        # resolution); rc 0 since at least one target was kept.
+        assert rc == 0
+        # SmbShare IS invoked — the DFS resolution happens inside it
+        SmbShare.assert_called_once()
+        targets_file = tmp_path / "hunt_targets.txt"
+        assert "Finance" in targets_file.read_text()

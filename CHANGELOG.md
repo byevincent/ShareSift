@@ -6,9 +6,71 @@ All notable changes to ShareSift are listed here. Format loosely follows
 
 ## [Unreleased]
 
-v0.53+ — full DFS referral resolution (smbprotocol referral chase),
-multi-DC LDAP failover, GOAD-validated head-to-head benchmark of
-`sharesift hunt` vs `Snaffler.exe -s -d corp.local`.
+v0.54+ — interlink referral support, DFS referral caching across a
+hunt run, multi-DC LDAP failover. v0.55: GOAD-validated head-to-head
+benchmark of `sharesift hunt` vs `Snaffler.exe -s -d corp.local`
+(harness ships in v0.53; lab validation gated on standing up GOAD).
+
+## [0.53.0] — 2026-06-11
+
+DFS referral resolution + GOAD benchmark harness.
+
+ShareSift now transparently handles domain DFS namespaces. The v0.52
+hunt command works against `\\corp.local\dept\hr`-shaped UNCs without
+operator intervention: `SmbShare` catches `STATUS_PATH_NOT_COVERED`
+on tree-connect, queries `FSCTL_DFS_GET_REFERRALS` over IPC$,
+parses the referral chain, and retargets to the resolved fileserver.
+
+### Added — DFS referral resolution
+
+- `src/sharesift/share/dfs.py` — `DfsResolution` dataclass with
+  path-rewrite helper, `dfs_request_via_ipc` (IOCTL wire-format),
+  `first_target_unc` (highest-priority target extraction),
+  `resolve_dfs_path` (orchestrates IPC$ + IOCTL + teardown),
+  `is_path_not_covered` (exception detection).
+- `src/sharesift/share/smb.py::SmbShare` — accepts
+  `auto_resolve_dfs=True` (default), catches `PathNotCovered`
+  exception on tree-connect, chases referrals via IPC$ on the same
+  connection, tears down + reconnects to the resolved fileserver,
+  retries. Original target preserved as `self._original_target`.
+- Implementation mirrors smbclient._pool.dfs_request (private API
+  in jborean93/smbprotocol; we reimplement using public primitives).
+
+### Added — GOAD benchmark harness
+
+- `tools/goad_benchmark.py` — orchestrator that runs `sharesift hunt`,
+  ingests operator-supplied Snaffler TSV, diffs the find sets
+  (UNC-normalized), emits per-category scorecard (markdown + JSON).
+  19 category buckets covering GPP cpassword, KeePass, AWS, browser,
+  SCCM NAA, etc. so Snaffler's rule labels and ShareSift's rule IDs
+  cluster to the same underlying credential shapes.
+- `docs/goad_benchmark_methodology.md` — GOAD-Light setup recipe
+  (Vagrant + VirtualBox) + Snaffler.exe invocation guide + scoring
+  methodology + interpretation guidance ("recall ratio",
+  "expansion ratio", what the scorecard does NOT measure).
+
+### Changed
+
+- `hunt --detect-dfs` semantics: now informational-only (emits
+  pre-flight note for domain-shaped UNCs). DFS resolution itself
+  is automatic regardless of the flag.
+
+### Tests added: 36
+
+`test_dfs_resolution_v0p53.py` (18 — pure-function helpers +
+IOCTL construction + SmbShare integration via mocks) +
+`test_goad_benchmark_v0p53.py` (18 — UNC normalization,
+category mapping, TSV parsing, scorecard computation).
+
+Full suite: **1391 passed, 29 skipped, 0 failed.**
+
+### Honest caveats
+
+- DFS resolution mocked-only — no live-DC validation yet.
+- GOAD benchmark harness pure-function-tested only — full
+  subprocess + TSV roundtrip awaits the lab being up.
+- Interlink referrals, referral caching, sticky target hints, and
+  multi-DC LDAP failover queue for v0.54+.
 
 ## [0.52.0] — 2026-06-10
 

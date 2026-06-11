@@ -1146,16 +1146,13 @@ def cmd_hunt(args: argparse.Namespace) -> int:
                 continue
             shares_total += 1
             unc = rf"\\{host}\{s.name}"
-            # DFS detection is heuristic and false-positives on every
-            # FQDN host (\\ws01.corp.local\X looks identical to a
-            # \\corp.local\X DFS root). Off by default in v0.52; opt
-            # in with --detect-dfs when manually hunting a UNC you
-            # suspect is a DFS namespace. v0.53 ships full referral
-            # resolution.
+            # v0.53: real DFS referral resolution lands in
+            # SmbShare._ensure_connected (catches STATUS_PATH_NOT_COVERED
+            # and chases referrals via IPC$). The --detect-dfs flag
+            # now just emits an informational note before the
+            # resolution attempt — no skip.
             if detect_dfs and looks_like_dfs(unc):
-                skipped_dfs += 1
-                out.warn(dfs_guidance(unc))
-                continue
+                out.info(dfs_guidance(unc))
             # Per-share R/W probe — opens an SmbShare just for the
             # cheap two-CREATE probe, then closes.
             target = SmbTarget(host=host, share=s.name, port=port)
@@ -2171,11 +2168,11 @@ def main(argv: list[str] | None = None) -> int:
     hu.add_argument(
         "--detect-dfs", action="store_true",
         help=(
-            "v0.52: skip UNCs whose server segment looks like a domain "
-            "(possible DFS root) with operator guidance for manual "
-            "resolution. Off by default — heuristic false-positives on "
-            "every FQDN host. Use when hunting a single UNC you suspect "
-            "is a DFS namespace. v0.53 ships full referral resolution."
+            "Emit an informational note for any UNC whose server "
+            "segment looks like a domain (possible DFS namespace). "
+            "v0.53: real DFS referral resolution is automatic in "
+            "SmbShare — this flag is informational only and does "
+            "not skip anything."
         ),
     )
     hu.add_argument(

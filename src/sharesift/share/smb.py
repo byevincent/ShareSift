@@ -79,15 +79,21 @@ class SmbShare:
         *,
         encrypt: bool = True,
         timeout: int = 30,
+        auto_resolve_dfs: bool = True,
     ) -> None:
-        self._target = target
+        self._target = target  # may be rewritten to the resolved fileserver
+        self._original_target = target  # frozen — operator's input
         self._auth = auth
         self._encrypt = encrypt
         self._timeout = timeout
+        self._auto_resolve_dfs = auto_resolve_dfs
         self._connection = None
         self._session = None
         self._tree = None
         self._share_access: ShareAccess | None = None
+        # v0.53: populated when tree-connect to the requested target
+        # hit STATUS_PATH_NOT_COVERED and we chased the referral.
+        self._dfs_resolution = None
 
     @property
     def root(self) -> str:
@@ -330,7 +336,94 @@ class SmbShare:
 
         tree_unc = rf"\\{self._target.host}\{self._target.share}"
         self._tree = TreeConnect(self._session, tree_unc)
-        self._tree.connect()
+        try:
+            self._tree.connect()
+        except Exception as exc:
+            # v0.53: STATUS_PATH_NOT_COVERED on tree-connect means
+            # the host owns a DFS namespace, not the share itself.
+            # Query referrals on IPC$, retarget to the resolved
+            # fileserver, retry.
+            from sharesift.share.dfs import is_path_not_covered
+
+            if not (self._auto_resolve_dfs and is_path_not_covered(exc)):
+                raise
+            self._chase_dfs_and_reconnect()
+
+    def _chase_dfs_and_reconnect(self) -> None:
+        """v0.53: invoked when tree-connect returned
+        STATUS_PATH_NOT_COVERED. Opens IPC$ on the current
+        session, queries DFS referrals, retargets self to the
+        resolved fileserver, and rebuilds the connection chain.
+
+        On success, ``self._dfs_resolution`` is populated and
+        ``self._target`` points at the fileserver.
+        """
+        from smbprotocol.connection import Connection
+        from smbprotocol.session import Session
+        from smbprotocol.tree import TreeConnect
+
+        from sharesift.share.dfs import resolve_dfs_path
+        from sharesift.share.target import SmbTarget
+
+        original_unc = self._target.unc
+        resolution = resolve_dfs_path(
+            self._connection, self._session, original_unc,
+        )
+        if resolution is None or not resolution.target_unc:
+            raise RuntimeError(
+                f"DFS resolution returned no targets for {original_unc!r}"
+            )
+
+        # Parse \\fileserver\share[\subpath] → SmbTarget. We construct
+        # the SmbTarget manually rather than going through parse_target
+        # to preserve the operator's port.
+        target_unc = resolution.target_unc
+        # Strip leading \\
+        rest = target_unc.lstrip("\\")
+        parts = rest.split("\\", 2)
+        if len(parts) < 2:
+            raise RuntimeError(
+                f"DFS resolution returned malformed UNC: {target_unc!r}"
+            )
+        new_host = parts[0]
+        new_share = parts[1]
+        new_root = parts[2].replace("/", "\\").strip("\\") if len(parts) >= 3 else ""
+
+        # Tear down the IPC-session connection to the DFS root before
+        # reconnecting to the fileserver. The fileserver is almost
+        # always a different host.
+        try:
+            self._session.disconnect()
+        except Exception:
+            pass
+        try:
+            self._connection.disconnect()
+        except Exception:
+            pass
+        self._session = None
+        self._connection = None
+        self._tree = None
+
+        new_target = SmbTarget(
+            host=new_host,
+            share=new_share,
+            port=self._target.port,
+            root_path=new_root,
+        )
+        self._dfs_resolution = resolution
+        self._target = new_target
+
+        # Rebuild against the fileserver. Recurse into _ensure_connected
+        # one level — if it fails AGAIN with PATH_NOT_COVERED, that's
+        # an interlink referral chain which we don't support in v0.53.
+        # Set auto_resolve_dfs=False temporarily to fail loudly rather
+        # than loop.
+        prior_auto = self._auto_resolve_dfs
+        self._auto_resolve_dfs = False
+        try:
+            self._ensure_connected()
+        finally:
+            self._auto_resolve_dfs = prior_auto
 
     def _list_directory(self, rel_dir: str) -> list[dict]:
         """List one directory. Returns list of
