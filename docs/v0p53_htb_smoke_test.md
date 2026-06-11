@@ -136,9 +136,65 @@ operators do this themselves and don't want the tool touching
 
 1. smbprotocol anonymous fallback to impacket for SMB walks
 2. Auto-detect SMB3 capability and fallback to unencrypted
-3. Better error message on STATUS_PATH_NOT_COVERED loops
-4. Live-DC validation of v0.53 DFS resolver (still needs a DFS
-   namespace to test against)
+3. **DFS-root share probe handling** — surfaced on HTB Multimaster
+   below. The R/W probe in `SmbShare._probe_access_mask` issues a
+   plain SMB2 CREATE on the share root; on a DFS namespace root
+   share, the server returns `STATUS_INVALID_PARAMETER` because it
+   requires DFS-aware Opens. Treat this status as "probe
+   inconclusive, share readable" so the walker reaches the
+   DFS links (which DO trigger `STATUS_PATH_NOT_COVERED` and the
+   v0.53 resolver chain).
+4. Better error message on STATUS_PATH_NOT_COVERED loops
+
+## v0.53 DFS resolution — live validation (HTB Multimaster)
+
+**Date:** 2026-06-11 (same session)
+**Target:** HTB Multimaster (10.129.95.200, MULTIMASTER.MEGACORP.LOCAL, Insane)
+
+The Multimaster DC exposes a literal `dfs` share that is a
+real Microsoft DFS namespace root. Inside, `Development` is a
+DFS link pointing to host `FSMO`. **The v0.53 wire-level
+resolver works end-to-end** against this production AD:
+
+```python
+>>> resolve_dfs_path(conn, session, r"\\10.129.95.200\dfs\Development")
+DfsResolution(
+    original_unc=r"\\10.129.95.200\dfs\Development",
+    target_unc=r"\\FSMO\Development",
+    path_consumed_chars=31,
+)
+>>> res.rewrite(r"\\10.129.95.200\dfs\Development\file.txt")
+'\\FSMO\\Development\\file.txt'
+
+# Domain-shaped form also resolves:
+>>> resolve_dfs_path(conn, session, r"\\MEGACORP.LOCAL\dfs\Development")
+DfsResolution(target_unc=r"\\FSMO\Development", ...)
+```
+
+This is the first live-DC validation of:
+- `FSCTL_DFS_GET_REFERRALS` IOCTL wire format
+- `DFSReferralResponse` parsing
+- `network_address` extraction from V3 entries
+- `path_consumed` byte→char conversion
+- Domain-form (`\\MEGACORP.LOCAL\dfs\X`) and host-form
+  (`\\10.129.95.200\dfs\X`) both resolving identically
+
+**Gap surfaced:** `SmbShare`'s share-root R/W probe sends a
+regular CREATE which the DFS-root share rejects with
+`STATUS_INVALID_PARAMETER` (CREATE on a namespace root needs
+DFS-aware session flags). This means `cmd_hunt` filters out
+the `dfs` share at the probe stage before any link walking
+happens. The v0.54 fix (item 3 above) treats
+`STATUS_INVALID_PARAMETER` on DFS-root CREATE as "probe
+inconclusive, share readable" so the walker proceeds and hits
+the link, which DOES trigger `STATUS_PATH_NOT_COVERED` and
+runs the validated resolver.
+
+**Honest reading:** v0.53 DFS resolution is wire-correct on
+production Microsoft AD. The remaining work is plumbing — the
+probe step needs to NOT reject DFS-root shares, and the
+DNS-resolution-of-fileserver step is engagement-prep that
+operators handle outside the tool.
 
 ## Operational takeaway
 
