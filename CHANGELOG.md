@@ -6,10 +6,52 @@ All notable changes to ShareSift are listed here. Format loosely follows
 
 ## [Unreleased]
 
-v0.54+ — interlink referral support, DFS referral caching across a
-hunt run, multi-DC LDAP failover. v0.55: GOAD-validated head-to-head
-benchmark of `sharesift hunt` vs `Snaffler.exe -s -d corp.local`
-(harness ships in v0.53; lab validation gated on standing up GOAD).
+v0.56+ — GOAD-validated head-to-head benchmark of `sharesift hunt`
+vs `Snaffler.exe -s -d corp.local`. Harness ships in v0.53; lab
+validation gated on standing up GOAD.
+
+## [0.55.0] — 2026-06-11
+
+DFS namespace root walking — closes the Multimaster DFS scenario
+end-to-end.
+
+After v0.54.1 let DFS shares enter cmd_hunt's target list, the
+walker itself failed with `STATUS_INVALID_PARAMETER` on the
+namespace root listing — smbprotocol's regular Open +
+query_directory doesn't work because the namespace root isn't a
+real directory, just a referral table.
+
+### Fixed — `_list_directory` DFS root fallback
+
+`SmbShare._list_directory` catches `STATUS_INVALID_PARAMETER` and,
+when `tree.is_dfs_share=True`, falls back to `smbclient.scandir`
+which handles the namespace-root listing internally via
+`_resolve_dfs`.
+
+### Fixed — `walk()` PATH_NOT_COVERED graceful skip
+
+DFS-link descent typically fails because the resolved fileserver
+needs operator-managed DNS (standard engagement prep — `/etc/hosts`
+entry). `walk()` catches PATH_NOT_COVERED, records the skipped
+link in `self._skipped_dfs_links`, and continues.
+
+### Fixed — `smbclient` package shadow workaround
+
+impacket ships a `smbclient.py` script in `.venv/bin/` that
+shadows the smbprotocol package under `uv run`. New
+`_import_real_smbclient` helper strips bin directories during the
+import.
+
+### Live-validated against HTB Multimaster
+
+`sharesift hunt //10.129.13.28 -u tushikikatomo -p finance1`:
+probe → R (v0.54.1), namespace root → Development link (v0.55
+fallback), link descent → PATH_NOT_COVERED → skipped gracefully
+(v0.55 walk fix), share scan completes.
+
+### Tests added: 7
+
+Full suite: **1425 passed, 29 skipped, 0 failed.**
 
 ## [0.54.0] — 2026-06-11
 
