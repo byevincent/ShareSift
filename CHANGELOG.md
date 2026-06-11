@@ -6,10 +6,92 @@ All notable changes to ShareSift are listed here. Format loosely follows
 
 ## [Unreleased]
 
-v0.52+ — close v0.51 diskforge_winshare_v1 gaps surfaced by the new
-benchmark (extensionless `.aws/credentials` filename rule, .msi/.iso
-path-classifier tier cap, sysprep/answer.txt extension), then close
-v0.50 held-out v4 fails (encrypted PPK floor), lock held-out v5.
+v0.53+ — full DFS referral resolution (smbprotocol referral chase),
+multi-DC LDAP failover, GOAD-validated head-to-head benchmark of
+`sharesift hunt` vs `Snaffler.exe -s -d corp.local`.
+
+## [0.52.0] — 2026-06-10
+
+Snaffler-replacement enumeration sprint. ShareSift becomes a
+self-contained Linux-native attacker workflow: one command
+(`sharesift hunt --ad-domain corp.local -u U -p P --output-dir ./out`)
+takes a domain + creds and returns ranked credential findings
+across every joined host's readable shares. No Snaffler binary,
+no `nxc --shares` glue, no `discover | batch` shell pipe.
+
+### Added — LDAP/AD computer discovery
+
+- `src/sharesift/share/ad.py` — `discover_computers(domain, auth, dc=...)`.
+  Auth dispatch via the existing `share.Auth` bundle: password →
+  NTLM bind, hash → NTLM bind with `lm:nt` password encoding (well-
+  known ldap3 PtH pattern), kerberos → SASL GSSAPI bind reading
+  `KRB5CCNAME`, anonymous → ANONYMOUS bind.
+- Paged search (`paged_size=500`) so large forests don't hit AD's
+  `MaxPageSize` ceiling.
+- `userAccountControl & ACCOUNTDISABLE` filtering — drops disabled
+  computer accounts by default.
+- `ComputerObject.host` prefers `dnsHostName`; falls back to
+  `sAMAccountName` with trailing `$` stripped (NetBIOS form).
+
+### Added — `sharesift discover --ad-domain`
+
+`cmd_discover` gains LDAP discovery mode: the positional target
+becomes optional; `--ad-domain DOMAIN` substitutes LDAP as the
+host-list source. `--dc HOST`, `--ldap-port N`, `--use-ldaps` flags
+override defaults. Output format unchanged — operators compose
+into `batch` via the same shell pipe.
+
+### Added — `sharesift hunt` (end-to-end Snaffler-replacement)
+
+New subcommand chaining the full pipeline:
+
+1. LDAP discovery (`--ad-domain`) or network expansion (positional
+   `target`) → host list.
+2. Concurrent `:445` liveness probe → drop dead hosts.
+3. Per-host `NetrShareEnum` → file shares only.
+4. Per-share R/W probe via SMB2 CREATE → keep readable (default)
+   or writable (`--writable-only`).
+5. Build `hunt_targets.txt` → delegate to `cmd_batch` internals.
+
+Output mirrors `batch`: `batch_summary.jsonl` at root,
+`sharesift-<host>-<share>/` subdirs per scan with `hits.jsonl` +
+report.
+
+### Added — DFS detection utilities
+
+- `src/sharesift/share/dfs.py` — `looks_like_dfs(unc)`,
+  `dfs_guidance(unc)`. Heuristic-only (server-segment-has-a-dot);
+  intended for operator help when manually hunting a UNC suspected
+  to be a DFS namespace. Off by default in `cmd_hunt` because the
+  heuristic false-positives on every FQDN host. Opt in via
+  `hunt --detect-dfs`.
+- Full DFS referral resolution queues for v0.53.
+
+### Findings
+
+After auditing the v0.39 / v0.40 codebase, most of the originally-
+scoped v0.52-v0.55 sprint (ACL-aware share enum, Kerberos ccache,
+Snaffler skip-list, R/W probe fixing Snaffler #184) was already
+done — the real gaps were LDAP discovery, DFS handling, and a
+unified `hunt` command. Sprint compressed from ~5 weeks to 1
+session.
+
+### Honest caveats
+
+- LDAP path tested against `ldap3` mocks, not a live DC. First-run
+  on GOAD will validate.
+- DFS referral resolution not yet shipped — detection only, opt-in.
+- No live-AD head-to-head benchmark yet. v0.55 queues
+  `sharesift hunt` vs `Snaffler.exe -s -d corp.local` on a GOAD-
+  class lab.
+
+### Tests added: 46
+
+`test_ad_discovery_v0p52.py` (24) +
+`test_dfs_detection_v0p52.py` (11) +
+`test_hunt_v0p52.py` (11).
+
+Full suite: 1299 passed, 51 skipped.
 
 ## [0.51.0] — 2026-06-10
 

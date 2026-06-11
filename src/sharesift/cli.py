@@ -852,12 +852,64 @@ _PRESET_QUERIES = {
 }
 
 
+def _ldap_discover_hosts(args: argparse.Namespace, auth) -> list[str]:
+    """v0.52: resolve --domain into a list of computer hostnames via LDAP.
+
+    Honors ``--dc``, ``--ldap-port``, ``--use-ldaps`` flags. Returns
+    deduped, non-empty ``dnsHostName`` / sAMAccountName-derived
+    hostnames. Disabled computer accounts are filtered out by
+    ``discover_computers`` default.
+    """
+    from sharesift.share.ad import discover_computers
+
+    dc = getattr(args, "dc", None) or None
+    ldap_port = getattr(args, "ldap_port", None) or 389
+    use_ldaps = bool(getattr(args, "use_ldaps", False))
+    out.info(
+        f"ldap: querying {dc or args.domain_filter}:{ldap_port}"
+        f"{' (TLS)' if use_ldaps else ''} for computer objects"
+    )
+    try:
+        computers = discover_computers(
+            args.domain_filter, auth,
+            dc=dc, port=ldap_port, use_tls=use_ldaps,
+        )
+    except SystemExit:
+        raise
+    except Exception as exc:
+        out.error(f"ldap discovery failed: {type(exc).__name__}: {exc}")
+        raise SystemExit(2) from exc
+
+    out.info(f"ldap: {len(computers)} enabled computer object(s)")
+
+    seen: set[str] = set()
+    hosts: list[str] = []
+    for c in computers:
+        h = c.host
+        if not h:
+            continue
+        if h.lower() in seen:
+            continue
+        seen.add(h.lower())
+        hosts.append(h)
+    if len(hosts) < len(computers):
+        out.debug(
+            f"  skipped {len(computers) - len(hosts)} computer objects "
+            "with no usable hostname"
+        )
+    return hosts
+
+
 def cmd_discover(args: argparse.Namespace) -> int:
     """v0.39 step 1: list shares on a remote SMB host.
+
+    v0.52 adds ``--domain`` mode: query Active Directory via LDAP for
+    every joined computer, then enumerate shares against each.
 
     Composes with ``batch``:
 
         sharesift discover //10.10.10.5 -u u -p p > targets.txt
+        sharesift discover --domain corp.local -u u -p p > targets.txt
         sharesift batch --targets targets.txt -u u -p p \\
             --output-dir ./engagement
 
@@ -875,36 +927,59 @@ def cmd_discover(args: argparse.Namespace) -> int:
         probe_smb_alive,
     )
 
-    port = args.port or 445
-    # Extract port from target if present (preserves CIDR parsing —
-    # ``10.0.0.0/24:1445`` isn't valid but we tolerate ``host:port``).
-    bare_target = args.target.lstrip("/\\").replace("\\", "/")
-    if ":" in bare_target and "/" not in bare_target.partition(":")[0]:
-        head, _, port_str = bare_target.partition(":")
-        try:
-            port = int(port_str.partition("/")[0])
-            bare_target = head + ("/" + port_str.partition("/")[2] if "/" in port_str else "")
-        except ValueError:
-            pass
+    domain_mode = bool(getattr(args, "domain_filter", None))
+    if domain_mode and args.target:
+        raise SystemExit(
+            "discover: --domain and positional target are mutually exclusive"
+        )
+    if not domain_mode and not args.target:
+        raise SystemExit(
+            "discover: pass a target (IP/CIDR/UNC) or --domain DOMAIN"
+        )
 
-    hosts = expand_target_to_hosts(args.target)
-    is_cidr = len(hosts) > 1
+    port = args.port or 445
+    if not domain_mode:
+        # Extract port from target if present (preserves CIDR parsing —
+        # ``10.0.0.0/24:1445`` isn't valid but we tolerate ``host:port``).
+        bare_target = args.target.lstrip("/\\").replace("\\", "/")
+        if ":" in bare_target and "/" not in bare_target.partition(":")[0]:
+            head, _, port_str = bare_target.partition(":")
+            try:
+                port = int(port_str.partition("/")[0])
+                bare_target = head + ("/" + port_str.partition("/")[2] if "/" in port_str else "")
+            except ValueError:
+                pass
 
     auth = _build_auth_from_args(args)
     if auth is None:
         from sharesift.share import Auth
         auth = Auth(anonymous=True)
 
+    if domain_mode:
+        hosts = _ldap_discover_hosts(args, auth)
+        out.info(
+            f"discover: {len(hosts)} computer object(s) from "
+            f"{args.domain_filter}"
+        )
+        is_cidr = True  # treat as multi-host for per-host error reporting
+    else:
+        hosts = expand_target_to_hosts(args.target)
+        is_cidr = len(hosts) > 1
+
     if is_cidr:
-        out.info(f"discover: {len(hosts)} hosts in {args.target}")
+        if not domain_mode:
+            out.info(f"discover: {len(hosts)} hosts in {args.target}")
         # Concurrent TCP liveness probe — skip dead hosts before impacket
         from concurrent.futures import ThreadPoolExecutor
-        with ThreadPoolExecutor(max_workers=min(32, len(hosts))) as ex:
-            live_map = list(ex.map(
-                lambda h: (h, probe_smb_alive(h, port=port)),
-                hosts,
-            ))
-        live_hosts = [h for h, alive in live_map if alive]
+        if hosts:
+            with ThreadPoolExecutor(max_workers=min(32, len(hosts))) as ex:
+                live_map = list(ex.map(
+                    lambda h: (h, probe_smb_alive(h, port=port)),
+                    hosts,
+                ))
+            live_hosts = [h for h, alive in live_map if alive]
+        else:
+            live_hosts = []
         out.info(f"{len(live_hosts)}/{len(hosts)} hosts have SMB on :{port}")
     else:
         out.info(f"discover: {hosts[0]}:{port}")
@@ -952,7 +1027,7 @@ def cmd_discover(args: argparse.Namespace) -> int:
         "command": "discover",
         "version": __version__,
         "elapsed_s": round(time.monotonic() - start, 3),
-        "target": args.target,
+        "target": args.target if not domain_mode else f"--domain {args.domain_filter}",
         "port": port,
         "hosts_total": len(hosts),
         "hosts_live": len(live_hosts),
@@ -963,6 +1038,197 @@ def cmd_discover(args: argparse.Namespace) -> int:
         "exit_code": 0,
     })
     return 0
+
+
+def cmd_hunt(args: argparse.Namespace) -> int:
+    """v0.52: end-to-end ShareSift sweep — discover + enumerate + scan.
+
+    One command replaces the ``discover | batch`` shell pipe and
+    closes the Snaffler-replacement story: from a domain + creds (or
+    an IP/CIDR), get ranked credential findings across every joined
+    host's enumerable shares.
+
+    Pipeline:
+
+    1. AD discovery via LDAP (``--domain``) OR network expansion
+       (``--target`` CIDR/host) → host list.
+    2. Concurrent ``:445`` liveness probe → drop dead hosts.
+    3. Per-host ``NetrShareEnum`` → file shares only.
+    4. Per-share R/W probe via SMB2 CREATE → keep readable shares
+       (or writable, with ``--writable-only``).
+    5. Detect DFS-shaped UNCs and emit operator guidance (skip
+       them — full referral chasing is v0.53).
+    6. Build per-host UNC list → invoke ``cmd_batch`` internals,
+       producing one ``hits.jsonl`` + report per share under
+       ``--output-dir``.
+
+    Output mirrors ``batch``: ``batch_summary.jsonl`` at the root,
+    ``sharesift-<host>-<share>/`` subdirs per scan.
+    """
+    start = time.monotonic()
+
+    from sharesift.share.discovery import (
+        enumerate_shares,
+        expand_target_to_hosts,
+        probe_smb_alive,
+    )
+    from sharesift.share.dfs import dfs_guidance, looks_like_dfs
+
+    domain_mode = bool(getattr(args, "domain_filter", None))
+    detect_dfs = bool(getattr(args, "detect_dfs", False))
+    if domain_mode and args.target:
+        raise SystemExit(
+            "hunt: --domain and positional target are mutually exclusive"
+        )
+    if not domain_mode and not args.target:
+        raise SystemExit(
+            "hunt: pass a target (IP/CIDR/UNC) or --domain DOMAIN"
+        )
+
+    auth = _build_auth_from_args(args)
+    if auth is None:
+        raise SystemExit(
+            "hunt: SMB auth required — pass one of: "
+            "-u/-p (password), -H (PtH), -k/--use-kcache (Kerberos), "
+            "or --no-pass for anonymous"
+        )
+
+    port = getattr(args, "port", None) or 445
+
+    if domain_mode:
+        hosts = _ldap_discover_hosts(args, auth)
+    else:
+        hosts = expand_target_to_hosts(args.target)
+
+    if not hosts:
+        out.error("hunt: no hosts to scan")
+        return 1
+
+    # Liveness probe (concurrent TCP 445)
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=min(32, max(1, len(hosts)))) as ex:
+        live_map = list(ex.map(
+            lambda h: (h, probe_smb_alive(h, port=port)),
+            hosts,
+        ))
+    live_hosts = [h for h, alive in live_map if alive]
+    out.info(f"hunt: {len(live_hosts)}/{len(hosts)} hosts have SMB on :{port}")
+
+    # Per-host share enumeration + R/W probe → build UNC list
+    base_output: Path = args.output_dir
+    base_output.mkdir(parents=True, exist_ok=True)
+    targets_path = base_output / "hunt_targets.txt"
+
+    require_writable = bool(getattr(args, "writable_only", False))
+    targets: list[str] = []
+    skipped_dfs = 0
+    shares_total = 0
+    shares_readable = 0
+    shares_writable = 0
+    hosts_with_shares = 0
+    hosts_enum_failed = 0
+
+    from sharesift.share import SmbShare, SmbTarget
+
+    for host in live_hosts:
+        try:
+            shares = enumerate_shares(host, auth, port=port)
+        except SystemExit:
+            raise
+        except Exception as exc:
+            hosts_enum_failed += 1
+            out.warn(f"  {host}: enum failed: {type(exc).__name__}: {exc}")
+            continue
+
+        host_targets: list[str] = []
+        for s in shares:
+            if not s.is_file_share():
+                continue
+            shares_total += 1
+            unc = rf"\\{host}\{s.name}"
+            # DFS detection is heuristic and false-positives on every
+            # FQDN host (\\ws01.corp.local\X looks identical to a
+            # \\corp.local\X DFS root). Off by default in v0.52; opt
+            # in with --detect-dfs when manually hunting a UNC you
+            # suspect is a DFS namespace. v0.53 ships full referral
+            # resolution.
+            if detect_dfs and looks_like_dfs(unc):
+                skipped_dfs += 1
+                out.warn(dfs_guidance(unc))
+                continue
+            # Per-share R/W probe — opens an SmbShare just for the
+            # cheap two-CREATE probe, then closes.
+            target = SmbTarget(host=host, share=s.name, port=port)
+            try:
+                with SmbShare(target, auth, encrypt=args.encrypt) as live:
+                    access = live.probe_share_access()
+            except Exception as exc:
+                out.debug(f"  {unc}: probe failed: {exc}")
+                continue
+            if access.can_read:
+                shares_readable += 1
+            if access.can_write:
+                shares_writable += 1
+            if require_writable and not access.can_write:
+                continue
+            if not access.can_read:
+                continue
+            host_targets.append(unc)
+
+        if host_targets:
+            hosts_with_shares += 1
+        targets.extend(host_targets)
+
+    if not targets:
+        out.error("hunt: no readable file shares discovered")
+        return 1
+
+    targets_path.write_text("\n".join(targets) + "\n", encoding="utf-8")
+    out.info(
+        f"hunt: {len(targets)} target share(s) across "
+        f"{hosts_with_shares} host(s) → {targets_path}"
+    )
+
+    # Delegate to cmd_batch internals
+    batch_ns = _ns(
+        targets=targets_path,
+        output_dir=base_output,
+        user=args.user,
+        password=args.password,
+        hash=args.hash,
+        kerberos=args.kerberos,
+        use_kcache=args.use_kcache,
+        domain=args.domain,
+        anonymous=args.anonymous,
+        encrypt=args.encrypt,
+        check=False,
+        skip_verify=getattr(args, "skip_verify", False),
+        skip_report=getattr(args, "skip_report", False),
+        read_threads=getattr(args, "read_threads", 4),
+        db=getattr(args, "db", None),
+    )
+    rc = cmd_batch(batch_ns)
+
+    out.summary({
+        "command": "hunt",
+        "version": __version__,
+        "elapsed_s": round(time.monotonic() - start, 3),
+        "target": (
+            f"--domain {args.domain_filter}"
+            if domain_mode else args.target
+        ),
+        "hosts_total": len(hosts),
+        "hosts_live": len(live_hosts),
+        "hosts_with_shares": hosts_with_shares,
+        "hosts_enum_failed": hosts_enum_failed,
+        "shares_total": shares_total,
+        "shares_readable": shares_readable,
+        "shares_writable": shares_writable,
+        "shares_skipped_dfs": skipped_dfs,
+        "shares_scanned": len(targets),
+        "exit_code": rc,
+    })
+    return rc
 
 
 def cmd_batch(args: argparse.Namespace) -> int:
@@ -1784,20 +2050,51 @@ def main(argv: list[str] | None = None) -> int:
     ds = sub.add_parser(
         "discover",
         help=(
-            "List shares on a remote SMB host via NetrShareEnum. "
-            "Composes with ``batch``: pipe stdout into a targets "
-            "file, then ``sharesift batch --targets ...``."
+            "List shares on a remote SMB host via NetrShareEnum, or "
+            "AD-wide via LDAP (--ad-domain). Composes with ``batch``: "
+            "pipe stdout into a targets file, then ``sharesift batch``."
         ),
     )
     ds.add_argument(
         "target",
+        nargs="?",
+        default=None,
         help=(
             "Host or CIDR to enumerate. Accepts ``//host``, "
             "``\\\\host``, bare host, or CIDR like ``//10.0.0.0/24`` "
             "(network + broadcast excluded). Single host: enumerate "
             "shares directly. CIDR: concurrent TCP probe on :445 "
-            "first, then enumerate the live hosts."
+            "first, then enumerate the live hosts. Omit when using "
+            "--ad-domain."
         ),
+    )
+    ds.add_argument(
+        "--ad-domain",
+        dest="domain_filter",
+        default=None,
+        help=(
+            "v0.52: AD-wide discovery via LDAP. Queries "
+            "(objectCategory=computer) on the named domain and "
+            "enumerates shares against every joined computer. "
+            "Mutually exclusive with positional target."
+        ),
+    )
+    ds.add_argument(
+        "--dc",
+        default=None,
+        help=(
+            "LDAP DC hostname for --ad-domain. Defaults to the domain "
+            "itself (works when DNS resolves the domain to a DC, the "
+            "standard AD setup)."
+        ),
+    )
+    ds.add_argument(
+        "--ldap-port", type=int, default=None,
+        help="LDAP port for --ad-domain (default 389; 636 with --use-ldaps).",
+    )
+    ds.add_argument(
+        "--use-ldaps", action="store_true",
+        help="Force ldaps:// for --ad-domain bind.",
     )
     ds.add_argument(
         "--port", type=int, default=None,
@@ -1818,6 +2115,87 @@ def main(argv: list[str] | None = None) -> int:
     )
     _add_smb_auth_args(ds)
     ds.set_defaults(func=cmd_discover)
+
+    # v0.52: hunt — end-to-end Snaffler-replacement command
+    hu = sub.add_parser(
+        "hunt",
+        help=(
+            "v0.52: end-to-end Snaffler-replacement sweep. AD or CIDR "
+            "discovery → share enum + R/W probe → ranked credential "
+            "scan + report per share. One command replaces "
+            "``discover | batch``."
+        ),
+    )
+    hu.add_argument(
+        "target",
+        nargs="?",
+        default=None,
+        help=(
+            "Host, CIDR, or UNC to sweep. Omit when using --ad-domain "
+            "for AD-wide discovery."
+        ),
+    )
+    hu.add_argument(
+        "--ad-domain",
+        dest="domain_filter",
+        default=None,
+        help=(
+            "AD-wide sweep via LDAP. Queries (objectCategory=computer) "
+            "and scans every reachable host's readable file shares."
+        ),
+    )
+    hu.add_argument(
+        "--dc", default=None,
+        help="LDAP DC hostname for --ad-domain (defaults to the domain).",
+    )
+    hu.add_argument(
+        "--ldap-port", type=int, default=None,
+        help="LDAP port (389 default; 636 with --use-ldaps).",
+    )
+    hu.add_argument(
+        "--use-ldaps", action="store_true",
+        help="Force ldaps:// for --ad-domain bind.",
+    )
+    hu.add_argument(
+        "--port", type=int, default=None,
+        help="SMB port (default 445).",
+    )
+    hu.add_argument(
+        "--output-dir", type=Path, required=True,
+        help="Output directory; per-share subdirs land here.",
+    )
+    hu.add_argument(
+        "--writable-only", action="store_true",
+        help="Only scan shares where the operator has write access.",
+    )
+    hu.add_argument(
+        "--detect-dfs", action="store_true",
+        help=(
+            "v0.52: skip UNCs whose server segment looks like a domain "
+            "(possible DFS root) with operator guidance for manual "
+            "resolution. Off by default — heuristic false-positives on "
+            "every FQDN host. Use when hunting a single UNC you suspect "
+            "is a DFS namespace. v0.53 ships full referral resolution."
+        ),
+    )
+    hu.add_argument(
+        "--skip-verify", action="store_true",
+        help="Skip live credential verification stage per share.",
+    )
+    hu.add_argument(
+        "--skip-report", action="store_true",
+        help="Skip HTML report rendering per share.",
+    )
+    hu.add_argument(
+        "--read-threads", type=int, default=4,
+        help="Parallel content-read threads per share (default 4).",
+    )
+    hu.add_argument(
+        "--db", type=Path, default=None,
+        help="Engagement datastore (.sharesift.db) — same as batch --db.",
+    )
+    _add_smb_auth_args(hu)
+    hu.set_defaults(func=cmd_hunt)
 
     # v0.37 step 3: batch — scan multiple shares from a targets file
     bt = sub.add_parser(
