@@ -123,7 +123,7 @@ def test_walk_starts_at_target_root_path():
     """When the target specifies a subdir, walk only emits that
     subtree."""
     target = SmbTarget(host="h", share="s", root_path="Finance\\Q3")
-    share = SmbShare(target=target, auth=Auth(anonymous=True))
+    share = SmbShare(target=target, auth=Auth(user="u", password="p"))
     _patch_list_directory(share, {
         "Finance\\Q3": [
             {"name": "report.docx", "size": 100, "is_directory": False},
@@ -136,7 +136,7 @@ def test_walk_starts_at_target_root_path():
 def test_root_property_returns_target_unc():
     share = SmbShare(
         target=SmbTarget(host="h", share="s", root_path="sub"),
-        auth=Auth(anonymous=True),
+        auth=Auth(user="u", password="p"),
     )
     assert share.root == r"\\h\s\sub"
 
@@ -311,6 +311,6 @@ def test_smbshare_satisfies_share_protocol():
 
     share = SmbShare(
         target=SmbTarget(host="h", share="s"),
-        auth=Auth(anonymous=True),
+        auth=Auth(user="u", password="p"),
     )
     assert isinstance(share, Share)

@@ -11,6 +11,61 @@ hunt run, multi-DC LDAP failover. v0.55: GOAD-validated head-to-head
 benchmark of `sharesift hunt` vs `Snaffler.exe -s -d corp.local`
 (harness ships in v0.53; lab validation gated on standing up GOAD).
 
+## [0.54.0] — 2026-06-11
+
+Three real-engagement fixes from the HTB Active + Multimaster smoke
+tests. All three were surfaced live; two validated live against
+production Microsoft AD (the third needs a live anonymous-shares
+target which despawned before re-test).
+
+### Fixed — v0.54.1: DFS-namespace-root probe (live-validated)
+
+`SmbShare._probe_access_mask` now treats `STATUS_INVALID_PARAMETER`
+on share-root CREATE as probe-inconclusive with caller-supplied
+fallback. Read probe defaults to True (DFS namespace roots ARE
+walkable via DFS-aware Opens), write probe defaults to False
+(namespace roots aren't writable). DFS shares now pass `cmd_hunt`'s
+share filter where v0.53 dropped them. Validated live against
+HTB Multimaster `\\10.129.13.28\dfs` — share enters the target
+list with `access: R`.
+
+### Fixed — v0.54.2: SMB3 encryption auto-fallback
+
+`SmbShare._ensure_connected` inspects the negotiated dialect after
+`Connection.connect()`. If it's below SMB 3.0 (0x0300) and the
+operator didn't pass `require_encrypt=True`, the session is built
+with `require_encryption=False`. Server 2008 R2 hosts (HTB Active)
+no longer need an explicit `--no-encrypt` flag. New
+`--require-encrypt` flag for the opsec case where unencrypted is
+unacceptable.
+
+### Fixed — v0.54.3: Anonymous SMB via impacket fallback
+
+`smbprotocol + pyspnego` rejects empty credentials (`SpnegoError
+(16): Operation not supported or available`). `SmbShare` now lazily
+constructs an `ImpacketSmbWalker` backend when `auth.anonymous=True`,
+delegating `walk` / `read_bytes` / `probe_share_access` to
+impacket's null-session-capable `SMBConnection`. The walker mirrors
+the smbprotocol path's contract (sorted deterministic walk, UNC
+output, byte-cap on reads).
+
+### Test discipline
+
+- 32 new tests across `test_smb_dfs_probe_v0p54.py` (5),
+  `test_smb_encrypt_fallback_v0p54.py` (5), and
+  `test_smb_anonymous_v0p54.py` (17 — split TestAnonymousDispatch
+  + TestImpacketWalker). Pre-existing v0.35 tests updated where
+  `Auth(anonymous=True)` was being used as a convenience marker
+  rather than actual null-session intent.
+- Full suite: **1418 passed, 29 skipped, 0 failed.**
+
+### Queued for v0.55
+
+- DFS-aware Opens for walking INTO namespace roots
+  (`tree.is_dfs_share` flag handling). v0.54.1 lets DFS shares
+  enter the target list; v0.55 lets the walker descend into them.
+- GOAD-validated head-to-head benchmark.
+
 ## [0.53.1] — 2026-06-11
 
 Hot-patch from HTB Active smoke-test findings. ShareSift caught the

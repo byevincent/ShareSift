@@ -78,6 +78,7 @@ class SmbShare:
         auth: Auth,
         *,
         encrypt: bool = True,
+        require_encrypt: bool = False,
         timeout: int = 30,
         auto_resolve_dfs: bool = True,
     ) -> None:
@@ -85,6 +86,12 @@ class SmbShare:
         self._original_target = target  # frozen — operator's input
         self._auth = auth
         self._encrypt = encrypt
+        # v0.54.2: when ``require_encrypt`` is False (default), and
+        # the server doesn't support SMB3 GCM, fall back to an
+        # unencrypted session rather than failing the whole hunt.
+        # Operators who actually need encryption (opsec) pass
+        # ``require_encrypt=True`` (CLI: ``--require-encrypt``).
+        self._require_encrypt = require_encrypt
         self._timeout = timeout
         self._auto_resolve_dfs = auto_resolve_dfs
         self._connection = None
@@ -94,6 +101,31 @@ class SmbShare:
         # v0.53: populated when tree-connect to the requested target
         # hit STATUS_PATH_NOT_COVERED and we chased the referral.
         self._dfs_resolution = None
+        # v0.54.2: True when SMB3 wasn't negotiated and we fell back
+        # to an unencrypted session. Surfaces in summary output.
+        self._encryption_fallback_applied = False
+        # v0.54.3: when auth.anonymous=True, smbprotocol+pyspnego
+        # rejects the empty credential set. Delegate to an impacket
+        # backend that handles null sessions natively. The backend
+        # is lazy — we only construct it on first access so test
+        # fixtures that mock smbprotocol but not impacket still work.
+        self._use_impacket_backend = bool(
+            getattr(auth, "anonymous", False)
+        )
+        self._impacket_backend = None
+
+    def _ensure_impacket_backend(self):
+        """v0.54.3: lazily construct the impacket walker. Deferred
+        so test fixtures that mock smbprotocol but not impacket
+        still work — the backend is built only when a public method
+        actually needs it."""
+        if self._impacket_backend is None and self._use_impacket_backend:
+            from sharesift.share.smb_impacket import ImpacketSmbWalker
+
+            self._impacket_backend = ImpacketSmbWalker(
+                self._target, self._auth, timeout=self._timeout,
+            )
+        return self._impacket_backend
 
     @property
     def root(self) -> str:
@@ -116,22 +148,44 @@ class SmbShare:
         """
         if self._share_access is not None:
             return self._share_access
+        # v0.54.3: anonymous → impacket backend
+        if self._use_impacket_backend:
+            backend = self._ensure_impacket_backend()
+            access = backend.probe_share_access()
+            self._share_access = access
+            return access
         self._ensure_connected()
         # Probe the share root (a directory) with the right access
         # verbs: FILE_LIST_DIRECTORY → "can read", FILE_ADD_FILE → "can
         # write to share root."
-        can_read = self._probe_access_mask("FILE_LIST_DIRECTORY")
-        can_write = self._probe_access_mask("FILE_ADD_FILE")
+        #
+        # DFS-namespace-root shares (v0.54.1, surfaced on HTB Multimaster
+        # `\\<dc>\dfs`) reject regular CREATE with STATUS_INVALID_PARAMETER
+        # because they require DFS-aware Opens. Treat that case as
+        # "probe inconclusive — assume read access so the walker reaches
+        # the DFS links; write access is False (namespace roots aren't
+        # writable)."
+        can_read = self._probe_access_mask(
+            "FILE_LIST_DIRECTORY", invalid_param_fallback=True,
+        )
+        can_write = self._probe_access_mask(
+            "FILE_ADD_FILE", invalid_param_fallback=False,
+        )
         self._share_access = ShareAccess(can_read=can_read, can_write=can_write)
         return self._share_access
 
-    def _probe_access_mask(self, mask_name: str) -> bool:
+    def _probe_access_mask(
+        self, mask_name: str, *, invalid_param_fallback: bool = False,
+    ) -> bool:
         """Try opening the share root with the named access right.
 
         Returns True if the server granted it, False on
-        STATUS_ACCESS_DENIED. Other exceptions propagate — the caller
-        treats them as "probe inconclusive" which is honest, not
-        "no access" which would be wrong.
+        STATUS_ACCESS_DENIED. STATUS_INVALID_PARAMETER (the DFS-root
+        signal) returns ``invalid_param_fallback`` so callers can
+        choose how to interpret it per probe direction. Other
+        exceptions propagate — the caller treats them as "probe
+        inconclusive" which is honest, not "no access" which would
+        be wrong.
         """
         from smbprotocol.open import (
             CreateDisposition,
@@ -167,6 +221,15 @@ class SmbShare:
                 or "0xc0000022" in msg.lower()
             ):
                 return False
+            # v0.54.1: DFS-namespace-root rejection. The share IS
+            # readable (the namespace serves DFS link entries), just
+            # not via a regular CREATE on the root.
+            if (
+                "InvalidParameter" in name
+                or "STATUS_INVALID_PARAMETER" in msg
+                or "0xc000000d" in msg.lower()
+            ):
+                return invalid_param_fallback
             raise
         finally:
             try:
@@ -177,6 +240,11 @@ class SmbShare:
     def walk(self) -> Iterator["ShareEntry"]:
         """Recursive walk yielding files only, in deterministic
         sorted order."""
+        # v0.54.3: anonymous → impacket backend
+        if self._use_impacket_backend:
+            yield from self._ensure_impacket_backend().walk()
+            return
+
         from sharesift.share import ShareEntry
 
         self._ensure_connected()
@@ -213,6 +281,12 @@ class SmbShare:
         ``\\\\host\\share\\rel\\to\\file``. UNCs that don't belong
         to this share return ``None``.
         """
+        # v0.54.3: anonymous → impacket backend
+        if self._use_impacket_backend:
+            return self._ensure_impacket_backend().read_bytes(
+                path, max_bytes=max_bytes,
+            )
+
         rel = self._unc_to_rel(path)
         if not rel:
             return None
@@ -269,6 +343,10 @@ class SmbShare:
 
     def close(self) -> None:
         """Tear down tree + session + connection. Idempotent."""
+        if self._impacket_backend is not None:
+            self._impacket_backend.close()
+            self._impacket_backend = None
+            return
         if self._tree is not None:
             try:
                 self._tree.disconnect()
@@ -289,7 +367,10 @@ class SmbShare:
             self._connection = None
 
     def __enter__(self) -> "SmbShare":
-        self._ensure_connected()
+        if self._use_impacket_backend:
+            self._ensure_impacket_backend()._ensure_connected()
+        else:
+            self._ensure_connected()
         return self
 
     def __exit__(self, *exc_info: object) -> None:
@@ -325,11 +406,23 @@ class SmbShare:
         )
         self._connection.connect(timeout=self._timeout)
 
+        # v0.54.2: SMB3 encryption was introduced in dialect 3.0
+        # (0x0300). Older Windows (Server 2008 R2, anything below
+        # SMB 3.0) negotiates SMB 2.0/2.1 and rejects sessions that
+        # require encryption. Auto-detect and downgrade unless the
+        # operator explicitly required encryption.
+        effective_encrypt = self._encrypt
+        if effective_encrypt and not self._require_encrypt:
+            dialect = getattr(self._connection, "dialect", None)
+            if isinstance(dialect, int) and dialect < 0x0300:
+                effective_encrypt = False
+                self._encryption_fallback_applied = True
+
         self._session = Session(
             self._connection,
             username=username,
             password=password,
-            require_encryption=self._encrypt,
+            require_encryption=effective_encrypt,
             auth_protocol=auth_protocol,
         )
         self._session.connect()

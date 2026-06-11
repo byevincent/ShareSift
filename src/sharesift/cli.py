@@ -116,11 +116,26 @@ def _add_smb_auth_args(p: argparse.ArgumentParser) -> None:
     )
     p.add_argument(
         "--encrypt", dest="encrypt", action="store_true", default=True,
-        help="SMB3 message encryption (default on).",
+        help=(
+            "SMB3 message encryption (default on). v0.54.2: when "
+            "the server doesn't negotiate SMB 3.0+, ShareSift "
+            "automatically falls back to unencrypted unless "
+            "--require-encrypt is also set."
+        ),
     )
     p.add_argument(
         "--no-encrypt", dest="encrypt", action="store_false",
         help="Disable SMB3 encryption (legacy Samba configs).",
+    )
+    p.add_argument(
+        "--require-encrypt", action="store_true",
+        help=(
+            "v0.54.2: force SMB3 encryption — refuse to fall back to "
+            "an unencrypted session when the server only supports "
+            "SMB 2.0/2.1. Opsec-conscious flag for engagements where "
+            "unencrypted traffic is unacceptable. Mutually exclusive "
+            "with --no-encrypt."
+        ),
     )
     p.add_argument(
         "--check", action="store_true",
@@ -475,7 +490,10 @@ def cmd_scan(args: argparse.Namespace) -> int:
                 "-u/-p (password), -H (PtH), -k/--use-kcache (Kerberos), "
                 "or --no-pass for anonymous"
             )
-        smb_share = SmbShare(smb_target, auth, encrypt=args.encrypt)
+        smb_share = SmbShare(
+            smb_target, auth, encrypt=args.encrypt,
+            require_encrypt=bool(getattr(args, "require_encrypt", False)),
+        )
 
     # ``--check`` short-circuits: auth + tree-connect + share-access
     # probe + exit. The probe is two cheap CREATE round-trips; closes
@@ -1169,7 +1187,10 @@ def cmd_hunt(args: argparse.Namespace) -> int:
             # cheap two-CREATE probe, then closes.
             target = SmbTarget(host=host, share=s.name, port=port)
             try:
-                with SmbShare(target, auth, encrypt=args.encrypt) as live:
+                with SmbShare(
+                    target, auth, encrypt=args.encrypt,
+                    require_encrypt=bool(getattr(args, "require_encrypt", False)),
+                ) as live:
                     access = live.probe_share_access()
             except Exception as exc:
                 out.debug(f"  {unc}: probe failed: {exc}")
