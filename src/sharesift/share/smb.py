@@ -23,6 +23,43 @@ if TYPE_CHECKING:
     from sharesift.share.target import SmbTarget
 
 
+def _import_real_smbclient():
+    """Import the ``smbclient`` package that ships with smbprotocol,
+    not impacket's ``smbclient.py`` script in ``.venv/bin/``.
+
+    ``uv run`` (and any other launcher that prepends the venv's
+    ``bin/`` to ``sys.path``) makes ``import smbclient`` resolve to
+    impacket's CLI script rather than the smbprotocol package.
+    We work around this by temporarily stripping bin directories
+    from sys.path during the import, then restoring afterwards
+    and caching the right module in ``sys.modules``.
+    """
+    import sys
+
+    cached = sys.modules.get("smbclient")
+    if cached is not None and hasattr(cached, "ClientConfig"):
+        return cached
+
+    # Remove the wrong module from sys.modules so the next import
+    # actually re-resolves.
+    if cached is not None:
+        del sys.modules["smbclient"]
+
+    saved_path = sys.path[:]
+    sys.path = [p for p in sys.path if not p.rstrip("/").endswith("/bin")]
+    try:
+        import smbclient as _real
+        if not hasattr(_real, "ClientConfig"):
+            raise ImportError(
+                "smbclient package missing ClientConfig — check "
+                "smbprotocol install"
+            )
+        sys.modules["smbclient"] = _real
+        return _real
+    finally:
+        sys.path = saved_path
+
+
 @dataclass(frozen=True)
 class ShareAccess:
     """Pentester-facing share-level access verdict.
@@ -256,9 +293,25 @@ class SmbShare:
         # BFS over directories. Each entry is the path under the
         # share root (e.g. "Finance/Q3" — no leading separator).
         to_visit: list[str] = [self._target.root_path or ""]
+        skipped_dfs_links: list[str] = []
         while to_visit:
             rel_dir = to_visit.pop(0)
-            for entry in self._list_directory(rel_dir):
+            try:
+                entries = self._list_directory(rel_dir)
+            except Exception as exc:
+                # v0.55: DFS links throw STATUS_PATH_NOT_COVERED when
+                # we try to walk into them — the referral target is
+                # on a different fileserver. The v0.53 resolver tells
+                # us where; the actual walk requires the operator to
+                # have DNS for that host (standard engagement-prep).
+                # Skip the link with a warning instead of crashing.
+                from sharesift.share.dfs import is_path_not_covered
+
+                if is_path_not_covered(exc):
+                    skipped_dfs_links.append(self._build_unc(rel_dir))
+                    continue
+                raise
+            for entry in entries:
                 name = entry["name"]
                 if name in (".", ".."):
                     continue
@@ -268,6 +321,11 @@ class SmbShare:
                 else:
                     full_unc = self._build_unc(rel_path)
                     collected.append((full_unc, entry["size"]))
+
+        # Surface skipped DFS links so the operator knows what to
+        # add to /etc/hosts and re-run.
+        if skipped_dfs_links:
+            self._skipped_dfs_links = skipped_dfs_links
 
         for path, size in sorted(collected, key=lambda x: x[0]):
             yield ShareEntry(path=path, size=size)
@@ -521,6 +579,12 @@ class SmbShare:
     def _list_directory(self, rel_dir: str) -> list[dict]:
         """List one directory. Returns list of
         ``{"name": str, "size": int, "is_directory": bool}``.
+
+        v0.55: DFS-namespace-root directories can't be enumerated via
+        regular Open + query_directory — the server returns
+        STATUS_INVALID_PARAMETER (validated against HTB Multimaster
+        ``\\\\10.129.13.28\\dfs``). Fall back to ``smbclient.scandir``
+        which handles the DFS-aware listing path internally.
         """
         from smbprotocol.open import (
             CreateDisposition,
@@ -533,15 +597,40 @@ class SmbShare:
         )
 
         handle = Open(self._tree, rel_dir)
-        handle.create(
-            ImpersonationLevel.Impersonation,
-            DirectoryAccessMask.FILE_LIST_DIRECTORY
-            | DirectoryAccessMask.FILE_READ_ATTRIBUTES,
-            FileAttributes.FILE_ATTRIBUTE_DIRECTORY,
-            ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
-            CreateDisposition.FILE_OPEN,
-            CreateOptions.FILE_DIRECTORY_FILE,
-        )
+        try:
+            handle.create(
+                ImpersonationLevel.Impersonation,
+                DirectoryAccessMask.FILE_LIST_DIRECTORY
+                | DirectoryAccessMask.FILE_READ_ATTRIBUTES,
+                FileAttributes.FILE_ATTRIBUTE_DIRECTORY,
+                ShareAccess.FILE_SHARE_READ | ShareAccess.FILE_SHARE_WRITE,
+                CreateDisposition.FILE_OPEN,
+                CreateOptions.FILE_DIRECTORY_FILE,
+            )
+        except Exception as exc:
+            # v0.55: DFS namespace root rejects regular CREATE. Fall
+            # back to smbclient.scandir which handles the DFS listing
+            # via its internal _resolve_dfs path.
+            name = type(exc).__name__
+            msg = str(exc)
+            is_dfs_share = bool(getattr(self._tree, "is_dfs_share", False))
+            looks_invalid_param = (
+                "InvalidParameter" in name
+                or "STATUS_INVALID_PARAMETER" in msg
+                or "0xc000000d" in msg.lower()
+            )
+            if is_dfs_share and looks_invalid_param:
+                try:
+                    handle.close(False)
+                except Exception:
+                    pass
+                return self._list_directory_via_smbclient(rel_dir)
+            try:
+                handle.close(False)
+            except Exception:
+                pass
+            raise
+
         try:
             raw_entries = handle.query_directory(
                 "*", file_information_class=_FILE_ID_BOTH_DIR_INFO
@@ -561,6 +650,41 @@ class SmbShare:
                     "is_directory": bool(attrs & _FILE_ATTR_DIRECTORY),
                 }
             )
+        return out
+
+    def _list_directory_via_smbclient(self, rel_dir: str) -> list[dict]:
+        """v0.55 DFS-root fallback. Uses ``smbclient.scandir`` which
+        handles the namespace-root listing path internally via
+        ``_resolve_dfs``.
+
+        Registers our credentials with smbclient's connection pool
+        once per share so the scandir call doesn't need to
+        re-authenticate. The pool persists across calls within the
+        same SmbShare lifetime.
+        """
+        smbclient = _import_real_smbclient()
+
+        # Register session with our credentials (idempotent —
+        # smbclient caches by (server, username)).
+        _, password, _ = build_credential(self._auth)
+        smbclient.ClientConfig(
+            username=getattr(self._auth, "user", "") or "",
+            password=password if isinstance(password, str) else None,
+        )
+
+        full_unc = self._build_unc(rel_dir)
+        out: list[dict] = []
+        for entry in smbclient.scandir(full_unc):
+            try:
+                stat_result = entry.stat()
+                size = stat_result.st_size
+            except Exception:
+                size = 0
+            out.append({
+                "name": entry.name,
+                "size": int(size),
+                "is_directory": bool(entry.is_dir()),
+            })
         return out
 
     def _build_unc(self, rel_path: str) -> str:
