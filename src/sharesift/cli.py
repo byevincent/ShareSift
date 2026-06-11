@@ -881,6 +881,18 @@ def _ldap_discover_hosts(args: argparse.Namespace, auth) -> list[str]:
         raise SystemExit(2) from exc
 
     out.info(f"ldap: {len(computers)} enabled computer object(s)")
+    if not computers:
+        # AD often returns 0 results for an anonymous bind even when
+        # the bind itself succeeded — the search is rejected with
+        # operationsError ("In order to perform this operation a
+        # successful bind must be completed"). Surface a hint so the
+        # operator doesn't think the tool is broken.
+        if getattr(auth, "anonymous", False):
+            out.warn(
+                "ldap: 0 results — AD typically blocks anonymous "
+                "computer-object enumeration. Re-run with -u/-p, "
+                "-H (PtH), or -k/--use-kcache."
+            )
 
     seen: set[str] = set()
     hosts: list[str] = []

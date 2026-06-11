@@ -38,6 +38,77 @@ if TYPE_CHECKING:
 _UAC_ACCOUNTDISABLE = 0x0002
 
 
+def _install_md4_fallback() -> None:
+    """OpenSSL 3.x removed MD4 from default providers; ldap3's NTLM
+    module calls ``hashlib.new('md4', ...)`` which now raises
+    ``ValueError: unsupported hash type MD4``.
+
+    Surfaced against HTB Active on 2026-06-11: authenticated LDAP
+    bind via NTLM failed at the hash step. Install a pure-Python
+    fallback via ``Cryptodome.Hash.MD4`` (PyCryptodome) when the
+    library is available — it is part of the standard ShareSift
+    install via transitive deps.
+
+    Idempotent — safe to call repeatedly. Bails silently if
+    pycryptodome isn't installed; the original error surfaces
+    from ldap3 in that case.
+    """
+    import hashlib
+
+    # Already works (older OpenSSL, or someone else installed a fallback)
+    try:
+        hashlib.new("md4", b"")
+        return
+    except (ValueError, Exception):
+        pass
+
+    try:
+        from Cryptodome.Hash import MD4
+    except ImportError:
+        return  # Original error from ldap3 will bubble up with no shim
+
+    class _Md4Wrapper:
+        """hashlib-compatible wrapper around Cryptodome's MD4."""
+
+        name = "md4"
+        digest_size = 16
+        block_size = 64
+
+        def __init__(self, data: bytes = b"") -> None:
+            self._h = MD4.new()
+            if data:
+                self._h.update(data)
+
+        def update(self, data: bytes) -> None:
+            self._h.update(data)
+
+        def digest(self) -> bytes:
+            return self._h.digest()
+
+        def hexdigest(self) -> str:
+            return self._h.hexdigest()
+
+        def copy(self) -> "_Md4Wrapper":
+            new = _Md4Wrapper()
+            new._h = self._h.copy()
+            return new
+
+    _original_new = hashlib.new
+
+    def _patched_new(name, data=b"", **kwargs):
+        if isinstance(name, str) and name.lower() == "md4":
+            wrapper = _Md4Wrapper(data) if data else _Md4Wrapper()
+            return wrapper
+        return _original_new(name, data, **kwargs)
+
+    hashlib.new = _patched_new
+
+
+# Install at module import so any caller of discover_computers
+# benefits without needing to know about the shim.
+_install_md4_fallback()
+
+
 @dataclass(frozen=True)
 class ComputerObject:
     """One computer object from the AD LDAP query.

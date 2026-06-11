@@ -11,6 +11,45 @@ hunt run, multi-DC LDAP failover. v0.55: GOAD-validated head-to-head
 benchmark of `sharesift hunt` vs `Snaffler.exe -s -d corp.local`
 (harness ships in v0.53; lab validation gated on standing up GOAD).
 
+## [0.53.1] — 2026-06-11
+
+Hot-patch from HTB Active smoke-test findings. ShareSift caught the
+GPP cpassword as Red end-to-end (validating the v0.20+ parser path
+against a real AD lab), but three real bugs surfaced. This release
+ships the highest-priority fix.
+
+### Fixed
+
+- **ldap3 NTLM bind on OpenSSL 3.x** — `hashlib.new('md4')` raised
+  `ValueError: unsupported hash type MD4` on modern Python+OpenSSL,
+  blocking the entire v0.52 LDAP authenticated path. `share/ad.py`
+  now installs a `Cryptodome.Hash.MD4`-backed shim at module import.
+  Idempotent; no-op when hashlib already supports MD4.
+- **Anonymous LDAP empty-result UX** — when `auth.anonymous=True`
+  and the search returns 0 (AD policy blocks anonymous reads of
+  computer objects, typical), the CLI now prints a hint pointing
+  the operator at `-u/-p`, `-H`, or `-k` instead of silently
+  reporting 0 results.
+
+### Documented
+
+- `docs/v0p53_htb_smoke_test.md` — full HTB Active run: what worked
+  (GPP cpassword caught Red), three real bugs surfaced (MD4 fixed
+  here; smbprotocol anonymous + encryption default queued for
+  v0.54), the headline result.
+
+### Queued for v0.54
+
+1. smbprotocol anonymous fallback to impacket for SMB walks
+   (`pyspnego` rejects empty creds; `discover` works because it uses
+   impacket, but `hunt --no-pass` fails at the per-share probe).
+2. Auto-detect SMB3 capability and fallback to unencrypted (Server
+   2008 R2 only does SMB 2.0/2.1; current default `--encrypt=True`
+   fails). New `--require-encrypt` flag for the opsec case.
+3. Better error message on STATUS_PATH_NOT_COVERED loops.
+4. Live-DC validation of v0.53 DFS resolver (no DFS namespace on
+   Active.htb).
+
 ## [0.53.0] — 2026-06-11
 
 DFS referral resolution + GOAD benchmark harness.
