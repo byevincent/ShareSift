@@ -294,6 +294,7 @@ class SmbShare:
         # share root (e.g. "Finance/Q3" — no leading separator).
         to_visit: list[str] = [self._target.root_path or ""]
         skipped_dfs_links: list[str] = []
+        skipped_denied: list[str] = []
         while to_visit:
             rel_dir = to_visit.pop(0)
             try:
@@ -309,6 +310,22 @@ class SmbShare:
 
                 if is_path_not_covered(exc):
                     skipped_dfs_links.append(self._build_unc(rel_dir))
+                    continue
+                # v0.55.2: ACCESS_DENIED on a subdirectory is normal
+                # in real engagements — most users have read on some
+                # subtrees and not others. Pre-fix this crashed the
+                # whole share scan; now we record the skip and keep
+                # walking the readable parts. Surfaced on HTB Cascade
+                # where the Data share has IT/* readable to
+                # r.thompson but Contractors/, Finance/, etc. denied.
+                msg = str(exc)
+                exc_name = type(exc).__name__
+                if (
+                    "AccessDenied" in exc_name
+                    or "STATUS_ACCESS_DENIED" in msg
+                    or "0xc0000022" in msg.lower()
+                ):
+                    skipped_denied.append(self._build_unc(rel_dir))
                     continue
                 raise
             for entry in entries:
@@ -326,6 +343,8 @@ class SmbShare:
         # add to /etc/hosts and re-run.
         if skipped_dfs_links:
             self._skipped_dfs_links = skipped_dfs_links
+        if skipped_denied:
+            self._skipped_denied = skipped_denied
 
         for path, size in sorted(collected, key=lambda x: x[0]):
             yield ShareEntry(path=path, size=size)

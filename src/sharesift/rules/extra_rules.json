@@ -935,6 +935,47 @@
         "\\\\SCCMContentLib\\$\\\\"
       ],
       "description": "Files under an \\\\<host>\\SCCMContentLib$\\ share. PR #112 adds a ShareEnumeration rule KeepSCCMShares targeting the share itself (path readability is the find); ShareSift's content rule engine does not enumerate ShareName scope, so this fires on FilePath instead — any file under SCCMContentLib$ is interesting because the share is the CMLoot target. Closes the only v3 open fail (heldout-v3-112-sccm-contentlib-share). Source: PR #112 (v3-locked). Yellow."
+    },
+    {
+      "rule_name": "ShareSiftKeepVncPasswordHex",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\"Password\"=hex:[0-9a-f]{2}(,[0-9a-f]{2}){3,}"
+      ],
+      "description": "TightVNC / UltraVNC / TigerVNC store the obfuscated VNC auth password in registry exports (.reg files) as 'Password'=hex:6b,cf,2a,4b,... — 8+ hex bytes. The encoding is a known DES-based scheme with a fixed key; pentesters recover the cleartext via vncpwd, vncdec, or msf's auxiliary/admin/vnc/vnc_passwd_decoder. Surfaced on HTB Cascade 2026-06-11 in \\\\<dc>\\Data\\IT\\Temp\\s.smith\\VNC Install.reg containing the recoverable s.smith password. Red — the cred is directly recoverable from the captured hex."
+    },
+    {
+      "rule_name": "ShareSiftKeepRegistryAutoLogonPassword",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\"(DefaultPassword|AutoAdminLogon|EncMasterPassword|PortablePassword)\"\\s*=\\s*\"[^\"]+\""
+      ],
+      "description": "Registry exports (.reg files) with Windows AutoAdminLogon DefaultPassword cleartext, WinSCP exported EncMasterPassword, or PortablePassword fields. AutoAdminLogon stores the Windows logon password as plaintext in HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon\\DefaultPassword — pentester gold when surfacing on a share. Generalizes the v0.55.2 Cascade VNC catch to the other common .reg credential shapes. Red."
+    },
+    {
+      "rule_name": "ShareSiftKeepGitleaksHighConfidencePrefixes",
+      "triage": "Red",
+      "match_action": "Snaffle",
+      "match_location": "FileContentAsString",
+      "wordlist_type": "Regex",
+      "wordlist": [
+        "\\bxox[bpe]-[0-9]{10,13}-[0-9]{10,13}-[a-zA-Z0-9]{24,40}\\b",
+        "\\bgh[psuor]_[0-9A-Za-z]{36,40}\\b",
+        "\\bgithub_pat_[0-9A-Za-z_]{82}\\b",
+        "\\b(?:sk|rk)_live_[a-zA-Z0-9]{24,99}\\b",
+        "\\bhvs\\.[A-Za-z0-9_\\-]{90,120}\\b",
+        "\\bshp(?:at|ca|pa|ss)_[a-fA-F0-9]{32}\\b",
+        "\\bSK[0-9a-fA-F]{32}\\b",
+        "\\bSG\\.[A-Za-z0-9_\\-\\.]{66}\\b",
+        "\\bnpm_[a-zA-Z0-9]{36}\\b"
+      ],
+      "description": "Distinctive-prefix SaaS tokens with effectively-zero FP risk. Slack bot/user (xoxb-/xoxp-/xoxe-), GitHub PAT/OAuth/app/refresh (gh[psuor]_/github_pat_), Stripe live keys (sk_live/rk_live), HashiCorp Vault service token (hvs.), Shopify app tokens (shpat_/shpca_/shppa_/shpss_), Twilio API key (SK + 32 hex), SendGrid key (SG.), npm access token (npm_). All immediately bearer-usable. Per the v0.55.2 rule corpus audit — these are operational basics ShareSift was missing because Snaffler upstream predates modern SaaS proliferation. Red."
     }
   ]
 }

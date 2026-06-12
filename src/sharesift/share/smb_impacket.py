@@ -212,9 +212,29 @@ class ImpacketSmbWalker:
         # versions and backslash in others. We use backslash to
         # match the on-wire SMB convention.
         to_visit: list[str] = [self._target.root_path or ""]
+        skipped_denied: list[str] = []
         while to_visit:
             rel_dir = to_visit.pop(0)
-            for entry in self._list_directory(rel_dir):
+            try:
+                entries = self._list_directory(rel_dir)
+            except Exception as exc:
+                # v0.55.2: a single ACCESS_DENIED on a subdirectory
+                # crashed the whole share scan pre-fix. Surfaced on
+                # HTB Cascade where r.thompson has read on `IT/*`
+                # but not on `Contractors/`, `Finance/`, etc.
+                # Record the skip and continue — partial walks are
+                # operationally correct.
+                msg = str(exc)
+                name = type(exc).__name__
+                if (
+                    "AccessDenied" in name
+                    or "STATUS_ACCESS_DENIED" in msg
+                    or "0xc0000022" in msg.lower()
+                ):
+                    skipped_denied.append(self._build_unc(rel_dir))
+                    continue
+                raise
+            for entry in entries:
                 name = entry["name"]
                 if name in (".", ".."):
                     continue
@@ -224,6 +244,9 @@ class ImpacketSmbWalker:
                 else:
                     full_unc = self._build_unc(rel_path)
                     collected.append((full_unc, entry["size"]))
+
+        if skipped_denied:
+            self._skipped_denied = skipped_denied
 
         for path, size in sorted(collected, key=lambda x: x[0]):
             yield ShareEntry(path=path, size=size)

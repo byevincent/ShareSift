@@ -10,6 +10,70 @@ v0.56+ — GOAD-validated head-to-head benchmark of `sharesift hunt`
 vs `Snaffler.exe -s -d corp.local`. Harness ships in v0.53; lab
 validation gated on standing up GOAD.
 
+## [0.55.2] — 2026-06-11
+
+Four engagement-blocking fixes from HTB Cascade smoke test + the
+top three priorities from the rule corpus audit. Net result: the
+Cascade canonical catch (TightVNC `.reg` password) lands as Red
+end-to-end, validated live.
+
+### Fixed — Walker `ACCESS_DENIED` no longer crashes the share scan
+
+Pre-fix, `r.thompson` having `Contractors/` denied and `IT/`
+allowed caused the WHOLE share scan to crash on the first denied
+subdir — even though IT/ contained the recoverable VNC password.
+Both `share/smb.py` (smbprotocol) and `share/smb_impacket.py`
+walkers now catch `STATUS_ACCESS_DENIED`, record the skipped
+subtree in `self._skipped_denied`, and continue. Standard
+engagement reality: most users have read on some shares' subtrees
+and not others.
+
+### Fixed — UTF-16LE files (`.reg` exports) now decode correctly
+
+`extract.extract_text` was UTF-8-decoding all non-PDF/OOXML files,
+which garbled UTF-16LE bytes into `W\x00i\x00n\x00` strings where
+content regexes couldn't match across the embedded nulls. Now
+BOM-aware: UTF-16 LE/BE BOMs trigger the right decoder; UTF-8 BOM
+is stripped; no-BOM falls back to UTF-8 as before. Surfaced when
+the VNC rule unit-test fired but the live hunt didn't.
+
+### Added — `ShareSiftKeepVncPasswordHex` (Red, live-validated)
+
+Catches `"Password"=hex:6b,cf,2a,4b,...` in `.reg` files (TightVNC,
+UltraVNC, TigerVNC). Recoverable cleartext via vncpwd / vncdec /
+msf's vnc_passwd_decoder. Validated live: HTB Cascade
+`\\<dc>\Data\IT\Temp\s.smith\VNC Install.reg` → Red end-to-end.
+
+### Added — `ShareSiftKeepRegistryAutoLogonPassword` (Red)
+
+Generalizes the VNC catch to other registry-export shapes:
+`"DefaultPassword"`, `"AutoAdminLogon"`, `"EncMasterPassword"`
+(WinSCP exported), `"PortablePassword"`. Per the v0.55.2 rule
+audit. Highest operational hit-rate-per-rule in the missing set.
+
+### Added — `ShareSiftKeepGitleaksHighConfidencePrefixes` (Red)
+
+Distinctive-prefix SaaS tokens Snaffler upstream predates: Slack
+`xox[bpe]-`, GitHub `gh[psuor]_`/`github_pat_`, Stripe `sk_live`/
+`rk_live`, Vault `hvs.`, Shopify `shp[atcaps]_`, Twilio `SK`+32hex,
+SendGrid `SG.`, npm `npm_`. All immediately bearer-usable. FP risk
+effectively zero due to structured suffix lengths.
+
+### Tests added: 19
+
+`test_v0p55p2_fixes.py` — UTF-16 BOM decode (4), VNC rule (2),
+AutoLogon rule (2), Gitleaks bundle (9 parametrized),
+ACCESS_DENIED skip (2 — both walkers). Full suite: 1458 passed,
+29 skipped, 0 failed.
+
+### Live-validated end-to-end on HTB Cascade
+
+`sharesift hunt //10.129.13.58 -u r.thompson -p 'rY4n5eva'`:
+- All 4 shares walked (was 2 before)
+- Data share IT/Temp/s.smith/VNC Install.reg → **Red** with
+  `ShareSiftKeepVncPasswordHex`
+- SYSVOL went from crashed to 14 files / 5 tier-flagged
+
 ## [0.55.1] — 2026-06-11
 
 Three Kerberos ccache findings from the HTB Sauna smoke test

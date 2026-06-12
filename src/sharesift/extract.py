@@ -175,8 +175,22 @@ def extract_text(
     elif ext in (".docx", ".xlsx", ".pptx"):
         text = _extract_ooxml_from_bytes(data, ext)
     else:
+        # v0.55.2: BOM-aware decode. Windows `.reg` exports and
+        # some Notepad-saved Unicode files are UTF-16LE; UTF-8
+        # fallback garbles them into ``W\x00i\x00n\x00`` strings
+        # where regexes can't match across the embedded nulls.
+        # Surfaced on HTB Cascade where the VNC Install.reg
+        # password rule never fired despite the content being
+        # present. UTF-16 BE BOM and UTF-8 BOM also handled.
         try:
-            text = data.decode("utf-8", errors="replace")
+            if data[:2] == b"\xff\xfe":
+                text = data[2:].decode("utf-16-le", errors="replace")
+            elif data[:2] == b"\xfe\xff":
+                text = data[2:].decode("utf-16-be", errors="replace")
+            elif data[:3] == b"\xef\xbb\xbf":
+                text = data[3:].decode("utf-8", errors="replace")
+            else:
+                text = data.decode("utf-8", errors="replace")
         except Exception:
             return None
 
