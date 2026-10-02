@@ -54,6 +54,7 @@ _KNOWN_SUBCOMMANDS = frozenset({
     "query",
     "sort",
     "export",
+    "models",
 })
 
 
@@ -1543,6 +1544,106 @@ def cmd_sort(args: argparse.Namespace) -> int:
     return 0
 
 
+def _download_adapter(asset, force: bool) -> bool:
+    """Download + checksum-verify one adapter. Returns True if a fetch
+    happened, False if it was already present (skip)."""
+    import requests
+
+    from sharesift.models_manifest import sha256_file
+
+    if not force and asset.dest.is_file():
+        if sha256_file(asset.dest) == asset.sha256:
+            out.info(f"  {asset.version}: present, checksum ok — skipping")
+            return False
+        out.warn(f"  {asset.version}: checksum mismatch on disk — re-downloading")
+
+    asset.dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = asset.dest.with_suffix(asset.dest.suffix + ".part")
+    out.info(f"  {asset.version}: downloading {asset.size / 1e6:.0f} MB …")
+    with requests.get(asset.url, stream=True, timeout=60) as resp:
+        if resp.status_code == 404:
+            raise RuntimeError(
+                f"{asset.asset_name} not found in release "
+                f"'{asset.url}'. The weights release may not be "
+                "published yet — see README 'Model weights'."
+            )
+        resp.raise_for_status()
+        with tmp.open("wb") as fh:
+            for chunk in resp.iter_content(chunk_size=1 << 20):
+                fh.write(chunk)
+
+    got = sha256_file(tmp)
+    if got != asset.sha256:
+        tmp.unlink(missing_ok=True)
+        raise RuntimeError(
+            f"{asset.version}: checksum mismatch after download "
+            f"(expected {asset.sha256[:12]}…, got {got[:12]}…). "
+            "Aborted; file discarded."
+        )
+    tmp.replace(asset.dest)
+    out.info(f"  {asset.version}: ok → {asset.dest}")
+    return True
+
+
+def cmd_models(args: argparse.Namespace) -> int:
+    """Manage the downloadable content-classifier adapter weights.
+
+    The LoRA adapter tensors are not tracked in git (``.gitignore``
+    excludes ``*.safetensors``); they ship as release assets. This
+    command fetches them into ``models/<version>/`` where the content
+    classifier expects them.
+    """
+    from sharesift.models_manifest import DEFAULT_ASSET, MANIFEST, is_present
+
+    action = getattr(args, "models_action", None)
+
+    if action == "list":
+        for asset in MANIFEST.values():
+            status = "present" if is_present(asset) else "missing"
+            tag = " (default)" if asset.default else ""
+            print(f"{asset.version}{tag}: {status}")
+        return 0
+
+    # pull
+    if args.all:
+        targets = list(MANIFEST.values())
+    elif args.version:
+        targets = []
+        for name in args.version:
+            if name not in MANIFEST:
+                out.error(
+                    f"unknown model '{name}'. Known: "
+                    f"{', '.join(MANIFEST)}"
+                )
+                return 2
+            targets.append(MANIFEST[name])
+    else:
+        targets = [DEFAULT_ASSET]  # default: just the content-scan default
+
+    out.info(
+        f"Pulling {len(targets)} adapter(s) from release "
+        f"'{DEFAULT_ASSET.url.rsplit('/', 2)[1]}'"
+    )
+    fetched = 0
+    try:
+        for asset in targets:
+            if _download_adapter(asset, force=args.force):
+                fetched += 1
+    except Exception as exc:  # noqa: BLE001 - surface a clean CLI error
+        out.error(f"models pull failed: {type(exc).__name__}: {exc}")
+        return 1
+
+    out.summary({
+        "command": "models pull",
+        "version": __version__,
+        "requested": [a.version for a in targets],
+        "downloaded": fetched,
+        "skipped": len(targets) - fetched,
+        "exit_code": 0,
+    })
+    return 0
+
+
 def cmd_to_snaffler_tsv(args: argparse.Namespace) -> int:
     """v0.36 step 4: convert ``hits.jsonl`` to Snaffler-compatible TSV.
 
@@ -2329,6 +2430,41 @@ def main(argv: list[str] | None = None) -> int:
     so.add_argument("--stdin", action="store_true", help="Read JSONL from stdin")
     so.add_argument("--output", type=Path, default=None, help="Output JSONL (default stdout)")
     so.set_defaults(func=cmd_sort)
+
+    mo = sub.add_parser(
+        "models",
+        help=(
+            "Download the content-classifier adapter weights "
+            "(not tracked in git; shipped as release assets). "
+            "Run 'sharesift models pull' once after cloning."
+        ),
+    )
+    mo_sub = mo.add_subparsers(dest="models_action", required=True)
+    mo_pull = mo_sub.add_parser(
+        "pull", help="Download adapter weights into models/<version>/."
+    )
+    mo_pull.add_argument(
+        "version",
+        nargs="*",
+        help=(
+            "Model dir name(s) to fetch (e.g. "
+            "content_classifier_v0p6_docx_salted). Default: the "
+            "content-scan default model only."
+        ),
+    )
+    mo_pull.add_argument(
+        "--all", action="store_true", help="Fetch every published adapter."
+    )
+    mo_pull.add_argument(
+        "--force",
+        action="store_true",
+        help="Re-download even if a valid file is already present.",
+    )
+    mo_pull.set_defaults(func=cmd_models)
+    mo_list = mo_sub.add_parser(
+        "list", help="Show published adapters and whether each is present."
+    )
+    mo_list.set_defaults(func=cmd_models)
 
     # v0.35: implicit-scan dispatch. If the first non-flag positional
     # looks like an SMB target, inject ``scan`` so argparse routes there.

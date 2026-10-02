@@ -176,6 +176,24 @@ class ContentClassifier:
                 device_map="cpu",
                 torch_dtype=torch.bfloat16,
             )
+        # Guard: the adapter tensor file is not tracked in git (it ships
+        # as a release asset — see models_manifest.py). Without it, PEFT
+        # silently treats the dir name as a Hugging Face Hub repo id and
+        # fails with an opaque 404 RepositoryNotFoundError. Catch the
+        # missing-weights case here and point at the fix.
+        has_weights = any(
+            (self._model_dir / fn).is_file()
+            for fn in ("adapter_model.safetensors", "adapter_model.bin")
+        )
+        if not has_weights:
+            raise FileNotFoundError(
+                f"No adapter weights found in {self._model_dir}/ "
+                "(adapter_model.safetensors is missing). These weights "
+                "are not tracked in git; download them with:\n\n"
+                "    uv run sharesift models pull\n\n"
+                "(or 'sharesift models pull <version>' for a non-default "
+                "model). See the README 'Model weights' section."
+            )
         self._model = PeftModel.from_pretrained(base, str(self._model_dir))
         self._model.eval()
 
