@@ -122,6 +122,38 @@ uv sync --extra smb
 
 Add `--group content-training` for LoRA fine-tuning. That pulls another 5GB.
 
+### Model weights
+
+Path classifiers (sklearn `.joblib`) are committed to the repo and need
+no extra step. The **content** classifier is a Qwen3-1.7B LoRA adapter,
+and its `adapter_model.safetensors` (~67 MB) is **not** tracked in git —
+`.gitignore` excludes `*.safetensors`/`*.bin` to keep clones lean. The
+repo ships only the small adapter configs.
+
+If you run a content scan without the weights, you'll get a
+`FileNotFoundError` pointing here (older builds surfaced it as an opaque
+`RepositoryNotFoundError` 404 from huggingface.co). Fetch the weights
+once after cloning:
+
+```bash
+# Default content model (v0p6) — required for `sharesift scan`
+uv run sharesift models pull
+
+# Every published adapter (for --content-model-dir selection)
+uv run sharesift models pull --all
+
+# A specific one
+uv run sharesift models pull content_classifier_v0p5_handlabel
+
+# What's published and what's already on disk
+uv run sharesift models list
+```
+
+The puller downloads from the [`weights-v1`](https://github.com/byevincent/ShareSift/releases/tag/weights-v1)
+release into `models/<version>/` and verifies each file's SHA-256.
+Published adapters: `v0p6_docx_salted` (default), `v0p5_handlabel`,
+`v0p4_creddata`, `v0p3`. The `v0p7` adapters are not yet released.
+
 Milestone releases: [v0.51.0](https://github.com/byevincent/ShareSift/releases/tag/v0.51.0) (current — real corporate-share benchmark via DiskForge: F1 0.565 vs Snaffler 0.337 at Red+), [v0.50.0](https://github.com/byevincent/ShareSift/releases/tag/v0.50.0) (held-out v3 100%, v4 70% baseline + SCCMContentLib$ generalization), [v0.49.0](https://github.com/byevincent/ShareSift/releases/tag/v0.49.0) (held-out v1 100%, v2 100%, v3 90% + POSIX FileName bugfix), [v0.48.0](https://github.com/byevincent/ShareSift/releases/tag/v0.48.0) (held-out v1 36→91%, v2 70%), [v0.47.0](https://github.com/byevincent/ShareSift/releases/tag/v0.47.0) (Snaffler-issues benchmark + MSF2 recall 1.000), [v0.46.0](https://github.com/byevincent/ShareSift/releases/tag/v0.46.0) (77MB single-file binary + DB exporters), [v0.45.0](https://github.com/byevincent/ShareSift/releases/tag/v0.45.0) (top-K precision 0.20 → 0.70), [v0.43.0](https://github.com/byevincent/ShareSift/releases/tag/v0.43.0) (Linux rule gap closure), [v0.41.0](https://github.com/byevincent/ShareSift/releases/tag/v0.41.0) (engagement datastore). Intermediate tags are shown as pre-releases on the [releases page](https://github.com/byevincent/ShareSift/releases).
 
 ## Quick start
